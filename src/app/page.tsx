@@ -50,16 +50,16 @@ export default function Home() {
   };
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      {/* <Button variant="secondary">test</Button>
-<Link href="">hellooo</Link>
-<Input
+      <Button variant="secondary">test</Button>
+      <Link href="">test</Link>
+      <Input
         type="text"
         placeholder="Search"
         inputSize="md"
         minWidth="400px"
         className="bg-white"
         onChange={(e) => console.log(e.target.value)}
-      /> */}
+      />
 
       <div className="p-6 bg-white">
         <DataTable
