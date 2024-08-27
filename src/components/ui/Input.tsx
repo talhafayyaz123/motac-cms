@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import React from 'react';
 
@@ -54,4 +54,3 @@ const Input: React.FC<InputProps> = ({
 };
 
 export default Input;
- 
