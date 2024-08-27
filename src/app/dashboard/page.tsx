@@ -51,8 +51,8 @@ export default function Components() {
     }
   };
   return (
-    <main className="flex max-h-max flex-col items-center justify-between gap-10 p-10">
-      <Button variant="secondary"> Select All</Button>
+    <main className="h-full">
+      {/* <Button variant="secondary"> Select All</Button>
       <Button variant="primary" icon={<RiCheckDoubleFill />}>
         Select All
       </Button>
@@ -78,8 +78,8 @@ export default function Components() {
         onChange={(e) => console.log(e.target.value)}
         icon={<CiSearch />}
       />
-
-      <div className="p-6 bg-white">
+ */}
+      <div className="bg-white auto h-full w-full">
         <DataTable
           columns={columns}
           data={data.slice((currentPage - 1) * perPage, currentPage * perPage)}
