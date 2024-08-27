@@ -1,0 +1,28 @@
+# Ignore artifacts:
+build
+.next
+out
+node_modules
+
+# Ignore public files:
+public
+
+# Ignore environment variables:
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Ignore lock files:
+package-lock.json
+yarn.lock
+
+# Ignore specific config files:
+.prettierrc
+.eslintrc
+tsconfig.json
+
+# Ignore any other specific files:
+coverage
+**/*.d.ts

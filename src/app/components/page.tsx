@@ -6,8 +6,10 @@ import Link from "@/components/ui/Link";
 import DataTable from "@/components/ui/dataTable/DataTable";
 import generateDummyData from "@/components/ui/dataTable/DummyData";
 import { useState } from "react";
+import { CiSearch } from "react-icons/ci";
+import { RiCheckDoubleFill } from "react-icons/ri";
 
-export default function Home() {
+export default function Components() {
   const columns = [
     "Select",
     "Attraction ID",
@@ -49,8 +51,14 @@ export default function Home() {
     }
   };
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <Button variant="secondary">test</Button>
+    <main className="flex max-h-max flex-col items-center justify-between gap-10 p-10">
+      <Button variant="secondary"> Select All</Button>
+      <Button variant="primary" icon={<RiCheckDoubleFill />}>
+        Select All
+      </Button>
+      <Button variant="danger">Delete</Button>
+
+
       <Link href="">test</Link>
       <Input
         type="text"
@@ -59,6 +67,16 @@ export default function Home() {
         minWidth="400px"
         className="bg-white"
         onChange={(e) => console.log(e.target.value)}
+      />
+
+      <Input
+        type="text"
+        placeholder="Search"
+        inputSize="md"
+        minWidth="400px"
+        className="bg-white"
+        onChange={(e) => console.log(e.target.value)}
+        icon={<CiSearch />}
       />
 
       <div className="p-6 bg-white">
