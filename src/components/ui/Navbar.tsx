@@ -8,8 +8,8 @@ const Navbar = () => {
         <h1 className="text-2xl font-bold">Dashboard</h1>
       </div>
       <div className="flex items-center space-x-4">
-        <div className="relative">
-          <FaBell className="text-gray-600 text-xl cursor-pointer" />
+        <div className="relative h-10 w-10">
+          <FaBell className="text-black text-3xl cursor-pointer absolute bottom-0" />
           <span className="absolute top-0 right-0 bg-red-600 text-white rounded-full text-xs w-5 h-5 flex items-center justify-center">
             16
           </span>
