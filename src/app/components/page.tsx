@@ -51,7 +51,7 @@ export default function Components() {
     }
   };
   return (
-    <main className="flex max-h-max flex-col items-center justify-between">
+    <main className="flex max-h-max flex-col items-center justify-between gap-10 p-10">
       <Button variant="secondary"> Select All</Button>
       <Button variant="primary" icon={<RiCheckDoubleFill />}>
         Select All
