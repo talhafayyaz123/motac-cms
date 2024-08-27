@@ -26,7 +26,7 @@ const DataTable: React.FC<DataTableProps> = ({
   renderHeader,
   renderFooter,
   pagination,
-  minHeight = "700px",
+  minHeight = "500px",
 }) => {
   return (
     <div className="rounded-lg shadow overflow-hidden border border-gray-200 "  style={{ minHeight }} >

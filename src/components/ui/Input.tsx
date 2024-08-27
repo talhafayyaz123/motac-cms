@@ -35,7 +35,7 @@ const Input: React.FC<InputProps> = ({
   return (
     <div className="relative" style={{ minWidth }}>
       {icon && (
-        <span className="absolute inset-y-0 left-0 flex items-center pl-4 text-gray-400">
+        <span className="absolute inset-y-0 left-0 flex items-center pl-4 text-2xl text-black">
           {icon}
         </span>
       )}
