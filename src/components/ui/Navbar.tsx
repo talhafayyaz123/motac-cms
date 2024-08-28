@@ -1,5 +1,6 @@
-import React from "react";
-import { FaBell } from "react-icons/fa";
+import Image from 'next/image';
+import React from 'react';
+import { FaBell } from 'react-icons/fa';
 
 const Navbar = () => {
   return (
@@ -15,7 +16,7 @@ const Navbar = () => {
           </span>
         </div>
         <div className="flex items-center space-x-2">
-          <img
+          <Image
             src="https://via.placeholder.com/150"
             alt="Profile"
             className="w-8 h-8 rounded-full"

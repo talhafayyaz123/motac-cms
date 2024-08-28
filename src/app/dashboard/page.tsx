@@ -1,23 +1,19 @@
-"use client";
+'use client';
 
-import Button from "@/components/ui/Button";
-import Input from "@/components/ui/Input";
-import Link from "@/components/ui/Link";
-import DataTable from "@/components/ui/dataTable/DataTable";
-import generateDummyData from "@/components/ui/dataTable/DummyData";
-import { useState } from "react";
-import { CiSearch } from "react-icons/ci";
-import { RiCheckDoubleFill } from "react-icons/ri";
+import { useState } from 'react';
+
+import DataTable from '@/components/ui/dataTable/DataTable';
+import generateDummyData from '@/components/ui/dataTable/DummyData';
 
 export default function Components() {
   const columns = [
-    "Select",
-    "Attraction ID",
-    "Attraction Name",
-    "Attraction Category",
-    "Attraction City",
-    "Tags",
-    "Priority",
+    'Select',
+    'Attraction ID',
+    'Attraction Name',
+    'Attraction Category',
+    'Attraction City',
+    'Tags',
+    'Priority',
   ];
 
   const data = generateDummyData();
@@ -27,9 +23,9 @@ export default function Components() {
 
   const renderCell = (item: any, column: string) => {
     switch (column) {
-      case "Select":
+      case 'Select':
         return <input type="radio" />;
-      case "Tags":
+      case 'Tags':
         return item[column].map((tag: string) => (
           <span
             key={tag}
@@ -38,7 +34,7 @@ export default function Components() {
             {tag}
           </span>
         ));
-      case "Priority":
+      case 'Priority':
         return (
           <div className="relative">
             <button className="px-4 py-2 bg-blue-500 text-white rounded-md flex items-center justify-between">

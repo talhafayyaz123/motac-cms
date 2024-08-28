@@ -1,11 +1,11 @@
-import React, { ReactNode } from "react";
-import Sidebar from "../ui/Sidebar";
-import Navbar from "../ui/Navbar";
+import React, { ReactNode } from 'react';
+
+import Navbar from '@/components/ui/Navbar';
+import Sidebar from '@/components/ui/Sidebar';
 
 interface LayoutProps {
-    children: ReactNode; 
-  }
-
+  children: ReactNode;
+}
 const Layout: React.FC<LayoutProps> = ({ children }) => {
   return (
     <div className="flex h-screen bg-gray-100">

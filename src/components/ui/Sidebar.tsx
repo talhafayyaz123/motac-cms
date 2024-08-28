@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import React, { useState } from 'react';
 import {
   FaHome,
@@ -16,7 +17,6 @@ import {
   FaSignOutAlt,
   FaChevronDown,
 } from 'react-icons/fa';
-import Link from 'next/link';
 
 const menuItems = [
   {
@@ -98,9 +98,16 @@ const Sidebar = () => {
             <li key={item.label}>
               <div
                 className="flex items-center p-4 hover:bg-gray-100 cursor-pointer"
+                role="button"
+                tabIndex={0}
                 onClick={() =>
                   item.subItems ? handleDropdownToggle(item.label) : null
                 }
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    item.subItems ? handleDropdownToggle(item.label) : null;
+                  }
+                }}
               >
                 <span className="mr-4">{item.icon}</span>
                 <span>{item.label}</span>

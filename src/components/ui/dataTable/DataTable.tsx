@@ -1,7 +1,8 @@
-import React from "react";
-import TableHeader from "./TableHeader";
-import TableRow from "./TableRow";
-import Pagination from "./Pagination";
+import React from 'react';
+
+import Pagination from './Pagination';
+import TableHeader from './TableHeader';
+import TableRow from './TableRow';
 
 interface DataTableProps {
   columns: Array<string>;
@@ -26,7 +27,7 @@ const DataTable: React.FC<DataTableProps> = ({
   renderHeader,
   renderFooter,
   pagination,
-  minHeight = "500px",
+  minHeight = '500px',
 }) => {
   return (
     <div

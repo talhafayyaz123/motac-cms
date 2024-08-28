@@ -1,5 +1,10 @@
 import React from 'react';
-import { FaChevronLeft, FaChevronRight, FaAngleDoubleLeft, FaAngleDoubleRight, FaChevronDown } from 'react-icons/fa';
+import {
+  FaChevronLeft,
+  FaChevronRight,
+  FaAngleDoubleLeft,
+  FaAngleDoubleRight,
+} from 'react-icons/fa';
 
 interface PaginationProps {
   total: number;
@@ -66,7 +71,9 @@ const Pagination: React.FC<PaginationProps> = ({
             key={i}
             onClick={() => onPageChange(i + 1)}
             className={`px-4 py-2 rounded-md text-sm font-medium ${
-              i + 1 === currentPage ? 'bg-black text-white' : 'text-gray-700 hover:bg-gray-200'
+              i + 1 === currentPage
+                ? 'bg-black text-white'
+                : 'text-gray-700 hover:bg-gray-200'
             }`}
           >
             {i + 1}
