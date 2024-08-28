@@ -29,3 +29,5 @@ coverage/
 # TypeScript build artifacts
 *.d.ts
 dist/
+
+commitlint.config.js
