@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import { usePathname, useRouter } from 'next/navigation';
 import React, { useState } from 'react';
 import {
   FaHome,
@@ -15,21 +16,20 @@ import {
   FaTrash,
   FaMap,
   FaSignOutAlt,
-  FaChevronDown,
 } from 'react-icons/fa';
 
 const menuItems = [
   {
     label: 'Dashboard',
     icon: <FaHome />,
-    path: '/dashboard',
+    path: '/',
   },
   {
     label: 'User Management',
     icon: <FaUser />,
     path: '/user-management',
     subItems: [
-      { label: 'Active', path: '/user-management/active', icon: <FaUsers /> },
+      { label: 'Active', path: '/user-management', icon: <FaUsers /> },
       { label: 'Deleted', path: '/user-management/deleted', icon: <FaTrash /> },
     ],
   },
@@ -82,42 +82,55 @@ const menuItems = [
 
 const Sidebar = () => {
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
+  const router = useRouter();
+  const pathname = usePathname();
 
   const handleDropdownToggle = (label: string) => {
     setOpenDropdown(openDropdown === label ? null : label);
   };
 
+  const handleNavigation = (path: string) => {
+    router.push(path);
+  };
+
   return (
-    <div className="bg-white w-64 h-full shadow-md flex flex-col">
+    <div className="bg-white w-64 h-full shadow-md flex flex-col p-5">
       <div className="p-6">
         <h1 className="text-lg font-bold">Malaysia Truly Asia</h1>
       </div>
-      <div className="flex-1 overflow-y-auto">
+      <div className="flex-1 overflow-y-auto ">
         <ul className="mt-6">
           {menuItems.map((item) => (
             <li key={item.label}>
               <div
-                className="flex items-center p-4 hover:bg-gray-100 cursor-pointer"
+                className={`flex items-center p-2 mb-2 cursor-pointer rounded-lg ${
+                  pathname === item.path
+                    ? 'bg-blue-600 text-white'
+                    : 'hover:bg-gray-100'
+                }`}
                 role="button"
                 tabIndex={0}
                 onClick={() =>
-                  item.subItems ? handleDropdownToggle(item.label) : null
+                  item.subItems
+                    ? handleDropdownToggle(item.label)
+                    : handleNavigation(item.path)
                 }
                 onKeyDown={(e) => {
                   if (e.key === 'Enter' || e.key === ' ') {
-                    item.subItems ? handleDropdownToggle(item.label) : null;
+                    item.subItems
+                      ? handleDropdownToggle(item.label)
+                      : handleNavigation(item.path);
                   }
                 }}
               >
-                <span className="mr-4">{item.icon}</span>
-                <span>{item.label}</span>
-                {item.subItems && (
-                  <FaChevronDown
-                    className={`ml-auto transition-transform ${
-                      openDropdown === item.label ? 'rotate-180' : ''
-                    }`}
-                  />
-                )}
+                <span
+                  className={`mr-4 ${
+                    pathname === item.path ? 'text-white' : ''
+                  }`}
+                >
+                  {item.icon}
+                </span>
+                <span className="text-sm">{item.label}</span>
               </div>
               {item.subItems && openDropdown === item.label && (
                 <ul className="ml-6 space-y-1">
@@ -125,10 +138,20 @@ const Sidebar = () => {
                     <li key={subItem.label} className="pl-6 py-1">
                       <Link
                         href={subItem.path}
-                        className="flex items-center p-2 hover:bg-gray-100 rounded-md"
+                        className={`flex items-center p-2 rounded-md ${
+                          pathname === subItem.path
+                            ? ' text-blue-600'
+                            : 'hover:bg-gray-100'
+                        }`}
                       >
-                        {subItem.icon}
-                        <span className="ml-2">{subItem.label}</span>
+                        <span
+                          className={`mr-4 ${
+                            pathname === subItem.path ? 'text-blue-600' : ''
+                          }`}
+                        >
+                          {subItem.icon}
+                        </span>
+                        <span className="text-sm">{subItem.label}</span>
                       </Link>
                     </li>
                   ))}
@@ -138,9 +161,9 @@ const Sidebar = () => {
           ))}
         </ul>
       </div>
-      <div className="p-4 hover:bg-gray-100 cursor-pointer flex items-center">
+      <div className="p-2 hover:bg-gray-100 cursor-pointer flex items-center rounded-lg">
         <FaSignOutAlt className="mr-4" />
-        <span className="text-red-600">Logout</span>
+        <span className="text-red-600 text-sm">Logout</span>
       </div>
     </div>
   );

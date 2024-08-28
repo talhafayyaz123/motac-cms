@@ -31,3 +31,4 @@ coverage/
 dist/
 
 commitlint.config.js
+next.config.mjs
