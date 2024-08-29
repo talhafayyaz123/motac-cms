@@ -1,67 +1,27 @@
 const generateDummyData = () => {
-  const attractionNames = [
-    'Petronas Twin Towers',
-    'Langkawi Sky Bridge',
-    'Batu Caves',
-    'Sipadan Island',
-    'Penang Hill',
-    'Kinabalu National Park',
-    'Perhentian Islands',
-    'Cameron Highlands',
-    'Melaka UNESCO World ',
-    'Taman Negara National ',
+  const firstNames = ['John', 'Jane', 'Michael'];
+  const lastNames = ['Doe', 'Smith', 'Johnson'];
+  const emails = ['johndoe@gmail.com', 'jane@gmail.com', 'michael@gmail.com'];
+  const phoneNumbers = [
+    '+60 12-345 6789',
+    '+62 13-579 1234',
+    '+41 13-579 1234',
+    '+60 XX XXX XXXX',
   ];
+  const nationalities = ['United Kingdom', 'Singaporean', 'Australian'];
 
-  const categories = [
-    'Skyscraper',
-    'Adventure',
-    'Cave Temple',
-    'Diving Site',
-    'Scenic Viewpoint',
-    'Nature Reserve',
-    'Beaches',
-    'Hill Station',
-    'Historical Site',
-    'Rainforest',
-  ];
-
-  const cities = [
-    'Kuala Lumpur',
-    'Langkawi',
-    'Selangor',
-    'Sabah',
-    'Penang',
-    'Kuala Lumpur',
-    'Sabah',
-    'Langkawi',
-    'Selangor',
-    'Penang',
-  ];
-
-  const tagsList = [
-    ['Food', 'Nature', 'Travel'],
-    ['Adventure', 'Nature', 'Photography'],
-    ['Culture', 'History', 'Landmark'],
-    ['Diving', 'Marine Life', 'Adventure'],
-    ['Hiking', 'Scenic', 'Photography'],
-    ['Nature', 'Wildlife', 'Adventure'],
-    ['Beaches', 'Relaxation', 'Scenic'],
-    ['Cool Climate', 'Nature', 'Photography'],
-    ['History', 'Culture', 'Landmark'],
-    ['Rainforest', 'Adventure', 'Hiking'],
-  ];
-
-  const priorities = ['High', 'Medium', 'Low'];
-
-  const data = Array.from({ length: 18 }, (_, index) => ({
-    Select: '',
-    'Attraction ID': `00${(index % 6) + 1}`,
-    'Attraction Name': attractionNames[index % 10],
-    'Attraction Category': categories[index % 10],
-    'Attraction City': cities[index % 10],
-    Tags: tagsList[index % 10],
-    Priority: priorities[index % 3],
-  }));
+  const data = Array.from({ length: 18 }, (_, index) => {
+    return {
+      Select: '',
+      'User ID': `13453${(index % 10) + 2}`,
+      'First Name': firstNames[index % 3],
+      'Last Name': lastNames[index % 3],
+      Email: emails[index % 3],
+      'Phone Number': phoneNumbers[index % 4],
+      Nationality: nationalities[index % 3],
+      Action: 'Edit',
+    };
+  });
 
   return data;
 };

@@ -8,12 +8,13 @@ import generateDummyData from '@/components/ui/dataTable/DummyData';
 export default function Components() {
   const columns = [
     'Select',
-    'Attraction ID',
-    'Attraction Name',
-    'Attraction Category',
-    'Attraction City',
-    'Tags',
-    'Priority',
+    'User ID',
+    'First Name',
+    'Last Name',
+    'Email',
+    'Phone Number',
+    'Nationality',
+    'Action',
   ];
 
   const data = generateDummyData();
@@ -48,33 +49,6 @@ export default function Components() {
   };
   return (
     <main className="h-full">
-      {/* <Button variant="secondary"> Select All</Button>
-      <Button variant="primary" icon={<RiCheckDoubleFill />}>
-        Select All
-      </Button>
-      <Button variant="danger">Delete</Button>
-
-
-      <Link href="">test</Link>
-      <Input
-        type="text"
-        placeholder="Search"
-        inputSize="md"
-        minWidth="400px"
-        className="bg-white"
-        onChange={(e) => console.log(e.target.value)}
-      />
-
-      <Input
-        type="text"
-        placeholder="Search"
-        inputSize="md"
-        minWidth="400px"
-        className="bg-white"
-        onChange={(e) => console.log(e.target.value)}
-        icon={<CiSearch />}
-      />
- */}
       <div className="bg-white auto h-full w-full">
         <DataTable
           columns={columns}
