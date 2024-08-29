@@ -36,7 +36,8 @@ const DataTable: React.FC<DataTableProps> = ({
       <div className="overflow-y-auto flex-grow">
         <table className="min-w-full table-fixed divide-y divide-gray-200">
           <thead
-            className={`bg-[${colors.data_table_header}] sticky top-0 z-10`}
+            className="sticky top-0 z-10"
+            style={{ background: colors.data_table_header }}
           >
             <TableHeader columns={columns} renderHeader={renderHeader} />
           </thead>
