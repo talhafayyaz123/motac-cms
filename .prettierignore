@@ -26,3 +26,5 @@ tsconfig.json
 # Ignore any other specific files:
 coverage
 **/*.d.ts
+
+tailwind.config.ts

@@ -1,21 +1,19 @@
-"use client";
+'use client';
 
-import Button from "@/components/ui/Button";
-import Input from "@/components/ui/Input";
-import Link from "@/components/ui/Link";
-import DataTable from "@/components/ui/dataTable/DataTable";
-import generateDummyData from "@/components/ui/dataTable/DummyData";
-import { useState } from "react";
+import { useState } from 'react';
 
-export default function Home() {
+import DataTable from '@/components/ui/dataTable/DataTable';
+import generateDummyData from '@/components/ui/dataTable/DummyData';
+
+export default function Components() {
   const columns = [
-    "Select",
-    "Attraction ID",
-    "Attraction Name",
-    "Attraction Category",
-    "Attraction City",
-    "Tags",
-    "Priority",
+    'Select',
+    'Attraction ID',
+    'Attraction Name',
+    'Attraction Category',
+    'Attraction City',
+    'Tags',
+    'Priority',
   ];
 
   const data = generateDummyData();
@@ -25,9 +23,9 @@ export default function Home() {
 
   const renderCell = (item: any, column: string) => {
     switch (column) {
-      case "Select":
+      case 'Select':
         return <input type="radio" />;
-      case "Tags":
+      case 'Tags':
         return item[column].map((tag: string) => (
           <span
             key={tag}
@@ -36,7 +34,7 @@ export default function Home() {
             {tag}
           </span>
         ));
-      case "Priority":
+      case 'Priority':
         return (
           <div className="relative">
             <button className="px-4 py-2 bg-blue-500 text-white rounded-md flex items-center justify-between">
@@ -49,8 +47,14 @@ export default function Home() {
     }
   };
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <Button variant="secondary">test</Button>
+    <main className="h-full">
+      {/* <Button variant="secondary"> Select All</Button>
+      <Button variant="primary" icon={<RiCheckDoubleFill />}>
+        Select All
+      </Button>
+      <Button variant="danger">Delete</Button>
+
+
       <Link href="">test</Link>
       <Input
         type="text"
@@ -61,7 +65,17 @@ export default function Home() {
         onChange={(e) => console.log(e.target.value)}
       />
 
-      <div className="p-6 bg-white">
+      <Input
+        type="text"
+        placeholder="Search"
+        inputSize="md"
+        minWidth="400px"
+        className="bg-white"
+        onChange={(e) => console.log(e.target.value)}
+        icon={<CiSearch />}
+      />
+ */}
+      <div className="bg-white auto h-full w-full">
         <DataTable
           columns={columns}
           data={data.slice((currentPage - 1) * perPage, currentPage * perPage)}
