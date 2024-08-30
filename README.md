@@ -1,36 +1,126 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# MOTAC Frontend
 
-## Getting Started
+Frontend for the MOTAC project.
 
-First, run the development server:
+## Documentation
+
+Full documentation can be found [here](#).
+
+
+## 🚀 Features
+
+- **Next.js** - The React Framework for production.
+- **React 18** - A JavaScript library for building user interfaces.
+- **TypeScript** - Typed JavaScript at Any Scale.
+- **Tailwind CSS** - A utility-first CSS framework for rapidly building custom user interfaces.
+- **Prettier** - An opinionated code formatter.
+- **ESLint** - A tool for identifying and fixing problems in JavaScript and TypeScript code.
+- **Husky** - Git hooks made easy.
+- **Lint-Staged** - Run linters on git staged files.
+- **React Icons** - Popular icons in React.
+- **Commitlint** - Lint commit messages.
+
+## 🛠️ Development
+
+### Running the project
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+This will start the development server on `http://localhost:3000`.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Building the project
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+```bash
+npm run build
+```
 
-## Learn More
+This will build the production-ready version of your project.
 
-To learn more about Next.js, take a look at the following resources:
+### Starting the production server
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+npm run start
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+This will start the production server.
 
-## Deploy on Vercel
+### Linting
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```bash
+npm run lint
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+Runs ESLint to check for linting issues in the project.
+
+### Formatting
+
+```bash
+npm run format
+```
+
+Runs Prettier to format the code according to the defined style.
+
+### Type Checking
+
+```bash
+npm run check-types
+```
+
+Runs TypeScript compiler to check types without emitting any files.
+
+### Fix Linting Issues
+
+```bash
+npm run lint:fix
+```
+
+Automatically fixes linting issues using ESLint.
+
+### Run All Checks
+
+```bash
+npm run test-all
+```
+
+Runs Prettier check, ESLint check, TypeScript type checking, and then builds the project.
+
+## 🛠️ Tools and Libraries
+
+- **ESLint Plugins:**
+  - `eslint-plugin-import` - Import/export linting.
+  - `eslint-plugin-jsx-a11y` - Accessibility linting for JSX.
+  - `eslint-plugin-react` - Linting for React.
+  - `eslint-plugin-react-hooks` - Linting for React hooks.
+  - `eslint-plugin-prettier` - Integrates Prettier with ESLint.
+  - `eslint-plugin-no-relative-import-paths` - Enforces absolute import paths.
+
+- **Husky** - Git hooks for better commit and code management.
+- **Lint-Staged** - Runs linters on staged git files to ensure code quality before commits.
+- **Prettier** - Code formatter ensuring a consistent style.
+- **TypeScript** - Provides static types to JavaScript for safer and more predictable code.
+- **Tailwind CSS** - A utility-first CSS framework to style the application.
+
+## 📦 Installation
+
+To install the dependencies:
+
+```bash
+npm install
+```
+
+## 🐳 Docker
+
+You can also run the project using Docker:
+
+```bash
+docker build -t cms-frontend .
+docker run -p 3000:3000 cms-frontend
+```
+
+## 📄 License
+
+This project is licensed under the MIT License.
+
+---
