@@ -19,7 +19,7 @@ const Button: React.FC<ButtonProps> = ({
   ...rest
 }) => {
   const baseStyles =
-    'inline-flex items-center justify-center rounded-lg focus:outline-none focus:ring-2 focus:ring-offset-2 transition ease-in-out duration-150';
+    'inline-flex items-center text-sm justify-center rounded-lg focus:outline-none focus:ring-2 focus:ring-offset-2 transition ease-in-out duration-150';
   const variantStyles = {
     primary:
       'bg-white text-black hover:bg-gray-100 focus:ring-black disabled:bg-gray-200 disabled:text-gray-500 disabled:border-gray-300',

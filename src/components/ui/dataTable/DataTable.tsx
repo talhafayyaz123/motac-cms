@@ -1,5 +1,7 @@
 import React from 'react';
 
+import { colors } from '@/lib/theme';
+
 import Pagination from './Pagination';
 import TableHeader from './TableHeader';
 import TableRow from './TableRow';
@@ -27,16 +29,16 @@ const DataTable: React.FC<DataTableProps> = ({
   renderHeader,
   renderFooter,
   pagination,
-  minHeight = '500px',
+  minHeight = 'maxContent',
 }) => {
   return (
-    <div
-      className="rounded-lg shadow border border-gray-200 flex flex-col"
-      style={{ minHeight }}
-    >
+    <div className="rounded-lg flex flex-col" style={{ minHeight }}>
       <div className="overflow-y-auto flex-grow">
         <table className="min-w-full table-fixed divide-y divide-gray-200">
-          <thead className="bg-gray-50 sticky top-0 z-10">
+          <thead
+            className="sticky top-0 z-10"
+            style={{ background: colors.data_table_header }}
+          >
             <TableHeader columns={columns} renderHeader={renderHeader} />
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
@@ -60,7 +62,7 @@ const DataTable: React.FC<DataTableProps> = ({
       </div>
 
       {pagination && (
-        <div className="border-t border-gray-200 bg-white overflow-hidden">
+        <div className=" bg-white overflow-hidden">
           <Pagination
             total={pagination.total}
             perPage={pagination.perPage}

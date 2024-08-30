@@ -1,12 +1,38 @@
+'use client';
+
 import Image from 'next/image';
+import { usePathname, useRouter } from 'next/navigation';
 import React from 'react';
-import { FaBell } from 'react-icons/fa';
+import { FaBell, FaCaretLeft } from 'react-icons/fa';
+
+import { parsePathToTitle } from '@/helpers/utils/utils';
+
+import Title from './Title';
 
 const Navbar = () => {
+  const pathname = usePathname();
+  const router = useRouter();
   return (
-    <div className="bg-white shadow-md p-8 flex justify-between items-center">
-      <div>
-        <h1 className="text-xl ">Dashboard</h1>
+    <div className="bg-white p-8 flex justify-between items-center">
+      <div className="flex items-center max-h-max gap-4">
+        {pathname !== '/' && (
+          <div
+            className="h-8 w-8 rounded-full bg-black flex items-center justify-start"
+            onClick={() => router.push('/')}
+            role="button"
+            tabIndex={0}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                router.push('/');
+              }
+            }}
+          >
+            <FaCaretLeft className="text-white text-3xl" />
+          </div>
+        )}
+        <Title>
+          {pathname === '/' ? 'Dashboard' : parsePathToTitle(pathname)}
+        </Title>
       </div>
       <div className="flex items-center space-x-9">
         <div className="relative h-10 w-10">
