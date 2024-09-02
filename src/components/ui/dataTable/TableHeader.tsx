@@ -11,7 +11,7 @@ const TableHeader: React.FC<TableHeaderProps> = ({ columns, renderHeader }) => {
       {columns.map((column, index) => (
         <th
           key={index}
-          className={`px-6 py-6 text-left text-sm font-medium text-black tracking-wider border-y border-gray-300 ${
+          className={`px-6 py-6 max-w-max text-center text-sm font-medium text-black tracking-wider border-y border-gray-300 whitespace-nowrap ${
             index === 0
               ? 'border-r border-gray-300'
               : index === columns.length - 1

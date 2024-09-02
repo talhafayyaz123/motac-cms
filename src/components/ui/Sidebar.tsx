@@ -16,7 +16,11 @@ import {
   FaTrash,
   FaMap,
   FaSignOutAlt,
+  FaAward,
 } from 'react-icons/fa';
+import { FaCameraRetro, FaLocationDot } from 'react-icons/fa6';
+import { IoTrailSignSharp } from 'react-icons/io5';
+import { MdEvent } from 'react-icons/md';
 
 const menuItems = [
   {
@@ -29,7 +33,7 @@ const menuItems = [
     icon: <FaUser />,
     path: '/user-management',
     subItems: [
-      { label: 'Active', path: '/user-management', icon: <FaUsers /> },
+      { label: 'Active', path: '/user-management/active', icon: <FaUsers /> },
       { label: 'Deleted', path: '/user-management/deleted', icon: <FaTrash /> },
     ],
   },
@@ -37,6 +41,34 @@ const menuItems = [
     label: 'Discover Malaysia',
     icon: <FaGlobe />,
     path: '/discover-malaysia',
+    subItems: [
+      { label: 'Exploring Destinations', path: '#', icon: <FaUsers /> },
+      {
+        label: 'Must See Attractions',
+        path: '/discover-malaysia/must-see-attractions',
+        icon: <FaLocationDot />,
+      },
+      {
+        label: 'Top Experience',
+        path: '/discover-malaysia/top-experience',
+        icon: <FaCameraRetro />,
+      },
+      {
+        label: 'Happening Events',
+        path: '/discover-malaysia/happening-events',
+        icon: <MdEvent />,
+      },
+      {
+        label: 'Ar Trails',
+        path: '/discover-malaysia/ar-trails',
+        icon: <IoTrailSignSharp />,
+      },
+      {
+        label: 'Halal Food',
+        path: '/discover-malaysia/halal-food',
+        icon: <FaAward />,
+      },
+    ],
   },
   {
     label: 'Arrival Card',
@@ -135,7 +167,7 @@ const Sidebar = () => {
               {item.subItems && openDropdown === item.label && (
                 <ul className="ml-6 space-y-1">
                   {item.subItems.map((subItem) => (
-                    <li key={subItem.label} className="pl-6 py-1">
+                    <li key={subItem.label} className="pl-2 py-1">
                       <Link
                         href={subItem.path}
                         className={`flex items-center p-2 rounded-md ${
@@ -151,7 +183,7 @@ const Sidebar = () => {
                         >
                           {subItem.icon}
                         </span>
-                        <span className="text-sm">{subItem.label}</span>
+                        <span className="text-xs">{subItem.label}</span>
                       </Link>
                     </li>
                   ))}

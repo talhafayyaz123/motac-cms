@@ -12,7 +12,7 @@ const TableRow: React.FC<TableRowProps> = ({ item, columns, renderCell }) => {
       {columns.map((column, index) => (
         <td
           key={index}
-          className={`px-6 py-2 whitespace-nowrap text-sm  ${
+          className={`px-6 py-2 whitespace-nowrap text-sm text-center  ${
             index === 0
               ? 'border-r border-gray-300'
               : index === columns.length - 1
