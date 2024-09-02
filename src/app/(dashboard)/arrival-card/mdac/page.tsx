@@ -2,26 +2,26 @@
 
 import React, { useState } from 'react';
 import { CiSearch } from 'react-icons/ci';
-import { FaFileExcel, FaRegEdit } from 'react-icons/fa';
+import { FaFileExcel } from 'react-icons/fa';
 import { RiCheckDoubleFill } from 'react-icons/ri';
 
 import Button from '@/components/ui/Button';
 import DataTable from '@/components/ui/dataTable/DataTable';
 import Wrapper from '@/components/ui/dataTable/DataTableWrapper';
-import generateDummyData from '@/components/ui/dataTable/DummyData';
 import Input from '@/components/ui/Input';
 import Title from '@/components/ui/Title';
 
-export default function UserManagementActive() {
+import generateDummyData from './DummyData';
+
+export default function VisaApplication() {
   const columns = [
     'Select',
     'User ID',
-    'First Name',
-    'Last Name',
-    'Email',
-    'Phone Number',
-    'Nationality',
-    'Action',
+    'MDAC ID',
+    'Applicant Name',
+    'Date',
+    'Email Address',
+    'MDAC PIN Code',
   ];
 
   const data = generateDummyData();
@@ -37,20 +37,15 @@ export default function UserManagementActive() {
             <Input type="radio" minWidth="maxContent" />
           </div>
         );
-      case 'Action':
-        return (
-          <div className="flex items-center gap-2 cursor-pointer">
-            <FaRegEdit className="text-blue-800 text-xl" />
-            {item[column]}
-          </div>
-        );
+
       default:
         return <span>{item[column]}</span>;
     }
   };
+
   return (
     <main className="h-full">
-      <Title className="font-light ml-2 mb-2">User Management</Title>
+      <Title className="font-light ml-2 mb-2">MDAC</Title>
       <Wrapper>
         <div className="flex gap-3">
           <Button variant="primary" icon={<RiCheckDoubleFill />}>
@@ -63,7 +58,6 @@ export default function UserManagementActive() {
             Download Excel
           </Button>
         </div>
-
         <Input
           type="text"
           placeholder="Search"

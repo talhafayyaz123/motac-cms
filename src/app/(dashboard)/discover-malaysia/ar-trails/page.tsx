@@ -9,20 +9,18 @@ import Button from '@/components/ui/Button';
 import DataTable from '@/components/ui/dataTable/DataTable';
 import Wrapper from '@/components/ui/dataTable/DataTableWrapper';
 import Input from '@/components/ui/Input';
-import Select from '@/components/ui/Select';
 import Title from '@/components/ui/Title';
 
 import generateDummyData from './DummyData';
 
-export default function MustSeeAttractions() {
+export default function ArTrails() {
   const columns = [
     'Select',
-    'Attraction ID',
-    'Attraction Name',
-    'Attraction Category',
-    'Attraction City',
+    'Name of AR Trail',
+    'Location of Trail',
+    'AR Trail Category',
+    'Link of the Trail',
     'Tags',
-    'Priority',
     'Edit',
     'Delete',
   ];
@@ -54,17 +52,10 @@ export default function MustSeeAttractions() {
             {item[column]}
           </div>
         );
-      case 'Priority':
+      case 'Link of the Trail':
         return (
-          <div className="relative">
-            <Select
-              options={[
-                { value: 'High', label: 'High' },
-                { value: 'Medium', label: 'Medium' },
-                { value: 'Low', label: 'Low' },
-              ]}
-              highlightValue="High"
-            />
+          <div className="flex items-center gap-2 cursor-pointer">
+            <span className="underline text-blue-400">{item[column]}</span>
           </div>
         );
       case 'Tags':
@@ -87,7 +78,7 @@ export default function MustSeeAttractions() {
 
   return (
     <main className="h-full">
-      <Title className="font-light ml-2 mb-2">Must See Attractions</Title>
+      <Title className="font-light ml-2 mb-2">AR Trails</Title>
       <Wrapper>
         <div className="flex gap-3">
           <Button variant="primary" icon={<RiCheckDoubleFill />}>
@@ -101,7 +92,7 @@ export default function MustSeeAttractions() {
           </Button>
         </div>
         <div className="flex gap-3">
-          <Button variant="secondary">Add Attraction</Button>
+          <Button variant="secondary">Add Trail</Button>
           <Input
             type="text"
             placeholder="Search"

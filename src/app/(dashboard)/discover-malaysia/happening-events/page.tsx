@@ -14,13 +14,14 @@ import Title from '@/components/ui/Title';
 
 import generateDummyData from './DummyData';
 
-export default function MustSeeAttractions() {
+export default function HappeningEvents() {
   const columns = [
     'Select',
-    'Attraction ID',
-    'Attraction Name',
-    'Attraction Category',
-    'Attraction City',
+    'Event ID',
+    'Event Name',
+    'Event Category',
+    'Event City',
+    'Event Date',
     'Tags',
     'Priority',
     'Edit',
@@ -87,7 +88,7 @@ export default function MustSeeAttractions() {
 
   return (
     <main className="h-full">
-      <Title className="font-light ml-2 mb-2">Must See Attractions</Title>
+      <Title className="font-light ml-2 mb-2">Happening Events</Title>
       <Wrapper>
         <div className="flex gap-3">
           <Button variant="primary" icon={<RiCheckDoubleFill />}>
@@ -101,7 +102,7 @@ export default function MustSeeAttractions() {
           </Button>
         </div>
         <div className="flex gap-3">
-          <Button variant="secondary">Add Attraction</Button>
+          <Button variant="secondary">Add Events</Button>
           <Input
             type="text"
             placeholder="Search"

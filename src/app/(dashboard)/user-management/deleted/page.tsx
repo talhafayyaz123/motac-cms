@@ -33,7 +33,7 @@ export default function UserManagementDeleted() {
       case 'Select':
         return (
           <div className="flex justify-center">
-            <input type="radio" />
+            <Input type="radio" minWidth="maxContent" />
           </div>
         );
       default:

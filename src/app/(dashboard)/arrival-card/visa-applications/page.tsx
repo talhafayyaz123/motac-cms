@@ -2,26 +2,37 @@
 
 import React, { useState } from 'react';
 import { CiSearch } from 'react-icons/ci';
-import { FaFileExcel, FaRegEdit } from 'react-icons/fa';
+import { FaFileExcel } from 'react-icons/fa';
 import { RiCheckDoubleFill } from 'react-icons/ri';
 
 import Button from '@/components/ui/Button';
 import DataTable from '@/components/ui/dataTable/DataTable';
 import Wrapper from '@/components/ui/dataTable/DataTableWrapper';
-import generateDummyData from '@/components/ui/dataTable/DummyData';
 import Input from '@/components/ui/Input';
 import Title from '@/components/ui/Title';
+import { colors } from '@/lib/theme';
 
-export default function UserManagementActive() {
+import generateDummyData from './DummyData';
+
+type StatusType = 'Approved' | 'Rejected' | 'Pending' | 'Document Required';
+
+interface Item {
+  Select: string;
+  Status: StatusType;
+  [key: string]: any;
+}
+
+export default function VisaApplication() {
   const columns = [
     'Select',
     'User ID',
     'First Name',
     'Last Name',
-    'Email',
-    'Phone Number',
-    'Nationality',
-    'Action',
+    'Email Address',
+    'Visa Application Number',
+    'Application Date',
+    'Type of Visa',
+    'Status',
   ];
 
   const data = generateDummyData();
@@ -29,7 +40,26 @@ export default function UserManagementActive() {
   const [currentPage, setCurrentPage] = useState(1);
   const [perPage, setPerPage] = useState(12);
 
-  const renderCell = (item: any, column: string) => {
+  const tagStyle: Record<StatusType, { background: string; border: string }> = {
+    Approved: {
+      background: colors.success_status_bg,
+      border: `1px solid ${colors.success_status_outline}`,
+    },
+    Rejected: {
+      background: colors.reject_status_bg,
+      border: `1px solid ${colors.pending_status_outline}`,
+    },
+    Pending: {
+      background: colors.pending_status_bg,
+      border: `1px solid ${colors.pending_status_outline}`,
+    },
+    'Document Required': {
+      background: colors.required_status_bg,
+      border: `1px solid ${colors.required_status_outline}`,
+    },
+  };
+
+  const renderCell = (item: Item, column: string) => {
     switch (column) {
       case 'Select':
         return (
@@ -37,20 +67,27 @@ export default function UserManagementActive() {
             <Input type="radio" minWidth="maxContent" />
           </div>
         );
-      case 'Action':
+
+      case 'Status':
         return (
-          <div className="flex items-center gap-2 cursor-pointer">
-            <FaRegEdit className="text-blue-800 text-xl" />
-            {item[column]}
+          <div className="flex justify-center">
+            <span
+              style={tagStyle[item[column]]}
+              className="w-full px-2 py-1 rounded-md"
+            >
+              {item[column]}
+            </span>
           </div>
         );
+
       default:
         return <span>{item[column]}</span>;
     }
   };
+
   return (
     <main className="h-full">
-      <Title className="font-light ml-2 mb-2">User Management</Title>
+      <Title className="font-light ml-2 mb-2">Visa Applications</Title>
       <Wrapper>
         <div className="flex gap-3">
           <Button variant="primary" icon={<RiCheckDoubleFill />}>
@@ -63,7 +100,6 @@ export default function UserManagementActive() {
             Download Excel
           </Button>
         </div>
-
         <Input
           type="text"
           placeholder="Search"

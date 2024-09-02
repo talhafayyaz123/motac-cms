@@ -9,20 +9,21 @@ import Button from '@/components/ui/Button';
 import DataTable from '@/components/ui/dataTable/DataTable';
 import Wrapper from '@/components/ui/dataTable/DataTableWrapper';
 import Input from '@/components/ui/Input';
-import Select from '@/components/ui/Select';
 import Title from '@/components/ui/Title';
 
 import generateDummyData from './DummyData';
 
-export default function MustSeeAttractions() {
+export default function HalalFood() {
   const columns = [
     'Select',
-    'Attraction ID',
-    'Attraction Name',
-    'Attraction Category',
-    'Attraction City',
+    'ID',
+    'Restaurant Name',
+    'Description',
+    'Location',
+    'Opens At',
+    'Closes At',
+    'Category',
     'Tags',
-    'Priority',
     'Edit',
     'Delete',
   ];
@@ -54,16 +55,21 @@ export default function MustSeeAttractions() {
             {item[column]}
           </div>
         );
-      case 'Priority':
+      case 'Description':
         return (
-          <div className="relative">
-            <Select
-              options={[
-                { value: 'High', label: 'High' },
-                { value: 'Medium', label: 'Medium' },
-                { value: 'Low', label: 'Low' },
-              ]}
-              highlightValue="High"
+          <div className="flex items-center gap-2 cursor-pointer">
+            <span
+              dangerouslySetInnerHTML={{ __html: item[column] }}
+              className="text-sm text-left"
+            />
+          </div>
+        );
+      case 'Location':
+        return (
+          <div className="flex items-center gap-2 cursor-pointer">
+            <span
+              dangerouslySetInnerHTML={{ __html: item[column] }}
+              className="text-sm text-left"
             />
           </div>
         );
@@ -87,7 +93,7 @@ export default function MustSeeAttractions() {
 
   return (
     <main className="h-full">
-      <Title className="font-light ml-2 mb-2">Must See Attractions</Title>
+      <Title className="font-light ml-2 mb-2">Halal Food</Title>
       <Wrapper>
         <div className="flex gap-3">
           <Button variant="primary" icon={<RiCheckDoubleFill />}>
@@ -101,7 +107,7 @@ export default function MustSeeAttractions() {
           </Button>
         </div>
         <div className="flex gap-3">
-          <Button variant="secondary">Add Attraction</Button>
+          <Button variant="secondary">Add Restaurant</Button>
           <Input
             type="text"
             placeholder="Search"

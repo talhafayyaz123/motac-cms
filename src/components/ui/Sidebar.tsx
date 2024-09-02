@@ -17,9 +17,11 @@ import {
   FaMap,
   FaSignOutAlt,
   FaAward,
+  FaRegIdCard,
 } from 'react-icons/fa';
 import { FaCameraRetro, FaLocationDot } from 'react-icons/fa6';
 import { IoTrailSignSharp } from 'react-icons/io5';
+import { LuScrollText } from 'react-icons/lu';
 import { MdEvent } from 'react-icons/md';
 
 const menuItems = [
@@ -74,6 +76,18 @@ const menuItems = [
     label: 'Arrival Card',
     icon: <FaWallet />,
     path: '/arrival-card',
+    subItems: [
+      {
+        label: 'Visa Applications',
+        path: '/arrival-card/visa-applications',
+        icon: <LuScrollText />,
+      },
+      {
+        label: 'MDAC',
+        path: '/arrival-card/mdac',
+        icon: <FaRegIdCard />,
+      },
+    ],
   },
   {
     label: 'My Wallet',

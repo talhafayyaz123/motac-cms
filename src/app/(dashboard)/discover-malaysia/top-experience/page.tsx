@@ -14,7 +14,7 @@ import Title from '@/components/ui/Title';
 
 import generateDummyData from './DummyData';
 
-export default function UserManagementActive() {
+export default function TopExperience() {
   const columns = [
     'Select',
     'Experience ID',
@@ -37,7 +37,7 @@ export default function UserManagementActive() {
       case 'Select':
         return (
           <div className="flex justify-center">
-            <input type="radio" />
+            <Input type="radio" minWidth="maxContent" />
           </div>
         );
       case 'Edit':
