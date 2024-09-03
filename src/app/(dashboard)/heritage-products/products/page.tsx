@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import React, { useState } from 'react';
 import { CiSearch } from 'react-icons/ci';
 import { FaFileExcel, FaRegEdit, FaTrashAlt } from 'react-icons/fa';
@@ -9,21 +10,22 @@ import Button from '@/components/ui/Button';
 import DataTable from '@/components/ui/dataTable/DataTable';
 import Wrapper from '@/components/ui/dataTable/DataTableWrapper';
 import Input from '@/components/ui/Input';
+import Select from '@/components/ui/Select';
 import Title from '@/components/ui/Title';
 
 import generateDummyData from './DummyData';
 
-export default function HalalFood() {
+export default function Products() {
   const columns = [
     'Select',
-    'ID',
-    'Restaurant Name',
-    'Description',
-    'Location',
-    'Opens At',
-    'Closes At',
-    'Category',
+    'Image',
+    'Product ID',
+    'Product Name',
+    'Product Category',
+    'Product Price',
     'Tags',
+    'Product Upload Date',
+    'Product Status',
     'Edit',
     'Delete',
   ];
@@ -41,6 +43,12 @@ export default function HalalFood() {
             <Input type="radio" minWidth="maxContent" />
           </div>
         );
+      case 'Image':
+        return (
+          <div className="flex justify-center">
+            <Image src={item[column]} alt="product" width={60} height={60} />
+          </div>
+        );
       case 'Edit':
         return (
           <div className="flex items-center gap-2 cursor-pointer">
@@ -55,21 +63,12 @@ export default function HalalFood() {
             {item[column]}
           </div>
         );
-      case 'Description':
+      case 'Product Status':
         return (
-          <div className="flex items-center gap-2 cursor-pointer">
-            <span
-              dangerouslySetInnerHTML={{ __html: item[column] }}
-              className="text-xs text-left"
-            />
-          </div>
-        );
-      case 'Location':
-        return (
-          <div className="flex items-center gap-2 cursor-pointer">
-            <span
-              dangerouslySetInnerHTML={{ __html: item[column] }}
-              className="text-xs text-left"
+          <div className="relative">
+            <Select
+              options={[{ value: 'Active', label: 'Active' }]}
+              highlightValue="High"
             />
           </div>
         );
@@ -93,7 +92,7 @@ export default function HalalFood() {
 
   return (
     <main className="h-full">
-      <Title className="font-light ml-2 mb-2">Halal Food</Title>
+      <Title className="font-light ml-2 mb-2">Products</Title>
       <Wrapper>
         <div className="flex gap-3">
           <Button variant="primary" icon={<RiCheckDoubleFill />}>
@@ -107,7 +106,7 @@ export default function HalalFood() {
           </Button>
         </div>
         <div className="flex gap-3">
-          <Button variant="secondary">Add Restaurant</Button>
+          <Button variant="secondary">Add Product</Button>
           <Input
             type="text"
             placeholder="Search"

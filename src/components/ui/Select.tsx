@@ -5,6 +5,7 @@ interface SelectProps {
   onChange?: (event: React.ChangeEvent<HTMLSelectElement>) => void;
   options: Array<{ value: string; label: string }>;
   highlightValue?: string;
+  // defaultText?: string;
 }
 
 const Select: React.FC<SelectProps> = ({
@@ -12,6 +13,7 @@ const Select: React.FC<SelectProps> = ({
   onChange,
   options,
   highlightValue,
+  // defaultText = 'Priority',
 }) => {
   return (
     <select
@@ -21,7 +23,7 @@ const Select: React.FC<SelectProps> = ({
         value === highlightValue ? 'bg-blue-100 text-blue-800' : 'bg-white'
       }`}
     >
-      <option value="">Priority</option>
+      {/* <option value="">{defaultText}</option> */}
       {options.map((option) => (
         <option key={option.value} value={option.value}>
           {option.label}

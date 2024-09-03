@@ -9,21 +9,22 @@ import Button from '@/components/ui/Button';
 import DataTable from '@/components/ui/dataTable/DataTable';
 import Wrapper from '@/components/ui/dataTable/DataTableWrapper';
 import Input from '@/components/ui/Input';
+import Select from '@/components/ui/Select';
 import Title from '@/components/ui/Title';
 
 import generateDummyData from './DummyData';
 
-export default function HalalFood() {
+export default function Discounts() {
   const columns = [
     'Select',
-    'ID',
-    'Restaurant Name',
-    'Description',
-    'Location',
-    'Opens At',
-    'Closes At',
-    'Category',
-    'Tags',
+    'Offer ID',
+    'Offer Title',
+    'Offer Subtitle',
+    'Offer Start Date',
+    'Offer End Date',
+    'Merchant Name',
+    'Merchant Country',
+    'Merchant Country Code',
     'Edit',
     'Delete',
   ];
@@ -55,7 +56,7 @@ export default function HalalFood() {
             {item[column]}
           </div>
         );
-      case 'Description':
+      case 'Offer Subtitle':
         return (
           <div className="flex items-center gap-2 cursor-pointer">
             <span
@@ -64,26 +65,16 @@ export default function HalalFood() {
             />
           </div>
         );
-      case 'Location':
+      case 'Merchant Country':
         return (
-          <div className="flex items-center gap-2 cursor-pointer">
-            <span
-              dangerouslySetInnerHTML={{ __html: item[column] }}
-              className="text-xs text-left"
+          <div className="relative">
+            <Select
+              options={[
+                { value: 'Malaysia', label: 'Malaysia' },
+                { value: 'Singapore', label: 'Singapore' },
+              ]}
+              highlightValue="Malaysia"
             />
-          </div>
-        );
-      case 'Tags':
-        return (
-          <div className="flex gap-1">
-            {item[column].map((tag: string, index: number) => (
-              <span
-                key={index}
-                className="px-3 py-1 bg-gray-200 rounded-full text-xs font-medium"
-              >
-                {tag}
-              </span>
-            ))}
           </div>
         );
       default:
@@ -93,7 +84,7 @@ export default function HalalFood() {
 
   return (
     <main className="h-full">
-      <Title className="font-light ml-2 mb-2">Halal Food</Title>
+      <Title className="font-light ml-2 mb-2">Discounts</Title>
       <Wrapper>
         <div className="flex gap-3">
           <Button variant="primary" icon={<RiCheckDoubleFill />}>

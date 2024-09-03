@@ -13,17 +13,13 @@ import Title from '@/components/ui/Title';
 
 import generateDummyData from './DummyData';
 
-export default function HalalFood() {
+export default function ArTrails() {
   const columns = [
     'Select',
-    'ID',
-    'Restaurant Name',
-    'Description',
-    'Location',
-    'Opens At',
-    'Closes At',
-    'Category',
-    'Tags',
+    'Plan Name',
+    'Provider Name',
+    'Provider Link',
+    'Plan Price',
     'Edit',
     'Delete',
   ];
@@ -55,35 +51,10 @@ export default function HalalFood() {
             {item[column]}
           </div>
         );
-      case 'Description':
+      case 'Provider Link':
         return (
           <div className="flex items-center gap-2 cursor-pointer">
-            <span
-              dangerouslySetInnerHTML={{ __html: item[column] }}
-              className="text-xs text-left"
-            />
-          </div>
-        );
-      case 'Location':
-        return (
-          <div className="flex items-center gap-2 cursor-pointer">
-            <span
-              dangerouslySetInnerHTML={{ __html: item[column] }}
-              className="text-xs text-left"
-            />
-          </div>
-        );
-      case 'Tags':
-        return (
-          <div className="flex gap-1">
-            {item[column].map((tag: string, index: number) => (
-              <span
-                key={index}
-                className="px-3 py-1 bg-gray-200 rounded-full text-xs font-medium"
-              >
-                {tag}
-              </span>
-            ))}
+            <span className="underline text-blue-400">{item[column]}</span>
           </div>
         );
       default:
@@ -93,7 +64,7 @@ export default function HalalFood() {
 
   return (
     <main className="h-full">
-      <Title className="font-light ml-2 mb-2">Halal Food</Title>
+      <Title className="font-light ml-2 mb-2">Insurance Marketplace</Title>
       <Wrapper>
         <div className="flex gap-3">
           <Button variant="primary" icon={<RiCheckDoubleFill />}>
@@ -107,7 +78,7 @@ export default function HalalFood() {
           </Button>
         </div>
         <div className="flex gap-3">
-          <Button variant="secondary">Add Restaurant</Button>
+          <Button variant="secondary">Add New Insurance</Button>
           <Input
             type="text"
             placeholder="Search"

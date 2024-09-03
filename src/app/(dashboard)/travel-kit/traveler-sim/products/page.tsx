@@ -9,23 +9,20 @@ import Button from '@/components/ui/Button';
 import DataTable from '@/components/ui/dataTable/DataTable';
 import Wrapper from '@/components/ui/dataTable/DataTableWrapper';
 import Input from '@/components/ui/Input';
+import Select from '@/components/ui/Select';
 import Title from '@/components/ui/Title';
 
 import generateDummyData from './DummyData';
 
-export default function HalalFood() {
+export default function Products() {
   const columns = [
     'Select',
-    'ID',
-    'Restaurant Name',
-    'Description',
-    'Location',
-    'Opens At',
-    'Closes At',
-    'Category',
-    'Tags',
-    'Edit',
-    'Delete',
+    'Provider ID',
+    'Provider Name',
+    'Plan Name',
+    'Packages',
+    'Package Price',
+    'SIM Plan Status',
   ];
 
   const data = generateDummyData();
@@ -55,35 +52,13 @@ export default function HalalFood() {
             {item[column]}
           </div>
         );
-      case 'Description':
+      case 'SIM Plan Status':
         return (
-          <div className="flex items-center gap-2 cursor-pointer">
-            <span
-              dangerouslySetInnerHTML={{ __html: item[column] }}
-              className="text-xs text-left"
+          <div className="relative">
+            <Select
+              options={[{ value: 'Active', label: 'Active' }]}
+              highlightValue="High"
             />
-          </div>
-        );
-      case 'Location':
-        return (
-          <div className="flex items-center gap-2 cursor-pointer">
-            <span
-              dangerouslySetInnerHTML={{ __html: item[column] }}
-              className="text-xs text-left"
-            />
-          </div>
-        );
-      case 'Tags':
-        return (
-          <div className="flex gap-1">
-            {item[column].map((tag: string, index: number) => (
-              <span
-                key={index}
-                className="px-3 py-1 bg-gray-200 rounded-full text-xs font-medium"
-              >
-                {tag}
-              </span>
-            ))}
           </div>
         );
       default:
@@ -93,7 +68,7 @@ export default function HalalFood() {
 
   return (
     <main className="h-full">
-      <Title className="font-light ml-2 mb-2">Halal Food</Title>
+      <Title className="font-light ml-2 mb-2">Products</Title>
       <Wrapper>
         <div className="flex gap-3">
           <Button variant="primary" icon={<RiCheckDoubleFill />}>
@@ -107,7 +82,7 @@ export default function HalalFood() {
           </Button>
         </div>
         <div className="flex gap-3">
-          <Button variant="secondary">Add Restaurant</Button>
+          <Button variant="secondary">Add Product</Button>
           <Input
             type="text"
             placeholder="Search"

@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import React, { useState } from 'react';
 import { CiSearch } from 'react-icons/ci';
 import { FaFileExcel, FaRegEdit, FaTrashAlt } from 'react-icons/fa';
@@ -9,21 +10,25 @@ import Button from '@/components/ui/Button';
 import DataTable from '@/components/ui/dataTable/DataTable';
 import Wrapper from '@/components/ui/dataTable/DataTableWrapper';
 import Input from '@/components/ui/Input';
+import Select from '@/components/ui/Select';
 import Title from '@/components/ui/Title';
 
 import generateDummyData from './DummyData';
 
-export default function HalalFood() {
+export default function Orders() {
   const columns = [
     'Select',
-    'ID',
-    'Restaurant Name',
-    'Description',
-    'Location',
-    'Opens At',
-    'Closes At',
-    'Category',
-    'Tags',
+    'Image',
+    'User ID',
+    'Order ID',
+    'Order Name',
+    'Order Category',
+    'Order Date',
+    'Order Time',
+    'Order Value',
+    'Payment Mode',
+    'Payment Status',
+    'Order Status',
     'Edit',
     'Delete',
   ];
@@ -34,11 +39,19 @@ export default function HalalFood() {
   const [perPage, setPerPage] = useState(12);
 
   const renderCell = (item: any, column: string) => {
+    console.log(item);
+
     switch (column) {
       case 'Select':
         return (
           <div className="flex justify-center">
             <Input type="radio" minWidth="maxContent" />
+          </div>
+        );
+      case 'Image':
+        return (
+          <div className="flex justify-center">
+            <Image src={item[column]} alt="product" width={60} height={60} />
           </div>
         );
       case 'Edit':
@@ -55,35 +68,37 @@ export default function HalalFood() {
             {item[column]}
           </div>
         );
-      case 'Description':
+      case 'Payment Mode':
         return (
-          <div className="flex items-center gap-2 cursor-pointer">
-            <span
-              dangerouslySetInnerHTML={{ __html: item[column] }}
-              className="text-xs text-left"
+          <div className="relative">
+            <Select
+              options={[
+                { value: 'Digital Wallet', label: 'Digital Wallet' },
+                { value: 'Credit Card', label: 'Credit Card' },
+              ]}
+              highlightValue="High"
             />
           </div>
         );
-      case 'Location':
+      case 'Payment Status':
         return (
-          <div className="flex items-center gap-2 cursor-pointer">
-            <span
-              dangerouslySetInnerHTML={{ __html: item[column] }}
-              className="text-xs text-left"
+          <div className="relative">
+            <Select
+              options={[
+                { value: 'Completed', label: 'Completed' },
+                { value: 'Pending', label: 'Pending' },
+              ]}
+              highlightValue="High"
             />
           </div>
         );
-      case 'Tags':
+      case 'Order Status':
         return (
-          <div className="flex gap-1">
-            {item[column].map((tag: string, index: number) => (
-              <span
-                key={index}
-                className="px-3 py-1 bg-gray-200 rounded-full text-xs font-medium"
-              >
-                {tag}
-              </span>
-            ))}
+          <div className="relative">
+            <Select
+              options={[{ value: 'Delivered', label: 'Delivered' }]}
+              highlightValue="High"
+            />
           </div>
         );
       default:
@@ -93,7 +108,7 @@ export default function HalalFood() {
 
   return (
     <main className="h-full">
-      <Title className="font-light ml-2 mb-2">Halal Food</Title>
+      <Title className="font-light ml-2 mb-2">Orders</Title>
       <Wrapper>
         <div className="flex gap-3">
           <Button variant="primary" icon={<RiCheckDoubleFill />}>
@@ -106,18 +121,15 @@ export default function HalalFood() {
             Download Excel
           </Button>
         </div>
-        <div className="flex gap-3">
-          <Button variant="secondary">Add Restaurant</Button>
-          <Input
-            type="text"
-            placeholder="Search"
-            inputSize="sm"
-            minWidth="400px"
-            className="bg-white"
-            onChange={(e) => console.log(e.target.value)}
-            icon={<CiSearch />}
-          />
-        </div>
+        <Input
+          type="text"
+          placeholder="Search"
+          inputSize="sm"
+          minWidth="400px"
+          className="bg-white"
+          onChange={(e) => console.log(e.target.value)}
+          icon={<CiSearch />}
+        />
       </Wrapper>
 
       <div className="bg-white auto">
