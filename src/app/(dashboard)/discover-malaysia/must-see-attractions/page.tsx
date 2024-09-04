@@ -11,6 +11,7 @@ import Wrapper from '@/components/ui/dataTable/DataTableWrapper';
 import Input from '@/components/ui/Input';
 import Select from '@/components/ui/Select';
 import Title from '@/components/ui/Title';
+import AlertService from '@/services/alertService';
 
 import generateDummyData from './DummyData';
 
@@ -49,7 +50,26 @@ export default function MustSeeAttractions() {
         );
       case 'Delete':
         return (
-          <div className="flex items-center gap-2 cursor-pointer">
+          <div
+            className="flex items-center gap-2 cursor-pointer"
+            onClick={async () => {
+              try {
+                await AlertService.confirm(
+                  'Are you sure you want to delete this Selected Field',
+                  'Confirm',
+                  'Cancel',
+                );
+              } catch (error) {
+                console.log('something went wrong ');
+              }
+            }}
+            role="button"
+            tabIndex={0}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+              }
+            }}
+          >
             <FaTrashAlt className="text-red-600 text-xl" />
             {item[column]}
           </div>
@@ -96,6 +116,18 @@ export default function MustSeeAttractions() {
           <Button
             variant="primary"
             icon={<FaFileExcel className="text-green-600" />}
+            onClick={async () => {
+              try {
+                await AlertService.alert(
+                  'Successful!',
+                  'Downloaded Excell Sucessfully',
+                  'success',
+                  'Done',
+                );
+              } catch (error) {
+                console.log('something went wrong ');
+              }
+            }}
           >
             Download Excel
           </Button>
