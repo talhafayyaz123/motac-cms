@@ -29,7 +29,7 @@ const DataTable: React.FC<DataTableProps> = ({
   renderHeader,
   renderFooter,
   pagination,
-  minHeight = 'maxContent',
+  minHeight = '550px',
 }) => {
   return (
     <div className="rounded-lg flex flex-col" style={{ minHeight }}>
