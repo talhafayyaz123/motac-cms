@@ -12,6 +12,8 @@ import Title from './Title';
 const Navbar = () => {
   const pathname = usePathname();
   const router = useRouter();
+
+  const requiredPath = pathname.split('/')[1];
   return (
     <div className="bg-white p-8 flex justify-between items-center">
       <div className="flex items-center max-h-max gap-4">
@@ -31,7 +33,7 @@ const Navbar = () => {
           </div>
         )}
         <Title>
-          {pathname === '/' ? 'Dashboard' : parsePathToTitle(pathname)}
+          {pathname === '/' ? 'Dashboard' : parsePathToTitle(requiredPath)}
         </Title>
       </div>
       <div className="flex items-center space-x-9">
