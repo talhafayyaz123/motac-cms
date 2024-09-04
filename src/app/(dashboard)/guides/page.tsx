@@ -9,21 +9,17 @@ import Button from '@/components/ui/Button';
 import DataTable from '@/components/ui/dataTable/DataTable';
 import Wrapper from '@/components/ui/dataTable/DataTableWrapper';
 import Input from '@/components/ui/Input';
-import Select from '@/components/ui/Select';
 import Title from '@/components/ui/Title';
-import AlertService from '@/services/alertService';
 
 import generateDummyData from './DummyData';
 
-export default function MustSeeAttractions() {
+export default function Guides() {
   const columns = [
     'Select',
-    'Attraction ID',
-    'Attraction Name',
-    'Attraction Category',
-    'Attraction City',
+    'Guide Name',
+    'City',
+    'Category',
     'Tags',
-    'Priority',
     'Edit',
     'Delete',
   ];
@@ -50,41 +46,9 @@ export default function MustSeeAttractions() {
         );
       case 'Delete':
         return (
-          <div
-            className="flex items-center gap-2 cursor-pointer"
-            onClick={async () => {
-              try {
-                await AlertService.confirm(
-                  'Are you sure you want to delete this Selected Field',
-                  'Confirm',
-                  'Cancel',
-                );
-              } catch (error) {
-                console.log('something went wrong ');
-              }
-            }}
-            role="button"
-            tabIndex={0}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter' || e.key === ' ') {
-              }
-            }}
-          >
+          <div className="flex items-center gap-2 cursor-pointer">
             <FaTrashAlt className="text-red-600 text-xl" />
             {item[column]}
-          </div>
-        );
-      case 'Priority':
-        return (
-          <div className="relative">
-            <Select
-              options={[
-                { value: 'High', label: 'High' },
-                { value: 'Medium', label: 'Medium' },
-                { value: 'Low', label: 'Low' },
-              ]}
-              highlightValue="High"
-            />
           </div>
         );
       case 'Tags':
@@ -107,7 +71,7 @@ export default function MustSeeAttractions() {
 
   return (
     <main className="h-full">
-      <Title className="font-light ml-2 mb-2">Must See Attractions</Title>
+      <Title className="font-light ml-2 mb-2">Guides</Title>
       <Wrapper>
         <div className="flex gap-3">
           <Button variant="primary" icon={<RiCheckDoubleFill />}>
@@ -116,24 +80,12 @@ export default function MustSeeAttractions() {
           <Button
             variant="primary"
             icon={<FaFileExcel className="text-green-600" />}
-            onClick={async () => {
-              try {
-                await AlertService.alert(
-                  'Successful!',
-                  'Downloaded Excell Sucessfully',
-                  'success',
-                  'Done',
-                );
-              } catch (error) {
-                console.log('something went wrong ');
-              }
-            }}
           >
             Download Excel
           </Button>
         </div>
         <div className="flex gap-3">
-          <Button variant="secondary">Add Attraction</Button>
+          <Button variant="secondary">Add Guides</Button>
           <Input
             type="text"
             placeholder="Search"
