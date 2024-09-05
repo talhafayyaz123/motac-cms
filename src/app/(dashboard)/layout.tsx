@@ -13,7 +13,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       <div className="flex-grow flex flex-col overflow-hidden">
         <Navbar />
 
-        <div className="flex-grow md:overflow-y-auto overflow-x-hidden p-3">
+        <div className="flex-grow md:overflow-y-auto overflow-x-hidden py-3">
           {children}
         </div>
       </div>
