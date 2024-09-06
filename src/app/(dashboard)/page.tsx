@@ -1,67 +1,166 @@
 'use client';
+import Image from 'next/image';
 
-import { useState } from 'react';
-
-import DataTable from '@/components/ui/dataTable/DataTable';
-import generateDummyData from '@/components/ui/dataTable/DummyData';
+import locationIcon from '@/assets/location-icon.svg';
+import reviewsIcon from '@/assets/reviews-icon.svg';
+import usersIcon from '@/assets/users-icon.svg';
+import AttractionList from '@/components/ui/dashboard/AttractionList';
+import AreasplineChart from '@/components/ui/dashboard/charts/areasplineChart';
+import UserStats from '@/components/ui/dashboard/UserStates';
+import Select from '@/components/ui/Select';
 
 export default function Components() {
-  const columns = [
-    'Select',
-    'User ID',
-    'First Name',
-    'Last Name',
-    'Email',
-    'Phone Number',
-    'Nationality',
-    'Action',
+  const categories = [
+    'Jan',
+    'Feb',
+    'Mar',
+    'Apr',
+    'May',
+    'Jun',
+    'Jul',
+    'Sep',
+    'Oct',
+    'Nov',
+    'Dec',
+  ];
+  const data = [1, 2, 1, 1, 2, 4, 3, 2.5, 2, 3, 2.5, 2];
+
+  const userStats = [
+    { label: 'Total Users', value: 7000 },
+    { label: 'Active Users', value: 6500 },
+    { label: 'Deleted Users', value: 500 },
   ];
 
-  const data = generateDummyData();
-
-  const [currentPage, setCurrentPage] = useState(1);
-  const [perPage, setPerPage] = useState(10);
-
-  const renderCell = (item: any, column: string) => {
-    switch (column) {
-      case 'Select':
-        return <input type="radio" />;
-      case 'Tags':
-        return item[column].map((tag: string) => (
-          <span
-            key={tag}
-            className="px-2 py-1 bg-gray-200 rounded-full text-xs font-medium mr-2"
-          >
-            {tag}
-          </span>
-        ));
-      case 'Priority':
-        return (
-          <div className="relative">
-            <button className="px-4 py-2 bg-blue-500 text-white rounded-md flex items-center justify-between">
-              {item[column]}
-            </button>
-          </div>
-        );
-      default:
-        return <span>{item[column]}</span>;
-    }
-  };
   return (
     <main className="h-full">
-      <div className="bg-white auto h-full w-full">
-        <DataTable
-          columns={columns}
-          data={data.slice((currentPage - 1) * perPage, currentPage * perPage)}
-          renderCell={renderCell}
-          pagination={{
-            total: data.length,
-            perPage,
-            currentPage,
-            onPageChange: setCurrentPage,
-            onPerPageChange: setPerPage,
-          }}
+      <div className="flex justify-end pr-4">
+        <Select
+          options={[
+            { value: '30Days', label: 'Last 30 days' },
+            { value: '7Days', label: 'This week' },
+            { value: '14Days', label: '14 days' },
+          ]}
+          highlightValue="30Days"
         />
+      </div>
+      <div className="bg-white px-4 auto lg:max-h-96 lg:h-full h-auto w-full flex lg:flex-row flex-col justify-between gap-6 p-4">
+        <div className="flex flex-col gap-6 h-full w-full lg:w-3/12">
+          <div className="h-[50%] relative rounded-xl overflow-hidden bg-white border border-[#70707069] p-4">
+            <div className="absolute left-0 top-1/2 transform -translate-y-1/2 h-2/3 w-1 bg-[#778FDF] rounded-tr-xl rounded-br-xl"></div>
+            <div className="flex">
+              <div className="flex-auto">
+                <p className="text-xs text-[#666E79]">New User Sign Ups</p>
+                <p className="text-3xl font-semibold text-[#364EA2]">250</p>
+              </div>
+              <Image src={usersIcon} alt="" className="w-10 h-10" />
+            </div>
+          </div>
+          <div className="h-[50%] relative rounded-xl overflow-hidden bg-white border border-[#70707069] p-4">
+            <div className="absolute left-0 top-1/2 transform -translate-y-1/2 h-2/3 w-1 bg-[#778FDF] rounded-tr-xl rounded-br-xl"></div>
+            <div className="flex">
+              <div className="flex-auto">
+                <p className="text-3xl font-semibold text-[#364EA2]">10</p>
+                <p className="text-xs text-[#666E79]">New Locations Added</p>
+              </div>
+              <Image src={locationIcon} alt="" className="w-14 h-14" />
+            </div>
+          </div>
+        </div>
+
+        <div className="flex flex-col gap-6 h-full w-full lg:w-3/12">
+          <div className="h-full relative rounded-xl overflow-hidden bg-white border border-[#70707069]  flex flex-col">
+            <div className="absolute left-1/2 top-0 transform -translate-x-1/2 w-2/3 h-1 bg-[#778FDF] rounded-bl-xl rounded-br-xl"></div>
+            <div className=" items-start p-4">
+              <div className="flex items-start w-full">
+                <div className="flex-auto justify-between text-left">
+                  <p className="text-xs text-[#666E79]">New User Sign Ups</p>
+                  <p className="text-3xl font-semibold text-[#364EA2]">250</p>
+                  <p className="text-xs font-semibold text-[#364EA2] mt-7">
+                    50% Increase
+                  </p>
+                </div>
+                <div className="flex flex-col space-y-10">
+                  <div className="flex-auto text-left">
+                    <p className="text-xs text-[#666E79]">Total Users</p>
+                    <p className="text-xl font-semibold text-[#364EA2]">7000</p>
+                  </div>
+                  <div className="flex-auto text-left">
+                    <p className="text-xs text-[#666E79]">Deleted Users</p>
+                    <p className="text-xl font-semibold text-[#364EA2]">500</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <AreasplineChart
+              categories={categories}
+              data={data}
+              title=""
+              color="#364EA2"
+              fillColorStart="#778FDF"
+              fillColorEnd="transparent"
+              width={288}
+              height={150}
+            />
+          </div>
+        </div>
+
+        <div className="flex flex-col gap-6 h-full w-full lg:w-3/12">
+          <div className="h-[50%] relative rounded-xl max-h-[50%] overflow-hidden bg-white border border-[#70707069] p-4">
+            <div className="absolute left-0 top-1/2 transform -translate-y-1/2 h-2/3 w-1 bg-[#778FDF] rounded-tr-xl rounded-br-xl"></div>
+            <div className="flex items-center">
+              <div className="flex-auto">
+                <p className="text-xs text-[#666E79]">Reviews Added</p>
+                <p className="text-3xl mt-5 font-semibold text-[#364EA2]">
+                  350
+                </p>
+              </div>
+              <Image src={reviewsIcon} alt="" className="w-12 h-12" />
+            </div>
+          </div>
+        </div>
+
+        <div className="flex flex-col gap-6 h-full w-full lg:w-3/12">
+          <div className="relative rounded-xl overflow-hidden bg-white border border-[#70707069] p-4 h-full">
+            <div className="absolute left-1/2 top-0 transform -translate-x-1/2 w-2/3 h-1 bg-[#778FDF] rounded-bl-xl rounded-br-xl"></div>
+            <div className="flex flex-col items-center h-full">
+              <p className="text-xs text-[#666E79]">Attractions Added</p>
+              <p className="text-3xl font-semibold text-[#364EA2]">29</p>
+              <div className="w-full flex justify-between flex-col h-full space-y-2">
+                <AttractionList />
+                <div className="text-xs cursor-pointer text-center text-[#666E79]">
+                  {'View All >'}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="relative rounded-xl bg-white border border-[#70707069] p-4">
+        <div className="flex">
+          <UserStats title="User Management" stats={userStats} />
+          <AreasplineChart
+            categories={categories}
+            data={data}
+            title="New Users this Month"
+            color="#364EA2"
+            fillColorStart="#778FDF"
+            fillColorEnd="transparent"
+            // width={1000}
+            // height={350}
+          />
+
+          <div className="absolute top-4 right-0 flex justify-end pr-4">
+            <Select
+              options={[
+                { value: '30Days', label: 'Last 30 days' },
+                { value: '7Days', label: 'This week' },
+                { value: '14Days', label: '14 days' },
+              ]}
+              highlightValue="30Days"
+            />
+          </div>
+        </div>
       </div>
     </main>
   );

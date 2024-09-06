@@ -1,0 +1,103 @@
+'use client';
+import Highcharts from 'highcharts';
+import HighchartsReact from 'highcharts-react-official';
+import React from 'react';
+
+interface AreasplineChartProps {
+  categories: string[];
+  data: number[];
+  title?: string;
+  color?: string;
+  fillColorStart?: string;
+  fillColorEnd?: string;
+  width?: string | number; // Updated to accept string values for responsiveness
+  height?: string | number; // Updated to accept string values for responsiveness
+}
+
+const AreasplineChart: React.FC<AreasplineChartProps> = ({
+  categories,
+  data,
+  title = '',
+  color = 'transparent',
+  fillColorStart = '#778FDF',
+  fillColorEnd = 'transparent',
+  width = '100%', // Default to full width
+  height = '100%', // Default to full height
+}) => {
+  const options: Highcharts.Options = {
+    chart: {
+      type: 'areaspline',
+      width: typeof width === 'number' ? width : undefined,
+      height: typeof height === 'number' ? height : undefined,
+      // Ensure chart uses the full container size
+      reflow: true,
+    },
+    title: {
+      text: title,
+      style: {
+        fontSize: '14px',
+        color: '#666E79',
+      },
+    },
+    xAxis: {
+      categories: categories,
+      gridLineWidth: 1,
+      gridLineDashStyle: 'Dash',
+      labels: {
+        style: {
+          fontSize: '10px',
+        },
+      },
+    },
+    yAxis: {
+      title: {
+        text: '',
+      },
+      labels: {
+        enabled: false,
+      },
+      gridLineWidth: 0,
+    },
+    series: [
+      {
+        type: 'areaspline',
+        name: 'Data',
+        color: color,
+        fillColor: {
+          linearGradient: {
+            x1: 0,
+            y1: 0,
+            x2: 0,
+            y2: 1,
+          },
+          stops: [
+            [0, fillColorStart],
+            [1, fillColorEnd],
+          ],
+        },
+        data: data.map((y) => ({ y, marker: { enabled: false } })),
+        marker: {
+          enabled: false,
+          fillColor: fillColorStart,
+        },
+      },
+    ],
+    legend: { enabled: false },
+    credits: {
+      enabled: false,
+    },
+    plotOptions: {
+      areaspline: {
+        fillOpacity: 0.3,
+      },
+    },
+  };
+
+  return (
+    <div className="w-full h-full">
+      <HighchartsReact highcharts={Highcharts} options={options} />
+    </div>
+  );
+};
+
+export default AreasplineChart;
