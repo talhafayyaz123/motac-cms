@@ -1,56 +1,44 @@
 'use client';
-import { useRef } from 'react';
+import { useState } from 'react';
 
 import CardContainer from '@/components/ui/card/CardContainer';
 import CardStats from '@/components/ui/card/CardStats';
+import CustomDatePicker from '@/components/ui/CustomDatePicker';
 import AreasplineChart from '@/components/ui/dashboard/charts/AreasplineChart';
 import BarChart from '@/components/ui/dashboard/charts/BarChart';
 import MapChart from '@/components/ui/dashboard/charts/MapChart';
 import StatsSection from '@/components/ui/dashboard/StatsSections';
 import UserStats from '@/components/ui/dashboard/UserStates';
+import DataTable from '@/components/ui/dataTable/DataTable';
 import Select from '@/components/ui/Select';
+import {
+  categoriesForBar,
+  chartCategories,
+  chartData,
+  dummyMapDataOne,
+  dummyMapDataTwo,
+  dummyMapVisibleCountriesOne,
+  dummyMapVisibleCountriesTwo,
+  seriesData,
+  userStats,
+} from '@/constants';
 
-export default function Components() {
-  const categories = [
-    'Jan',
-    'Feb',
-    'Mar',
-    'Apr',
-    'May',
-    'Jun',
-    'Jul',
-    'Sep',
-    'Oct',
-    'Nov',
-    'Dec',
-  ];
-  const data = [1, 2, 1, 1, 2, 4, 3, 2.5, 2, 3, 2.5, 2];
+import generateDummyDataForARTrails from './DummyData';
 
-  const userStats = [
-    { label: 'Total Users', value: 7000 },
-    { label: 'Active Users', value: 6500 },
-    { label: 'Deleted Users', value: 500 },
-  ];
+export default function Dashboard() {
+  const columns = ['AR Trail Name', 'Location', 'Category'];
 
-  const mapData = [
-    { code: 'US', value: 1 },
-    { code: 'RU', value: 5 },
-  ];
+  const data = generateDummyDataForARTrails();
 
-  const visibleCountries = ['US', 'RU'];
+  const [currentPage] = useState(1);
+  const [perPage] = useState(12);
 
-  const categoriesForBar = ['Nature', 'Culture & History', 'Food Beverage'];
-
-  const seriesData = [
-    {
-      type: 'column' as const,
-      name: 'Fruits',
-      data: [5, 3, 4],
-    },
-  ];
-
-  const dateInputRef = useRef<HTMLInputElement>(null);
-
+  const renderCell = (item: any, column: string) => {
+    switch (column) {
+      default:
+        return <span>{item[column]}</span>;
+    }
+  };
   return (
     <main className="h-full">
       <StatsSection />
@@ -58,8 +46,8 @@ export default function Components() {
         <div className="flex">
           <UserStats stats={userStats} />
           <AreasplineChart
-            categories={categories}
-            data={data}
+            categories={chartCategories}
+            data={chartData}
             title="New Users this Month"
             color="#364EA2"
             fillColorStart="#778FDF"
@@ -86,7 +74,10 @@ export default function Components() {
             statsLabel="Total Attraction"
             statsData={24}
           >
-            <MapChart data={mapData} visibleCountries={visibleCountries} />
+            <MapChart
+              data={dummyMapDataOne}
+              visibleCountries={dummyMapVisibleCountriesOne}
+            />
           </CardStats>
           <CardStats
             title="Top Experiences"
@@ -101,13 +92,36 @@ export default function Components() {
             isEventFilter={true}
             statsData={26}
           >
-            <input
-              ref={dateInputRef}
-              type="date"
-              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-              placeholder="Select date"
-            />{' '}
+            <CustomDatePicker />
           </CardStats>
+        </div>
+      </CardContainer>
+
+      <CardContainer title="AR Trails">
+        <div className="grid lg:grid-cols-2 grid-rows-2 lg:grid-rows-1 gap-4 mb-4">
+          <div className="relative rounded-xl bg-[#FBFCFF] border border-[#70707069] overflow-hidden">
+            <DataTable
+              minHeight="auto"
+              verticalSpace="py-2"
+              bgColor="bg-[#FBFCFF]"
+              columns={columns}
+              data={data.slice(
+                (currentPage - 1) * perPage,
+                currentPage * perPage,
+              )}
+              renderCell={renderCell}
+            />
+          </div>
+          <div className="relative rounded-xl bg-[#FBFCFF] border border-[#70707069]  overflow-hidden">
+            <div className="absolute bottom-3 left-3 flex flex-col z-10">
+              <p className="text-xs text-[#666E79]">Total AR Trail</p>
+              <p className="text-4xl font-semibold text-[#364EA2]">14</p>
+            </div>
+            <MapChart
+              data={dummyMapDataTwo}
+              visibleCountries={dummyMapVisibleCountriesTwo}
+            />
+          </div>
         </div>
       </CardContainer>
     </main>

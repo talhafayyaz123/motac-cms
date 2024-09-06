@@ -1,3 +1,4 @@
+'use client';
 import Highcharts, { SeriesColumnOptions } from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
 import React from 'react';
@@ -16,6 +17,7 @@ const BarChart: React.FC<BarChartProps> = ({
   const options: Highcharts.Options = {
     chart: {
       type: 'column',
+      backgroundColor: 'transparent',
     },
     title: {
       text: title,

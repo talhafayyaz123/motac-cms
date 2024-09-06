@@ -1,3 +1,4 @@
+'use client';
 import worldMapData from '@highcharts/map-collection/custom/world.geo.json';
 import Highcharts from 'highcharts';
 import HighchartsMap from 'highcharts/modules/map';
@@ -28,6 +29,7 @@ const MapChart: React.FC<MapChartProps> = ({
   const options: Highcharts.Options = {
     chart: {
       map: {
+        backgroundColor: 'transparent',
         type: 'FeatureCollection',
         features: filteredMapData, // Use only filtered countries
       },
@@ -87,13 +89,11 @@ const MapChart: React.FC<MapChartProps> = ({
   };
 
   return (
-    <div style={{ width: '100%', height: '100%', minHeight: '400px' }}>
-      <HighchartsReact
-        highcharts={Highcharts}
-        options={options}
-        constructorType={'mapChart'}
-      />
-    </div>
+    <HighchartsReact
+      highcharts={Highcharts}
+      options={options}
+      constructorType={'mapChart'}
+    />
   );
 };
 

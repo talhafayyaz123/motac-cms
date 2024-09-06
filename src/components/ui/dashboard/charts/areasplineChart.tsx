@@ -26,6 +26,7 @@ const AreasplineChart: React.FC<AreasplineChartProps> = ({
 }) => {
   const options: Highcharts.Options = {
     chart: {
+      backgroundColor: 'transparent',
       type: 'areaspline',
       width: typeof width === 'number' ? width : undefined,
       height: typeof height === 'number' ? height : undefined,

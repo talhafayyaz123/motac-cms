@@ -6,24 +6,11 @@ import reviewsIcon from '@/assets/reviews-icon.svg';
 import usersIcon from '@/assets/users-icon.svg';
 import AttractionList from '@/components/ui/dashboard/AttractionList';
 import Select from '@/components/ui/Select';
+import { chartCategories, chartData } from '@/constants';
 
 import AreasplineChart from './charts/AreasplineChart';
 
 const StatsSection: React.FC = () => {
-  const categories = [
-    'Jan',
-    'Feb',
-    'Mar',
-    'Apr',
-    'May',
-    'Jun',
-    'Jul',
-    'Sep',
-    'Oct',
-    'Nov',
-    'Dec',
-  ];
-  const data = [1, 2, 1, 1, 2, 4, 3, 2.5, 2, 3, 2.5, 2];
   return (
     <>
       <div className="flex justify-end pr-4">
@@ -85,8 +72,8 @@ const StatsSection: React.FC = () => {
               </div>
             </div>
             <AreasplineChart
-              categories={categories}
-              data={data}
+              categories={chartCategories}
+              data={chartData}
               title=""
               color="#364EA2"
               fillColorStart="#778FDF"
