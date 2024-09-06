@@ -5,6 +5,7 @@ import React, { useState } from 'react';
 import { FaTrashAlt } from 'react-icons/fa';
 
 import FormContainer from '@/components/container/FormContainer';
+import Button from '@/components/ui/Button';
 import DropZone from '@/components/ui/DropZone';
 import Input from '@/components/ui/Input';
 import TextEditor from '@/components/ui/TextEditor';
@@ -20,7 +21,7 @@ export default function AddAttraction() {
   };
   return (
     <main className="h-full px-8 ">
-      <div className="sticky top-0 bg-white w-full py-8">
+      <div className="sticky top-0 bg-white w-full py-8 z-50">
         <Title>Detailed View</Title>
       </div>
       <FormContainer>
@@ -108,6 +109,10 @@ export default function AddAttraction() {
         </div>
         <DropZone images={images} setImages={setImages} />
       </FormContainer>
+      <div className="w-full flex justify-end gap-3 p-10">
+        <Button variant="danger">Cancel</Button>
+        <Button variant="customBlue">Add</Button>
+      </div>
     </main>
   );
 }
