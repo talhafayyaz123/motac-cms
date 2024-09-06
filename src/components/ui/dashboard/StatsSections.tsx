@@ -1,0 +1,147 @@
+'use client';
+import Image from 'next/image';
+
+import locationIcon from '@/assets/location-icon.svg';
+import reviewsIcon from '@/assets/reviews-icon.svg';
+import usersIcon from '@/assets/users-icon.svg';
+import AttractionList from '@/components/ui/dashboard/AttractionList';
+import Select from '@/components/ui/Select';
+
+import AreasplineChart from './charts/AreasplineChart';
+
+const StatsSection: React.FC = () => {
+  const categories = [
+    'Jan',
+    'Feb',
+    'Mar',
+    'Apr',
+    'May',
+    'Jun',
+    'Jul',
+    'Sep',
+    'Oct',
+    'Nov',
+    'Dec',
+  ];
+  const data = [1, 2, 1, 1, 2, 4, 3, 2.5, 2, 3, 2.5, 2];
+  return (
+    <>
+      <div className="flex justify-end pr-4">
+        <Select
+          options={[
+            { value: '30Days', label: 'Last 30 days' },
+            { value: '7Days', label: 'This week' },
+            { value: '14Days', label: '14 days' },
+          ]}
+          highlightValue="30Days"
+        />
+      </div>
+      <div className="bg-white px-4 auto lg:max-h-96 lg:h-full h-auto w-full flex lg:flex-row flex-col justify-between gap-6 p-4">
+        <div className="flex flex-col gap-6 h-full w-full lg:w-3/12">
+          <div className="h-[50%] relative rounded-xl overflow-hidden bg-white border border-[#70707069] p-4">
+            <div className="absolute left-0 top-1/2 transform -translate-y-1/2 h-2/3 w-1 bg-[#778FDF] rounded-tr-xl rounded-br-xl"></div>
+            <div className="flex">
+              <div className="flex-auto">
+                <p className="text-xs text-[#666E79]">New User Sign Ups</p>
+                <p className="text-3xl font-semibold text-[#364EA2]">250</p>
+              </div>
+              <Image src={usersIcon} alt="" className="w-10 h-10" />
+            </div>
+          </div>
+          <div className="content-center h-[50%] relative rounded-xl overflow-hidden bg-white border border-[#70707069] p-4">
+            <div className="absolute left-0 top-1/2 transform -translate-y-1/2 h-2/3 w-1 bg-[#778FDF] rounded-tr-xl rounded-br-xl"></div>
+            <div className="flex">
+              <div className="flex-auto">
+                <p className="text-3xl font-semibold text-[#364EA2]">10</p>
+                <p className="text-xs text-[#666E79]">New Locations Added</p>
+              </div>
+              <Image src={locationIcon} alt="" className="w-14 h-14" />
+            </div>
+          </div>
+        </div>
+
+        <div className="flex flex-col gap-6 h-full w-full lg:w-3/12">
+          <div className="h-full relative rounded-xl overflow-hidden bg-white border border-[#70707069]  flex flex-col">
+            <div className="absolute left-1/2 top-0 transform -translate-x-1/2 w-2/3 h-1 bg-[#778FDF] rounded-bl-xl rounded-br-xl"></div>
+            <div className=" items-start p-4">
+              <div className="flex items-start w-full">
+                <div className="flex-auto justify-between text-left">
+                  <p className="text-xs text-[#666E79]">New User Sign Ups</p>
+                  <p className="text-3xl font-semibold text-[#364EA2]">250</p>
+                  <p className="text-xs font-semibold text-[#364EA2] mt-7">
+                    50% Increase
+                  </p>
+                </div>
+                <div className="flex flex-col space-y-10">
+                  <div className="flex-auto text-left">
+                    <p className="text-xs text-[#666E79]">Total Users</p>
+                    <p className="text-xl font-semibold text-[#364EA2]">7000</p>
+                  </div>
+                  <div className="flex-auto text-left">
+                    <p className="text-xs text-[#666E79]">Deleted Users</p>
+                    <p className="text-xl font-semibold text-[#364EA2]">500</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <AreasplineChart
+              categories={categories}
+              data={data}
+              title=""
+              color="#364EA2"
+              fillColorStart="#778FDF"
+              fillColorEnd="transparent"
+              width={288}
+              height={150}
+            />
+          </div>
+        </div>
+
+        <div className="flex flex-col gap-6 h-full w-full lg:w-3/12">
+          <div className="h-[50%] relative rounded-xl max-h-[50%] overflow-hidden bg-white border border-[#70707069] p-4">
+            <div className="absolute left-0 top-1/2 transform -translate-y-1/2 h-2/3 w-1 bg-[#778FDF] rounded-tr-xl rounded-br-xl"></div>
+            <div className="flex items-center">
+              <div className="flex-auto">
+                <p className="text-xs text-[#666E79]">Reviews Added</p>
+                <p className="text-3xl mt-5 font-semibold text-[#364EA2]">
+                  350
+                </p>
+              </div>
+              <Image src={reviewsIcon} alt="" className="w-12 h-12" />
+            </div>
+          </div>
+
+          <div className="content-center h-[50%] relative rounded-xl max-h-[50%] overflow-hidden bg-white border border-[#70707069] p-4 opacity-[0.6] pointer-events-none">
+            <div className="absolute left-0 top-1/2 transform -translate-y-1/2 h-2/3 w-1 bg-[#778FDF] rounded-tr-xl rounded-br-xl"></div>
+            <div className="flex items-center">
+              <div className="flex-auto">
+                <p className="text-3xl font-semibold text-[#364EA2]">2600</p>
+                <p className="text-xs text-[#666E79]">
+                  Applicants For Arrival Card
+                </p>
+              </div>
+              <Image src={reviewsIcon} alt="" className="w-12 h-12" />
+            </div>
+          </div>
+        </div>
+
+        <div className="flex flex-col gap-6 h-full w-full lg:w-3/12">
+          <div className="relative rounded-xl overflow-hidden bg-white border border-[#70707069] p-4 h-full">
+            <div className="absolute left-1/2 top-0 transform -translate-x-1/2 w-2/3 h-1 bg-[#778FDF] rounded-bl-xl rounded-br-xl"></div>
+            <div className="flex flex-col items-center h-full">
+              <p className="text-xs text-[#666E79]">Attractions Added</p>
+              <p className="text-3xl font-semibold text-[#364EA2]">29</p>
+              <div className="w-full flex justify-between flex-col h-full space-y-2">
+                <AttractionList />
+                <div className="text-xs cursor-pointer text-center text-[#666E79]">
+                  {'View All >'}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </>
+  );
+};
+export default StatsSection;

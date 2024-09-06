@@ -10,8 +10,8 @@ interface AreasplineChartProps {
   color?: string;
   fillColorStart?: string;
   fillColorEnd?: string;
-  width?: string | number; // Updated to accept string values for responsiveness
-  height?: string | number; // Updated to accept string values for responsiveness
+  width?: string | number;
+  height?: string | number;
 }
 
 const AreasplineChart: React.FC<AreasplineChartProps> = ({
@@ -21,8 +21,8 @@ const AreasplineChart: React.FC<AreasplineChartProps> = ({
   color = 'transparent',
   fillColorStart = '#778FDF',
   fillColorEnd = 'transparent',
-  width = '100%', // Default to full width
-  height = '100%', // Default to full height
+  width = '100%',
+  height = '100%',
 }) => {
   const options: Highcharts.Options = {
     chart: {
