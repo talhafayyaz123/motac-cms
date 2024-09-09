@@ -1,68 +1,181 @@
 'use client';
-
 import { useState } from 'react';
 
+import CardContainer from '@/components/ui/card/CardContainer';
+import CardStats from '@/components/ui/card/CardStats';
+import ComingSoonFeature from '@/components/ui/ComingSoonFeature';
+import CustomDatePicker from '@/components/ui/CustomDatePicker';
+import AreasplineChart from '@/components/ui/dashboard/charts/AreasplineChart';
+import BarChart from '@/components/ui/dashboard/charts/BarChart';
+import MapChart from '@/components/ui/dashboard/charts/MapChart';
+import StatsSection from '@/components/ui/dashboard/StatsSections';
+import UserStats from '@/components/ui/dashboard/UserStates';
 import DataTable from '@/components/ui/dataTable/DataTable';
-import generateDummyData from '@/components/ui/dataTable/DummyData';
+import Select from '@/components/ui/Select';
+import {
+  categoriesForBar,
+  chartCategories,
+  chartData,
+  dummyMapDataOne,
+  dummyMapDataTwo,
+  dummyMapVisibleCountriesOne,
+  dummyMapVisibleCountriesTwo,
+  seriesData,
+  userStats,
+} from '@/constants';
 
-export default function Components() {
-  const columns = [
-    'Select',
-    'User ID',
-    'First Name',
-    'Last Name',
-    'Email',
-    'Phone Number',
-    'Nationality',
-    'Action',
-  ];
+import generateDummyDataForARTrails from './DummyData';
 
-  const data = generateDummyData();
+export default function Dashboard() {
+  const columns = ['AR Trail Name', 'Location', 'Category'];
 
-  const [currentPage, setCurrentPage] = useState(1);
-  const [perPage, setPerPage] = useState(10);
+  const data = generateDummyDataForARTrails();
+
+  const [currentPage] = useState(1);
+  const [perPage] = useState(12);
 
   const renderCell = (item: any, column: string) => {
     switch (column) {
-      case 'Select':
-        return <input type="radio" />;
-      case 'Tags':
-        return item[column].map((tag: string) => (
-          <span
-            key={tag}
-            className="px-2 py-1 bg-gray-200 rounded-full text-xs font-medium mr-2"
-          >
-            {tag}
-          </span>
-        ));
-      case 'Priority':
-        return (
-          <div className="relative">
-            <button className="px-4 py-2 bg-blue-500 text-white rounded-md flex items-center justify-between">
-              {item[column]}
-            </button>
-          </div>
-        );
       default:
         return <span>{item[column]}</span>;
     }
   };
   return (
     <main className="h-full">
-      <div className="bg-white auto h-full w-full">
-        <DataTable
-          columns={columns}
-          data={data.slice((currentPage - 1) * perPage, currentPage * perPage)}
-          renderCell={renderCell}
-          pagination={{
-            total: data.length,
-            perPage,
-            currentPage,
-            onPageChange: setCurrentPage,
-            onPerPageChange: setPerPage,
-          }}
-        />
+      <StatsSection />
+      <CardContainer title="User Management">
+        <div className="flex">
+          <UserStats stats={userStats} />
+          <AreasplineChart
+            categories={chartCategories}
+            data={chartData}
+            title="New Users this Month"
+            color="#364EA2"
+            fillColorStart="#778FDF"
+            fillColorEnd="transparent"
+          />
+
+          <div className="absolute top-4 right-0 flex justify-end pr-4">
+            <Select
+              options={[
+                { value: '30Days', label: 'Last 30 days' },
+                { value: '7Days', label: 'This week' },
+                { value: '14Days', label: '14 days' },
+              ]}
+              highlightValue="30Days"
+            />
+          </div>
+        </div>
+      </CardContainer>
+
+      <CardContainer title="Discover Malaysia">
+        <div className="grid lg:grid-cols-3 grid-rows-3 lg:grid-rows-1 gap-4 w-full">
+          <CardStats
+            title="Must See Attraction"
+            statsLabel="Total Attraction"
+            statsData={24}
+          >
+            <MapChart
+              data={dummyMapDataOne}
+              visibleCountries={dummyMapVisibleCountriesOne}
+            />
+          </CardStats>
+          <CardStats
+            title="Top Experiences"
+            statsLabel="Experiences Offered"
+            statsData={26}
+          >
+            <BarChart categories={categoriesForBar} seriesData={seriesData} />
+          </CardStats>
+          <CardStats
+            title="Happening Events"
+            statsLabel="Upcoming Events"
+            isEventFilter={true}
+            statsData={26}
+          >
+            <CustomDatePicker />
+          </CardStats>
+        </div>
+      </CardContainer>
+
+      <CardContainer title="AR Trails">
+        <div className="grid lg:grid-cols-2 grid-rows-2 lg:grid-rows-1 gap-4 mb-4 filter blur-lg pointer-events-none">
+          <div className="relative rounded-xl bg-[#FBFCFF] border border-[#70707069] overflow-hidden">
+            <DataTable
+              minHeight="auto"
+              verticalSpace="py-2"
+              bgColor="bg-[#FBFCFF]"
+              columns={columns}
+              data={data.slice(
+                (currentPage - 1) * perPage,
+                currentPage * perPage,
+              )}
+              renderCell={renderCell}
+            />
+          </div>
+          <div className="relative rounded-xl bg-[#FBFCFF] border border-[#70707069]  overflow-hidden">
+            <div className="absolute bottom-3 left-3 flex flex-col z-10">
+              <p className="text-xs text-[#666E79]">Total AR Trail</p>
+              <p className="text-4xl font-semibold text-[#364EA2]">14</p>
+            </div>
+            <MapChart
+              data={dummyMapDataTwo}
+              visibleCountries={dummyMapVisibleCountriesTwo}
+            />
+          </div>
+        </div>
+      </CardContainer>
+
+      <div className="flex justify-between gap-5 w-full">
+        <CardContainer customClasses="m-w-[50%] w-full" title="Arrival Card">
+          <ComingSoonFeature maxWidth="100%" height="400px" />{' '}
+        </CardContainer>
+        <CardContainer customClasses="m-w-[50%] w-full" title="MDAC">
+          <ComingSoonFeature maxWidth="100%" height="400px" />{' '}
+        </CardContainer>
       </div>
+
+      <CardContainer title="My Wallet" customClasses="w-full">
+        <div className="flex justify-between gap-5 w-full">
+          <ComingSoonFeature
+            addedBorder={true}
+            maxWidth="100%"
+            height="400px"
+          />{' '}
+          <ComingSoonFeature
+            addedBorder={true}
+            maxWidth="100%"
+            height="400px"
+          />{' '}
+        </div>
+      </CardContainer>
+
+      <CardContainer title="Rewards" customClasses="w-full">
+        <div className="flex justify-between gap-5 w-full">
+          <ComingSoonFeature
+            addedBorder={true}
+            maxWidth="100%"
+            height="400px"
+          />{' '}
+          <ComingSoonFeature
+            addedBorder={true}
+            maxWidth="100%"
+            height="400px"
+          />{' '}
+        </div>
+      </CardContainer>
+
+      <CardContainer title="Discounts" customClasses="w-full">
+        <ComingSoonFeature maxWidth="100%" height="400px" />
+      </CardContainer>
+
+      <CardContainer title="Heritage Products" customClasses="w-full">
+        <ComingSoonFeature maxWidth="100%" height="400px" />
+      </CardContainer>
+
+      <CardContainer title="Travel Kit" customClasses="w-full">
+        <ComingSoonFeature maxWidth="100%" height="400px" />
+      </CardContainer>
     </main>
   );
 }
