@@ -1,5 +1,6 @@
 'use client';
 
+import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
 import { CiSearch } from 'react-icons/ci';
 import { FaFileExcel, FaRegEdit, FaTrashAlt } from 'react-icons/fa';
@@ -15,6 +16,8 @@ import Title from '@/components/ui/Title';
 import generateDummyData from './DummyData';
 
 export default function HappeningEvents() {
+  const router = useRouter();
+
   const columns = [
     'Select',
     'Event ID',
@@ -102,7 +105,16 @@ export default function HappeningEvents() {
           </Button>
         </div>
         <div className="flex gap-3">
-          <Button variant="secondary">Add Events</Button>
+          <Button
+            variant="secondary"
+            onClick={() => {
+              router.push(
+                '/discover-malaysia/happening-events/add-happening-event',
+              );
+            }}
+          >
+            Add Events
+          </Button>
           <Input
             type="text"
             placeholder="Search"
