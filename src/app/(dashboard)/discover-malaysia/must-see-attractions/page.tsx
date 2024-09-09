@@ -1,5 +1,6 @@
 'use client';
 
+import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
 import { CiSearch } from 'react-icons/ci';
 import { FaFileExcel, FaRegEdit, FaTrashAlt } from 'react-icons/fa';
@@ -16,6 +17,8 @@ import AlertService from '@/services/alertService';
 import generateDummyData from './DummyData';
 
 export default function MustSeeAttractions() {
+  const router = useRouter();
+
   const columns = [
     'Select',
     'Attraction ID',
@@ -55,7 +58,7 @@ export default function MustSeeAttractions() {
             onClick={async () => {
               try {
                 await AlertService.confirm(
-                  'Are you sure you want to delete this Selected Field',
+                  'Are you sure you want to delete the Selected Field',
                   'Confirm',
                   'Cancel',
                 );
@@ -133,7 +136,16 @@ export default function MustSeeAttractions() {
           </Button>
         </div>
         <div className="flex gap-3">
-          <Button variant="secondary">Add Attraction</Button>
+          <Button
+            variant="secondary"
+            onClick={() => {
+              router.push(
+                '/discover-malaysia/must-see-attractions/add-attraction',
+              );
+            }}
+          >
+            Add Attraction
+          </Button>
           <Input
             type="text"
             placeholder="Search"
