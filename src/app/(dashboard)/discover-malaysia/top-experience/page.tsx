@@ -1,5 +1,6 @@
 'use client';
 
+import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
 import { CiSearch } from 'react-icons/ci';
 import { FaFileExcel, FaRegEdit, FaTrashAlt } from 'react-icons/fa';
@@ -15,6 +16,8 @@ import Title from '@/components/ui/Title';
 import generateDummyData from './DummyData';
 
 export default function TopExperience() {
+  const router = useRouter();
+
   const columns = [
     'Select',
     'Experience ID',
@@ -101,7 +104,14 @@ export default function TopExperience() {
           </Button>
         </div>
         <div className="flex gap-3">
-          <Button variant="secondary">Add Experiences</Button>
+          <Button
+            variant="secondary"
+            onClick={() => {
+              router.push('/discover-malaysia/top-experience/add-experiences');
+            }}
+          >
+            Add Experiences
+          </Button>
           <Input
             type="text"
             placeholder="Search"

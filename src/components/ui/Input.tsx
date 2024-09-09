@@ -1,10 +1,12 @@
 'use client';
 
+import Image from 'next/image';
 import React from 'react';
 
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   inputSize?: 'sm' | 'md' | 'lg';
   icon?: React.ReactNode;
+  label?: string;
   minWidth?: string;
 }
 
@@ -16,6 +18,7 @@ const Input: React.FC<InputProps> = ({
   inputSize = 'md',
   disabled = false,
   icon,
+  label,
   className = '',
   minWidth = '300px',
   ...rest
@@ -30,25 +33,34 @@ const Input: React.FC<InputProps> = ({
   const disabledStyles = disabled
     ? 'bg-gray-200 text-gray-500 cursor-not-allowed'
     : 'bg-white text-gray-900';
-  const combinedStyles = `${baseStyles} ${sizeStyles[inputSize]} ${disabledStyles} ${className}`;
+  const combinedStyles = `${className} ${baseStyles} ${sizeStyles[inputSize]} ${disabledStyles}`;
 
   return (
-    <div className="relative" style={{ minWidth }}>
-      {icon && (
-        <span className="absolute inset-y-0 left-0 flex items-center pl-4 text-2xl text-black">
-          {icon}
-        </span>
+    <div className="flex flex-col mb-4" style={{ minWidth }}>
+      {label && <p className="mb-2 text-md text-black">{label}</p>}
+      {type === 'file' && (
+        <label htmlFor={label} className={`${combinedStyles} flex justify-end`}>
+          <Image alt="image" src="/photo.svg" height={20} width={20} />
+        </label>
       )}
-      <input
-        type={type}
-        placeholder={placeholder}
-        value={value}
-        onChange={onChange}
-        className={`${combinedStyles} ${icon ? 'pl-12' : ''} border-gray-300 shadow-sm placeholder-black`}
-        disabled={disabled}
-        style={{ minWidth }}
-        {...rest}
-      />
+      <div className="relative">
+        {icon && (
+          <span className="absolute inset-y-0 left-0 flex items-center pl-4 text-2xl text-black">
+            {icon}
+          </span>
+        )}
+        <input
+          type={type}
+          id={label}
+          placeholder={placeholder}
+          value={value}
+          onChange={onChange}
+          className={`${combinedStyles} ${type === 'file' && 'hidden'} ${icon ? 'pl-12' : ''} border-gray-300 shadow-sm placeholder-black`}
+          disabled={disabled}
+          style={{ minWidth }}
+          {...rest}
+        />
+      </div>
     </div>
   );
 };
