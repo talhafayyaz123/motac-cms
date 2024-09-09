@@ -1,6 +1,7 @@
 'use client';
 
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
 import { CiSearch } from 'react-icons/ci';
 import { FaFileExcel, FaRegEdit, FaTrashAlt } from 'react-icons/fa';
@@ -16,6 +17,7 @@ import Title from '@/components/ui/Title';
 import generateDummyData from './DummyData';
 
 export default function Products() {
+  const router = useRouter();
   const columns = [
     'Select',
     'Image',
@@ -106,7 +108,14 @@ export default function Products() {
           </Button>
         </div>
         <div className="flex gap-3">
-          <Button variant="secondary">Add Product</Button>
+          <Button
+            variant="secondary"
+            onClick={() => {
+              router.push('/heritage-products/products/add-product');
+            }}
+          >
+            Add Product
+          </Button>
           <Input
             type="text"
             placeholder="Search"

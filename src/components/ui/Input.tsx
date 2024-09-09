@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import React from 'react';
 
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
@@ -36,9 +37,10 @@ const Input: React.FC<InputProps> = ({
 
   return (
     <div className="flex flex-col mb-4" style={{ minWidth }}>
-      {label && (
-        <label className="mb-2 text-md text-black" htmlFor={label}>
-          {label}
+      {label && <p className="mb-2 text-md text-black">{label}</p>}
+      {type === 'file' && (
+        <label htmlFor={label} className={`${combinedStyles} flex justify-end`}>
+          <Image alt="image" src="/photo.svg" height={20} width={20} />
         </label>
       )}
       <div className="relative">
@@ -53,7 +55,7 @@ const Input: React.FC<InputProps> = ({
           placeholder={placeholder}
           value={value}
           onChange={onChange}
-          className={`${combinedStyles} ${icon ? 'pl-12' : ''} border-gray-300 shadow-sm placeholder-black`}
+          className={`${combinedStyles} ${type === 'file' && 'hidden'} ${icon ? 'pl-12' : ''} border-gray-300 shadow-sm placeholder-black`}
           disabled={disabled}
           style={{ minWidth }}
           {...rest}
