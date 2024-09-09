@@ -3,6 +3,7 @@ import { useState } from 'react';
 
 import CardContainer from '@/components/ui/card/CardContainer';
 import CardStats from '@/components/ui/card/CardStats';
+import ComingSoonFeature from '@/components/ui/ComingSoonFeature';
 import CustomDatePicker from '@/components/ui/CustomDatePicker';
 import AreasplineChart from '@/components/ui/dashboard/charts/AreasplineChart';
 import BarChart from '@/components/ui/dashboard/charts/BarChart';
@@ -98,7 +99,7 @@ export default function Dashboard() {
       </CardContainer>
 
       <CardContainer title="AR Trails">
-        <div className="grid lg:grid-cols-2 grid-rows-2 lg:grid-rows-1 gap-4 mb-4">
+        <div className="grid lg:grid-cols-2 grid-rows-2 lg:grid-rows-1 gap-4 mb-4 filter blur-lg pointer-events-none">
           <div className="relative rounded-xl bg-[#FBFCFF] border border-[#70707069] overflow-hidden">
             <DataTable
               minHeight="auto"
@@ -123,6 +124,57 @@ export default function Dashboard() {
             />
           </div>
         </div>
+      </CardContainer>
+
+      <div className="flex justify-between gap-5 w-full">
+        <CardContainer customClasses="m-w-[50%] w-full" title="Arrival Card">
+          <ComingSoonFeature maxWidth="100%" height="400px" />{' '}
+        </CardContainer>
+        <CardContainer customClasses="m-w-[50%] w-full" title="MDAC">
+          <ComingSoonFeature maxWidth="100%" height="400px" />{' '}
+        </CardContainer>
+      </div>
+
+      <CardContainer title="My Wallet" customClasses="w-full">
+        <div className="flex justify-between gap-5 w-full">
+          <ComingSoonFeature
+            addedBorder={true}
+            maxWidth="100%"
+            height="400px"
+          />{' '}
+          <ComingSoonFeature
+            addedBorder={true}
+            maxWidth="100%"
+            height="400px"
+          />{' '}
+        </div>
+      </CardContainer>
+
+      <CardContainer title="Rewards" customClasses="w-full">
+        <div className="flex justify-between gap-5 w-full">
+          <ComingSoonFeature
+            addedBorder={true}
+            maxWidth="100%"
+            height="400px"
+          />{' '}
+          <ComingSoonFeature
+            addedBorder={true}
+            maxWidth="100%"
+            height="400px"
+          />{' '}
+        </div>
+      </CardContainer>
+
+      <CardContainer title="Discounts" customClasses="w-full">
+        <ComingSoonFeature maxWidth="100%" height="400px" />
+      </CardContainer>
+
+      <CardContainer title="Heritage Products" customClasses="w-full">
+        <ComingSoonFeature maxWidth="100%" height="400px" />
+      </CardContainer>
+
+      <CardContainer title="Travel Kit" customClasses="w-full">
+        <ComingSoonFeature maxWidth="100%" height="400px" />
       </CardContainer>
     </main>
   );

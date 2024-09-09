@@ -4,6 +4,7 @@ import Image from 'next/image';
 import locationIcon from '@/assets/location-icon.svg';
 import reviewsIcon from '@/assets/reviews-icon.svg';
 import usersIcon from '@/assets/users-icon.svg';
+import ComingSoonFeature from '@/components/ui/ComingSoonFeature';
 import AttractionList from '@/components/ui/dashboard/AttractionList';
 import Select from '@/components/ui/Select';
 import { chartCategories, chartData } from '@/constants';
@@ -98,7 +99,7 @@ const StatsSection: React.FC = () => {
             </div>
           </div>
 
-          <div className="content-center h-[50%] relative rounded-xl max-h-[50%] overflow-hidden bg-white border border-[#70707069] p-4 opacity-[0.6] pointer-events-none">
+          {/* <div className="content-center h-[50%] relative rounded-xl max-h-[50%] overflow-hidden bg-white border border-[#70707069] p-4 opacity-[0.6] pointer-events-none">
             <div className="absolute left-0 top-1/2 transform -translate-y-1/2 h-2/3 w-1 bg-[#778FDF] rounded-tr-xl rounded-br-xl"></div>
             <div className="flex items-center">
               <div className="flex-auto">
@@ -109,7 +110,9 @@ const StatsSection: React.FC = () => {
               </div>
               <Image src={reviewsIcon} alt="" className="w-12 h-12" />
             </div>
-          </div>
+          </div> */}
+
+          <ComingSoonFeature addedBorder={true} />
         </div>
 
         <div className="flex flex-col gap-6 h-full w-full lg:w-3/12">
