@@ -1,0 +1,143 @@
+'use client';
+
+import Image from 'next/image';
+import Link from 'next/link';
+import React, { FormEvent } from 'react';
+
+import Button from '@/components/ui/Button';
+import Input from '@/components/ui/Input';
+
+interface AuthFormProps {
+  title: string;
+  description: string;
+  buttonText: string;
+  fields: { type: string; placeholder: string; name: string }[];
+  onSubmit: (event: FormEvent<HTMLFormElement>) => void;
+  forgotPasswordLink?: string;
+  width: string;
+  height: string;
+  paddingTop: string;
+  formWidth?: string;
+  resendOtp?: string;
+  backBtn?: boolean;
+}
+
+const AuthForm: React.FC<AuthFormProps> = ({
+  title,
+  description,
+  buttonText,
+  fields,
+  onSubmit,
+  forgotPasswordLink,
+  width,
+  height,
+  paddingTop,
+  formWidth = '443px',
+  resendOtp,
+  backBtn,
+}) => {
+  return (
+    <main
+      className="h-screen w-screen bg-cover bg-center bg-no-repeat flex justify-center items-center"
+      style={{ backgroundImage: `url(/login-bg.png)` }}
+    >
+      <div
+        className="bg-white p-6 rounded-lg shadow-md mt-6 pt-[50px]"
+        style={{ width, height }}
+      >
+        <div className="flex items-center justify-center mb-6">
+          {backBtn && (
+            <Link
+              href={'/login'}
+              className="relative right-[75px] rounded-full"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="40"
+                height="40"
+                viewBox="0 0 70 70"
+              >
+                <rect
+                  id="Rectangle_889"
+                  data-name="Rectangle 889"
+                  width="70"
+                  height="70"
+                  rx="35"
+                  fill="#364ea2"
+                />
+                <path
+                  id="Path_2041"
+                  data-name="Path 2041"
+                  d="M24.88,26.837,17.7,19.656a2.067,2.067,0,0,0-3.264.218,2.285,2.285,0,0,0,.218,2.938l8.7,8.6a2.067,2.067,0,0,0,3.047,0l8.7-8.6a2.285,2.285,0,0,0,.218-2.938,2.067,2.067,0,0,0-3.264-.218Z"
+                  transform="translate(59 11) rotate(90)"
+                  fill="#fff"
+                />
+              </svg>
+            </Link>
+          )}
+          <Image alt="image" src="/login-logo.png" height={155} width={155} />
+        </div>
+
+        <h2 className="text-center mb-6 text-2xl font-medium">Admin Portal</h2>
+        <div className="flex justify-center">
+          <form
+            className={`flex flex-col gap-3 w-[${formWidth}]`}
+            onSubmit={onSubmit}
+          >
+            <h2
+              className={`text-left text-2xl font-medium pt-[${paddingTop}] `}
+            >
+              {title}
+            </h2>
+            <span className="text-left ext-2xl font-medium">{description}</span>
+            {fields.map((field, index) => (
+              <div key={index} className="flex flex-col gap-3">
+                <label
+                  htmlFor={field.name}
+                  className="mb-1 text-sm font-medium"
+                >
+                  {field.placeholder}
+                </label>
+                <Input
+                  type={field.type}
+                  placeholder={field.placeholder}
+                  inputSize="sm"
+                  minWidth="200px"
+                  className="bg-white !border-0 !border-b-2 focus:outline-none focus:ring-0 !rounded-none"
+                  name={field.name}
+                />
+              </div>
+            ))}
+
+            {forgotPasswordLink && (
+              <div className="flex justify-end -mt-3">
+                <Link href={forgotPasswordLink}>
+                  <span className="text-xs">Forgot Password?</span>
+                </Link>
+              </div>
+            )}
+
+            <Button variant="customBlue" minWidth="300px">
+              {buttonText}
+            </Button>
+
+            {resendOtp && (
+              <div className="flex justify-center mt-3 text-xs">
+                <span>
+                  Didn't get code?
+                  <Link href={resendOtp}>
+                    <span className="text-blue-500 ml-1">
+                      Resend code after 2 minutes
+                    </span>
+                  </Link>
+                </span>
+              </div>
+            )}
+          </form>
+        </div>
+      </div>
+    </main>
+  );
+};
+
+export default AuthForm;
