@@ -23,7 +23,6 @@ export default function ForgotPassword() {
       resendOtp="#"
       backBtn={true}
       formPadding="50px"
-      
     />
   );
 }
