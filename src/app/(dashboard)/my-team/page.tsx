@@ -1,5 +1,6 @@
 'use client';
 
+import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
 import { CiSearch } from 'react-icons/ci';
 import { FaFileExcel, FaRegEdit, FaTrashAlt } from 'react-icons/fa';
@@ -14,6 +15,8 @@ import Title from '@/components/ui/Title';
 import generateDummyData from './DummyData';
 
 export default function MyTeam() {
+  const router = useRouter();
+
   const columns = [
     'Select',
     'First Name',
@@ -74,15 +77,25 @@ export default function MyTeam() {
           </Button>
         </div>
 
-        <Input
-          type="text"
-          placeholder="Search"
-          inputSize="sm"
-          minWidth="400px"
-          className="bg-white"
-          onChange={(e) => console.log(e.target.value)}
-          icon={<CiSearch />}
-        />
+        <div className="flex gap-3">
+          <Button
+            variant="secondary"
+            onClick={() => {
+              router.push('/my-team/add-team-member');
+            }}
+          >
+            Add Member
+          </Button>
+          <Input
+            type="text"
+            placeholder="Search"
+            inputSize="sm"
+            minWidth="400px"
+            className="bg-white"
+            onChange={(e) => console.log(e.target.value)}
+            icon={<CiSearch />}
+          />
+        </div>
       </Wrapper>
 
       <div className="bg-white auto">
