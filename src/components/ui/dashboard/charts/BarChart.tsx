@@ -14,6 +14,11 @@ const BarChart: React.FC<BarChartProps> = ({
   categories,
   seriesData,
 }) => {
+  const getColorForBar = (index: number): string => {
+    const colors = ['#364EA2'];
+    return colors[index % colors.length];
+  };
+
   const options: Highcharts.Options = {
     chart: {
       type: 'column',
@@ -31,21 +36,34 @@ const BarChart: React.FC<BarChartProps> = ({
     yAxis: {
       min: 0,
       title: {
-        text: 'Values',
+        text: '',
         align: 'high',
       },
       labels: {
-        overflow: 'justify',
+        enabled: false,
       },
     },
     plotOptions: {
-      bar: {
+      column: {
         dataLabels: {
           enabled: true,
         },
+        colorByPoint: true,
       },
     },
-    series: seriesData,
+    series: seriesData.map((data) => ({
+      ...data,
+      data: (data.data || []).map((point: any): any => {
+        if (typeof point === 'number') {
+          return { y: point, color: getColorForBar(point) };
+        } else if (Array.isArray(point) && typeof point[1] === 'number') {
+          return { y: point[1], color: getColorForBar(point[1]) };
+        } else if (typeof point === 'object' && point !== null) {
+          return { ...point, color: getColorForBar((point as any).y) };
+        }
+        return point; // Fallback case
+      }),
+    })),
     responsive: {
       rules: [
         {
@@ -76,7 +94,7 @@ const BarChart: React.FC<BarChartProps> = ({
       enabled: false,
     },
     tooltip: {
-      enabled: false, // Disable tooltip
+      enabled: false,
     },
   };
 

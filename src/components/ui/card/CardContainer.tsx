@@ -13,9 +13,9 @@ const CardContainer: React.FC<CardContainerProps> = ({
 }) => {
   return (
     <div
-      className={`relative rounded-xl bg-white border border-[#70707069] p-4 mb-4 ${customClasses}`}
+      className={`relative rounded-xl bg-white border border-gray-100 font-medium px-5 py-6 mb-6 ${customClasses}`}
     >
-      <p className="text-lg text-[#181819] pb-4">{title}</p>
+      <p className="text-lg text-black-100 pb-4">{title}</p>
       {children}
     </div>
   );

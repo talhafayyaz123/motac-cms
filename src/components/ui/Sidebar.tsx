@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import React, { useState } from 'react';
@@ -27,51 +28,76 @@ import { LuScrollText } from 'react-icons/lu';
 import { MdEvent } from 'react-icons/md';
 import { SiHomeassistantcommunitystore } from 'react-icons/si';
 
+import producLogo from '@/assets/product-logo.svg';
+
 const menuItems = [
   {
     label: 'Dashboard',
     icon: <FaHome />,
     path: '/',
+    disabled: false,
   },
   {
     label: 'User Management',
     icon: <FaUser />,
     path: '/user-management',
+    disabled: false,
     subItems: [
-      { label: 'Active', path: '/user-management/active', icon: <FaUsers /> },
-      { label: 'Deleted', path: '/user-management/deleted', icon: <FaTrash /> },
+      {
+        label: 'Active',
+        path: '/user-management/active',
+        icon: <FaUsers />,
+        disabled: false,
+      },
+      {
+        label: 'Deleted',
+        path: '/user-management/deleted',
+        icon: <FaTrash />,
+        disabled: false,
+      },
     ],
   },
   {
     label: 'Discover Malaysia',
     icon: <FaGlobe />,
     path: '/discover-malaysia',
+    disabled: false,
     subItems: [
-      { label: 'Exploring Destinations', path: '#', icon: <FaUsers /> },
+      {
+        label: 'Exploring Destinations',
+        path: '#',
+        icon: <FaUsers />,
+        disabled: false,
+      },
       {
         label: 'Must See Attractions',
         path: '/discover-malaysia/must-see-attractions',
         icon: <FaLocationDot />,
+        disabled: false,
       },
       {
         label: 'Top Experience',
         path: '/discover-malaysia/top-experience',
         icon: <FaCameraRetro />,
+        disabled: false,
       },
       {
         label: 'Happening Events',
         path: '/discover-malaysia/happening-events',
         icon: <MdEvent />,
+        disabled: false,
       },
       {
         label: 'Ar Trails',
         path: '/discover-malaysia/ar-trails',
         icon: <IoTrailSignSharp />,
+        disabled: true,
       },
       {
         label: 'Restaurants',
         path: '/discover-malaysia/restaurants',
         icon: <FaAward />,
+        disabled: false,
       },
     ],
   },
@@ -79,16 +105,19 @@ const menuItems = [
     label: 'Arrival Card',
     icon: <FaWallet />,
     path: '/arrival-card',
+    disabled: true,
     subItems: [
       {
         label: 'Visa Applications',
         path: '/arrival-card/visa-applications',
         icon: <LuScrollText />,
+        disabled: true,
       },
       {
         label: 'MDAC',
         path: '/arrival-card/mdac',
         icon: <FaRegIdCard />,
+        disabled: true,
       },
     ],
   },
@@ -96,31 +125,37 @@ const menuItems = [
     label: 'My Wallet',
     icon: <FaWallet />,
     path: '/my-wallet',
+    disabled: true,
   },
   {
     label: 'Rewards',
     icon: <FaGift />,
     path: '/rewards',
+    disabled: true,
   },
   {
     label: 'Discounts',
     icon: <FaTags />,
     path: '/discounts',
+    disabled: true,
   },
   {
     label: 'Heritage Products',
     icon: <FaBook />,
     path: '/heritage-products',
+    disabled: true,
     subItems: [
       {
         label: 'Products',
         path: '/heritage-products/products',
         icon: <HiSquare3Stack3D />,
+        disabled: true,
       },
       {
         label: 'Orders',
         path: '/heritage-products/orders',
         icon: <FaBoxArchive />,
+        disabled: true,
       },
     ],
   },
@@ -128,26 +163,31 @@ const menuItems = [
     label: 'Travel Kit',
     icon: <FaSuitcase />,
     path: '/travel-kit',
+    disabled: true,
     subItems: [
       {
         label: 'Insurance Marketplace',
         path: '/travel-kit/insurance-marketplace',
         icon: <SiHomeassistantcommunitystore />,
+        disabled: true,
       },
       {
         label: 'Traveler Sim',
         path: '/travel-kit/traveler-sim',
         icon: <FaSimCard />,
+        disabled: true,
         subItems: [
           {
             label: 'Products',
             path: '/travel-kit/traveler-sim/products',
             icon: <HiSquare3Stack3D />,
+            disabled: true,
           },
           {
             label: 'Orders',
             path: '/travel-kit/traveler-sim/orders',
             icon: <FaBoxArchive />,
+            disabled: false,
           },
         ],
       },
@@ -157,11 +197,13 @@ const menuItems = [
     label: 'Guides',
     icon: <FaMap />,
     path: '/guides',
+    disabled: true,
   },
   {
     label: 'My Team',
     icon: <FaUsers />,
     path: '/my-team',
+    disabled: true,
   },
 ];
 
@@ -186,29 +228,34 @@ const Sidebar = () => {
   };
 
   return (
-    <div className="bg-white w-64 h-full shadow-md flex flex-col p-5">
+    <div className="w-full h-full flex flex-col py-5 pl-7">
       <div className="p-6">
-        <h1 className="text-lg font-bold">Malaysia Truly Asia</h1>
+        <Image src={producLogo} alt="product-logo" className="w-40 h-12" />
       </div>
-      <div className="flex-1 overflow-y-auto">
+      <div className="sidebar-scroll-bar flex-1 overflow-y-auto pr-7">
         <ul className="mt-6">
           {menuItems.map((item) => (
             <li key={item.label}>
               <div
-                className={`flex items-center p-2 mb-2 cursor-pointer rounded-lg ${
-                  pathname === item.path
-                    ? 'bg-blue-600 text-white'
-                    : 'hover:bg-gray-100'
+                className={`flex items-center p-2 mb-2 rounded-lg font-medium ${
+                  item.disabled
+                    ? 'text-gray-300 cursor-not-allowed' // Style for disabled item
+                    : (item.path !== '/' && pathname.includes(item.path)) ||
+                        pathname === item.path
+                      ? 'bg-blue-100 text-white'
+                      : 'hover:bg-blue-100 hover:text-white text-black-100 cursor-pointer'
                 }`}
                 role="button"
                 tabIndex={0}
-                onClick={() =>
-                  item.subItems
-                    ? handleDropdownToggle(item.label)
-                    : handleNavigation(item.path)
-                }
+                onClick={() => {
+                  if (!item.disabled) {
+                    item.subItems
+                      ? handleDropdownToggle(item.label)
+                      : handleNavigation(item.path);
+                  }
+                }}
                 onKeyDown={(e) => {
-                  if (e.key === 'Enter' || e.key === ' ') {
+                  if (!item.disabled && (e.key === 'Enter' || e.key === ' ')) {
                     item.subItems
                       ? handleDropdownToggle(item.label)
                       : handleNavigation(item.path);
@@ -217,32 +264,47 @@ const Sidebar = () => {
               >
                 <span
                   className={`mr-4 ${
-                    pathname === item.path ? 'text-white' : ''
+                    item.disabled
+                      ? 'text-gray-300'
+                      : pathname === item.path
+                        ? 'text-white'
+                        : ''
                   }`}
                 >
                   {item.icon}
                 </span>
-                <span className="text-sm">{item.label}</span>
+                <span
+                  className={`text-sm ${item.disabled ? 'text-gray-300' : ''}`}
+                >
+                  {item.label}
+                </span>
               </div>
               {item.subItems && openDropdown === item.label && (
-                <ul className="ml-6 space-y-1">
+                <ul className="ml-6 mb-2 space-y-1 border-l-2 border-blue-100 pl-4 relative">
                   {item.subItems.map((subItem) => (
-                    <li key={subItem.label}>
+                    <li key={subItem.label} className="relative">
                       <div
-                        className={`flex items-center p-2 cursor-pointer rounded-md ${
-                          pathname === subItem.path
-                            ? 'bg-blue-100 text-blue-600'
-                            : 'hover:bg-gray-100'
+                        className={`flex font-medium items-center p-2 rounded-md ${
+                          subItem.disabled
+                            ? 'text-gray-300 cursor-not-allowed'
+                            : pathname === subItem.path
+                              ? 'text-blue-100'
+                              : 'hover:text-blue-100 text-black-100 cursor-pointer'
                         }`}
                         role="button"
                         tabIndex={0}
-                        onClick={() =>
-                          subItem.subItems
-                            ? handleSubDropdownToggle(subItem.label)
-                            : handleNavigation(subItem.path)
-                        }
+                        onClick={() => {
+                          if (!subItem.disabled) {
+                            subItem.subItems
+                              ? handleSubDropdownToggle(subItem.label)
+                              : handleNavigation(subItem.path);
+                          }
+                        }}
                         onKeyDown={(e) => {
-                          if (e.key === 'Enter' || e.key === ' ') {
+                          if (
+                            !subItem.disabled &&
+                            (e.key === 'Enter' || e.key === ' ')
+                          ) {
                             subItem.subItems
                               ? handleSubDropdownToggle(subItem.label)
                               : handleNavigation(subItem.path);
@@ -251,36 +313,51 @@ const Sidebar = () => {
                       >
                         <span
                           className={`mr-4 ${
-                            pathname === subItem.path ? 'text-blue-600' : ''
+                            subItem.disabled
+                              ? 'text-gray-300'
+                              : pathname === subItem.path
+                                ? 'text-blue-100'
+                                : ''
                           }`}
                         >
                           {subItem.icon}
                         </span>
-                        <span className="text-xs">{subItem.label}</span>
+                        <span
+                          className={`text-xs text-nowrap ${subItem.disabled ? 'text-gray-300' : ''}`}
+                        >
+                          {subItem.label}
+                        </span>
                       </div>
+                      <span className="absolute w-3 h-[2px] bg-blue-100 top-1/2 -left-[18px] transform rotate-12 rounded-bl-full rounded-tr-full"></span>
                       {subItem.subItems &&
                         openSubDropdown === subItem.label && (
-                          <ul className="ml-6 space-y-1">
+                          <ul className="ml-6 space-y-1 border-l-2 border-blue-100 pl-4">
                             {subItem.subItems.map((nestedItem) => (
                               <li key={nestedItem.label} className="pl-4 py-1">
                                 <Link
                                   href={nestedItem.path}
                                   className={`flex items-center p-2 rounded-md ${
-                                    pathname === nestedItem.path
-                                      ? 'text-blue-600'
-                                      : 'hover:bg-gray-100'
+                                    nestedItem.disabled
+                                      ? 'text-gray-300 cursor-not-allowed'
+                                      : pathname === nestedItem.path
+                                        ? 'text-blue-100 bg-transparent'
+                                        : 'text-black-100'
                                   }`}
                                 >
                                   <span
                                     className={`mr-4 ${
-                                      pathname === nestedItem.path
-                                        ? 'text-blue-600'
-                                        : ''
+                                      nestedItem.disabled
+                                        ? 'text-gray-300'
+                                        : pathname === nestedItem.path
+                                          ? 'text-blue-100'
+                                          : ''
                                     }`}
                                   >
                                     {nestedItem.icon}
                                   </span>
-                                  <span className="text-xs">
+                                  <span
+                                    className={`text-xs ${nestedItem.disabled ? 'text-gray-300' : ''}`}
+                                  >
                                     {nestedItem.label}
                                   </span>
                                 </Link>
@@ -296,9 +373,10 @@ const Sidebar = () => {
           ))}
         </ul>
       </div>
-      <div className="p-2 hover:bg-gray-100 cursor-pointer flex items-center rounded-lg">
+
+      <div className="p-2 hover:bg-blue-100 cursor-pointer flex items-center rounded-lg">
         <FaSignOutAlt className="mr-4" />
-        <span className="text-red-600 text-sm">Logout</span>
+        <span className="text-red-100 text-sm">Logout</span>
       </div>
     </div>
   );

@@ -37,3 +37,17 @@ body {
     text-wrap: balance;
   }
 }
+
+
+.sidebar-scroll-bar::-webkit-scrollbar {
+  height: 4px;
+  width: 2px;
+}
+
+.sidebar-scroll-bar::-webkit-scrollbar-thumb {
+  background-color: #364EA2;
+}
+
+.sidebar-scroll-bar::-webkit-scrollbar-track {
+  background-color: #f5f5f5;
+}
