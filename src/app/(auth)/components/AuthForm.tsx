@@ -55,8 +55,8 @@ const AuthForm: React.FC<AuthFormProps> = ({
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                width="40"
-                height="40"
+                width="46"
+                height="46"
                 viewBox="0 0 70 70"
               >
                 <rect
