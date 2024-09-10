@@ -18,6 +18,7 @@ interface AuthFormProps {
   height: string;
   paddingTop: string;
   formWidth?: string;
+  formPadding?: string;
   resendOtp?: string;
   backBtn?: boolean;
 }
@@ -35,6 +36,7 @@ const AuthForm: React.FC<AuthFormProps> = ({
   formWidth = '443px',
   resendOtp,
   backBtn,
+  formPadding = '0',
 }) => {
   return (
     <main
@@ -79,7 +81,8 @@ const AuthForm: React.FC<AuthFormProps> = ({
         </div>
 
         <h2 className="text-center mb-6 text-2xl font-medium">Admin Portal</h2>
-        <div className="flex justify-center">
+
+        <div className={`flex justify-center pt-[${formPadding}]`}>
           <form
             className={`flex flex-col gap-3 w-[${formWidth}]`}
             onSubmit={onSubmit}
@@ -92,10 +95,7 @@ const AuthForm: React.FC<AuthFormProps> = ({
             <span className="text-left ext-2xl font-medium">{description}</span>
             {fields.map((field, index) => (
               <div key={index} className="flex flex-col gap-3">
-                <label
-                  htmlFor={field.name}
-                  className="mb-1 text-sm font-medium"
-                >
+                <label htmlFor={field.name} className="text-sm font-medium">
                   {field.placeholder}
                 </label>
                 <Input
@@ -112,19 +112,21 @@ const AuthForm: React.FC<AuthFormProps> = ({
             {forgotPasswordLink && (
               <div className="flex justify-end -mt-3">
                 <Link href={forgotPasswordLink}>
-                  <span className="text-xs">Forgot Password?</span>
+                  <span className="text-xs font-medium">Forgot Password?</span>
                 </Link>
               </div>
             )}
 
-            <Button variant="customBlue" minWidth="300px">
-              {buttonText}
-            </Button>
+            <div className="w-full flex justify-center p-2">
+              <Button variant="customBlue" minWidth="360px">
+                {buttonText}
+              </Button>
+            </div>
 
             {resendOtp && (
               <div className="flex justify-center mt-3 text-xs">
                 <span>
-                  Didn't get code?
+                  Didnt get code?
                   <Link href={resendOtp}>
                     <span className="text-blue-500 ml-1">
                       Resend code after 2 minutes

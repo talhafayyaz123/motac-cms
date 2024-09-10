@@ -19,9 +19,10 @@ export default function ForgotPassword() {
       ]}
       onSubmit={handleSubmit}
       width="520px"
-      height="485px"
+      height="540px"
       paddingTop="25px"
       backBtn={true}
+      formPadding="50px"
     />
   );
 }

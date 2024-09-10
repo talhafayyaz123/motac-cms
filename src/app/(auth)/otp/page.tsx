@@ -17,11 +17,13 @@ export default function ForgotPassword() {
       fields={[{ type: 'password', placeholder: 'Enter Otp', name: 'otp' }]}
       onSubmit={handleSubmit}
       width="520px"
-      height="500px"
+      height="560px"
       paddingTop="25px"
       formWidth="380px"
       resendOtp="#"
       backBtn={true}
+      formPadding="50px"
+      
     />
   );
 }

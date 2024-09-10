@@ -31,6 +31,7 @@ export default function ForgotPassword() {
       height="573px"
       paddingTop="25px"
       backBtn={true}
+       formPadding="30px"
     />
   );
 }
