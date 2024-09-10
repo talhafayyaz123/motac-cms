@@ -69,8 +69,8 @@ const menuItems = [
         icon: <IoTrailSignSharp />,
       },
       {
-        label: 'Halal Food',
-        path: '/discover-malaysia/halal-food',
+        label: 'Restaurants',
+        path: '/discover-malaysia/restaurants',
         icon: <FaAward />,
       },
     ],
