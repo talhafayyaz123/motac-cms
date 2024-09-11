@@ -4,208 +4,10 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import React, { useState } from 'react';
-import {
-  FaHome,
-  FaUser,
-  FaGlobe,
-  FaWallet,
-  FaGift,
-  FaTags,
-  FaBook,
-  FaSuitcase,
-  FaUsers,
-  FaTrash,
-  FaMap,
-  FaSignOutAlt,
-  FaAward,
-  FaRegIdCard,
-  FaSimCard,
-} from 'react-icons/fa';
-import { FaBoxArchive, FaCameraRetro, FaLocationDot } from 'react-icons/fa6';
-import { HiSquare3Stack3D } from 'react-icons/hi2';
-import { IoTrailSignSharp } from 'react-icons/io5';
-import { LuScrollText } from 'react-icons/lu';
-import { MdEvent } from 'react-icons/md';
-import { SiHomeassistantcommunitystore } from 'react-icons/si';
+import { FaSignOutAlt } from 'react-icons/fa';
 
+import { menuItems } from '@/assets';
 import producLogo from '@/assets/product-logo.svg';
-
-const menuItems = [
-  {
-    label: 'Dashboard',
-    icon: <FaHome />,
-    path: '/',
-    disabled: false,
-  },
-  {
-    label: 'User Management',
-    icon: <FaUser />,
-    path: '/user-management',
-    disabled: false,
-    subItems: [
-      {
-        label: 'Active',
-        path: '/user-management/active',
-        icon: <FaUsers />,
-        disabled: false,
-      },
-      {
-        label: 'Deleted',
-        path: '/user-management/deleted',
-        icon: <FaTrash />,
-        disabled: false,
-      },
-    ],
-  },
-  {
-    label: 'Discover Malaysia',
-    icon: <FaGlobe />,
-    path: '/discover-malaysia',
-    disabled: false,
-    subItems: [
-      {
-        label: 'Exploring Destinations',
-        path: '#',
-        icon: <FaUsers />,
-        disabled: false,
-      },
-      {
-        label: 'Must See Attractions',
-        path: '/discover-malaysia/must-see-attractions',
-        icon: <FaLocationDot />,
-        disabled: false,
-      },
-      {
-        label: 'Top Experience',
-        path: '/discover-malaysia/top-experience',
-        icon: <FaCameraRetro />,
-        disabled: false,
-      },
-      {
-        label: 'Happening Events',
-        path: '/discover-malaysia/happening-events',
-        icon: <MdEvent />,
-        disabled: false,
-      },
-      {
-        label: 'Ar Trails',
-        path: '/discover-malaysia/ar-trails',
-        icon: <IoTrailSignSharp />,
-        disabled: true,
-      },
-      {
-        label: 'Restaurants',
-        path: '/discover-malaysia/restaurants',
-        icon: <FaAward />,
-        disabled: false,
-      },
-    ],
-  },
-  {
-    label: 'Arrival Card',
-    icon: <FaWallet />,
-    path: '/arrival-card',
-    disabled: true,
-    subItems: [
-      {
-        label: 'Visa Applications',
-        path: '/arrival-card/visa-applications',
-        icon: <LuScrollText />,
-        disabled: true,
-      },
-      {
-        label: 'MDAC',
-        path: '/arrival-card/mdac',
-        icon: <FaRegIdCard />,
-        disabled: true,
-      },
-    ],
-  },
-  {
-    label: 'My Wallet',
-    icon: <FaWallet />,
-    path: '/my-wallet',
-    disabled: true,
-  },
-  {
-    label: 'Rewards',
-    icon: <FaGift />,
-    path: '/rewards',
-    disabled: true,
-  },
-  {
-    label: 'Discounts',
-    icon: <FaTags />,
-    path: '/discounts',
-    disabled: true,
-  },
-  {
-    label: 'Heritage Products',
-    icon: <FaBook />,
-    path: '/heritage-products',
-    disabled: true,
-    subItems: [
-      {
-        label: 'Products',
-        path: '/heritage-products/products',
-        icon: <HiSquare3Stack3D />,
-        disabled: true,
-      },
-      {
-        label: 'Orders',
-        path: '/heritage-products/orders',
-        icon: <FaBoxArchive />,
-        disabled: true,
-      },
-    ],
-  },
-  {
-    label: 'Travel Kit',
-    icon: <FaSuitcase />,
-    path: '/travel-kit',
-    disabled: true,
-    subItems: [
-      {
-        label: 'Insurance Marketplace',
-        path: '/travel-kit/insurance-marketplace',
-        icon: <SiHomeassistantcommunitystore />,
-        disabled: true,
-      },
-      {
-        label: 'Traveler Sim',
-        path: '/travel-kit/traveler-sim',
-        icon: <FaSimCard />,
-        disabled: true,
-        subItems: [
-          {
-            label: 'Products',
-            path: '/travel-kit/traveler-sim/products',
-            icon: <HiSquare3Stack3D />,
-            disabled: true,
-          },
-          {
-            label: 'Orders',
-            path: '/travel-kit/traveler-sim/orders',
-            icon: <FaBoxArchive />,
-            disabled: false,
-          },
-        ],
-      },
-    ],
-  },
-  {
-    label: 'Guides',
-    icon: <FaMap />,
-    path: '/guides',
-    disabled: true,
-  },
-  {
-    label: 'My Team',
-    icon: <FaUsers />,
-    path: '/my-team',
-    disabled: true,
-  },
-];
 
 const Sidebar = () => {
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
@@ -226,6 +28,7 @@ const Sidebar = () => {
   const handleNavigation = (path: string) => {
     router.push(path);
   };
+  console.log('pathname', pathname);
 
   return (
     <div className="w-full h-full flex flex-col py-5 pl-7">
@@ -234,10 +37,10 @@ const Sidebar = () => {
       </div>
       <div className="sidebar-scroll-bar flex-1 overflow-y-auto pr-7">
         <ul className="mt-6">
-          {menuItems.map((item) => (
+          {menuItems?.map((item) => (
             <li key={item.label}>
               <div
-                className={`flex items-center p-2 mb-2 rounded-lg font-medium ${
+                className={`group flex items-center p-2 mb-2 rounded-lg font-medium ${
                   item.disabled
                     ? 'text-gray-300 cursor-not-allowed' // Style for disabled item
                     : (item.path !== '/' && pathname.includes(item.path)) ||
@@ -266,12 +69,23 @@ const Sidebar = () => {
                   className={`mr-4 ${
                     item.disabled
                       ? 'text-gray-300'
-                      : pathname === item.path
+                      : (item.path !== '/' && pathname.includes(item.path)) ||
+                          pathname === item.path
                         ? 'text-white'
-                        : ''
+                        : 'group-hover:fill-white'
                   }`}
                 >
-                  {item.icon}
+                  {/* {item.icon} */}
+                  <item.icon
+                    color={
+                      item.disabled
+                        ? 'gray'
+                        : (item.path !== '/' && pathname.includes(item.path)) ||
+                            pathname === item.path
+                          ? 'white'
+                          : 'text-black-100'
+                    }
+                  />
                 </span>
                 <span
                   className={`text-sm ${item.disabled ? 'text-gray-300' : ''}`}
@@ -284,7 +98,7 @@ const Sidebar = () => {
                   {item.subItems.map((subItem) => (
                     <li key={subItem.label} className="relative">
                       <div
-                        className={`flex font-medium items-center p-2 rounded-md ${
+                        className={`group flex font-medium items-center p-2 rounded-md ${
                           subItem.disabled
                             ? 'text-gray-300 cursor-not-allowed'
                             : pathname === subItem.path
@@ -317,10 +131,18 @@ const Sidebar = () => {
                               ? 'text-gray-300'
                               : pathname === subItem.path
                                 ? 'text-blue-100'
-                                : ''
+                                : 'group-hover:fill-blue-100'
                           }`}
                         >
-                          {subItem.icon}
+                          <subItem.icon
+                            color={
+                              subItem.disabled
+                                ? 'gray'
+                                : pathname === subItem.path
+                                  ? '#364EA2'
+                                  : 'text-black-100 group-hover:fill-blue-100'
+                            }
+                          />
                         </span>
                         <span
                           className={`text-xs text-nowrap ${subItem.disabled ? 'text-gray-300' : ''}`}
@@ -336,7 +158,7 @@ const Sidebar = () => {
                               <li key={nestedItem.label} className="pl-4 py-1">
                                 <Link
                                   href={nestedItem.path}
-                                  className={`flex items-center p-2 rounded-md ${
+                                  className={`group flex items-center p-2 rounded-md ${
                                     nestedItem.disabled
                                       ? 'text-gray-300 cursor-not-allowed'
                                       : pathname === nestedItem.path
@@ -350,10 +172,18 @@ const Sidebar = () => {
                                         ? 'text-gray-300'
                                         : pathname === nestedItem.path
                                           ? 'text-blue-100'
-                                          : ''
+                                          : 'group-hover:fill-blue-100'
                                     }`}
                                   >
-                                    {nestedItem.icon}
+                                    <nestedItem.icon
+                                      color={
+                                        nestedItem.disabled
+                                          ? 'gray'
+                                          : pathname === nestedItem.path
+                                            ? '#364EA2'
+                                            : 'text-black-100 group-hover:fill-blue-100'
+                                      }
+                                    />
                                   </span>
                                   <span
                                     className={`text-xs ${nestedItem.disabled ? 'text-gray-300' : ''}`}
