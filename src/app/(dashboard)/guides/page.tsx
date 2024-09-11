@@ -1,5 +1,6 @@
 'use client';
 
+import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
 import { CiSearch } from 'react-icons/ci';
 import { FaFileExcel, FaRegEdit, FaTrashAlt } from 'react-icons/fa';
@@ -14,6 +15,8 @@ import Title from '@/components/ui/Title';
 import generateDummyData from './DummyData';
 
 export default function Guides() {
+  const router = useRouter();
+
   const columns = [
     'Select',
     'Guide Name',
@@ -85,7 +88,14 @@ export default function Guides() {
           </Button>
         </div>
         <div className="flex gap-3">
-          <Button variant="secondary">Add Guides</Button>
+          <Button
+            variant="secondary"
+            onClick={() => {
+              router.push('/guides/add-guide');
+            }}
+          >
+            Add Guides
+          </Button>
           <Input
             type="text"
             placeholder="Search"

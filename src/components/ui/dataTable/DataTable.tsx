@@ -20,6 +20,8 @@ interface DataTableProps {
     onPerPageChange: (perPage: number) => void;
   };
   minHeight?: string;
+  bgColor?: string;
+  verticalSpace?: string;
 }
 
 const DataTable: React.FC<DataTableProps> = ({
@@ -30,6 +32,8 @@ const DataTable: React.FC<DataTableProps> = ({
   renderFooter,
   pagination,
   minHeight = '550px',
+  bgColor = 'bg-white',
+  verticalSpace,
 }) => {
   return (
     <div className="rounded-lg flex flex-col" style={{ minHeight }}>
@@ -39,9 +43,13 @@ const DataTable: React.FC<DataTableProps> = ({
             className="sticky top-0 z-10"
             style={{ background: colors.data_table_header }}
           >
-            <TableHeader columns={columns} renderHeader={renderHeader} />
+            <TableHeader
+              columns={columns}
+              renderHeader={renderHeader}
+              verticalSpace={verticalSpace}
+            />
           </thead>
-          <tbody className="bg-white divide-y divide-gray-200">
+          <tbody className={`${bgColor} divide-y divide-gray-200`}>
             {data.map((item, index) => (
               <TableRow
                 key={index}

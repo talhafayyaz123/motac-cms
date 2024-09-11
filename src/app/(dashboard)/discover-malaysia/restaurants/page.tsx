@@ -1,5 +1,6 @@
 'use client';
 
+import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
 import { CiSearch } from 'react-icons/ci';
 import { FaFileExcel, FaRegEdit, FaTrashAlt } from 'react-icons/fa';
@@ -13,7 +14,9 @@ import Title from '@/components/ui/Title';
 
 import generateDummyData from './DummyData';
 
-export default function HalalFood() {
+export default function Restaurants() {
+  const router = useRouter();
+
   const columns = [
     'Select',
     'ID',
@@ -105,7 +108,7 @@ export default function HalalFood() {
 
   return (
     <main className="h-full">
-      <Title className="font-light ml-2 mb-2">Halal Food</Title>
+      <Title className="font-light ml-2 mb-2">Restaurants</Title>
       <Wrapper>
         <div className="flex gap-3">
           <Button variant="primary" icon={<RiCheckDoubleFill />}>
@@ -119,7 +122,14 @@ export default function HalalFood() {
           </Button>
         </div>
         <div className="flex gap-3">
-          <Button variant="secondary">Add Restaurant</Button>
+          <Button
+            variant="secondary"
+            onClick={() => {
+              router.push('/discover-malaysia/restaurants/add-restaurant');
+            }}
+          >
+            Add Restaurant
+          </Button>
           <Input
             type="text"
             placeholder="Search"

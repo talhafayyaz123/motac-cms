@@ -10,7 +10,7 @@ const variantStyles = {
   danger:
     'bg-red-600 text-white hover:bg-red-700 disabled:bg-red-400 disabled:text-gray-200',
   customBlue:
-    'bg-[#364EA2] text-white hover:bg-[#2F458E] disabled:bg-[#7B8BC4] disabled:text-gray-200',
+    'bg-blue-100 text-white hover:bg-[#2F458E] disabled:bg-[#7B8BC4] disabled:text-gray-200',
 };
 const AlertService = {
   alert: (
