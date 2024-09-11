@@ -32,11 +32,9 @@ const menuItems = [
     label: 'Dashboard',
     icon: <FaHome />,
     path: '/',
-    disabled: false,
   },
   {
     label: 'User Management',
-    disabled: false,
     icon: <FaUser />,
     path: '/user-management',
     subItems: [
@@ -47,7 +45,6 @@ const menuItems = [
   {
     label: 'Discover Malaysia',
     icon: <FaGlobe />,
-    disabled: false,
     path: '/discover-malaysia',
     subItems: [
       { label: 'Exploring Destinations', path: '#', icon: <FaUsers /> },
@@ -81,7 +78,6 @@ const menuItems = [
   {
     label: 'Arrival Card',
     icon: <FaWallet />,
-    disabled: true,
     path: '/arrival-card',
     subItems: [
       {
@@ -99,25 +95,21 @@ const menuItems = [
   {
     label: 'My Wallet',
     icon: <FaWallet />,
-    disabled: true,
     path: '/my-wallet',
   },
   {
     label: 'Rewards',
-    disabled: true,
     icon: <FaGift />,
     path: '/rewards',
   },
   {
     label: 'Discounts',
-    disabled: true,
     icon: <FaTags />,
     path: '/discounts',
   },
   {
     label: 'Heritage Products',
     icon: <FaBook />,
-    disabled: true,
     path: '/heritage-products',
     subItems: [
       {
@@ -135,7 +127,6 @@ const menuItems = [
   {
     label: 'Travel Kit',
     icon: <FaSuitcase />,
-    disabled: true,
     path: '/travel-kit',
     subItems: [
       {
@@ -165,12 +156,10 @@ const menuItems = [
   {
     label: 'Guides',
     icon: <FaMap />,
-    disabled: false,
     path: '/guides',
   },
   {
     label: 'My Team',
-    disabled: false,
     icon: <FaUsers />,
     path: '/my-team',
   },
@@ -204,10 +193,7 @@ const Sidebar = () => {
       <div className="flex-1 overflow-y-auto">
         <ul className="mt-6">
           {menuItems.map((item) => (
-            <li
-              key={item.label}
-              className={item.disabled ? 'pointer-events-none opacity-25' : ''}
-            >
+            <li key={item.label}>
               <div
                 className={`flex items-center p-2 mb-2 cursor-pointer rounded-lg ${
                   pathname === item.path
