@@ -31,12 +31,18 @@ export default function MustSeeAttractions() {
     'Delete',
   ];
 
-  const data = generateDummyData();
+  const [data, setData] = useState(generateDummyData());
 
   const [currentPage, setCurrentPage] = useState(1);
   const [perPage, setPerPage] = useState(12);
 
-  const renderCell = (item: any, column: string) => {
+  const handleTagRemove = (rowIndex: number, tagIndex: number) => {
+    const newData = [...data];
+    newData[rowIndex].Tags.splice(tagIndex, 1);
+    setData(newData);
+  };
+
+  const renderCell = (item: any, column: string, rowIndex: number) => {
     switch (column) {
       case 'Select':
         return (
@@ -99,6 +105,12 @@ export default function MustSeeAttractions() {
                 className="px-3 py-1 bg-gray-200 rounded-full text-xs font-medium"
               >
                 {tag}
+                <button
+                  onClick={() => handleTagRemove(rowIndex, index)}
+                  className="ml-2 text-gray-500 hover:text-gray-700"
+                >
+                  &times;
+                </button>
               </span>
             ))}
           </div>

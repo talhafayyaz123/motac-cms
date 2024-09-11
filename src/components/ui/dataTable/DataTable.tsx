@@ -9,7 +9,7 @@ import TableRow from './TableRow';
 interface DataTableProps {
   columns: Array<string>;
   data: Array<any>;
-  renderCell: (item: any, column: string) => React.ReactNode;
+  renderCell: (item: any, column: string, index?: number) => React.ReactNode;
   renderHeader?: (column: string) => React.ReactNode;
   renderFooter?: () => React.ReactNode;
   pagination?: {
@@ -55,7 +55,9 @@ const DataTable: React.FC<DataTableProps> = ({
                 key={index}
                 item={item}
                 columns={columns}
-                renderCell={renderCell}
+                renderCell={(item: any, column: string) =>
+                  renderCell(item, column, index)
+                }
               />
             ))}
           </tbody>

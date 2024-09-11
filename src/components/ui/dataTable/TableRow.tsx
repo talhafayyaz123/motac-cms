@@ -3,10 +3,16 @@ import React from 'react';
 interface TableRowProps {
   item: any;
   columns: Array<string>;
-  renderCell: (item: any, column: string) => React.ReactNode;
+  rowIndex: number;
+  renderCell: (item: any, column: string, rowIndex: number) => React.ReactNode;
 }
 
-const TableRow: React.FC<TableRowProps> = ({ item, columns, renderCell }) => {
+const TableRow: React.FC<TableRowProps> = ({
+  item,
+  columns,
+  rowIndex,
+  renderCell,
+}) => {
   return (
     <tr>
       {columns.map((column, index) => (
@@ -20,7 +26,7 @@ const TableRow: React.FC<TableRowProps> = ({ item, columns, renderCell }) => {
                 : 'border-x border-gray-300'
           }`}
         >
-          {renderCell(item, column)}
+          {renderCell(item, column, rowIndex)}
         </td>
       ))}
     </tr>

@@ -45,7 +45,7 @@ const Navbar = () => {
         </div>
         <div className="flex items-center space-x-2 pr-6">
           <Image
-            src="https://via.placeholder.com/150"
+            src="/user.jpg"
             alt="Profile"
             className="rounded-full"
             width={50}
