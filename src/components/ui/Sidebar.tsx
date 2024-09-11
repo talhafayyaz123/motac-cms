@@ -197,13 +197,13 @@ const menuItems = [
     label: 'Guides',
     icon: <FaMap />,
     path: '/guides',
-    disabled: true,
+    disabled: false,
   },
   {
     label: 'My Team',
     icon: <FaUsers />,
     path: '/my-team',
-    disabled: true,
+    disabled: false,
   },
 ];
 
