@@ -18,8 +18,6 @@ export default function ForgotPassword() {
         { type: 'email', placeholder: 'Enter your email', name: 'email' },
       ]}
       onSubmit={handleSubmit}
-      width="520px"
-      height="540px"
       paddingTop="25px"
       backBtn={true}
       formPadding="50px"

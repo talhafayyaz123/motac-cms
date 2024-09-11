@@ -16,8 +16,6 @@ export default function ForgotPassword() {
       buttonText="Next"
       fields={[{ type: 'password', placeholder: 'Enter Otp', name: 'otp' }]}
       onSubmit={handleSubmit}
-      width="520px"
-      height="560px"
       paddingTop="25px"
       formWidth="380px"
       resendOtp="#"

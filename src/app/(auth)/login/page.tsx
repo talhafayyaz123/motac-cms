@@ -24,8 +24,6 @@ export default function Login() {
       ]}
       onSubmit={handleSubmit}
       forgotPasswordLink="/forgot-password"
-      width="520px"
-      height="580px"
       paddingTop="0px"
     />
   );

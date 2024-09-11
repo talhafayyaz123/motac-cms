@@ -14,8 +14,6 @@ interface AuthFormProps {
   fields: { type: string; placeholder: string; name: string }[];
   onSubmit: (event: FormEvent<HTMLFormElement>) => void;
   forgotPasswordLink?: string;
-  width: string;
-  height: string;
   paddingTop: string;
   formWidth?: string;
   formPadding?: string;
@@ -30,8 +28,6 @@ const AuthForm: React.FC<AuthFormProps> = ({
   fields,
   onSubmit,
   forgotPasswordLink,
-  width,
-  height,
   paddingTop,
   formWidth = '443px',
   resendOtp,
@@ -44,8 +40,7 @@ const AuthForm: React.FC<AuthFormProps> = ({
       style={{ backgroundImage: `url(/login-bg.png)` }}
     >
       <div
-        className="bg-white p-6 rounded-lg shadow-md mt-6 pt-[50px]"
-        style={{ width, height }}
+        className={`bg-white p-6 rounded-lg shadow-md mt-6 pt-[50px] w-[520px] h-[567px]`}
       >
         <div className="flex items-center justify-center mb-6">
           {backBtn && (
