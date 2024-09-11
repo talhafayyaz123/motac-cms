@@ -10,7 +10,7 @@ import Title from '@/components/ui/Title';
 
 export default function AddGuide() {
   return (
-    <main className="h-full px-8 ">
+    <main className="h-full">
       <div className="sticky top-0 bg-white w-full py-8 z-50">
         <Title>Detailed View</Title>
       </div>
