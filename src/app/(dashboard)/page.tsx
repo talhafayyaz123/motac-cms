@@ -1,45 +1,44 @@
 'use client';
-import { useState } from 'react';
-
+// import { useState } from 'react';
 import CardContainer from '@/components/ui/card/CardContainer';
 import CardStats from '@/components/ui/card/CardStats';
 import ComingSoonFeature from '@/components/ui/ComingSoonFeature';
 import CustomDatePicker from '@/components/ui/CustomDatePicker';
-import AreasplineChart from '@/components/ui/dashboard/charts/AreasplineChart';
+import AreasplineChart from '@/components/ui/dashboard/charts/areasplineChart';
 import BarChart from '@/components/ui/dashboard/charts/BarChart';
 import MapChart from '@/components/ui/dashboard/charts/MapChart';
 import StatsSection from '@/components/ui/dashboard/StatsSections';
 import UserStats from '@/components/ui/dashboard/UserStates';
-import DataTable from '@/components/ui/dataTable/DataTable';
+// import DataTable from '@/components/ui/dataTable/DataTable';
 import Select from '@/components/ui/Select';
 import {
   categoriesForBar,
   chartCategories,
   chartData,
   dummyMapDataOne,
-  dummyMapDataTwo,
+  // dummyMapDataTwo,
   dummyMapVisibleCountriesOne,
-  dummyMapVisibleCountriesTwo,
+  // dummyMapVisibleCountriesTwo,
   seriesData,
   userStats,
 } from '@/constants';
 
-import generateDummyDataForARTrails from './DummyData';
+// import generateDummyDataForARTrails from './DummyData';
 
 export default function Dashboard() {
-  const columns = ['AR Trail Name', 'Location', 'Category'];
+  // const columns = ['AR Trail Name', 'Location', 'Category'];
 
-  const data = generateDummyDataForARTrails();
+  // const data = generateDummyDataForARTrails();
 
-  const [currentPage] = useState(1);
-  const [perPage] = useState(12);
+  // const [currentPage] = useState(1);
+  // const [perPage] = useState(12);
 
-  const renderCell = (item: any, column: string) => {
-    switch (column) {
-      default:
-        return <span>{item[column]}</span>;
-    }
-  };
+  // const renderCell = (item: any, column: string) => {
+  //   switch (column) {
+  //     default:
+  //       return <span>{item[column]}</span>;
+  //   }
+  // };
   return (
     <main className="h-full">
       <StatsSection />
@@ -69,24 +68,44 @@ export default function Dashboard() {
       </CardContainer>
 
       <CardContainer title="Discover Malaysia">
-        <div className="grid lg:grid-cols-3 grid-rows-3 lg:grid-rows-1 gap-4 w-full">
-          <CardStats
-            title="Must See Attraction"
-            statsLabel="Total Attraction"
-            statsData={24}
-          >
-            <MapChart
-              data={dummyMapDataOne}
-              visibleCountries={dummyMapVisibleCountriesOne}
-            />
-          </CardStats>
-          <CardStats
-            title="Top Experiences"
-            statsLabel="Experiences Offered"
-            statsData={26}
-          >
-            <BarChart categories={categoriesForBar} seriesData={seriesData} />
-          </CardStats>
+        <div className="flex lg:flex-row flex-col justify-between gap-4 w-full font-medium">
+          <div className="flex rounded-xl bg-blue-50 border border-gray-100 gap-4 font-medium p-4 lg:w-[68%] w-full">
+            <div className="p-2 flex flex-col w-1/2">
+              <p className="text-xs text-black-100 mb-4">Must See Attraction</p>
+              <p className="text-xs text-black-100">Total Attraction</p>
+              <p className="text-4xl font-semibold text-blue-100 mb-3">24</p>
+              <MapChart
+                data={dummyMapDataOne}
+                visibleCountries={dummyMapVisibleCountriesOne}
+              />
+            </div>
+            <div className="flex flex-col w-1/2 relative">
+              <div className="flex lg:flex-row flex-col-reverse justify-between gap-2">
+                <p className="text-xs text-black-100">Top Experiences</p>
+                <div className="h-[max-content] mr-3">
+                  <Select
+                    options={[
+                      { value: '30Days', label: 'Last 30 days' },
+                      { value: '7Days', label: 'This week' },
+                      { value: '14Days', label: '14 days' },
+                    ]}
+                    highlightValue="30Days"
+                  />
+                </div>
+              </div>
+              <div className="p-2">
+                <p className="text-xs text-black-100">Experiences Offered</p>
+                <p className="text-4xl font-semibold text-blue-100 mb-3">26</p>
+                <div className="flex py-2 items-center w-full">
+                  <div className="transform translate-y-1/2 absolute left-0 h-1/3 lg:border-l lg:border-gray-300" />
+                  <BarChart
+                    categories={categoriesForBar}
+                    seriesData={seriesData}
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
           <CardStats
             title="Happening Events"
             statsLabel="Upcoming Events"
@@ -99,8 +118,9 @@ export default function Dashboard() {
       </CardContainer>
 
       <CardContainer title="AR Trails">
-        <div className="grid lg:grid-cols-2 grid-rows-2 lg:grid-rows-1 gap-4 mb-4 filter blur-lg pointer-events-none">
-          <div className="relative rounded-xl bg-[#FBFCFF] border border-[#70707069] overflow-hidden">
+        <ComingSoonFeature maxWidth="100%" height="400px" />
+        {/* <div className="grid lg:grid-cols-2 grid-rows-2 lg:grid-rows-1 gap-4 mb-4 filter blur-lg">
+          <div className="relative rounded-xl bg-[#FBFCFF] border border-gray-100 overflow-hidden">
             <DataTable
               minHeight="auto"
               verticalSpace="py-2"
@@ -113,24 +133,24 @@ export default function Dashboard() {
               renderCell={renderCell}
             />
           </div>
-          <div className="relative rounded-xl bg-[#FBFCFF] border border-[#70707069]  overflow-hidden">
+          <div className="relative rounded-xl bg-[#FBFCFF] border border-gray-100  overflow-hidden">
             <div className="absolute bottom-3 left-3 flex flex-col z-10">
               <p className="text-xs text-[#666E79]">Total AR Trail</p>
-              <p className="text-4xl font-semibold text-[#364EA2]">14</p>
+              <p className="text-4xl font-semibold text-blue-100">14</p>
             </div>
             <MapChart
               data={dummyMapDataTwo}
               visibleCountries={dummyMapVisibleCountriesTwo}
             />
           </div>
-        </div>
+        </div> */}
       </CardContainer>
 
       <div className="flex justify-between gap-5 w-full">
-        <CardContainer customClasses="m-w-[50%] w-full" title="Arrival Card">
+        <CardContainer customClasses="max-w-[50%] w-full" title="Arrival Card">
           <ComingSoonFeature maxWidth="100%" height="400px" />{' '}
         </CardContainer>
-        <CardContainer customClasses="m-w-[50%] w-full" title="MDAC">
+        <CardContainer customClasses="max-w-[50%] w-full" title="MDAC">
           <ComingSoonFeature maxWidth="100%" height="400px" />{' '}
         </CardContainer>
       </div>

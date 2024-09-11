@@ -45,6 +45,6 @@ export const seriesData = [
   {
     type: 'column' as const,
     name: 'Fruits',
-    data: [5, 3, 4],
+    data: [6, 12, 8],
   },
 ];
