@@ -20,7 +20,9 @@ const Select: React.FC<SelectProps> = ({
       value={value}
       onChange={onChange}
       className={`px-4 py-1 text-sm rounded-md outline-none ring-1 ring-gray-500 ring-offset-2 ${
-        value === highlightValue ? 'bg-blue-100 text-blue-800' : 'bg-white'
+        value === highlightValue
+          ? 'bg-blue-100 text-white ring-2 ring-blue-100 ring-offset-0'
+          : 'bg-white'
       }`}
     >
       {/* <option value="">{defaultText}</option> */}

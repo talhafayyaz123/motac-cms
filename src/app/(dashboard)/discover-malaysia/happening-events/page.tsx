@@ -12,6 +12,7 @@ import Wrapper from '@/components/ui/dataTable/DataTableWrapper';
 import Select from '@/components/ui/dataTable/Select';
 import Input from '@/components/ui/Input';
 import Title from '@/components/ui/Title';
+import { colors } from '@/lib/theme';
 
 import generateDummyData from './DummyData';
 
@@ -42,7 +43,7 @@ export default function HappeningEvents() {
     setData(newData);
   };
 
-  const renderCell = (item: any, column: string, rowIndex: number) => {
+  const renderCell = (item: any, column: string, rowIndex: any) => {
     switch (column) {
       case 'Select':
         return (
@@ -84,6 +85,7 @@ export default function HappeningEvents() {
               <span
                 key={index}
                 className="flex items-center px-3 py-1 bg-gray-200 rounded-full text-xs font-medium"
+                style={{ backgroundColor: colors[tag] }}
               >
                 {tag}
                 <button
