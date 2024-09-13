@@ -40,7 +40,7 @@ export default function Dashboard() {
   //   }
   // };
   return (
-    <main className="h-full p-4">
+    <main className="h-full px-4">
       <StatsSection />
       <CardContainer title="User Management">
         <div className="flex">
