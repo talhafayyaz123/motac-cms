@@ -68,12 +68,18 @@ export default function TopExperience() {
         return (
           <div className="relative">
             <Select
+              value={item[column]}
               options={[
                 { value: 'High', label: 'High' },
                 { value: 'Medium', label: 'Medium' },
                 { value: 'Low', label: 'Low' },
               ]}
               highlightValue="High"
+              onChange={(e) => {
+                const updatedData = [...data];
+                updatedData[rowIndex].Priority = e.target.value;
+                setData(updatedData);
+              }}
             />
           </div>
         );
