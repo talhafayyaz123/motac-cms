@@ -19,7 +19,8 @@ const generateDummyData = () => {
       Email: emails[index % 3],
       'Phone Number': phoneNumbers[index % 4],
       Nationality: nationalities[index % 3],
-      Action: 'Edit',
+      Action: 'View',
+      'Reset Link': 'Send Reset Password Link',
     };
   });
 
