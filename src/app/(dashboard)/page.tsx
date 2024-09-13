@@ -4,13 +4,13 @@ import CardContainer from '@/components/ui/card/CardContainer';
 import CardStats from '@/components/ui/card/CardStats';
 import ComingSoonFeature from '@/components/ui/ComingSoonFeature';
 import CustomDatePicker from '@/components/ui/CustomDatePicker';
-import AreasplineChart from '@/components/ui/dashboard/charts/AreasplineChart';
+import AreasplineChart from '@/components/ui/dashboard/charts/areasplineChart';
 import BarChart from '@/components/ui/dashboard/charts/BarChart';
 import MapChart from '@/components/ui/dashboard/charts/MapChart';
 import StatsSection from '@/components/ui/dashboard/StatsSections';
 import UserStats from '@/components/ui/dashboard/UserStates';
 // import DataTable from '@/components/ui/dataTable/DataTable';
-import Select from '@/components/ui/dataTable/Select';
+import Select from '@/components/ui/Select';
 import {
   categoriesForBar,
   chartCategories,

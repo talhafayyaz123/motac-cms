@@ -1,16 +1,17 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, lazy, useEffect, Suspense } from 'react';
 import { CiSearch } from 'react-icons/ci';
 import { FaFileExcel, FaRegEdit } from 'react-icons/fa';
 import { RiCheckDoubleFill } from 'react-icons/ri';
 
 import Button from '@/components/ui/Button';
-import DataTable from '@/components/ui/dataTable/DataTable';
 import Wrapper from '@/components/ui/dataTable/DataTableWrapper';
-import generateDummyData from '@/components/ui/dataTable/DummyData';
 import Input from '@/components/ui/Input';
+import Loader from '@/components/ui/Loader';
 import Title from '@/components/ui/Title';
+
+const DataTable = lazy(() => import('@/components/ui/dataTable/DataTable'));
 
 export default function UserManagementActive() {
   const columns = [
@@ -24,10 +25,19 @@ export default function UserManagementActive() {
     'Action',
   ];
 
-  const data = generateDummyData();
-
+  const [data, setData] = useState<any[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [perPage, setPerPage] = useState(12);
+
+  useEffect(() => {
+    const loadData = async () => {
+      const { default: generateDummyData } = await import(
+        '@/components/ui/dataTable/DummyData'
+      );
+      setData(generateDummyData());
+    };
+    void loadData();
+  }, []);
 
   const renderCell = (item: any, column: string) => {
     switch (column) {
@@ -50,8 +60,10 @@ export default function UserManagementActive() {
   };
   return (
     <main className="h-full">
-      <Title className="font-light ml-2 mb-2">User Management</Title>
-      <Wrapper>
+      <Title className="font-light ml-2 mb-2 text-[#051225]">
+        User Management
+      </Title>
+      <Wrapper isBgColor={false}>
         <div className="flex gap-3">
           <Button variant="primary" icon={<RiCheckDoubleFill />}>
             Select All
@@ -69,25 +81,34 @@ export default function UserManagementActive() {
           placeholder="Search"
           inputSize="sm"
           minWidth="400px"
-          className="bg-white"
+          className="bg-white !border-0"
           onChange={(e) => console.log(e.target.value)}
           icon={<CiSearch />}
         />
       </Wrapper>
 
       <div className="bg-white auto">
-        <DataTable
-          columns={columns}
-          data={data.slice((currentPage - 1) * perPage, currentPage * perPage)}
-          renderCell={renderCell}
-          pagination={{
-            total: data.length,
-            perPage,
-            currentPage,
-            onPageChange: setCurrentPage,
-            onPerPageChange: setPerPage,
-          }}
-        />
+        {data.length == 0 ? (
+          <Loader />
+        ) : (
+          <Suspense fallback={<Loader />}>
+            <DataTable
+              columns={columns}
+              data={data.slice(
+                (currentPage - 1) * perPage,
+                currentPage * perPage,
+              )}
+              renderCell={renderCell}
+              pagination={{
+                total: data.length,
+                perPage,
+                currentPage,
+                onPageChange: setCurrentPage,
+                onPerPageChange: setPerPage,
+              }}
+            />
+          </Suspense>
+        )}
       </div>
     </main>
   );

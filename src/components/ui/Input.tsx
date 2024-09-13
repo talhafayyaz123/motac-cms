@@ -1,6 +1,5 @@
 'use client';
 
-import Image from 'next/image';
 import React from 'react';
 import { FaChevronDown } from 'react-icons/fa';
 
@@ -12,8 +11,6 @@ interface InputProps
   minWidth?: string;
   isSelect?: boolean;
   options?: { value: string; label: string }[];
-  multiple?: boolean;
-  value?: string[] | string;
 }
 
 const Input: React.FC<InputProps> = ({
@@ -29,7 +26,6 @@ const Input: React.FC<InputProps> = ({
   minWidth = '300px',
   isSelect = false,
   options = [],
-  multiple,
   ...rest
 }) => {
   const baseStyles =
@@ -44,36 +40,10 @@ const Input: React.FC<InputProps> = ({
     : 'bg-white text-gray-900';
   const combinedStyles = `${className} ${baseStyles} ${sizeStyles[inputSize]} ${disabledStyles}`;
 
-  const handleChange: React.ChangeEventHandler<
-    HTMLInputElement | HTMLSelectElement
-  > = (e) => {
-    if (onChange) {
-      if (multiple && isSelect) {
-        const options = (e.target as HTMLSelectElement).options;
-        const selectedValues = Array.from(options)
-          .filter((option) => option.selected)
-          .map((option) => option.value);
-
-        onChange({
-          ...e,
-          target: {
-            ...e.target,
-            value: selectedValues,
-          },
-        } as unknown as React.ChangeEvent<HTMLSelectElement>);
-      } else {
-        onChange(e);
-      }
-    }
-  };
-
   return (
     <div className="flex flex-col mb-4" style={{ minWidth }}>
-      {label && <p className="mb-2 text-md text-black">{label}</p>}
-      {type === 'file' && (
-        <label htmlFor={label} className={`${combinedStyles} flex justify-end`}>
-          <Image alt="image" src="/photo.svg" height={20} width={20} />
-        </label>
+      {label && (
+        <p className="mb-2 text-md text-[#181819] font-medium">{label}</p>
       )}
       <div className="relative">
         {icon && (
@@ -84,10 +54,9 @@ const Input: React.FC<InputProps> = ({
         {isSelect ? (
           <div className="relative">
             <select
-              value={multiple ? (Array.isArray(value) ? value : []) : value}
-              onChange={handleChange}
-              multiple={multiple}
-              className={`${combinedStyles} ${icon ? 'pl-12' : ''} pr-10 border-gray-300 shadow-sm placeholder-black`}
+              value={value}
+              onChange={onChange}
+              className={`${combinedStyles} ${icon ? 'pl-12' : ''} pr-10 border-gray-300 shadow-sm placeholder-black`} // Added `pr-10` for padding-right
               disabled={disabled}
               style={{ minWidth, appearance: 'none' }}
               {...rest}
@@ -98,7 +67,6 @@ const Input: React.FC<InputProps> = ({
                 </option>
               ))}
             </select>
-
             <span className="absolute inset-y-0 right-0 flex items-center pr-4 pointer-events-none text-black text-sm">
               <FaChevronDown />
             </span>
@@ -110,7 +78,7 @@ const Input: React.FC<InputProps> = ({
             placeholder={placeholder}
             value={value}
             onChange={onChange}
-            className={`${combinedStyles} ${type === 'file' && 'hidden'} ${icon ? 'pl-12' : ''} border-gray-300 shadow-sm placeholder-black`}
+            className={`${combinedStyles} ${icon ? 'pl-12' : ''} border-gray-300 shadow-sm placeholder-black`}
             disabled={disabled}
             style={{ minWidth }}
             {...rest}

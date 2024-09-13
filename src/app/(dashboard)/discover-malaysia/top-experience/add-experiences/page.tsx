@@ -8,44 +8,49 @@ import FormContainer from '@/components/container/FormContainer';
 import Button from '@/components/ui/Button';
 import DropZone from '@/components/ui/DropZone';
 import Input from '@/components/ui/Input';
-import { Select } from '@/components/ui/Select';
 import TextEditor from '@/components/ui/TextEditor';
 import Title from '@/components/ui/Title';
 
 export default function AddAttraction() {
   const [images, setImages] = useState<File[]>([]);
 
-  const [selectedTags, setSelectedTags] = useState<string[]>([]);
-  const [categoty, setCategory] = useState<string>('');
-
   const removeImage = (index: number) => {
     const newImages = [...images];
     newImages.splice(index, 1);
     setImages(newImages);
   };
-
   return (
-    <main className="h-full">
+    <main className="h-full px-8 ">
       <div className="sticky top-0 bg-white w-full py-8 z-50">
-        <Title>Detailed View</Title>
+        <Title className="text-[#051225] font-bold">Detailed View</Title>
       </div>
       <FormContainer>
-        <p className="font-semibold mb-3">Main Info</p>
+        <p className="font-medium mb-3 text-[#181819]">Main Info</p>
         <Input
           label="Title"
           placeholder="Explore the Petronas Twin Towers"
           className="text-xs"
         />
         <TextEditor />
-        <div className=" w-1/4 my-5">
+        <div className="mt-5 flex flex-wrap gap-4">
+          <Input
+            label="City"
+            placeholder="Kuala Lumpur"
+            className="text-xs"
+            minWidth="350px"
+          />
+          <Input
+            label="Location"
+            placeholder="Kuala Lumpur City Centre (KLCC), 43 Jalan Ampan"
+            className="text-xs"
+            minWidth="350px"
+          />
           <Input
             label="Opening Hours / Closing Hours"
             placeholder="Daily 9:00 Am - 9:00 Pm"
             className="text-xs"
             minWidth="350px"
           />
-        </div>
-        <div className="mt-5 flex flex-wrap gap-4">
           <Input
             label="Age Limitation"
             placeholder="None"
@@ -65,18 +70,11 @@ export default function AddAttraction() {
             minWidth="350px"
             type="date"
           />
-          <Select
-            label="Category"
-            options={[{ value: 'Cultural', label: 'Cultural' }]}
-            selectedValues={categoty}
-            setSelectedValues={setCategory}
-            minWidth="350px"
-          />
           <Input
             label="Banner Image"
+            placeholder="Image"
             className="text-xs"
             minWidth="350px"
-            type="file"
           />
           <Input
             label="Map Link"
@@ -84,37 +82,15 @@ export default function AddAttraction() {
             className="text-xs"
             minWidth="350px"
           />
-
-          <Select
-            label="Tags"
-            options={[
-              { value: 'food', label: 'Food' },
-              { value: 'travel', label: 'Travel' },
-              { value: 'nature', label: 'Nature' },
-            ]}
-            selectedValues={selectedTags}
-            multiple
-            setSelectedValues={setSelectedTags}
-            minWidth="350px"
-          />
-        </div>
-        <div className="mt-5 flex flex-wrap gap-4">
-          <Select
-            label="City"
-            options={[{ value: 'Kuala Lumpur', label: 'Kuala Lumpur' }]}
-            selectedValues={selectedTags}
-            setSelectedValues={setSelectedTags}
-            minWidth="350px"
-          />
           <Input
-            label="Area"
-            placeholder="Kuala Lumpur City Centre (KLCC), 43 Jalan Ampan"
+            label="Category"
+            placeholder="Skycraper"
             className="text-xs"
             minWidth="350px"
           />
           <Input
-            label="Address"
-            placeholder="Daily 9:00 Am - 9:00 Pm"
+            label="Tags"
+            placeholder="Food, Nature, Travel"
             className="text-xs"
             minWidth="350px"
           />
@@ -130,7 +106,7 @@ export default function AddAttraction() {
                 alt={file.name}
                 height={100}
                 width={100}
-                className="rounded-lg object-cover w-full h-32"
+                className="rounded-lg object-cover w-full h-32 aspect-[16/9]"
               />
               <button
                 onClick={() => removeImage(index)}

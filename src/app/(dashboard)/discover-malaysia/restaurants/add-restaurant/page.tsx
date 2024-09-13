@@ -7,9 +7,9 @@ import Title from '@/components/ui/Title';
 
 export default function AddRestaurant() {
   return (
-    <main className="h-full">
+    <main className="h-full px-8 ">
       <div className="sticky top-0 bg-white w-full py-8 z-50">
-        <Title>Detailed View</Title>
+        <Title className="text-[#051225] font-medium">Detailed View</Title>
       </div>
       <FormContainer>
         <Input

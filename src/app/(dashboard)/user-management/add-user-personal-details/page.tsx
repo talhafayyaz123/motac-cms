@@ -11,7 +11,7 @@ export default function PersonalDetails() {
   return (
     <main className="h-full px-8 ">
       <div className="sticky top-0 bg-white w-full py-8 z-50 flex justify-between">
-        <Title>Detailed View</Title>
+        <Title className="text-[#051225]">Personal Details</Title>
         <div className="flex gap-2">
           <Button variant="secondary">Delete</Button>
           <Button variant="customBlue">Send Reset Password Link</Button>

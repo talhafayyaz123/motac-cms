@@ -4,6 +4,7 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: 'primary' | 'secondary' | 'danger' | 'customBlue';
   size?: 'sm' | 'md' | 'lg';
   minWidth?: string;
+  className?: string;
   icon?: React.ReactNode;
 }
 
@@ -15,6 +16,7 @@ const Button: React.FC<ButtonProps> = ({
   disabled = false,
   minWidth = '120px',
   icon,
+  className = '',
   onClick,
   ...rest
 }) => {
@@ -24,7 +26,7 @@ const Button: React.FC<ButtonProps> = ({
     primary:
       'bg-white text-black hover:bg-gray-100 focus:ring-black disabled:bg-gray-200 disabled:text-gray-500 disabled:border-gray-300',
     secondary:
-      'bg-black text-white hover:bg-gray-800 focus:ring-gray-500 disabled:bg-gray-700 disabled:text-gray-400',
+      'bg-gray-900 text-white hover:bg-gray-800 focus:ring-gray-500 disabled:bg-gray-700 disabled:text-gray-400',
     danger:
       'bg-red-600 text-white hover:bg-red-700 focus:ring-red-500 disabled:bg-red-400 disabled:text-gray-200',
     customBlue:
@@ -37,7 +39,7 @@ const Button: React.FC<ButtonProps> = ({
     lg: 'px-5 py-3 text-lg',
   };
 
-  const combinedStyles = `${baseStyles} ${variantStyles[variant]} ${sizeStyles[size]}`;
+  const combinedStyles = `${baseStyles} ${variantStyles[variant]} ${sizeStyles[size]} ${className}`;
   const buttonStyles = { minWidth };
 
   return (
