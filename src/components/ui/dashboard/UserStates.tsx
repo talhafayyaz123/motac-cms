@@ -14,10 +14,12 @@ const UserStats: React.FC<UserStatsProps> = ({ stats }) => {
       {stats.map((stat, index) => (
         <div
           key={index}
-          className="rounded-xl bg-[#FBFCFF] border border-gray-100 p-4 min-w-40 mr-4"
+          className="rounded-xl bg-[#FBFCFF] border border-gray-200 p-4 min-w-40 mr-4"
         >
-          <p className="text-xs text-black-100">{stat.label}</p>
-          <p className="text-3xl font-bold text-blue-100">{stat.value}</p>
+          <p className="text-xs text-gray-500">{stat.label}</p>
+          <p className="text-4xl text-[#364ea2]">
+            {stat.value.toLocaleString()}
+          </p>
         </div>
       ))}
     </div>

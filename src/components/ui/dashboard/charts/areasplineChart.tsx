@@ -7,6 +7,7 @@ interface AreasplineChartProps {
   categories: string[];
   data: number[];
   title?: string;
+  subtitle?: string;
   color?: string;
   fillColorStart?: string;
   fillColorEnd?: string;
@@ -17,7 +18,6 @@ interface AreasplineChartProps {
 const AreasplineChart: React.FC<AreasplineChartProps> = ({
   categories,
   data,
-  title = '',
   color = 'transparent',
   fillColorStart = '#778FDF',
   fillColorEnd = 'transparent',
@@ -30,15 +30,13 @@ const AreasplineChart: React.FC<AreasplineChartProps> = ({
       type: 'areaspline',
       width: typeof width === 'number' ? width : undefined,
       height: typeof height === 'number' ? height : undefined,
-      // Ensure chart uses the full container size
       reflow: true,
     },
     title: {
-      text: title,
-      style: {
-        fontSize: '14px',
-        color: '#666E79',
-      },
+      text: '',
+    },
+    subtitle: {
+      text: '',
     },
     xAxis: {
       categories: categories,
