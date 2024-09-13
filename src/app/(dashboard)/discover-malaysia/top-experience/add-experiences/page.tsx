@@ -17,6 +17,8 @@ export default function AddAttraction() {
 
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const [categoty, setCategory] = useState<string>('');
+  const [city, setCity] = useState<string>('');
+  const [area, setArea] = useState<string>('');
 
   const removeImage = (index: number) => {
     const newImages = [...images];
@@ -88,9 +90,9 @@ export default function AddAttraction() {
           <Select
             label="Tags"
             options={[
-              { value: 'food', label: 'Food' },
-              { value: 'travel', label: 'Travel' },
-              { value: 'nature', label: 'Nature' },
+              { value: 'Food', label: 'Food' },
+              { value: 'Travel', label: 'Travel' },
+              { value: 'Nature', label: 'Nature' },
             ]}
             selectedValues={selectedTags}
             multiple
@@ -102,15 +104,20 @@ export default function AddAttraction() {
           <Select
             label="City"
             options={[{ value: 'Kuala Lumpur', label: 'Kuala Lumpur' }]}
-            selectedValues={selectedTags}
-            setSelectedValues={setSelectedTags}
+            selectedValues={city}
+            setSelectedValues={setCity}
             minWidth="350px"
           />
-          <Input
+          <Select
             label="Area"
-            placeholder="Kuala Lumpur City Centre (KLCC), 43 Jalan Ampan"
-            className="text-xs"
+            options={[
+              { value: 'Kuala Lumpur', label: 'Kuala Lumpur' },
+              { value: 'Lumpur', label: 'Lumpur' },
+            ]}
+            selectedValues={area}
+            setSelectedValues={setArea}
             minWidth="350px"
+            searchable
           />
           <Input
             label="Address"

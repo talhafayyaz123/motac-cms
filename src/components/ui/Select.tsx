@@ -11,6 +11,7 @@ interface InputProps {
   setSelectedValues: (values: any) => void;
   minWidth?: string;
   multiple?: boolean;
+  searchable?: boolean;
 }
 
 export const Select: React.FC<InputProps> = ({
@@ -20,8 +21,10 @@ export const Select: React.FC<InputProps> = ({
   setSelectedValues,
   minWidth = '300px',
   multiple = false,
+  searchable = false,
 }) => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
 
   const handleOptionToggle = (optionValue: string) => {
     if (multiple && Array.isArray(selectedValues)) {
@@ -47,6 +50,10 @@ export const Select: React.FC<InputProps> = ({
     return (typeof selectedValues === 'string' && selectedValues) || 'Select';
   };
 
+  const filteredOptions = options.filter((option) =>
+    option.label.toLowerCase().includes(searchTerm.toLowerCase()),
+  );
+
   return (
     <div className="flex flex-col mb-4" style={{ minWidth }}>
       {label && <p className="mb-2 text-md text-black">{label}</p>}
@@ -60,26 +67,38 @@ export const Select: React.FC<InputProps> = ({
             <FaChevronDown />
           </span>
         </div>
+
         {dropdownOpen && (
-          <ul className="absolute z-10 mt-1 bg-white border border-gray-300 rounded-lg shadow-lg w-full max-h-48 overflow-y-auto">
-            {options.map((option) => (
-              <li
-                key={option.value}
-                className={`px-4 py-2 cursor-pointer text-sm ${
-                  Array.isArray(selectedValues)
-                    ? selectedValues.includes(option.value)
-                      ? 'bg-blue-100 text-white'
-                      : 'hover:bg-gray-100'
-                    : selectedValues === option.value
-                      ? 'bg-blue-100 text-white'
-                      : 'hover:bg-gray-100'
-                }`}
-                onClick={() => handleOptionToggle(option.value)}
-              >
-                {option.label}
-              </li>
-            ))}
-          </ul>
+          <div className="absolute z-10 mt-1 bg-white border border-gray-300 rounded-lg shadow-lg w-full max-h-48 overflow-y-auto">
+            {searchable && (
+              <input
+                type="text"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                placeholder="Search..."
+                className="w-full p-2 border-b border-gray-300 focus:outline-none focus:ring-1 focus:ring-blue-500"
+              />
+            )}
+            <ul>
+              {filteredOptions.map((option) => (
+                <li
+                  key={option.value}
+                  className={`px-4 py-2 cursor-pointer text-sm ${
+                    Array.isArray(selectedValues)
+                      ? selectedValues.includes(option.value)
+                        ? 'bg-blue-100 text-white'
+                        : 'hover:bg-gray-100'
+                      : selectedValues === option.value
+                        ? 'bg-blue-100 text-white'
+                        : 'hover:bg-gray-100'
+                  }`}
+                  onClick={() => handleOptionToggle(option.value)}
+                >
+                  {option.label}
+                </li>
+              ))}
+            </ul>
+          </div>
         )}
       </div>
     </div>
