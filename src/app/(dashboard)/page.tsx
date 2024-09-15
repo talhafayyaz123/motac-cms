@@ -40,9 +40,9 @@ export default function Dashboard() {
   //   }
   // };
   return (
-    <main className="h-full">
+    <main className="h-full px-4">
       <StatsSection />
-      <CardContainer title="User Management">
+      <CardContainer title="User Management" showStats>
         <div className="flex">
           <UserStats stats={userStats} />
           <AreasplineChart
@@ -62,6 +62,7 @@ export default function Dashboard() {
                 { value: '14Days', label: '14 days' },
               ]}
               highlightValue="30Days"
+              minimalStyle
             />
           </div>
         </div>
@@ -90,6 +91,7 @@ export default function Dashboard() {
                       { value: '14Days', label: '14 days' },
                     ]}
                     highlightValue="30Days"
+                    minimalStyle
                   />
                 </div>
               </div>

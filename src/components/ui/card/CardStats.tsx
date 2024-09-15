@@ -35,6 +35,7 @@ const CardStats: React.FC<CardStatsProps> = ({
                 { value: 'feb', label: 'Feb' },
               ]}
               highlightValue="selectMonth"
+              minimalStyle
             />
           </div>
         </div>

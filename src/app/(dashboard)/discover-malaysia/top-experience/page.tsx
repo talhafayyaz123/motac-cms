@@ -12,6 +12,7 @@ import Input from '@/components/ui/Input';
 import Loader from '@/components/ui/Loader';
 import Select from '@/components/ui/Select';
 import Title from '@/components/ui/Title';
+import { colors } from '@/lib/theme';
 
 const DataTable = lazy(() => import('@/components/ui/dataTable/DataTable'));
 
@@ -50,7 +51,7 @@ export default function TopExperience() {
     setData(newData);
   };
 
-  const renderCell = (item: any, column: string, rowIndex: number) => {
+  const renderCell = (item: any, column: string, rowIndex: any) => {
     switch (column) {
       case 'Select':
         return (
@@ -76,12 +77,18 @@ export default function TopExperience() {
         return (
           <div className="relative">
             <Select
+              value={item[column]}
               options={[
                 { value: 'High', label: 'High' },
                 { value: 'Medium', label: 'Medium' },
                 { value: 'Low', label: 'Low' },
               ]}
               highlightValue="High"
+              onChange={(e) => {
+                const updatedData = [...data];
+                updatedData[rowIndex].Priority = e.target.value;
+                setData(updatedData);
+              }}
             />
           </div>
         );
@@ -92,6 +99,7 @@ export default function TopExperience() {
               <span
                 key={index}
                 className="px-3 py-1 bg-gray-200 rounded-full text-xs font-medium"
+                style={{ backgroundColor: colors[tag] }}
               >
                 {tag}
 

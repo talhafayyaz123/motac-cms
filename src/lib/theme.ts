@@ -1,4 +1,4 @@
-export const colors = {
+export const colors: { [key: string]: string } = {
   data_table_wrapper: '#364EA2',
   data_table_header: '#DDE1EF',
   success_status_outline: '#0E9C6C',
@@ -9,4 +9,10 @@ export const colors = {
   pending_status_bg: '#FFFCF6',
   required_status_outline: '#8E8E8E',
   required_status_bg: '#F8F8F8',
+  Food: '#E7ECFC',
+  Nature: '#E3EFF8',
+  Travel: '#E3F7F8',
+  Jungle: '#E7ECFC',
+  Trekking: '#E3EFF8',
+  Wildlife: '#E3F7F8',
 };

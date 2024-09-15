@@ -8,10 +8,11 @@ import { RiCheckDoubleFill } from 'react-icons/ri';
 
 import Button from '@/components/ui/Button';
 import Wrapper from '@/components/ui/dataTable/DataTableWrapper';
+import Select from '@/components/ui/dataTable/Select';
 import Input from '@/components/ui/Input';
 import Loader from '@/components/ui/Loader';
-import Select from '@/components/ui/Select';
 import Title from '@/components/ui/Title';
+import { colors } from '@/lib/theme';
 import AlertService from '@/services/alertService';
 
 // Lazy loading DataTable component
@@ -53,7 +54,7 @@ export default function MustSeeAttractions() {
     setData(newData);
   };
 
-  const renderCell = (item: any, column: string, rowIndex: number) => {
+  const renderCell = (item: any, column: string, rowIndex: any) => {
     switch (column) {
       case 'Select':
         return (
@@ -98,12 +99,18 @@ export default function MustSeeAttractions() {
         return (
           <div className="relative">
             <Select
+              value={item[column]}
               options={[
                 { value: 'High', label: 'High' },
                 { value: 'Medium', label: 'Medium' },
                 { value: 'Low', label: 'Low' },
               ]}
               highlightValue="High"
+              onChange={(e) => {
+                const updatedData = [...data];
+                updatedData[rowIndex].Priority = e.target.value;
+                setData(updatedData);
+              }}
             />
           </div>
         );
@@ -113,7 +120,8 @@ export default function MustSeeAttractions() {
             {item[column].map((tag: string, index: number) => (
               <span
                 key={index}
-                className="px-3 py-1 bg-gray-200 rounded-full text-xs font-medium"
+                className="px-3 py-1 rounded-full text-xs font-medium"
+                style={{ backgroundColor: colors[tag] }}
               >
                 {tag}
                 <button

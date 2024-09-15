@@ -3,7 +3,7 @@ import React from 'react';
 interface TableRowProps {
   item: any;
   columns: Array<string>;
-  rowIndex: number;
+  rowIndex?: any;
   renderCell: (item: any, column: string, rowIndex: number) => React.ReactNode;
 }
 
