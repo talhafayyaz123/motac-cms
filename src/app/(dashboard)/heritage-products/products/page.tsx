@@ -10,8 +10,8 @@ import { RiCheckDoubleFill } from 'react-icons/ri';
 import Button from '@/components/ui/Button';
 import DataTable from '@/components/ui/dataTable/DataTable';
 import Wrapper from '@/components/ui/dataTable/DataTableWrapper';
-import Select from '@/components/ui/dataTable/Select';
 import Input from '@/components/ui/Input';
+import Select from '@/components/ui/Select';
 import Title from '@/components/ui/Title';
 
 import generateDummyData from './DummyData';
@@ -48,7 +48,13 @@ export default function Products() {
       case 'Image':
         return (
           <div className="flex justify-center">
-            <Image src={item[column]} alt="product" width={60} height={60} />
+            <Image
+              src={item[column]}
+              alt="product"
+              width={60}
+              height={60}
+              className="object-cover aspect-[16/9]"
+            />
           </div>
         );
       case 'Edit':

@@ -19,7 +19,7 @@ const Navbar = () => {
       <div className="flex items-center max-h-max gap-4">
         {pathname !== '/' && (
           <div
-            className="h-8 w-8 rounded-full bg-black flex items-center justify-start"
+            className="h-8 w-8 rounded-full bg-gray-900 flex items-center justify-start"
             onClick={() => router.push('/')}
             role="button"
             tabIndex={0}
@@ -47,9 +47,9 @@ const Navbar = () => {
           <Image
             src="/user.jpg"
             alt="Profile"
-            className="rounded-full"
-            width={50}
-            height={50}
+            width={60}
+            height={60}
+            className="h-[50px] rounded-full object-cover aspect-[16/9]"
           />
           <div>
             <p className="text-sm font-semibold">George Alex</p>

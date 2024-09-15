@@ -1,19 +1,19 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import React, { useState } from 'react';
+import React, { useState, lazy, useEffect, Suspense } from 'react';
 import { CiSearch } from 'react-icons/ci';
 import { FaFileExcel, FaRegEdit, FaTrashAlt } from 'react-icons/fa';
 import { RiCheckDoubleFill } from 'react-icons/ri';
 
 import Button from '@/components/ui/Button';
-import DataTable from '@/components/ui/dataTable/DataTable';
 import Wrapper from '@/components/ui/dataTable/DataTableWrapper';
 import Input from '@/components/ui/Input';
+import Loader from '@/components/ui/Loader';
 import Title from '@/components/ui/Title';
 import { colors } from '@/lib/theme';
 
-import generateDummyData from './DummyData';
+const DataTable = lazy(() => import('@/components/ui/dataTable/DataTable'));
 
 export default function Restaurants() {
   const router = useRouter();
@@ -32,7 +32,17 @@ export default function Restaurants() {
     'Delete',
   ];
 
-  const [data, setData] = useState(generateDummyData());
+  const [data, setData] = useState<any[]>([]);
+
+  // UseEffect to lazily load dummy data
+  useEffect(() => {
+    const loadData = async () => {
+      const { default: generateDummyData } = await import('./DummyData');
+      setData(generateDummyData());
+    };
+
+    void loadData();
+  }, []);
 
   const [currentPage, setCurrentPage] = useState(1);
   const [perPage, setPerPage] = useState(12);
@@ -110,7 +120,7 @@ export default function Restaurants() {
 
   return (
     <main className="h-full">
-      <Title className="font-light ml-2 mb-2">Restaurants</Title>
+      <Title className="font-light ml-2 mb-2 text-[#051225]">Restaurants</Title>
       <Wrapper>
         <div className="flex gap-3">
           <Button variant="primary" icon={<RiCheckDoubleFill />}>
@@ -126,6 +136,7 @@ export default function Restaurants() {
         <div className="flex gap-3">
           <Button
             variant="secondary"
+            className="h-10 mt-2"
             onClick={() => {
               router.push('/discover-malaysia/restaurants/add-restaurant');
             }}
@@ -145,18 +156,27 @@ export default function Restaurants() {
       </Wrapper>
 
       <div className="bg-white auto">
-        <DataTable
-          columns={columns}
-          data={data.slice((currentPage - 1) * perPage, currentPage * perPage)}
-          renderCell={renderCell}
-          pagination={{
-            total: data.length,
-            perPage,
-            currentPage,
-            onPageChange: setCurrentPage,
-            onPerPageChange: setPerPage,
-          }}
-        />
+        {data.length === 0 ? (
+          <Loader />
+        ) : (
+          <Suspense fallback={<Loader />}>
+            <DataTable
+              columns={columns}
+              data={data.slice(
+                (currentPage - 1) * perPage,
+                currentPage * perPage,
+              )}
+              renderCell={renderCell}
+              pagination={{
+                total: data.length,
+                perPage,
+                currentPage,
+                onPageChange: setCurrentPage,
+                onPerPageChange: setPerPage,
+              }}
+            />
+          </Suspense>
+        )}
       </div>
     </main>
   );

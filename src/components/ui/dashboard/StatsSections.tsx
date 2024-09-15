@@ -6,7 +6,7 @@ import locationIcon from '@/assets/location-icon.svg';
 import usersIcon from '@/assets/users-icon.svg';
 import ComingSoonFeature from '@/components/ui/ComingSoonFeature';
 import AttractionList from '@/components/ui/dashboard/AttractionList';
-import Select from '@/components/ui/dataTable/Select';
+import Select from '@/components/ui/Select';
 import { chartCategories, chartData } from '@/constants';
 
 import AreasplineChart from './charts/areasplineChart';
@@ -36,7 +36,11 @@ const StatsSection: React.FC = () => {
                 </p>
                 <p className="text-3xl font-semibold text-blue-200">250</p>
               </div>
-              <Image src={usersIcon} alt="user-icon" className="w-10 h-10" />
+              <Image
+                src={usersIcon}
+                alt="user-icon"
+                className="w-10 h-10 object-cover aspect-[16/9]"
+              />
             </div>
           </div>
           <div className="content-center h-[50%] relative rounded-xl overflow-hidden bg-white border border-gray-100 p-4">
@@ -51,7 +55,7 @@ const StatsSection: React.FC = () => {
               <Image
                 src={locationIcon}
                 alt="location-icon"
-                className="w-14 h-14"
+                className="w-14 h-14 object-cover aspect-[16/9]"
               />
             </div>
           </div>

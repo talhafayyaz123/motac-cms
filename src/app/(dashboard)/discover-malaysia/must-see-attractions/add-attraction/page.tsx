@@ -24,12 +24,12 @@ export default function AddAttraction() {
     setImages(newImages);
   };
   return (
-    <main className="h-full">
+    <main className="h-full px-8 ">
       <div className="sticky top-0 bg-white w-full py-8 z-50">
-        <Title>Detailed View</Title>
+        <Title className="text-[#051225] font-medium">Detailed View</Title>
       </div>
       <FormContainer>
-        <p className="font-semibold mb-3">Main Info</p>
+        <p className="font-semibold mb-3 text-[#181819]">Main Info</p>
         <Input
           label="Title"
           placeholder="Explore the Petronas Twin Towers"
@@ -106,7 +106,7 @@ export default function AddAttraction() {
                 alt={file.name}
                 height={100}
                 width={100}
-                className="rounded-lg object-cover w-full h-32"
+                className="rounded-lg object-cover w-full h-32 aspect-[16/9]"
               />
               <button
                 onClick={() => removeImage(index)}

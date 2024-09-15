@@ -1,6 +1,6 @@
 import React from 'react';
 
-import Select from '@/components/ui/dataTable/Select';
+import Select from '@/components/ui/Select';
 
 interface CardStatsProps {
   title: string;

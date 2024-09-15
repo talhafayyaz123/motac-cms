@@ -46,7 +46,7 @@ const generateEventData = () => {
   ];
 
   const priorities = ['High', 'Medium', 'Low'];
-  const data = Array.from({ length: 5 }, (_, index) => {
+  const data = Array.from({ length: 25 }, (_, index) => {
     return {
       Select: '',
       'Event ID': `EV00${(index % 5) + 1}`,
