@@ -1,7 +1,6 @@
 'use client';
 
 import React from 'react';
-import { FaChevronDown } from 'react-icons/fa';
 
 interface InputProps
   extends React.InputHTMLAttributes<HTMLInputElement | HTMLSelectElement> {
@@ -9,8 +8,6 @@ interface InputProps
   icon?: React.ReactNode;
   label?: string;
   minWidth?: string;
-  isSelect?: boolean;
-  options?: { value: string; label: string }[];
 }
 
 const Input: React.FC<InputProps> = ({
@@ -24,8 +21,6 @@ const Input: React.FC<InputProps> = ({
   label,
   className = '',
   minWidth = '300px',
-  isSelect = false,
-  options = [],
   ...rest
 }) => {
   const baseStyles =
@@ -41,7 +36,7 @@ const Input: React.FC<InputProps> = ({
   const combinedStyles = `${className} ${baseStyles} ${sizeStyles[inputSize]} ${disabledStyles}`;
 
   return (
-    <div className="flex flex-col mb-4" style={{ minWidth }}>
+    <div className="flex flex-col" style={{ minWidth }}>
       {label && (
         <p className="mb-2 text-md text-[#181819] font-medium">{label}</p>
       )}
@@ -51,39 +46,17 @@ const Input: React.FC<InputProps> = ({
             {icon}
           </span>
         )}
-        {isSelect ? (
-          <div className="relative">
-            <select
-              value={value}
-              onChange={onChange}
-              className={`${combinedStyles} ${icon ? 'pl-12' : ''} pr-10 border-gray-300 shadow-sm placeholder-black`} // Added `pr-10` for padding-right
-              disabled={disabled}
-              style={{ minWidth, appearance: 'none' }}
-              {...rest}
-            >
-              {options.map((option) => (
-                <option key={option.value} value={option.value}>
-                  {option.label}
-                </option>
-              ))}
-            </select>
-            <span className="absolute inset-y-0 right-0 flex items-center pr-4 pointer-events-none text-black text-sm">
-              <FaChevronDown />
-            </span>
-          </div>
-        ) : (
-          <input
-            type={type}
-            id={label}
-            placeholder={placeholder}
-            value={value}
-            onChange={onChange}
-            className={`${combinedStyles} ${icon ? 'pl-12' : ''} border-gray-300 shadow-sm placeholder-black`}
-            disabled={disabled}
-            style={{ minWidth }}
-            {...rest}
-          />
-        )}
+        <input
+          type={type}
+          id={label}
+          placeholder={placeholder}
+          value={value}
+          onChange={onChange}
+          className={`${combinedStyles} ${icon ? 'pl-12' : ''} border-gray-300 shadow-sm placeholder-black`}
+          disabled={disabled}
+          style={{ minWidth }}
+          {...rest}
+        />
       </div>
     </div>
   );

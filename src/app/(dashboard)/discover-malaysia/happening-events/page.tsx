@@ -10,9 +10,9 @@ import Button from '@/components/ui/Button';
 import Wrapper from '@/components/ui/dataTable/DataTableWrapper';
 import Input from '@/components/ui/Input';
 import Loader from '@/components/ui/Loader';
-import Select from '@/components/ui/Select';
 import Title from '@/components/ui/Title';
 import { colors } from '@/lib/theme';
+import Select from '@/components/ui/dataTable/Select';
 
 const DataTable = lazy(() => import('@/components/ui/dataTable/DataTable'));
 
@@ -138,7 +138,7 @@ export default function HappeningEvents() {
         <div className="flex gap-3">
           <Button
             variant="secondary"
-            className="h-10 mt-2"
+            className="h-10"
             onClick={() => {
               router.push(
                 '/discover-malaysia/happening-events/add-happening-event',

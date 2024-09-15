@@ -136,7 +136,7 @@ export default function Restaurants() {
         <div className="flex gap-3">
           <Button
             variant="secondary"
-            className="h-10 mt-2"
+            className="h-10"
             onClick={() => {
               router.push('/discover-malaysia/restaurants/add-restaurant');
             }}
