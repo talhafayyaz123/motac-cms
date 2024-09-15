@@ -8,7 +8,7 @@ import Button from '@/components/ui/Button';
 import Input from '@/components/ui/Input';
 
 interface AuthFormProps {
-  title: string;
+  title?: string;
   description: string;
   buttonText: string;
   fields: { type: string; placeholder: string; name: string }[];
@@ -60,7 +60,7 @@ const AuthForm: React.FC<AuthFormProps> = ({
                   width="70"
                   height="70"
                   rx="35"
-                  fill="#364ea2"
+                  fill="#364EA2"
                 />
                 <path
                   id="Path_2041"
@@ -72,10 +72,18 @@ const AuthForm: React.FC<AuthFormProps> = ({
               </svg>
             </Link>
           )}
-          <Image alt="image" src="/login-logo.png" height={155} width={155} />
+          <Image
+            alt="image"
+            src="/login-logo.png"
+            height={155}
+            width={155}
+            className="h-[65px] object-cover aspect-[16/9]"
+          />
         </div>
 
-        <h2 className="text-center mb-6 text-2xl font-medium">Admin Portal</h2>
+        <h2 className="text-center mb-6 text-2xl font-medium text-[#181819]">
+          Admin Portal
+        </h2>
 
         <div className={`flex justify-center pt-[${formPadding}]`}>
           <form
@@ -83,14 +91,19 @@ const AuthForm: React.FC<AuthFormProps> = ({
             onSubmit={onSubmit}
           >
             <h2
-              className={`text-left text-2xl font-medium pt-[${paddingTop}] `}
+              className={`text-left text-2xl font-medium pt-[${paddingTop}] text-[#181819] `}
             >
               {title}
             </h2>
-            <span className="text-left ext-2xl font-medium">{description}</span>
+            <span className="text-left ext-2xl font-medium text-[#181819]">
+              {description}
+            </span>
             {fields.map((field, index) => (
               <div key={index} className="flex flex-col gap-3">
-                <label htmlFor={field.name} className="text-sm font-medium">
+                <label
+                  htmlFor={field.name}
+                  className="text-sm font-medium text-[#181819]"
+                >
                   {field.placeholder}
                 </label>
                 <Input
@@ -107,7 +120,9 @@ const AuthForm: React.FC<AuthFormProps> = ({
             {forgotPasswordLink && (
               <div className="flex justify-end -mt-3">
                 <Link href={forgotPasswordLink}>
-                  <span className="text-xs font-medium">Forgot Password?</span>
+                  <span className="text-xs font-medium text-[#181819]">
+                    Forgot Password?
+                  </span>
                 </Link>
               </div>
             )}
@@ -123,7 +138,7 @@ const AuthForm: React.FC<AuthFormProps> = ({
                 <span>
                   Didnt get code?
                   <Link href={resendOtp}>
-                    <span className="text-blue-500 ml-1">
+                    <span className="text-blue-800 ml-1">
                       Resend code after 2 minutes
                     </span>
                   </Link>
