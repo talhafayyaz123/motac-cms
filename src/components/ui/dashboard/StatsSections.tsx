@@ -9,7 +9,7 @@ import AttractionList from '@/components/ui/dashboard/AttractionList';
 import Select from '@/components/ui/dataTable/Select';
 import { chartCategories, chartData } from '@/constants';
 
-import AreasplineChart from './charts/AreasplineChart';
+import AreasplineChart from './charts/areasplineChart';
 
 const StatsSection: React.FC = () => {
   return (
@@ -22,6 +22,7 @@ const StatsSection: React.FC = () => {
             { value: '14Days', label: '14 days' },
           ]}
           highlightValue="30Days"
+          minimalStyle
         />
       </div>
       <div className="lg:max-h-96 lg:h-full h-auto w-full flex lg:flex-row flex-col justify-between gap-6">

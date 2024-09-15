@@ -9,6 +9,12 @@ import { FaSignOutAlt } from 'react-icons/fa';
 import { menuItems } from '@/assets';
 import producLogo from '@/assets/product-logo.svg';
 
+interface DropdownItem {
+  label: string;
+  path: string;
+  disabled: boolean;
+}
+
 const Sidebar = () => {
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
   const [openSubDropdown, setOpenSubDropdown] = useState<string | null>(
@@ -17,8 +23,15 @@ const Sidebar = () => {
   const router = useRouter();
   const pathname = usePathname();
 
-  const handleDropdownToggle = (label: string) => {
+  const handleDropdownToggle = (label: string, items: DropdownItem[]) => {
     setOpenDropdown(openDropdown === label ? null : label);
+    if (items?.length) {
+      if (label === 'Discover Malaysia') {
+        router.push(items[1]?.path);
+      } else {
+        router.push(items[0]?.path);
+      }
+    }
   };
 
   const handleSubDropdownToggle = (label: string) => {
@@ -42,7 +55,7 @@ const Sidebar = () => {
               <div
                 className={`group flex items-center p-2 mb-2 rounded-lg font-medium ${
                   item.disabled
-                    ? 'text-gray-300 cursor-not-allowed' // Style for disabled item
+                    ? 'text-gray-300 cursor-not-allowed'
                     : (item.path !== '/' && pathname.includes(item.path)) ||
                         pathname === item.path
                       ? 'bg-blue-100 text-white'
@@ -53,14 +66,14 @@ const Sidebar = () => {
                 onClick={() => {
                   if (!item.disabled) {
                     item.subItems
-                      ? handleDropdownToggle(item.label)
+                      ? handleDropdownToggle(item.label, item.subItems)
                       : handleNavigation(item.path);
                   }
                 }}
                 onKeyDown={(e) => {
                   if (!item.disabled && (e.key === 'Enter' || e.key === ' ')) {
                     item.subItems
-                      ? handleDropdownToggle(item.label)
+                      ? handleDropdownToggle(item.label, item.subItems)
                       : handleNavigation(item.path);
                   }
                 }}

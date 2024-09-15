@@ -1157,7 +1157,7 @@ export const menuItems = [
         label: 'Recommended Trips',
         path: '/discover-malaysia/recommended-trips',
         icon: RecommendedTripIcon,
-        disabled: false,
+        disabled: true,
       },
     ],
   },

@@ -2,7 +2,8 @@
 
 import React, { useState } from 'react';
 import { CiSearch } from 'react-icons/ci';
-import { FaFileExcel, FaRegEdit } from 'react-icons/fa';
+import { FaFileExcel } from 'react-icons/fa';
+import { IoEyeSharp } from 'react-icons/io5';
 import { RiCheckDoubleFill } from 'react-icons/ri';
 
 import Button from '@/components/ui/Button';
@@ -22,6 +23,7 @@ export default function UserManagementActive() {
     'Phone Number',
     'Nationality',
     'Action',
+    'Reset Link',
   ];
 
   const data = generateDummyData();
@@ -37,17 +39,27 @@ export default function UserManagementActive() {
             <Input type="radio" minWidth="maxContent" />
           </div>
         );
+
       case 'Action':
         return (
-          <div className="flex items-center gap-2 cursor-pointer">
-            <FaRegEdit className="text-blue-800 text-xl" />
-            {item[column]}
+          <div className="flex items-center gap-1 cursor-pointer">
+            <IoEyeSharp />
+            <span>{item[column]}</span>
           </div>
         );
+
+      case 'Reset Link':
+        return (
+          <div className="flex items-center gap-2 cursor-pointer">
+            <span className="text-blue-600 underline">{item[column]}</span>
+          </div>
+        );
+
       default:
         return <span>{item[column]}</span>;
     }
   };
+
   return (
     <main className="h-full">
       <Title className="font-light ml-2 mb-2">User Management</Title>

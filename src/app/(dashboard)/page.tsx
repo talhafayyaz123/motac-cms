@@ -4,7 +4,7 @@ import CardContainer from '@/components/ui/card/CardContainer';
 import CardStats from '@/components/ui/card/CardStats';
 import ComingSoonFeature from '@/components/ui/ComingSoonFeature';
 import CustomDatePicker from '@/components/ui/CustomDatePicker';
-import AreasplineChart from '@/components/ui/dashboard/charts/AreasplineChart';
+import AreasplineChart from '@/components/ui/dashboard/charts/areasplineChart';
 import BarChart from '@/components/ui/dashboard/charts/BarChart';
 import MapChart from '@/components/ui/dashboard/charts/MapChart';
 import StatsSection from '@/components/ui/dashboard/StatsSections';
@@ -40,9 +40,9 @@ export default function Dashboard() {
   //   }
   // };
   return (
-    <main className="h-full">
+    <main className="h-full px-4">
       <StatsSection />
-      <CardContainer title="User Management">
+      <CardContainer title="User Management" showStats>
         <div className="flex">
           <UserStats stats={userStats} />
           <AreasplineChart
@@ -62,6 +62,7 @@ export default function Dashboard() {
                 { value: '14Days', label: '14 days' },
               ]}
               highlightValue="30Days"
+              minimalStyle
             />
           </div>
         </div>
@@ -90,6 +91,7 @@ export default function Dashboard() {
                       { value: '14Days', label: '14 days' },
                     ]}
                     highlightValue="30Days"
+                    minimalStyle
                   />
                 </div>
               </div>

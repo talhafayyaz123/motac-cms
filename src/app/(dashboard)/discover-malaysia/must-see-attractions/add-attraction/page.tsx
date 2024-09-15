@@ -8,11 +8,15 @@ import FormContainer from '@/components/container/FormContainer';
 import Button from '@/components/ui/Button';
 import DropZone from '@/components/ui/DropZone';
 import Input from '@/components/ui/Input';
+import Select from '@/components/ui/Select';
 import TextEditor from '@/components/ui/TextEditor';
 import Title from '@/components/ui/Title';
 
 export default function AddAttraction() {
   const [images, setImages] = useState<File[]>([]);
+  const [selectedTags, setSelectedTags] = useState<string[]>([]);
+  const [categoty, setCategory] = useState<string>('');
+  const [city, setCity] = useState<string>('');
 
   const removeImage = (index: number) => {
     const newImages = [...images];
@@ -33,10 +37,11 @@ export default function AddAttraction() {
         />
         <TextEditor />
         <div className="mt-5 flex flex-wrap gap-4">
-          <Input
+          <Select
             label="City"
-            placeholder="Kuala Lumpur"
-            className="text-xs"
+            options={[{ value: 'Kuala Lumpur', label: 'Kuala Lumpur' }]}
+            selectedValues={city}
+            setSelectedValues={setCity}
             minWidth="350px"
           />
           <Input
@@ -62,6 +67,7 @@ export default function AddAttraction() {
             placeholder="Image"
             className="text-xs"
             minWidth="350px"
+            type="file"
           />
           <Input
             label="Map Link"
@@ -69,16 +75,23 @@ export default function AddAttraction() {
             className="text-xs"
             minWidth="350px"
           />
-          <Input
+          <Select
             label="Category"
-            placeholder="Skycraper"
-            className="text-xs"
+            options={[{ value: 'Cultural', label: 'Cultural' }]}
+            selectedValues={categoty}
+            setSelectedValues={setCategory}
             minWidth="350px"
           />
-          <Input
+          <Select
             label="Tags"
-            placeholder="Food, Nature, Travel"
-            className="text-xs"
+            options={[
+              { value: 'Food', label: 'Food' },
+              { value: 'Travel', label: 'Travel' },
+              { value: 'Nature', label: 'Nature' },
+            ]}
+            selectedValues={selectedTags}
+            multiple
+            setSelectedValues={setSelectedTags}
             minWidth="350px"
           />
         </div>
