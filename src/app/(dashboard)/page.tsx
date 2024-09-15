@@ -9,8 +9,8 @@ import BarChart from '@/components/ui/dashboard/charts/BarChart';
 import MapChart from '@/components/ui/dashboard/charts/MapChart';
 import StatsSection from '@/components/ui/dashboard/StatsSections';
 import UserStats from '@/components/ui/dashboard/UserStates';
+import Select from '@/components/ui/dataTable/Select';
 // import DataTable from '@/components/ui/dataTable/DataTable';
-import Select from '@/components/ui/Select';
 import {
   categoriesForBar,
   chartCategories,
