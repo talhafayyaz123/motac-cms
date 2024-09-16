@@ -3,10 +3,10 @@ import Image from 'next/image';
 
 import locationIcon from '@/assets/location-icon.svg';
 // import reviewsIcon from '@/assets/reviews-icon.svg';
-import Select from '../dataTable/Select';
 import usersIcon from '@/assets/users-icon.svg';
 import ComingSoonFeature from '@/components/ui/ComingSoonFeature';
 import AttractionList from '@/components/ui/dashboard/AttractionList';
+import Select from '@/components/ui/dataTable/Select';
 import { chartCategories, chartData } from '@/constants';
 
 import AreasplineChart from './charts/areasplineChart';
