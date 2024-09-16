@@ -7,7 +7,7 @@ import Title from '@/components/ui/Title';
 
 export default function AddRestaurant() {
   return (
-    <main className="h-full px-8 ">
+    <main className="h-full">
       <div className="sticky top-0 bg-white w-full py-8 z-50">
         <Title className="text-[#051225] font-medium">Detailed View</Title>
       </div>
@@ -15,7 +15,7 @@ export default function AddRestaurant() {
         <Input
           label="Restaurant Name"
           placeholder="Seri Melaka"
-          className="text-xs"
+          className="text-xs mb-3"
         />
         <Input
           label="Description"

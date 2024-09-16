@@ -8,7 +8,7 @@ import FormContainer from '@/components/container/FormContainer';
 import Button from '@/components/ui/Button';
 import DropZone from '@/components/ui/DropZone';
 import Input from '@/components/ui/Input';
-import { Select } from '@/components/ui/Select';
+import Select from '@/components/ui/Select';
 import TextEditor from '@/components/ui/TextEditor';
 import Title from '@/components/ui/Title';
 
@@ -36,7 +36,7 @@ export default function AddAttraction() {
         <Input
           label="Title"
           placeholder="Explore the Petronas Twin Towers"
-          className="text-xs"
+          className="text-xs mb-3"
         />
         <TextEditor />
         <div className=" w-1/4 my-5">

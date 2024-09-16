@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import React from 'react';
 
 interface InputProps
@@ -40,6 +41,11 @@ const Input: React.FC<InputProps> = ({
       {label && (
         <p className="mb-2 text-md text-[#181819] font-medium">{label}</p>
       )}
+      {type === 'file' && (
+        <label htmlFor={label} className={`${combinedStyles} flex justify-end`}>
+          <Image alt="image" src="/photo.svg" height={20} width={20} />
+        </label>
+      )}
       <div className="relative">
         {icon && (
           <span className="absolute inset-y-0 left-0 flex items-center pl-4 text-2xl text-black">
@@ -52,7 +58,7 @@ const Input: React.FC<InputProps> = ({
           placeholder={placeholder}
           value={value}
           onChange={onChange}
-          className={`${combinedStyles} ${icon ? 'pl-12' : ''} border-gray-300 shadow-sm placeholder-black`}
+          className={`${combinedStyles} ${type === 'file' && 'hidden'} ${icon ? 'pl-12' : ''} border-gray-300 shadow-sm placeholder-black`}
           disabled={disabled}
           style={{ minWidth }}
           {...rest}

@@ -1,15 +1,19 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 
 import FormContainer from '@/components/container/FormContainer';
 import Button from '@/components/ui/Button';
 import Input from '@/components/ui/Input';
+import Select from '@/components/ui/Select';
 import Title from '@/components/ui/Title';
 
 export default function AddTeamMember() {
+  const [designation, setDesignation] = useState('');
+  const [role, setRole] = useState('');
+
   return (
-    <main className="h-full px-8 ">
+    <main className="h-full">
       <div className="sticky top-0 bg-white w-full py-8 z-50">
         <Title>Member Detail</Title>
       </div>
@@ -27,16 +31,15 @@ export default function AddTeamMember() {
             className="text-xs"
             minWidth="350px"
           />
-          <Input
+          <Select
             label="Designation*"
-            placeholder="+60 12-345 6789"
-            className="text-xs"
-            minWidth="350px"
-            isSelect
             options={[
               { value: 'ceo', label: 'Ceo' },
               { value: 'coo', label: 'Coo' },
             ]}
+            selectedValues={designation}
+            setSelectedValues={setDesignation}
+            minWidth="350px"
           />
           <Input
             label="Work Email Address*"
@@ -50,17 +53,16 @@ export default function AddTeamMember() {
             className="text-xs"
             minWidth="350px"
           />
-          <Input
+          <Select
             label="Role*"
-            placeholder="Admin"
-            className="text-xs"
-            minWidth="350px"
-            isSelect
             options={[
               { value: 'admin', label: 'Admin' },
               { value: 'user', label: 'User' },
               { value: 'guest', label: 'Guest' },
             ]}
+            selectedValues={role}
+            setSelectedValues={setRole}
+            minWidth="350px"
           />
         </div>
 

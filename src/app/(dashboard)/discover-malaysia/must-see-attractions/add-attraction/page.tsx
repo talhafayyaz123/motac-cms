@@ -24,7 +24,7 @@ export default function AddAttraction() {
     setImages(newImages);
   };
   return (
-    <main className="h-full px-8 ">
+    <main className="h-full">
       <div className="sticky top-0 bg-white w-full py-8 z-50">
         <Title className="text-[#051225] font-medium">Detailed View</Title>
       </div>
@@ -33,7 +33,7 @@ export default function AddAttraction() {
         <Input
           label="Title"
           placeholder="Explore the Petronas Twin Towers"
-          className="text-xs"
+          className="text-xs mb-3"
         />
         <TextEditor />
         <div className="mt-5 flex flex-wrap gap-4">
