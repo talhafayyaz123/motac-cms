@@ -41,7 +41,6 @@ const Sidebar = () => {
   const handleNavigation = (path: string) => {
     router.push(path);
   };
-  console.log('pathname', pathname);
 
   return (
     <div className="w-full h-full flex flex-col py-5 pl-7">

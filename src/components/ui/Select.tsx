@@ -14,7 +14,7 @@ interface InputProps {
   searchable?: boolean;
 }
 
-export const Select: React.FC<InputProps> = ({
+const Select: React.FC<InputProps> = ({
   label,
   options,
   selectedValues,
