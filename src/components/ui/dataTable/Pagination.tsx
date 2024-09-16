@@ -41,14 +41,14 @@ const Pagination: React.FC<PaginationProps> = ({
         <button
           onClick={() => onPageChange(1)}
           disabled={currentPage === 1}
-          className="px-2 py-2 rounded-md  bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 disabled:opacity-50"
+          className="px-2 py-2 rounded-md  bg-white text-sm font-medium text-gray-500 hover:bg-gray-200 disabled:opacity-50"
         >
           <FaAngleDoubleLeft />
         </button>
         <button
           onClick={handlePrev}
           disabled={currentPage === 1}
-          className="px-2 py-2 rounded-md  bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 disabled:opacity-50"
+          className="px-2 py-2 rounded-md  bg-white text-sm font-medium text-gray-500 hover:bg-gray-200 disabled:opacity-50"
         >
           <FaChevronLeft />
         </button>
@@ -58,7 +58,7 @@ const Pagination: React.FC<PaginationProps> = ({
             onClick={() => onPageChange(i + 1)}
             className={`px-3 py-1 rounded-md text-sm font-medium ${
               i + 1 === currentPage
-                ? 'bg-black text-white'
+                ? 'bg-black-100 text-white'
                 : 'text-gray-700 hover:bg-gray-200'
             }`}
           >
@@ -68,14 +68,14 @@ const Pagination: React.FC<PaginationProps> = ({
         <button
           onClick={handleNext}
           disabled={currentPage === totalPages}
-          className="px-2 py-2 rounded-md  bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 disabled:opacity-50"
+          className="px-2 py-2 rounded-md  bg-white text-sm font-medium text-gray-500 hover:bg-gray-200 disabled:opacity-50"
         >
           <FaChevronRight />
         </button>
         <button
           onClick={() => onPageChange(totalPages)}
           disabled={currentPage === totalPages}
-          className="px-2 py-2 rounded-md  bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 disabled:opacity-50"
+          className="px-2 py-2 rounded-md  bg-white text-sm font-medium text-gray-500 hover:bg-gray-200 disabled:opacity-50"
         >
           <FaAngleDoubleRight />
         </button>

@@ -1,18 +1,18 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import React, { useState } from 'react';
+import React, { lazy, Suspense, useEffect, useState } from 'react';
 import { CiSearch } from 'react-icons/ci';
 import { FaFileExcel, FaRegEdit, FaTrashAlt } from 'react-icons/fa';
 import { RiCheckDoubleFill } from 'react-icons/ri';
 
 import Button from '@/components/ui/Button';
-import DataTable from '@/components/ui/dataTable/DataTable';
 import Wrapper from '@/components/ui/dataTable/DataTableWrapper';
 import Input from '@/components/ui/Input';
+import Loader from '@/components/ui/Loader';
 import Title from '@/components/ui/Title';
 
-import generateDummyData from './DummyData';
+const DataTable = lazy(() => import('@/components/ui/dataTable/DataTable'));
 
 export default function MyTeam() {
   const router = useRouter();
@@ -28,10 +28,17 @@ export default function MyTeam() {
     'Delete',
   ];
 
-  const data = generateDummyData();
-
+  const [data, setData] = useState<any[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [perPage, setPerPage] = useState(12);
+
+  useEffect(() => {
+    const loadData = async () => {
+      const { default: generateDummyData } = await import('./DummyData');
+      setData(generateDummyData());
+    };
+    void loadData();
+  }, []);
 
   const renderCell = (item: any, column: string) => {
     console.log(item);
@@ -99,18 +106,27 @@ export default function MyTeam() {
       </Wrapper>
 
       <div className="bg-white auto">
-        <DataTable
-          columns={columns}
-          data={data.slice((currentPage - 1) * perPage, currentPage * perPage)}
-          renderCell={renderCell}
-          pagination={{
-            total: data.length,
-            perPage,
-            currentPage,
-            onPageChange: setCurrentPage,
-            onPerPageChange: setPerPage,
-          }}
-        />
+        {data.length == 0 ? (
+          <Loader />
+        ) : (
+          <Suspense fallback={<Loader />}>
+            <DataTable
+              columns={columns}
+              data={data.slice(
+                (currentPage - 1) * perPage,
+                currentPage * perPage,
+              )}
+              renderCell={renderCell}
+              pagination={{
+                total: data.length,
+                perPage,
+                currentPage,
+                onPageChange: setCurrentPage,
+                onPerPageChange: setPerPage,
+              }}
+            />
+          </Suspense>
+        )}
       </div>
     </main>
   );
