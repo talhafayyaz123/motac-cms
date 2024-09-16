@@ -8,11 +8,11 @@ import { RiCheckDoubleFill } from 'react-icons/ri';
 
 import Button from '@/components/ui/Button';
 import Wrapper from '@/components/ui/dataTable/DataTableWrapper';
+import Select from '@/components/ui/dataTable/Select';
 import Input from '@/components/ui/Input';
 import Loader from '@/components/ui/Loader';
 import Title from '@/components/ui/Title';
 import { colors } from '@/lib/theme';
-import Select from '@/components/ui/dataTable/Select';
 
 const DataTable = lazy(() => import('@/components/ui/dataTable/DataTable'));
 
