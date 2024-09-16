@@ -10,8 +10,8 @@ import { RiCheckDoubleFill } from 'react-icons/ri';
 import Button from '@/components/ui/Button';
 import DataTable from '@/components/ui/dataTable/DataTable';
 import Wrapper from '@/components/ui/dataTable/DataTableWrapper';
+import Select from '@/components/ui/dataTable/Select';
 import Input from '@/components/ui/Input';
-import Select from '@/components/ui/Select';
 import Title from '@/components/ui/Title';
 
 import generateDummyData from './DummyData';
@@ -74,10 +74,7 @@ export default function Products() {
       case 'Product Status':
         return (
           <div className="relative">
-            <Select
-              options={[{ value: 'Active', label: 'Active' }]}
-              highlightValue="High"
-            />
+            <Select options={[{ value: 'Active', label: 'Active' }]} />
           </div>
         );
       case 'Tags':

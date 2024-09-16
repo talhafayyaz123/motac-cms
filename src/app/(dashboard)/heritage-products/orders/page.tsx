@@ -9,8 +9,8 @@ import { RiCheckDoubleFill } from 'react-icons/ri';
 import Button from '@/components/ui/Button';
 import DataTable from '@/components/ui/dataTable/DataTable';
 import Wrapper from '@/components/ui/dataTable/DataTableWrapper';
+import Select from '@/components/ui/dataTable/Select';
 import Input from '@/components/ui/Input';
-import Select from '@/components/ui/Select';
 import Title from '@/components/ui/Title';
 
 import generateDummyData from './DummyData';
@@ -82,7 +82,6 @@ export default function Orders() {
                 { value: 'Digital Wallet', label: 'Digital Wallet' },
                 { value: 'Credit Card', label: 'Credit Card' },
               ]}
-              highlightValue="High"
             />
           </div>
         );
@@ -94,17 +93,13 @@ export default function Orders() {
                 { value: 'Completed', label: 'Completed' },
                 { value: 'Pending', label: 'Pending' },
               ]}
-              highlightValue="High"
             />
           </div>
         );
       case 'Order Status':
         return (
           <div className="relative">
-            <Select
-              options={[{ value: 'Delivered', label: 'Delivered' }]}
-              highlightValue="High"
-            />
+            <Select options={[{ value: 'Delivered', label: 'Delivered' }]} />
           </div>
         );
       default:

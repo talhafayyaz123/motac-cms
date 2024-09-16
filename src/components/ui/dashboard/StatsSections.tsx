@@ -9,7 +9,7 @@ import AttractionList from '@/components/ui/dashboard/AttractionList';
 import Select from '@/components/ui/dataTable/Select';
 import { chartCategories, chartData } from '@/constants';
 
-import AreasplineChart from './charts/areasplineChart';
+import AreasplineChart from './charts/AreasplineChart';
 
 const StatsSection: React.FC = () => {
   return (

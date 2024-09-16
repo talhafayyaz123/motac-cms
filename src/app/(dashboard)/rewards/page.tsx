@@ -8,8 +8,8 @@ import { RiCheckDoubleFill } from 'react-icons/ri';
 import Button from '@/components/ui/Button';
 import DataTable from '@/components/ui/dataTable/DataTable';
 import Wrapper from '@/components/ui/dataTable/DataTableWrapper';
+import Select from '@/components/ui/dataTable/Select';
 import Input from '@/components/ui/Input';
-import Select from '@/components/ui/Select';
 import Title from '@/components/ui/Title';
 
 import generateDummyData from './DummyData';
@@ -65,7 +65,6 @@ export default function Rewards() {
                 { value: 'Malaysia', label: 'Malaysia' },
                 { value: 'Singapore', label: 'Singapore' },
               ]}
-              highlightValue="Malaysia"
             />
           </div>
         );
