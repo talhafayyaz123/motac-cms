@@ -4,7 +4,6 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import React, { useState } from 'react';
-import { FaSignOutAlt } from 'react-icons/fa';
 
 import { menuItems } from '@/assets';
 import producLogo from '@/assets/product-logo.svg';
@@ -216,9 +215,17 @@ const Sidebar = () => {
         </ul>
       </div>
 
-      <div className="p-2 hover:bg-blue-100 cursor-pointer flex items-center rounded-lg">
-        <FaSignOutAlt className="mr-4" />
-        <span className="text-red-100 text-sm">Logout</span>
+      <div className="p-2 hover:bg-blue-100 cursor-pointer gap-1 flex items-center rounded-lg group">
+        <Image
+          height={20}
+          width={20}
+          alt="logout"
+          src="/Logouticon.svg"
+          className="group-hover:brightness-0 group-hover:invert"
+        />
+        <span className="text-red-100 text-sm group-hover:text-white">
+          Logout
+        </span>
       </div>
     </div>
   );

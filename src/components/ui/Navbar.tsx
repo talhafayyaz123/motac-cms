@@ -13,7 +13,15 @@ const Navbar = () => {
   const pathname = usePathname();
   const router = useRouter();
 
-  const requiredPath = pathname.split('/')[1];
+  console.log(pathname.split('/'));
+
+  const pathnameChunks = pathname.split('/');
+
+  const requiredPath =
+    pathnameChunks?.length === 3
+      ? pathnameChunks[1]
+      : pathnameChunks[pathnameChunks?.length - 1];
+
   return (
     <div className="bg-white p-8 flex justify-between items-center">
       <div className="flex items-center max-h-max gap-4">

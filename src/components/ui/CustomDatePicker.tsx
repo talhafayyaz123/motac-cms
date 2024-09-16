@@ -6,11 +6,12 @@ const CustomDatePicker: React.FC = () => {
     currentDate.toLocaleString('default', { month: 'long' }),
   );
   const [year, setYear] = useState<number>(currentDate.getFullYear());
-  const [events, setEvents] = useState<{ [key: string]: string[] }>({
+  const [events] = useState<{ [key: string]: string[] }>({
     '2024-09-06': ['Event 1'],
-    '2020-05-15': ['Event 2'],
+    '2024-09-26': ['Event 3'],
+    '2024-09-15': ['Event 2'],
   });
-  const [selectedDate, setSelectedDate] = useState<string | null>(null);
+  // const [selectedDate, setSelectedDate] = useState<string | null>(null);
 
   // Get the number of days in the selected month
   const getDaysInMonth = (month: string, year: number) => {
@@ -55,26 +56,26 @@ const CustomDatePicker: React.FC = () => {
     }
   };
 
-  const handleDateClick = (day: number) => {
-    const dateKey = `${year}-${String(new Date(`${month} 1, ${year}`).getMonth() + 1).padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
+  // const handleDateClick = (day: number) => {
+  //   const dateKey = `${year}-${String(new Date(`${month} 1, ${year}`).getMonth() + 1).padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
 
-    if (events[dateKey]) {
-      // If date already has events, remove it
-      const updatedEvents = { ...events };
-      delete updatedEvents[dateKey];
-      setEvents(updatedEvents);
-      setSelectedDate(null);
-    } else {
-      // Add the selected date to events with a placeholder event
-      setEvents({
-        ...events,
-        [dateKey]: [`Event on ${dateKey}`],
-      });
+  //   if (events[dateKey]) {
+  //     // If date already has events, remove it
+  //     const updatedEvents = { ...events };
+  //     delete updatedEvents[dateKey];
+  //     setEvents(updatedEvents);
+  //     setSelectedDate(null);
+  //   } else {
+  //     // Add the selected date to events with a placeholder event
+  //     setEvents({
+  //       ...events,
+  //       [dateKey]: [`Event on ${dateKey}`],
+  //     });
 
-      // Set the selected date
-      setSelectedDate(dateKey);
-    }
-  };
+  //     // Set the selected date
+  //     setSelectedDate(dateKey);
+  //   }
+  // };
 
   const renderDays = () => {
     const days = [];
@@ -83,22 +84,22 @@ const CustomDatePicker: React.FC = () => {
 
       // Check if the day has any events
       const hasEvent = events[dateKey];
-      const isSelected = selectedDate === dateKey;
+      // const isSelected = selectedDate === dateKey;
 
       days.push(
         <div
           role="button"
-          onKeyDown={(e) => {
-            if (e.key === 'Enter' || e.key === ' ') {
-              handleDateClick(i);
-            }
-          }}
+          // onKeyDown={(e) => {
+          //   if (e.key === 'Enter' || e.key === ' ') {
+          //     handleDateClick(i);
+          //   }
+          // }}
           tabIndex={0}
           key={i}
-          onClick={() => handleDateClick(i)}
-          className={`p-2 text-center cursor-pointer hover:bg-indigo-100 hover:text-black-100 hover:rounded-full
+          // onClick={() => handleDateClick(i)}
+          className={`h-9 w-9 flex m-1 items-center justify-center cursor-pointer hover:bg-indigo-100 hover:text-black-100 hover:rounded-full
             ${hasEvent ? 'bg-blue-100 text-white font-bold rounded-full' : ''} 
-            ${isSelected ? 'rounded-full' : ''}`}
+           `}
         >
           {i}
         </div>,

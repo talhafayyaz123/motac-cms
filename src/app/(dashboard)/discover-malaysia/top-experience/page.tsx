@@ -1,9 +1,10 @@
 'use client';
 
+import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import React, { useState, lazy, Suspense, useEffect } from 'react';
 import { CiSearch } from 'react-icons/ci';
-import { FaFileExcel, FaRegEdit, FaTrashAlt } from 'react-icons/fa';
+import { FaFileExcel } from 'react-icons/fa';
 import { RiCheckDoubleFill } from 'react-icons/ri';
 
 import Button from '@/components/ui/Button';
@@ -61,15 +62,15 @@ export default function TopExperience() {
         );
       case 'Edit':
         return (
-          <div className="flex items-center gap-2 cursor-pointer">
-            <FaRegEdit className="text-blue-800 text-xl" />
+          <div className="flex items-center gap-2 justify-center cursor-pointer">
+            <Image height={20} alt="edit" width={20} src="/edit_icon.svg" />
             {item[column]}
           </div>
         );
       case 'Delete':
         return (
-          <div className="flex items-center gap-2 cursor-pointer">
-            <FaTrashAlt className="text-red-600 text-xl" />
+          <div className="flex items-center justify-center gap-2 cursor-pointer">
+            <Image height={20} alt="delete" width={20} src="/delete_icon.svg" />
             {item[column]}
           </div>
         );

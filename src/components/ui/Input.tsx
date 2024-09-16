@@ -9,6 +9,7 @@ interface InputProps
   icon?: React.ReactNode;
   label?: string;
   minWidth?: string;
+  sublabel?: string;
 }
 
 const Input: React.FC<InputProps> = ({
@@ -22,6 +23,7 @@ const Input: React.FC<InputProps> = ({
   label,
   className = '',
   minWidth = '300px',
+  sublabel,
   ...rest
 }) => {
   const baseStyles =
@@ -39,7 +41,10 @@ const Input: React.FC<InputProps> = ({
   return (
     <div className="flex flex-col" style={{ minWidth }}>
       {label && (
-        <p className="mb-2 text-md text-[#181819] font-medium">{label}</p>
+        <p className="mb-2 text-md text-[#181819] font-normal">
+          {label}
+          <span className="text-[0.5rem] ml-12">{sublabel}</span>
+        </p>
       )}
       {type === 'file' && (
         <label htmlFor={label} className={`${combinedStyles} flex justify-end`}>

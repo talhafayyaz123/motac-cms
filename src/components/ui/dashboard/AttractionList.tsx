@@ -1,6 +1,6 @@
 'use client';
+import Image from 'next/image';
 import React from 'react';
-import { FaLocationPin } from 'react-icons/fa6';
 
 const AttractionList: React.FC = () => {
   const generateDummyAttractionData = () => {
@@ -22,7 +22,12 @@ const AttractionList: React.FC = () => {
 
           <div className="border-t w-full border-dotted border-gray-500 flex-1"></div>
 
-          <FaLocationPin color="#364EA2" />
+          <Image
+            height={15}
+            width={15}
+            alt="location"
+            src="/Location_icon.svg"
+          />
         </div>
       ))}
     </div>
