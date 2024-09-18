@@ -121,7 +121,7 @@ export default function Dashboard() {
 
       <CardContainer title="AR Trails">
         <div className="text-lg font-bold">AR Trails</div>
-        <ComingSoonFeature maxWidth="100%" height="400px" title="AR Trails" />
+        <ComingSoonFeature maxWidth="100%" height="400px" />
         {/* <div className="grid lg:grid-cols-2 grid-rows-2 lg:grid-rows-1 gap-4 mb-4 filter blur-lg">
           <div className="relative rounded-xl bg-[#FBFCFF] border border-gray-100 overflow-hidden">
             <DataTable
@@ -152,15 +152,11 @@ export default function Dashboard() {
       <div className="flex justify-between gap-5 w-full">
         <CardContainer customClasses="max-w-[50%] w-full" title="Arrival Card">
           <div className="text-lg font-bold">Arrival Card</div>
-          <ComingSoonFeature
-            maxWidth="100%"
-            height="400px"
-            title="Arrival Card"
-          />{' '}
+          <ComingSoonFeature maxWidth="100%" height="400px" />{' '}
         </CardContainer>
         <CardContainer customClasses="max-w-[50%] w-full" title="MDAC">
           <div className="text-lg font-bold">MDAC</div>
-          <ComingSoonFeature maxWidth="100%" height="400px" title="MDAC" />{' '}
+          <ComingSoonFeature maxWidth="100%" height="400px" />{' '}
         </CardContainer>
       </div>
 
@@ -198,23 +194,19 @@ export default function Dashboard() {
 
       <CardContainer title="Discounts" customClasses="w-full">
         <div className="text-lg font-bold">Discounts</div>
-        <ComingSoonFeature maxWidth="100%" height="400px" title="Discounts" />
+        <ComingSoonFeature maxWidth="100%" height="400px" />
       </CardContainer>
 
       <CardContainer title="Heritage Products" customClasses="w-full">
         <div className="text-lg font-bold">Heritage Products</div>
 
-        <ComingSoonFeature
-          maxWidth="100%"
-          height="400px"
-          title="Heritage Products"
-        />
+        <ComingSoonFeature maxWidth="100%" height="400px" />
       </CardContainer>
 
       <CardContainer title="Travel Kit" customClasses="w-full">
         <div className="text-lg font-bold">Travel Kit</div>
 
-        <ComingSoonFeature maxWidth="100%" height="400px" title="Travel Kit" />
+        <ComingSoonFeature maxWidth="100%" height="400px" />
       </CardContainer>
     </main>
   );

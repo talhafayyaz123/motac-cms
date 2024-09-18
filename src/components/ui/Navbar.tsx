@@ -2,18 +2,19 @@
 
 import Image from 'next/image';
 import { usePathname, useRouter } from 'next/navigation';
-import React from 'react';
-import { FaBell, FaCaretLeft } from 'react-icons/fa';
+import React, { useState } from 'react';
+import { FaBell, FaCaretLeft, FaUser } from 'react-icons/fa';
 
 import { parsePathToTitle } from '@/helpers/utils/utils';
 
 import Title from './Title';
 
 const Navbar = () => {
+  const [showProfileDropdown, setShowProfileDropdown] =
+    useState<boolean>(false);
+
   const pathname = usePathname();
   const router = useRouter();
-
-  console.log(pathname.split('/'));
 
   const pathnameChunks = pathname.split('/');
 
@@ -21,6 +22,24 @@ const Navbar = () => {
     pathnameChunks?.length === 3
       ? pathnameChunks[1]
       : pathnameChunks[pathnameChunks?.length - 1];
+
+  const renderProfileDropdownOption = () => {
+    return (
+      <div
+        className="absolute bottom-[-40px] z-50 flex items-center gap-2 text-xs p-2 bg-white rounded-md shadow"
+        onClick={() => router.push('/my-profile/account-setting')}
+        role="button"
+        tabIndex={0}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+          }
+        }}
+      >
+        <FaUser />
+        <span>My Profile</span>
+      </div>
+    );
+  };
 
   return (
     <div className="bg-white p-8 flex justify-between items-center">
@@ -51,7 +70,16 @@ const Navbar = () => {
             16
           </span>
         </div>
-        <div className="flex items-center space-x-2 pr-6">
+        <div
+          className="flex items-center space-x-2 pr-6 relative"
+          onClick={() => setShowProfileDropdown(!showProfileDropdown)}
+          role="button"
+          tabIndex={0}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+            }
+          }}
+        >
           <Image
             src="/user.jpg"
             alt="Profile"
@@ -59,6 +87,7 @@ const Navbar = () => {
             height={60}
             className="h-[50px] rounded-full object-cover aspect-[16/9]"
           />
+          {showProfileDropdown && renderProfileDropdownOption()}
           <div>
             <p className="text-sm font-semibold">George Alex</p>
             <p className="text-xs text-gray-500">Master Admin</p>
