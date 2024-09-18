@@ -33,7 +33,11 @@ const Select: React.FC<SelectProps> = ({
         style={minimalStyle ? { appearance: 'none' } : undefined}
       >
         {options.map((option) => (
-          <option key={option.value} value={option.value}>
+          <option
+            key={option.value}
+            value={option.value}
+            className="bg-white !text-gray-900"
+          >
             {option.label}
           </option>
         ))}
