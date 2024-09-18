@@ -20,6 +20,7 @@ const DataTable = lazy(() => import('@/components/ui/dataTable/DataTable'));
 export default function HappeningEvents() {
   const router = useRouter();
 
+  const availableTags = ['Food', 'Nature', 'Travel'];
   const columns = [
     'Select',
     'Event ID',
@@ -46,11 +47,62 @@ export default function HappeningEvents() {
 
   const [currentPage, setCurrentPage] = useState(1);
   const [perPage, setPerPage] = useState(12);
+  const [activeRowIndex, setActiveRowIndex] = useState<number | null>(null);
 
-  const handleTagRemove = (rowIndex: number, tagIndex: number) => {
+  const handleTagRemove = (
+    event: React.MouseEvent<HTMLButtonElement>,
+    rowIndex: number,
+    tagIndex: number,
+  ) => {
+    event.stopPropagation();
     const newData = [...data];
-    newData[rowIndex].Tags.splice(tagIndex, 1);
+    const newRow = { ...newData[rowIndex] };
+    newRow.Tags = [...newRow.Tags];
+    newRow.Tags.splice(tagIndex, 1);
+    newData[rowIndex] = newRow;
     setData(newData);
+  };
+
+  const handleTagAdd = (
+    e: React.MouseEvent<HTMLButtonElement | HTMLDivElement>,
+    rowIndex: number,
+  ) => {
+    const target = e.target as HTMLElement;
+    const newTag = target.innerText;
+    const newData = [...data];
+    const newRow = { ...newData[rowIndex] };
+    newRow.Tags = [...newRow.Tags, newTag];
+    newData[rowIndex] = newRow;
+    setData(newData);
+  };
+
+  const renderTagOptions = (rowIndex: number) => {
+    const rowTags = data[rowIndex]?.Tags || [];
+
+    const missingTags = availableTags.filter((tag) => !rowTags.includes(tag));
+
+    return (
+      missingTags.length > 0 && (
+        <div className="absolute left-0 z-10 mt-1 bg-white border border-gray-300 rounded-lg shadow-lg p-2">
+          {missingTags.map((tag) => (
+            <div
+              key={tag}
+              onClick={(e) => handleTagAdd(e, rowIndex)}
+              role="button"
+              tabIndex={0}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                }
+              }}
+            >
+              <span className="px-3 py-1 rounded-full text-xs font-medium">
+                {tag}
+              </span>
+            </div>
+          ))}
+        </div>
+      )
+    );
   };
 
   const renderCell = (item: any, column: string, rowIndex: any) => {
@@ -96,22 +148,36 @@ export default function HappeningEvents() {
         );
       case 'Tags':
         return (
-          <div className="flex gap-1">
-            {item[column].map((tag: string, index: number) => (
-              <span
-                key={index}
-                className="flex items-center px-3 py-1 bg-gray-200 rounded-full text-xs font-medium"
-                style={{ backgroundColor: colors[tag] }}
-              >
-                {tag}
-                <button
-                  onClick={() => handleTagRemove(rowIndex, index)}
-                  className="ml-2 text-gray-500 hover:text-gray-700"
+          <div
+            className={`${item[column]?.length === 0 && 'p-2'} flex gap-1 relative`}
+            onClick={() =>
+              setActiveRowIndex(rowIndex === activeRowIndex ? null : rowIndex)
+            }
+            role="button"
+            tabIndex={0}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+              }
+            }}
+          >
+            {item[column].map((tag: string, index: number) => {
+              return (
+                <span
+                  key={index}
+                  className="px-3 py-1 rounded-full text-xs font-medium"
+                  style={{ backgroundColor: colors[tag] }}
                 >
-                  &times;
-                </button>
-              </span>
-            ))}
+                  {tag}
+                  <button
+                    onClick={(event) => handleTagRemove(event, rowIndex, index)}
+                    className="ml-2 text-gray-500 hover:text-gray-700"
+                  >
+                    &times;
+                  </button>
+                </span>
+              );
+            })}
+            {activeRowIndex === rowIndex && renderTagOptions(rowIndex)}
           </div>
         );
       default:
