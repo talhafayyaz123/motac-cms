@@ -1,11 +1,18 @@
-import React from 'react';
+'use client';
+import React, { useState } from 'react';
 
 import FormContainer from '@/components/container/FormContainer';
 import Button from '@/components/ui/Button';
 import Input from '@/components/ui/Input';
+import Select from '@/components/ui/Select';
 import Title from '@/components/ui/Title';
 
 export default function AddRestaurant() {
+  const [selectedTags, setSelectedTags] = useState<string[]>([]);
+  const [categoty, setCategory] = useState<string>('');
+  const [city, setCity] = useState<string>('');
+  const [area, setArea] = useState<string>('');
+
   return (
     <main className="h-full">
       <div className="sticky top-0 bg-white w-full py-8 z-50">
@@ -23,16 +30,11 @@ export default function AddRestaurant() {
           className="text-xs"
         />
         <div className="mt-5 flex flex-wrap gap-4">
-          <Input
-            label="Location"
-            placeholder="Kuala Lumpur City Centre (KLCC), 43 Jalan Ampan"
-            className="text-xs"
-            minWidth="350px"
-          />
-          <Input
+          <Select
             label="Category"
-            placeholder="Skycraper"
-            className="text-xs"
+            options={[{ value: 'Cultural', label: 'Cultural' }]}
+            selectedValues={categoty}
+            setSelectedValues={setCategory}
             minWidth="350px"
           />
           <Input
@@ -42,9 +44,21 @@ export default function AddRestaurant() {
             minWidth="350px"
           />
           <Input
-            label="Tags"
-            placeholder="Food, Nature, Travel"
+            label="Map Link"
+            placeholder="Google Maps"
             className="text-xs"
+            minWidth="350px"
+          />
+          <Select
+            label="Tags"
+            options={[
+              { value: 'Food', label: 'Food' },
+              { value: 'Travel', label: 'Travel' },
+              { value: 'Nature', label: 'Nature' },
+            ]}
+            selectedValues={selectedTags}
+            multiple
+            setSelectedValues={setSelectedTags}
             minWidth="350px"
           />
           <Input
@@ -52,10 +66,32 @@ export default function AddRestaurant() {
             placeholder="Image"
             className="text-xs"
             minWidth="350px"
+            type="file"
+          />
+        </div>
+        <p className="mt-5 text-md text-[#181819] font-normal">Location</p>
+        <div className="mt-5 flex flex-wrap gap-4">
+          <Select
+            label="City"
+            options={[{ value: 'Kuala Lumpur', label: 'Kuala Lumpur' }]}
+            selectedValues={city}
+            setSelectedValues={setCity}
+            minWidth="350px"
+          />
+          <Select
+            label="Area"
+            options={[
+              { value: 'Kuala Lumpur', label: 'Kuala Lumpur' },
+              { value: 'Lumpur', label: 'Lumpur' },
+            ]}
+            selectedValues={area}
+            setSelectedValues={setArea}
+            minWidth="350px"
+            searchable
           />
           <Input
-            label="Map Link"
-            placeholder="Google Maps"
+            label="Address"
+            placeholder="Kuala Lumpur City Centre (KLCC), 43 Jalan Ampan"
             className="text-xs"
             minWidth="350px"
           />

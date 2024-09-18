@@ -43,6 +43,7 @@ export default function AddTeamMember() {
           />
           <Input
             label="Work Email Address*"
+            sublabel="(Please Add Work Email Only)"
             placeholder="johndoe@gmail.com"
             className="text-xs"
             minWidth="350px"

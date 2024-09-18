@@ -1,9 +1,10 @@
 'use client';
 
+import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import React, { useState, Suspense, lazy, useEffect } from 'react';
 import { CiSearch } from 'react-icons/ci';
-import { FaFileExcel, FaRegEdit, FaTrashAlt } from 'react-icons/fa';
+import { FaFileExcel } from 'react-icons/fa';
 import { RiCheckDoubleFill } from 'react-icons/ri';
 
 import Button from '@/components/ui/Button';
@@ -15,11 +16,12 @@ import Title from '@/components/ui/Title';
 import { colors } from '@/lib/theme';
 import AlertService from '@/services/alertService';
 
-// Lazy loading DataTable component
 const DataTable = lazy(() => import('@/components/ui/dataTable/DataTable'));
 
 export default function MustSeeAttractions() {
   const router = useRouter();
+
+  const availableTags = ['Food', 'Nature', 'Travel'];
 
   const columns = [
     'Select',
@@ -33,12 +35,11 @@ export default function MustSeeAttractions() {
     'Delete',
   ];
 
-  // Initially set data as null and load it lazily
   const [data, setData] = useState<any[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [perPage, setPerPage] = useState(12);
+  const [activeRowIndex, setActiveRowIndex] = useState<number | null>(null);
 
-  // UseEffect to lazily load dummy data
   useEffect(() => {
     const loadData = async () => {
       const { default: generateDummyData } = await import('./DummyData');
@@ -48,10 +49,60 @@ export default function MustSeeAttractions() {
     void loadData();
   }, []);
 
-  const handleTagRemove = (rowIndex: number, tagIndex: number) => {
+  const handleTagRemove = (
+    event: React.MouseEvent<HTMLButtonElement>,
+    rowIndex: number,
+    tagIndex: number,
+  ) => {
+    event.stopPropagation();
     const newData = [...data];
-    newData[rowIndex].Tags.splice(tagIndex, 1);
+    const newRow = { ...newData[rowIndex] };
+    newRow.Tags = [...newRow.Tags];
+    newRow.Tags.splice(tagIndex, 1);
+    newData[rowIndex] = newRow;
     setData(newData);
+  };
+
+  const handleTagAdd = (
+    e: React.MouseEvent<HTMLButtonElement | HTMLDivElement>,
+    rowIndex: number,
+  ) => {
+    const target = e.target as HTMLElement;
+    const newTag = target.innerText;
+    const newData = [...data];
+    const newRow = { ...newData[rowIndex] };
+    newRow.Tags = [...newRow.Tags, newTag];
+    newData[rowIndex] = newRow;
+    setData(newData);
+  };
+
+  const renderTagOptions = (rowIndex: number) => {
+    const rowTags = data[rowIndex]?.Tags || [];
+
+    const missingTags = availableTags.filter((tag) => !rowTags.includes(tag));
+
+    return (
+      missingTags.length > 0 && (
+        <div className="absolute left-0 z-10 mt-1 bg-white border border-gray-300 rounded-lg shadow-lg p-2">
+          {missingTags.map((tag) => (
+            <div
+              key={tag}
+              onClick={(e) => handleTagAdd(e, rowIndex)}
+              role="button"
+              tabIndex={0}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                }
+              }}
+            >
+              <span className="px-3 py-1 rounded-full text-xs font-medium">
+                {tag}
+              </span>
+            </div>
+          ))}
+        </div>
+      )
+    );
   };
 
   const renderCell = (item: any, column: string, rowIndex: any) => {
@@ -64,15 +115,28 @@ export default function MustSeeAttractions() {
         );
       case 'Edit':
         return (
-          <div className="flex items-center gap-2 cursor-pointer">
-            <FaRegEdit className="text-blue-800 text-xl" />
+          <div
+            className="flex items-center gap-2 justify-center cursor-pointer"
+            role="button"
+            tabIndex={0}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+              }
+            }}
+            onClick={() => {
+              router.push(
+                '/discover-malaysia/must-see-attractions/add-attraction',
+              );
+            }}
+          >
+            <Image height={20} alt="edit" width={20} src="/edit_icon.svg" />
             {item[column]}
           </div>
         );
       case 'Delete':
         return (
           <div
-            className="flex items-center gap-2 cursor-pointer"
+            className="flex items-center justify-center gap-2 cursor-pointer"
             onClick={async () => {
               try {
                 await AlertService.confirm(
@@ -91,7 +155,7 @@ export default function MustSeeAttractions() {
               }
             }}
           >
-            <FaTrashAlt className="text-red-600 text-xl" />
+            <Image height={20} alt="delete" width={20} src="/delete_icon.svg" />
             {item[column]}
           </div>
         );
@@ -116,22 +180,36 @@ export default function MustSeeAttractions() {
         );
       case 'Tags':
         return (
-          <div className="flex gap-1">
-            {item[column].map((tag: string, index: number) => (
-              <span
-                key={index}
-                className="px-3 py-1 rounded-full text-xs font-medium"
-                style={{ backgroundColor: colors[tag] }}
-              >
-                {tag}
-                <button
-                  onClick={() => handleTagRemove(rowIndex, index)}
-                  className="ml-2 text-gray-500 hover:text-gray-700"
+          <div
+            className={`${item[column]?.length === 0 && 'p-2'} flex gap-1 relative`}
+            onClick={() =>
+              setActiveRowIndex(rowIndex === activeRowIndex ? null : rowIndex)
+            }
+            role="button"
+            tabIndex={0}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+              }
+            }}
+          >
+            {item[column].map((tag: string, index: number) => {
+              return (
+                <span
+                  key={index}
+                  className="px-3 py-1 rounded-full text-xs font-medium"
+                  style={{ backgroundColor: colors[tag] }}
                 >
-                  &times;
-                </button>
-              </span>
-            ))}
+                  {tag}
+                  <button
+                    onClick={(event) => handleTagRemove(event, rowIndex, index)}
+                    className="ml-2 text-gray-500 hover:text-gray-700"
+                  >
+                    &times;
+                  </button>
+                </span>
+              );
+            })}
+            {activeRowIndex === rowIndex && renderTagOptions(rowIndex)}
           </div>
         );
       default:

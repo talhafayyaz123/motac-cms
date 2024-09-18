@@ -1,5 +1,6 @@
 'use client';
 
+import { useRouter } from 'next/navigation';
 import React, { useState, lazy, useEffect, Suspense } from 'react';
 import { CiSearch } from 'react-icons/ci';
 import { FaFileExcel } from 'react-icons/fa';
@@ -15,6 +16,7 @@ import Title from '@/components/ui/Title';
 const DataTable = lazy(() => import('@/components/ui/dataTable/DataTable'));
 
 export default function UserManagementActive() {
+  const router = useRouter();
   const columns = [
     'Select',
     'User ID',
@@ -52,7 +54,18 @@ export default function UserManagementActive() {
 
       case 'Action':
         return (
-          <div className="flex items-center gap-1 cursor-pointer">
+          <div
+            className="flex items-center gap-1 cursor-pointer"
+            onClick={() => {
+              router.push('/user-management/add-user-personal-details');
+            }}
+            role="button"
+            tabIndex={0}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+              }
+            }}
+          >
             <IoEyeSharp />
             <span>{item[column]}</span>
           </div>

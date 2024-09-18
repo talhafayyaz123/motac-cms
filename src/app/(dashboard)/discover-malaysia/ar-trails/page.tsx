@@ -36,7 +36,7 @@ export default function ArTrails() {
     setData(newData);
   };
 
-  const renderCell = (item: any, column: string, rowIndex: number) => {
+  const renderCell = (item: any, column: string, rowIndex: any) => {
     switch (column) {
       case 'Select':
         return (

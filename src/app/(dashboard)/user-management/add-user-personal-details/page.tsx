@@ -9,7 +9,7 @@ import Title from '@/components/ui/Title';
 
 export default function PersonalDetails() {
   return (
-    <main className="h-full px-8 ">
+    <main className="h-full">
       <div className="sticky top-0 bg-white w-full py-8 z-50 flex justify-between">
         <Title className="text-[#051225]">Personal Details</Title>
         <div className="flex gap-2">
@@ -18,7 +18,7 @@ export default function PersonalDetails() {
         </div>
       </div>
       <FormContainer>
-        <div className="mt-5 flex flex-wrap gap-4">
+        <div className="mt-5 flex pb-40 flex-wrap gap-4">
           <Input
             label="First Name"
             placeholder="Jhon"

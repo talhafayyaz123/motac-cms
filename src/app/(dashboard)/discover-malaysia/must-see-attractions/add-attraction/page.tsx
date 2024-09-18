@@ -17,6 +17,7 @@ export default function AddAttraction() {
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const [categoty, setCategory] = useState<string>('');
   const [city, setCity] = useState<string>('');
+  const [area, setArea] = useState<string>('');
 
   const removeImage = (index: number) => {
     const newImages = [...images];
@@ -36,26 +37,15 @@ export default function AddAttraction() {
           className="text-xs mb-3"
         />
         <TextEditor />
-        <div className="mt-5 flex flex-wrap gap-4">
-          <Select
-            label="City"
-            options={[{ value: 'Kuala Lumpur', label: 'Kuala Lumpur' }]}
-            selectedValues={city}
-            setSelectedValues={setCity}
-            minWidth="350px"
-          />
-          <Input
-            label="Location"
-            placeholder="Kuala Lumpur City Centre (KLCC), 43 Jalan Ampan"
-            className="text-xs"
-            minWidth="350px"
-          />
+        <div className=" w-1/4 my-5">
           <Input
             label="Opening Hours / Closing Hours"
             placeholder="Daily 9:00 Am - 9:00 Pm"
             className="text-xs"
             minWidth="350px"
           />
+        </div>
+        <div className="mt-5 flex flex-wrap gap-4">
           <Input
             label="Age Limitation"
             placeholder="None"
@@ -64,7 +54,6 @@ export default function AddAttraction() {
           />
           <Input
             label="Banner Image"
-            placeholder="Image"
             className="text-xs"
             minWidth="350px"
             type="file"
@@ -92,6 +81,33 @@ export default function AddAttraction() {
             selectedValues={selectedTags}
             multiple
             setSelectedValues={setSelectedTags}
+            minWidth="350px"
+          />
+        </div>
+        <p className="mt-5 text-md text-[#181819] font-normal">Location</p>
+        <div className="mt-5 flex flex-wrap gap-4">
+          <Select
+            label="City"
+            options={[{ value: 'Kuala Lumpur', label: 'Kuala Lumpur' }]}
+            selectedValues={city}
+            setSelectedValues={setCity}
+            minWidth="350px"
+          />
+          <Select
+            label="Area"
+            options={[
+              { value: 'Kuala Lumpur', label: 'Kuala Lumpur' },
+              { value: 'Lumpur', label: 'Lumpur' },
+            ]}
+            selectedValues={area}
+            setSelectedValues={setArea}
+            minWidth="350px"
+            searchable
+          />
+          <Input
+            label="Address"
+            placeholder="Daily 9:00 Am - 9:00 Pm"
+            className="text-xs"
             minWidth="350px"
           />
         </div>

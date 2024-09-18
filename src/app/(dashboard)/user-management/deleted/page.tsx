@@ -56,7 +56,7 @@ export default function UserManagementDeleted() {
       <Title className="font-light ml-2 mb-2 text-[#051225]">
         User Management
       </Title>
-      <Wrapper isBgColor={false}>
+      <Wrapper>
         <div className="flex gap-3">
           <Button variant="primary" icon={<RiCheckDoubleFill />}>
             Select All
