@@ -12,6 +12,7 @@ interface InputProps {
   minWidth?: string;
   multiple?: boolean;
   searchable?: boolean;
+  profile?: boolean;
 }
 
 const Select: React.FC<InputProps> = ({
@@ -22,6 +23,7 @@ const Select: React.FC<InputProps> = ({
   minWidth = '300px',
   multiple = false,
   searchable = false,
+  profile = false,
 }) => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
@@ -59,7 +61,7 @@ const Select: React.FC<InputProps> = ({
       {label && <p className="mb-2 text-md text-black">{label}</p>}
       <div className="relative">
         <div
-          className="block text-sm w-full border rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-offset-2 transition ease-in-out duration-150 bg-white text-gray-900 cursor-pointer"
+          className={`block text-sm w-full ${profile ? 'border border-blue-200 text-blue-200 font-medium' : 'border text-gray-900'} rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-offset-2 transition ease-in-out duration-150 bg-white cursor-pointer`}
           onClick={() => setDropdownOpen(!dropdownOpen)}
         >
           {displaySelected()}
