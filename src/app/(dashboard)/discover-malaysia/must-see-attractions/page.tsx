@@ -115,7 +115,20 @@ export default function MustSeeAttractions() {
         );
       case 'Edit':
         return (
-          <div className="flex items-center gap-2 justify-center cursor-pointer">
+          <div
+            className="flex items-center gap-2 justify-center cursor-pointer"
+            role="button"
+            tabIndex={0}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+              }
+            }}
+            onClick={() => {
+              router.push(
+                '/discover-malaysia/must-see-attractions/add-attraction',
+              );
+            }}
+          >
             <Image height={20} alt="edit" width={20} src="/edit_icon.svg" />
             {item[column]}
           </div>

@@ -30,12 +30,6 @@ export default function AddRestaurant() {
           className="text-xs"
         />
         <div className="mt-5 flex flex-wrap gap-4">
-          {/* <Input
-            label="Location"
-            placeholder="Kuala Lumpur City Centre (KLCC), 43 Jalan Ampan"
-            className="text-xs"
-            minWidth="350px"
-          /> */}
           <Select
             label="Category"
             options={[{ value: 'Cultural', label: 'Cultural' }]}
