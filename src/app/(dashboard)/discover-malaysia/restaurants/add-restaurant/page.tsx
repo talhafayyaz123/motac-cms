@@ -1,4 +1,5 @@
 'use client';
+import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
 
 import FormContainer from '@/components/container/FormContainer';
@@ -8,6 +9,8 @@ import Select from '@/components/ui/Select';
 import Title from '@/components/ui/Title';
 
 export default function AddRestaurant() {
+  const router = useRouter();
+
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const [categoty, setCategory] = useState<string>('');
   const [city, setCity] = useState<string>('');
@@ -98,7 +101,14 @@ export default function AddRestaurant() {
         </div>
       </FormContainer>
       <div className="w-full flex justify-end gap-3 p-10">
-        <Button variant="danger">Cancel</Button>
+        <Button
+          variant="danger"
+          onClick={() => {
+            router.push('/discover-malaysia/restaurants');
+          }}
+        >
+          Cancel
+        </Button>
         <Button variant="customBlue">Add</Button>
       </div>
     </main>

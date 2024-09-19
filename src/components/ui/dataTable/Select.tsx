@@ -27,7 +27,7 @@ const Select: React.FC<SelectProps> = ({
         } 
     px-4 py-1 text-sm rounded-md outline-none ${
       value === highlightValue
-        ? 'bg-blue-100 text-white ring-2 ring-blue-100 ring-offset-0'
+        ? 'bg-blue-100 text-white ring-0 py-[6.5px] px-5'
         : 'bg-white'
     }`}
         style={minimalStyle ? { appearance: 'none' } : undefined}

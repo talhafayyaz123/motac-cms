@@ -114,7 +114,7 @@ const Sidebar = () => {
                             ? 'text-gray-300 cursor-not-allowed'
                             : pathname === subItem.path
                               ? 'text-blue-100'
-                              : 'hover:text-blue-100 text-black-100 cursor-pointer'
+                              : `hover:text-blue-100 text-black-100 ${!subItem.path ? 'cursor-default' : 'cursor-pointer'}`
                         }`}
                         role="button"
                         tabIndex={0}
@@ -161,7 +161,11 @@ const Sidebar = () => {
                           {subItem.label}
                         </span>
                       </div>
-                      <span className="absolute w-3 h-[2px] bg-blue-100 top-1/2 -left-[18px] transform rotate-12 rounded-bl-full rounded-tr-full"></span>
+                      {!subItem.path ? (
+                        ''
+                      ) : (
+                        <span className="absolute w-3 h-[2px] bg-blue-100 top-1/2 -left-[18px] transform rotate-12 rounded-bl-full rounded-tr-full"></span>
+                      )}
                       {subItem.subItems &&
                         openSubDropdown === subItem.label && (
                           <ul className="ml-6 space-y-1 border-l-2 border-blue-100 pl-4">
