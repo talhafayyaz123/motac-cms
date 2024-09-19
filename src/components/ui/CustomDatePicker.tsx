@@ -97,7 +97,7 @@ const CustomDatePicker: React.FC = () => {
           tabIndex={0}
           key={i}
           // onClick={() => handleDateClick(i)}
-          className={`h-9 w-9 flex m-1 items-center justify-center cursor-pointer hover:bg-indigo-100 hover:text-black-100 hover:rounded-full
+          className={`h-9 w-9 flex m-1 items-center justify-center cursor-default hover:rounded-full
             ${hasEvent ? 'bg-blue-100 text-white font-bold rounded-full' : ''} 
            `}
         >

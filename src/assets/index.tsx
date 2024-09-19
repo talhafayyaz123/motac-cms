@@ -1119,7 +1119,7 @@ export const menuItems = [
     subItems: [
       {
         label: 'Exploring Destinations',
-        path: '#',
+        path: '',
         icon: ExploringDestinationsIcon,
         disabled: false,
       },
@@ -1257,7 +1257,7 @@ export const menuItems = [
     label: 'Guides',
     icon: GuideIcon,
     path: '/guides',
-    disabled: false,
+    disabled: true,
   },
   {
     label: 'My Team',

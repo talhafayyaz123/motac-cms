@@ -1,6 +1,7 @@
 'use client';
 
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
 import { FaTrashAlt } from 'react-icons/fa';
 
@@ -13,6 +14,8 @@ import TextEditor from '@/components/ui/TextEditor';
 import Title from '@/components/ui/Title';
 
 export default function AddAttraction() {
+  const router = useRouter();
+
   const [images, setImages] = useState<File[]>([]);
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const [categoty, setCategory] = useState<string>('');
@@ -139,7 +142,14 @@ export default function AddAttraction() {
         <DropZone images={images} setImages={setImages} />
       </FormContainer>
       <div className="w-full flex justify-end gap-3 p-10">
-        <Button variant="danger">Cancel</Button>
+        <Button
+          variant="danger"
+          onClick={() => {
+            router.push('/discover-malaysia/must-see-attractions');
+          }}
+        >
+          Cancel
+        </Button>
         <Button variant="customBlue">Add</Button>
       </div>
     </main>
