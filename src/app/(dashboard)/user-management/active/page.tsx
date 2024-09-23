@@ -66,7 +66,7 @@ export default function UserManagementActive() {
               }
             }}
           >
-            <IoEyeSharp />
+            <IoEyeSharp className="text-blue-200" />
             <span>{item[column]}</span>
           </div>
         );
@@ -74,7 +74,7 @@ export default function UserManagementActive() {
       case 'Reset Link':
         return (
           <div className="flex items-center gap-2 cursor-pointer">
-            <span className="text-blue-600 underline">{item[column]}</span>
+            <span className="text-blue-200 underline">{item[column]}</span>
           </div>
         );
 

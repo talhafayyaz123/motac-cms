@@ -61,7 +61,7 @@ const StatsSection: React.FC = () => {
           </div>
         </div>
 
-        <div className="flex flex-col gap-6 h-full w-full lg:w-3/12">
+        <div className="flex flex-col gap-6 h-auto w-full lg:w-3/12">
           <div className="h-full relative rounded-xl overflow-hidden bg-white border border-gray-100  flex flex-col">
             <div className="absolute left-1/2 top-0 transform -translate-x-1/2 w-2/3 h-1 bg-purple-100 rounded-bl-xl rounded-br-xl"></div>
             <div className=" items-start p-4">
@@ -128,8 +128,8 @@ const StatsSection: React.FC = () => {
               <Image src={reviewsIcon} alt="" className="w-12 h-12" />
             </div>
           </div> */}
-          <ComingSoonFeature addedBorder={true} />
-          <ComingSoonFeature addedBorder={true} />
+          <ComingSoonFeature />
+          <ComingSoonFeature />
         </div>
 
         <div className="flex flex-col gap-6 h-full w-full lg:w-3/12">
@@ -139,12 +139,9 @@ const StatsSection: React.FC = () => {
               <p className="text-xs text-gray-50 font-medium">
                 Attractions Added
               </p>
-              <p className="text-3xl font-semibold text-blue-200">29</p>
+              <p className="text-3xl font-semibold text-blue-200 m-3">29</p>
               <div className="w-full flex justify-between flex-col h-full space-y-2">
                 <AttractionList />
-                <div className="text-xs cursor-pointer text-center text-gray-50">
-                  {'View All >'}
-                </div>
               </div>
             </div>
           </div>

@@ -17,7 +17,7 @@ const UserStats: React.FC<UserStatsProps> = ({ stats }) => {
           className="rounded-xl bg-[#FBFCFF] border border-gray-200 p-4 min-w-40 mr-4"
         >
           <p className="text-xs text-gray-500">{stat.label}</p>
-          <p className="text-4xl text-[#364ea2]">
+          <p className="text-4xl text-blue-200 font-mark">
             {stat.value.toLocaleString()}
           </p>
         </div>

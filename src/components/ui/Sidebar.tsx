@@ -219,7 +219,13 @@ const Sidebar = () => {
         </ul>
       </div>
 
-      <div className="p-2 hover:bg-blue-100 cursor-pointer gap-1 flex items-center rounded-lg group">
+      <div
+        className="p-2 hover:bg-blue-100 cursor-pointer gap-1 flex items-center rounded-lg group"
+        onClick={() => router.push('/login')}
+        onKeyDown={() => {}}
+        role="button"
+        tabIndex={0}
+      >
         <Image
           height={20}
           width={20}

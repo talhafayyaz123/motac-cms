@@ -38,6 +38,22 @@ body {
   }
 }
 
+@font-face {
+  font-family: 'MarkForMC';
+  src: url('/fonts/MarkForMC/MarkForMC-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'MarkForMC';
+  src: url('/fonts/MarkForMC/MarkForMC-Bold.ttf') format('truetype');
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
+}
+
 
 .sidebar-scroll-bar::-webkit-scrollbar {
   height: 4px;
@@ -45,7 +61,7 @@ body {
 }
 
 .sidebar-scroll-bar::-webkit-scrollbar-thumb {
-  background-color: #364EA2;
+  background-color: #364ea2;
 }
 
 .sidebar-scroll-bar::-webkit-scrollbar-track {

@@ -5,7 +5,8 @@ interface SelectProps {
   onChange?: (event: React.ChangeEvent<HTMLSelectElement>) => void;
   options: Array<{ value: string; label: string }>;
   highlightValue?: string;
-  minimalStyle?: boolean; // New prop to toggle minimal style
+  minimalStyle?: boolean;
+  defaultOptionText?: string;
 }
 
 const Select: React.FC<SelectProps> = ({
@@ -14,6 +15,7 @@ const Select: React.FC<SelectProps> = ({
   options,
   highlightValue,
   minimalStyle = false,
+  defaultOptionText = 'Priority',
 }) => {
   return (
     <div className="relative">
@@ -25,13 +27,18 @@ const Select: React.FC<SelectProps> = ({
             ? 'border border-gray-300 text-gray-700 py-2 pl-3 pr-8 focus:ring-blue-500'
             : 'ring-1 ring-gray-500 ring-offset-2'
         } 
-    px-4 py-1 text-sm rounded-md outline-none ${
-      value === highlightValue
-        ? 'bg-blue-100 text-white ring-0 py-[6.5px] px-5'
-        : 'bg-white'
-    }`}
-        style={minimalStyle ? { appearance: 'none' } : undefined}
+   py-1 pl-3 pr-8 text-sm rounded-md outline-none ${
+     value === highlightValue
+       ? 'bg-blue-100 text-white ring-0 py-[6px] pl-3 pr-8 rounded-md'
+       : 'bg-white'
+   }`}
+        style={{ appearance: 'none' }}
       >
+        {!minimalStyle && (
+          <option value="none" selected disabled>
+            {defaultOptionText}
+          </option>
+        )}
         {options.map((option) => (
           <option
             key={option.value}
@@ -43,7 +50,7 @@ const Select: React.FC<SelectProps> = ({
         ))}
       </select>
       <span
-        className={`absolute inset-y-0 right-[-10px] flex items-center pr-4 pointer-events-none ${!minimalStyle ? 'hidden' : 'block'}`}
+        className={`absolute inset-y-0 right-[-10px] flex items-center pr-4 pointer-events-none`}
       >
         <svg
           className="w-4 h-4 text-gray-500"

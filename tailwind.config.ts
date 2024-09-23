@@ -33,7 +33,11 @@ const config: Config = {
         purple: {
           100:"#778FDF"
         }
-      }
+      },
+       fontFamily: {
+        montserrat: ['Montserrat', 'sans-serif'], 
+        mark: ['MarkForMC', 'sans-serif'],
+      },
     },
   },
   plugins: [],

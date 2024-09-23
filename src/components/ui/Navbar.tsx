@@ -3,7 +3,7 @@
 import Image from 'next/image';
 import { usePathname, useRouter } from 'next/navigation';
 import React, { useState } from 'react';
-import { FaBell, FaCaretLeft, FaUser } from 'react-icons/fa';
+import { FaCaretLeft, FaUser } from 'react-icons/fa';
 
 import { parsePathToTitle } from '@/helpers/utils/utils';
 
@@ -64,12 +64,12 @@ const Navbar = () => {
         </Title>
       </div>
       <div className="flex items-center space-x-9">
-        <div className="relative h-10 w-10">
+        {/* <div className="relative h-10 w-10">
           <FaBell className="text-black text-3xl cursor-pointer absolute bottom-0" />
           <span className="absolute top-0 right-0 bg-red-600 text-white rounded-full text-xs w-5 h-5 flex items-center justify-center">
             16
           </span>
-        </div>
+        </div> */}
         <div
           className="flex items-center space-x-2 pr-6 relative"
           onClick={() => setShowProfileDropdown(!showProfileDropdown)}

@@ -51,7 +51,7 @@ const generateDummyData = () => {
     ['Food', 'Nature', 'Travel'],
   ];
 
-  const priorities = ['High', 'Medium', 'Low'];
+  const priorities = ['none', 'none', 'none'];
 
   const data = Array.from({ length: 18 }, (_, index) => {
     return {

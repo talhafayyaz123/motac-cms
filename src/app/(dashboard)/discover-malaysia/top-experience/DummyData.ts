@@ -51,7 +51,7 @@ const generateExperienceData = () => {
     ['Food', 'Nature', 'Travel'],
   ];
 
-  const priorities = ['High', 'Priority'];
+  const priorities = ['none', 'none'];
 
   const data = Array.from({ length: 18 }, (_, index) => {
     return {
