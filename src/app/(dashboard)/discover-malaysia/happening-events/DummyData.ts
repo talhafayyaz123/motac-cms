@@ -45,7 +45,7 @@ const generateEventData = () => {
     ['Food', 'Nature', 'Travel'],
   ];
 
-  const priorities = ['High', 'Medium', 'Low'];
+  const priorities = ['none', 'none', 'none'];
   const data = Array.from({ length: 25 }, (_, index) => {
     return {
       Select: '',
