@@ -38,6 +38,10 @@ const config: Config = {
         montserrat: ['Montserrat', 'sans-serif'], 
         mark: ['MarkForMC', 'sans-serif'],
       },
+       fontWeight: {
+        normal: "400",  // Ensure normal is 400
+        bold: "700",    // Define bold as 700
+      },
     },
   },
   plugins: [],

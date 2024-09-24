@@ -1,7 +1,7 @@
 'use client';
 
 import Image from 'next/image';
-import React from 'react';
+import React, { useCallback } from 'react';
 
 interface InputProps
   extends React.InputHTMLAttributes<HTMLInputElement | HTMLSelectElement> {
@@ -10,6 +10,7 @@ interface InputProps
   label?: string;
   minWidth?: string;
   sublabel?: string;
+  onFileError?: (error: string) => void;
 }
 
 const Input: React.FC<InputProps> = ({
@@ -24,6 +25,7 @@ const Input: React.FC<InputProps> = ({
   className = '',
   minWidth = '300px',
   sublabel,
+  onFileError, // Error callback prop
   ...rest
 }) => {
   const baseStyles =
@@ -37,6 +39,37 @@ const Input: React.FC<InputProps> = ({
     ? 'bg-gray-200 text-gray-500 cursor-not-allowed'
     : 'bg-white text-gray-900';
   const combinedStyles = `${className} ${baseStyles} ${sizeStyles[inputSize]} ${disabledStyles}`;
+
+  const handleFileChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const file = e.target.files?.[0];
+      if (file) {
+        const reader = new FileReader();
+        const img = new window.Image();
+
+        reader.onload = (event) => {
+          if (event.target?.result) {
+            img.src = event.target.result as string;
+          }
+        };
+
+        img.onload = () => {
+          const aspectRatio = img.width / img.height;
+          const expectedRatio = 16 / 9;
+
+          if (Math.abs(aspectRatio - expectedRatio) > 0.01) {
+            onFileError?.('Only images with 16:9 aspect ratio are allowed');
+            e.target.value = '';
+          } else {
+            onChange?.(e);
+          }
+        };
+
+        reader.readAsDataURL(file);
+      }
+    },
+    [onChange, onFileError],
+  );
 
   return (
     <div className="flex flex-col" style={{ minWidth }}>
@@ -62,8 +95,10 @@ const Input: React.FC<InputProps> = ({
           id={label}
           placeholder={placeholder}
           value={value}
-          onChange={onChange}
-          className={`${combinedStyles} ${type === 'file' && 'hidden'} ${icon ? 'pl-12' : ''} border-gray-300 shadow-sm placeholder-black`}
+          onChange={type === 'file' ? handleFileChange : onChange} // Use the new handler for file inputs
+          className={`${combinedStyles} ${
+            type === 'file' && 'hidden'
+          } ${icon ? 'pl-12' : ''} border-gray-300 shadow-sm placeholder-black`}
           disabled={disabled}
           style={{ minWidth }}
           {...rest}

@@ -6,6 +6,7 @@ import FormContainer from '@/components/container/FormContainer';
 import Button from '@/components/ui/Button';
 import Input from '@/components/ui/Input';
 import Title from '@/components/ui/Title';
+import AlertService from '@/services/alertService';
 
 export default function PersonalDetails() {
   return (
@@ -63,10 +64,27 @@ export default function PersonalDetails() {
           />
           <Input
             label="View Image"
-            placeholder="Food, Nature, Travel"
             className="text-xs"
             minWidth="350px"
             type="file"
+            onFileError={async () => {
+              try {
+                await AlertService.alert(
+                  '',
+                  'Only images with 16:9 aspect ratio are allowed',
+                  'warning',
+                  'OK',
+                );
+              } catch (error) {
+                console.log('something went wrong ');
+              }
+            }}
+            onChange={(e) => {
+              const input = e.target as HTMLInputElement;
+              if (input.files && input.files[0]) {
+                console.log('Image uploaded successfully', input.files[0]);
+              }
+            }}
           />
         </div>
       </FormContainer>
