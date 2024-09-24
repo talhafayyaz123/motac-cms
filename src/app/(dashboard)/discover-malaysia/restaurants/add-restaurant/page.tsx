@@ -7,6 +7,7 @@ import Button from '@/components/ui/Button';
 import Input from '@/components/ui/Input';
 import Select from '@/components/ui/Select';
 import Title from '@/components/ui/Title';
+import AlertService from '@/services/alertService';
 
 export default function AddRestaurant() {
   const router = useRouter();
@@ -66,10 +67,27 @@ export default function AddRestaurant() {
           />
           <Input
             label="Banner Image"
-            placeholder="Image"
             className="text-xs"
             minWidth="350px"
             type="file"
+            onFileError={async () => {
+              try {
+                await AlertService.alert(
+                  '',
+                  'Only images with 16:9 aspect ratio are allowed',
+                  'warning',
+                  'OK',
+                );
+              } catch (error) {
+                console.log('something went wrong ');
+              }
+            }}
+            onChange={(e) => {
+              const input = e.target as HTMLInputElement;
+              if (input.files && input.files[0]) {
+                console.log('Image uploaded successfully', input.files[0]);
+              }
+            }}
           />
         </div>
         <p className="mt-5 text-md text-[#181819] font-normal">Location</p>

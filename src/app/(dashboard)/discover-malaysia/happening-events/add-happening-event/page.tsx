@@ -11,6 +11,7 @@ import DropZone from '@/components/ui/DropZone';
 import Input from '@/components/ui/Input';
 import TextEditor from '@/components/ui/TextEditor';
 import Title from '@/components/ui/Title';
+import AlertService from '@/services/alertService';
 
 export default function AddEvent() {
   const router = useRouter();
@@ -21,6 +22,10 @@ export default function AddEvent() {
     const newImages = [...images];
     newImages.splice(index, 1);
     setImages(newImages);
+  };
+
+  const handleFilesChange = (files: File[]) => {
+    console.log('New valid files added:', files);
   };
   return (
     <main className="h-full">
@@ -74,11 +79,29 @@ export default function AddEvent() {
           />
           <Input
             label="Banner Image"
-            placeholder="Kuala Lumpur"
             className="text-xs"
             minWidth="350px"
             type="file"
+            onFileError={async () => {
+              try {
+                await AlertService.alert(
+                  '',
+                  'Only images with 16:9 aspect ratio are allowed',
+                  'warning',
+                  'OK',
+                );
+              } catch (error) {
+                console.log('something went wrong ');
+              }
+            }}
+            onChange={(e) => {
+              const input = e.target as HTMLInputElement;
+              if (input.files && input.files[0]) {
+                console.log('Image uploaded successfully', input.files[0]);
+              }
+            }}
           />
+
           <Input
             label="Map Link"
             placeholder="Google Maps"
@@ -119,7 +142,7 @@ export default function AddEvent() {
             </div>
           ))}
         </div>
-        <DropZone images={images} setImages={setImages} />
+        <DropZone setImages={setImages} onChange={handleFilesChange} />
       </FormContainer>
       <div className="w-full flex justify-end gap-3 p-10">
         <Button

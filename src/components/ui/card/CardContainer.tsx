@@ -22,7 +22,7 @@ const CardContainer: React.FC<CardContainerProps> = ({
           <p className="text-lg text-black-100 pb-4">{title}</p>
           <div>
             <p className="text-xs text-gray-500">New Users This Month</p>
-            <p className="text-4xl text-[#364ea2] text-center font-mark">
+            <p className="text-4xl text-[#364ea2] text-center font-markForMC">
               3,000
             </p>
           </div>

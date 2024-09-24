@@ -40,20 +40,16 @@ body {
 
 @font-face {
   font-family: 'MarkForMC';
-  src: url('../assets/fonts/MarkForMC/MarkForMC-Med.ttf') format('truetype');
+  src: url('../assets/fonts/MarkForMC/MarkForMC.ttf') format('truetype');
   font-weight: normal;
   font-style: normal;
   font-display: swap;
 }
 
-@font-face {
+.font-markForMC {
   font-family: 'MarkForMC';
-  src: url('../assets/fonts/MarkForMC/MarkForMC-Med2.ttf') format('truetype');
   font-weight: bold;
-  font-style: normal;
-  font-display: swap;
 }
-
 
 .sidebar-scroll-bar::-webkit-scrollbar {
   height: 4px;

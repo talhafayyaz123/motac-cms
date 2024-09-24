@@ -12,6 +12,7 @@ import Input from '@/components/ui/Input';
 import Select from '@/components/ui/Select';
 import TextEditor from '@/components/ui/TextEditor';
 import Title from '@/components/ui/Title';
+import AlertService from '@/services/alertService';
 
 export default function AddAttraction() {
   const router = useRouter();
@@ -29,6 +30,9 @@ export default function AddAttraction() {
     setImages(newImages);
   };
 
+  const handleFilesChange = (files: File[]) => {
+    console.log('New valid files added:', files);
+  };
   return (
     <main className="h-full">
       <div className="sticky top-0 bg-white w-full py-8 z-50">
@@ -82,6 +86,24 @@ export default function AddAttraction() {
             className="text-xs"
             minWidth="350px"
             type="file"
+            onFileError={async () => {
+              try {
+                await AlertService.alert(
+                  '',
+                  'Only images with 16:9 aspect ratio are allowed',
+                  'warning',
+                  'OK',
+                );
+              } catch (error) {
+                console.log('something went wrong ');
+              }
+            }}
+            onChange={(e) => {
+              const input = e.target as HTMLInputElement;
+              if (input.files && input.files[0]) {
+                console.log('Image uploaded successfully', input.files[0]);
+              }
+            }}
           />
           <Input
             label="Map Link"
@@ -154,7 +176,7 @@ export default function AddAttraction() {
             </div>
           ))}
         </div>
-        <DropZone images={images} setImages={setImages} />
+        <DropZone setImages={setImages} onChange={handleFilesChange} />
       </FormContainer>
       <div className="w-full flex justify-end gap-3 p-10">
         <Button
