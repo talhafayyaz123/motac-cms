@@ -40,7 +40,7 @@ body {
 
 @font-face {
   font-family: 'MarkForMC';
-  src: url('/fonts/MarkForMC/MarkForMC-Regular.ttf') format('truetype');
+  src: url('../assets/fonts/MarkForMC/MarkForMC-Med.ttf') format('truetype');
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -48,7 +48,7 @@ body {
 
 @font-face {
   font-family: 'MarkForMC';
-  src: url('/fonts/MarkForMC/MarkForMC-Bold.ttf') format('truetype');
+  src: url('../assets/fonts/MarkForMC/MarkForMC-Med2.ttf') format('truetype');
   font-weight: bold;
   font-style: normal;
   font-display: swap;
