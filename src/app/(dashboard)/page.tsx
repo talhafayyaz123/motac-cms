@@ -72,6 +72,7 @@ export default function Dashboard() {
         <div className="flex lg:flex-row flex-col justify-between gap-4 w-full font-medium">
           <div className="flex rounded-xl bg-blue-50 border border-gray-100 gap-4 font-medium p-4 lg:w-[68%] w-full">
             <div className="p-2 flex flex-col w-1/2">
+              1
               <p className="text-xs text-black-100 mb-4">Must See Attraction</p>
               <p className="text-xs text-black-100">Total Attraction</p>
               <p className="text-4xl font-semibold text-blue-100 mb-3">24</p>

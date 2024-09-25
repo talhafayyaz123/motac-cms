@@ -19,6 +19,7 @@ interface AuthFormProps {
   formPadding?: string;
   resendOtp?: string;
   backBtn?: boolean;
+  error?: string | null;
 }
 
 const AuthForm: React.FC<AuthFormProps> = ({
@@ -33,6 +34,7 @@ const AuthForm: React.FC<AuthFormProps> = ({
   resendOtp,
   backBtn,
   formPadding = '0',
+  error,
 }) => {
   return (
     <main
@@ -40,7 +42,7 @@ const AuthForm: React.FC<AuthFormProps> = ({
       style={{ backgroundImage: `url(/login-bg.png)` }}
     >
       <div
-        className={`bg-white p-6 rounded-lg shadow-md mt-6 pt-[50px] w-[520px] h-[567px]`}
+        className={`bg-white p-6 rounded-lg shadow-md mt-6 pt-[50px] w-[520px] h-[600px]`}
       >
         <div className="flex items-center justify-center mb-6">
           {backBtn && (
@@ -85,6 +87,8 @@ const AuthForm: React.FC<AuthFormProps> = ({
           Admin Portal
         </h2>
 
+        {error && <div className="text-red-500 text-center mb-4">{error}</div>}
+
         <div className={`flex justify-center pt-[${formPadding}]`}>
           <form
             className={`flex flex-col gap-3 w-[${formWidth}]`}
@@ -128,7 +132,7 @@ const AuthForm: React.FC<AuthFormProps> = ({
             )}
 
             <div className="w-full flex justify-center p-2">
-              <Button variant="customBlue" minWidth="360px">
+              <Button variant="customBlue" minWidth="360px" type="submit">
                 {buttonText}
               </Button>
             </div>
