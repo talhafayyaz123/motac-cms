@@ -1,6 +1,10 @@
+// app/layout.tsx or wherever your RootLayout is defined
+
 import type { Metadata } from 'next';
 import { Montserrat } from 'next/font/google';
+
 import './globals.css';
+import SessionProviderWrapper from './providers/SessionProviderWrapper';
 
 const montserrat = Montserrat({ subsets: ['latin'] });
 
@@ -17,7 +21,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${montserrat.className} font-markForMC`}>
-        {children}
+        <SessionProviderWrapper>
+          {children}
+        </SessionProviderWrapper>
       </body>
     </html>
   );
