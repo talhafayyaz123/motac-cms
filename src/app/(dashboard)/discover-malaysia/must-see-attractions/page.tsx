@@ -13,8 +13,9 @@ import Select from '@/components/ui/dataTable/Select';
 import Input from '@/components/ui/Input';
 import Loader from '@/components/ui/Loader';
 import Title from '@/components/ui/Title';
-import { colors } from '@/lib/theme';
 import AlertService from '@/services/alertService';
+
+import fetchData from './destinationData';
 
 const DataTable = lazy(() => import('@/components/ui/dataTable/DataTable'));
 
@@ -27,7 +28,6 @@ export default function MustSeeAttractions() {
     'Select',
     'Attraction ID',
     'Attraction Name',
-    'Attraction Category',
     'Attraction City',
     'Tags',
     'Priority',
@@ -42,8 +42,12 @@ export default function MustSeeAttractions() {
 
   useEffect(() => {
     const loadData = async () => {
-      const { default: generateDummyData } = await import('./DummyData');
-      setData(generateDummyData());
+      try {
+        const fetchedData = await fetchData();
+        setData(fetchedData);
+      } catch (error) {
+        console.error('Error loading data:', error);
+      }
     };
 
     void loadData();
@@ -62,15 +66,22 @@ export default function MustSeeAttractions() {
     newData[rowIndex] = newRow;
     setData(newData);
   };
+  const tagColors = ['#E7ECFC', '#E3EFF8', '#E3F7F8'];
 
   const handleTagAdd = (
     e: React.MouseEvent<HTMLButtonElement | HTMLDivElement>,
     rowIndex: number,
+    newTagName: string, // Accept new tag name as an argument
   ) => {
-    const target = e.target as HTMLElement;
-    const newTag = target.innerText;
     const newData = [...data];
     const newRow = { ...newData[rowIndex] };
+
+    // Create a new tag object with a random color
+    const newTag = {
+      name: newTagName,
+      color: tagColors[Math.floor(Math.random() * tagColors.length)],
+    };
+
     newRow.Tags = [...newRow.Tags, newTag];
     newData[rowIndex] = newRow;
     setData(newData);
@@ -78,8 +89,9 @@ export default function MustSeeAttractions() {
 
   const renderTagOptions = (rowIndex: number) => {
     const rowTags = data[rowIndex]?.Tags || [];
-
-    const missingTags = availableTags.filter((tag) => !rowTags.includes(tag));
+    const missingTags = availableTags.filter((tag) =>
+      rowTags.every((rowTag: any) => rowTag.name !== tag),
+    );
 
     return (
       missingTags.length > 0 && (
@@ -87,7 +99,7 @@ export default function MustSeeAttractions() {
           {missingTags.map((tag) => (
             <div
               key={tag}
-              onClick={(e) => handleTagAdd(e, rowIndex)}
+              onClick={(e) => handleTagAdd(e, rowIndex, tag)}
               role="button"
               tabIndex={0}
               onKeyDown={(e) => {
@@ -192,14 +204,14 @@ export default function MustSeeAttractions() {
               }
             }}
           >
-            {item[column].map((tag: string, index: number) => {
+            {item[column].map((tag: any, index: number) => {
               return (
                 <span
                   key={index}
                   className="px-3 py-1 rounded-full text-xs font-medium"
-                  style={{ backgroundColor: colors[tag] }}
+                  style={{ backgroundColor: tag.color }}
                 >
-                  {tag}
+                  {tag.name}
                   <button
                     onClick={(event) => handleTagRemove(event, rowIndex, index)}
                     className="ml-2 text-gray-500 hover:text-gray-700"

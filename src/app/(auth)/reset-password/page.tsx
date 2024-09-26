@@ -1,14 +1,15 @@
 'use client';
 
-import { useSearchParams, useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import React, { FormEvent, useState } from 'react';
 
 import AuthForm from '@/app/(auth)/components/AuthForm';
 
-export default function ForgotPassword() {
-  const searchParams = useSearchParams();
+export default function ResetPassword() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [error, setError] = useState<string | null>();
+
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const form = event.target as HTMLFormElement;

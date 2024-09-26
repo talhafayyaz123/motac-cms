@@ -32,7 +32,6 @@ export const authOptions: NextAuthOptions = {
               body: JSON.stringify({
                 email: credentials?.email,
                 password: credentials?.password,
-                userAgent: userAgent,
               }),
             },
           );
@@ -56,7 +55,7 @@ export const authOptions: NextAuthOptions = {
     }),
   ],
   pages: {
-    signIn: '/auth/login',
+    signIn: '/login',
   },
   session: {
     strategy: 'jwt',
@@ -73,6 +72,8 @@ export const authOptions: NextAuthOptions = {
       return session;
     },
   },
+
+  secret: process.env.NEXTAUTH_SECRET,
 };
 
 // Default export of NextAuth

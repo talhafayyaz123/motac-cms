@@ -7,21 +7,32 @@ import React, { FormEvent, useState } from 'react';
 import AuthForm from '@/app/(auth)/components/AuthForm';
 
 export default function Login() {
+  // const { data: session, status } = useSession();
+
   const router = useRouter();
   const [error, setError] = useState<string | null>(null);
+
+  /*   useEffect(() => {
+    if (status === 'authenticated') {
+      router.push('/');
+    }
+  }, [status]);
+
+  if (status === 'authenticated') {
+    return <p>Redirecting to dashboard...</p>;
+  } */
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const form = event.target as HTMLFormElement;
     const email = form.email.value;
     const password = form.password.value;
-    const userAgent = 'Chrome/104.0';
+
     try {
       const result = await signIn('credentials', {
         redirect: false,
         email,
         password,
-        userAgent,
       });
 
       if (result?.error) {
