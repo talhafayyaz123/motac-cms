@@ -43,14 +43,24 @@ export default function AddAttraction() {
           label="Title"
           placeholder="Explore the Petronas Twin Towers"
           className="text-xs mb-3"
+          name="title"
         />
         <TextEditor />
-        <div className=" w-1/4 my-5">
+        <div className="mt-5 flex flex-wrap gap-2">
           <Input
-            label="Opening Hours / Closing Hours"
+            label="Opening Hours"
             placeholder="Daily 9:00 Am - 9:00 Pm"
             className="text-xs"
             minWidth="350px"
+            name="openingHours"
+          />
+
+          <Input
+            label="Closing Hours"
+            placeholder="Daily 9:00 Am - 9:00 Pm"
+            className="text-xs"
+            minWidth="350px"
+            name="closingHours"
           />
         </div>
         <div className="mt-5 flex flex-wrap gap-4">
@@ -59,11 +69,13 @@ export default function AddAttraction() {
             placeholder="None"
             className="text-xs"
             minWidth="350px"
+            name="ageLimit"
           />
           <Input
             label="Banner Image"
             className="text-xs"
             minWidth="350px"
+            name="bannerImageId"
             type="file"
             onFileError={async () => {
               try {
@@ -89,6 +101,7 @@ export default function AddAttraction() {
             placeholder="Google Maps"
             className="text-xs"
             minWidth="350px"
+            name="mapLink"
           />
           <Select
             label="Category"
