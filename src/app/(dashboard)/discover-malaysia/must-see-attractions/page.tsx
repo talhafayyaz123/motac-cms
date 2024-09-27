@@ -14,7 +14,6 @@ import Input from '@/components/ui/Input';
 import Loader from '@/components/ui/Loader';
 import Title from '@/components/ui/Title';
 import AlertService from '@/services/alertService';
-//import { fetchDestinations } from '@/services/destinationApiService';
 
 const DataTable = lazy(() => import('@/components/ui/dataTable/DataTable'));
 
@@ -26,10 +25,10 @@ export default function MustSeeAttractions() {
 
   const columns = [
     'Select',
-    'Attraction ID',
-    'Attraction Name',
-    'Attraction Category',
-    'Attraction City',
+    'ID ',
+    'Name ',
+    'Category ',
+    'City ',
     'Tags',
     'Priority',
     'Edit',
@@ -41,25 +40,9 @@ export default function MustSeeAttractions() {
   const [perPage, setPerPage] = useState(12);
   const [activeRowIndex, setActiveRowIndex] = useState<number | null>(null);
 
-  /*   useEffect(() => {
-    const loadData = async () => {
-      try {
-        const fetchedData = await fetchDestinations(1);
-        console.log('Fetched Data:', fetchedData);
-        setData(fetchedData);
-      } catch (error) {
-        console.error('Error loading data:', error);
-      }
-    };
-
-    void loadData();
-  }, []); */
-
   useEffect(() => {
     const loadData = async () => {
-      const { fetchDestinations } = await import(
-        '@/services/destinationApiService'
-      );
+      const { fetchDestinations } = await import('@/services/apiService');
       try {
         const fetchedData = await fetchDestinations(1);
         setData(fetchedData);

@@ -20,10 +20,10 @@ export const fetchDestinations = async (typeId: number): Promise<any[]> => {
     const tagColors = ['#E7ECFC', '#E3EFF8', '#E3F7F8'];
     const transformedData = result?.data?.map((item: any) => ({
       Select: '',
-      'Attraction ID': item.displayId,
-      'Attraction Name': item.title || '',
-      'Attraction Category': item.destinationCategoryName || '',
-      'Attraction City': item.cityName,
+      'ID ': item.displayId,
+      'Name ': item.title || '',
+      'Category ': item.destinationCategoryName || '',
+      'City ': item.cityName,
       Tags: item.tags
         ? item.tags.map((tag: any) => ({
             name: tag.name,
@@ -41,3 +41,4 @@ export const fetchDestinations = async (typeId: number): Promise<any[]> => {
     return [];
   }
 };
+export const fetchPriority = async () => {};
