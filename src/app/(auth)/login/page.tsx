@@ -12,16 +12,6 @@ export default function Login() {
   const router = useRouter();
   const [error, setError] = useState<string | null>(null);
 
-  /*   useEffect(() => {
-    if (status === 'authenticated') {
-      router.push('/');
-    }
-  }, [status]);
-
-  if (status === 'authenticated') {
-    return <p>Redirecting to dashboard...</p>;
-  } */
-
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const form = event.target as HTMLFormElement;
@@ -41,8 +31,9 @@ export default function Login() {
         router.push('/');
       }
     } catch (error) {
-      console.error('Sign-in error:', error);
-      setError(error?.message);
+      const typedError = error as Error;
+      console.error('Sign-in error:', typedError);
+      setError(typedError.message);
     }
   };
 

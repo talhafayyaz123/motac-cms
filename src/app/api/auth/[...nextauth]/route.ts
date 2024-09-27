@@ -2,7 +2,7 @@ import NextAuth, { NextAuthOptions } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 
 // NextAuth configuration options
-export const authOptions: NextAuthOptions = {
+const authOptions: NextAuthOptions = {
   providers: [
     CredentialsProvider({
       name: 'Credentials',
@@ -13,19 +13,12 @@ export const authOptions: NextAuthOptions = {
           placeholder: '',
         },
         password: { label: 'Password', type: 'password' },
-        userAgent: {
-          label: 'User Agent',
-          type: 'text',
-          placeholder: 'Browser user agent',
-        },
       },
-      async authorize(credentials, req) {
-        try {
-          const userAgent =
-            req?.headers?.['user-agent'] || credentials?.userAgent;
 
+      async authorize(credentials) {
+        try {
           const res = await fetch(
-            `${process.env.NEXT_PUBLIC_BACKEND_API_URL}/auth/login`,
+            'http://cms-api-motac.ap-south-1.elasticbeanstalk.com/api/v1/auth/login',
             {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
@@ -39,7 +32,7 @@ export const authOptions: NextAuthOptions = {
           const user = await res.json();
 
           if (res.ok && user) {
-            return user;
+            return { ...user, token: user.token };
           } else {
             throw new Error('Invalid credentials');
           }
@@ -61,19 +54,19 @@ export const authOptions: NextAuthOptions = {
     strategy: 'jwt',
   },
   callbacks: {
-    async jwt({ token, user }) {
-      if (user) {
+    jwt({ token, user }) {
+      if (user && user.token) {
         token.accessToken = user.token;
       }
       return token;
     },
-    async session({ session, token }) {
-      session.accessToken = token.accessToken;
+    session({ session, token }) {
+      session.accessToken = token.accessToken as string | undefined;
       return session;
     },
   },
 
-  secret: process.env.NEXTAUTH_SECRET,
+  secret: 'P7wO/D0EQE4BgjmIj9I0kX1EINDcajHMoeUNwqZyZKY=',
 };
 
 // Default export of NextAuth

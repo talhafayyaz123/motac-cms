@@ -3,12 +3,13 @@ import { getSession } from 'next-auth/react';
 const fetchData = async (): Promise<any> => {
   const session = await getSession();
   try {
-    const backendApiUrl = process.env.NEXT_PUBLIC_BACKEND_API_URL;
+    const backendApiUrl =
+      'http://cms-api-motac.ap-south-1.elasticbeanstalk.com/api/v1';
     const response = await fetch(`${backendApiUrl}/destinations?typeId=1`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${session.accessToken}`,
+        Authorization: `Bearer ${(session as any).accessToken}`,
       },
     });
 

@@ -1,25 +1,25 @@
 'use client';
 
-import { useRouter, useSearchParams } from 'next/navigation';
-import React, { FormEvent, useState } from 'react';
+//import { useRouter, useSearchParams } from 'next/navigation';
+import React, { FormEvent } from 'react';
 
 import AuthForm from '@/app/(auth)/components/AuthForm';
 
 export default function ResetPassword() {
-  const router = useRouter();
-  const searchParams = useSearchParams();
-  const [error, setError] = useState<string | null>();
+  // const router = useRouter();
+  //  const searchParams = useSearchParams();
+  //  const [error, setError] = useState<string | null>();
 
-  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const form = event.target as HTMLFormElement;
-    const password = form.password.value;
-    const newPassword = form.new_password.value;
+    // const form = event.target as HTMLFormElement;
+    // const password = form.password.value;
+    // const newPassword = form.new_password.value;
 
-    const email = searchParams.get('email');
-    const otp = searchParams.get('otp');
+    //    const email = searchParams.get('email') || '';
+    //   const otp = searchParams.get('otp') || '';
 
-    try {
+    /*  try {
       const backendApiUrl = process.env.NEXT_PUBLIC_BACKEND_API_URL;
 
       const response = await fetch(`${backendApiUrl}/auth/reset/password`, {
@@ -46,7 +46,7 @@ export default function ResetPassword() {
     } catch (error) {
       console.error('An error occurred:', error);
       setError('An unexpected error occurred. Please try again.');
-    }
+    } */
   };
 
   return (
@@ -70,7 +70,7 @@ export default function ResetPassword() {
       paddingTop="25px"
       backBtn={true}
       formPadding="30px"
-      error={error}
+      //      error={error}
     />
   );
 }

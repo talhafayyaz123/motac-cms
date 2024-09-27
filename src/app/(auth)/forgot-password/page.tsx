@@ -16,7 +16,8 @@ export default function ForgotPassword() {
     const userAgent = navigator.userAgent;
 
     try {
-      const backendApiUrl = process.env.NEXT_PUBLIC_BACKEND_API_URL;
+      const backendApiUrl =
+        'http://cms-api-motac.ap-south-1.elasticbeanstalk.com/api/v1';
 
       const response = await fetch(`${backendApiUrl}/otps/request`, {
         method: 'POST',

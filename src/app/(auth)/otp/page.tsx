@@ -1,15 +1,20 @@
 'use client';
 
-import { useRouter, useSearchParams } from 'next/navigation';
+//import { useRouter } from 'next/router';
 import React, { FormEvent, useState } from 'react';
 
 import AuthForm from '@/app/(auth)/components/AuthForm';
 
-export default function ForgotPassword() {
-  const router = useRouter();
+export default function Otp() {
+  //const router = useRouter();
   const [error, setError] = useState<string | null>(null);
-  const searchParams = useSearchParams();
-  const email = searchParams.get('email');
+  //const [email, setEmail] = useState<string>('');
+  const email = 'test@gmail.com';
+  /*   useEffect(() => {
+    if (router.query.email && typeof router.query.email === 'string') {
+      setEmail(router.query.email);
+    }
+  }, [router.query.email]); */
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -17,7 +22,8 @@ export default function ForgotPassword() {
     const otp = form.otp.value;
 
     try {
-      const backendApiUrl = process.env.NEXT_PUBLIC_BACKEND_API_URL;
+      const backendApiUrl =
+        'http://cms-api-motac.ap-south-1.elasticbeanstalk.com/api/v1';
 
       const response = await fetch(`${backendApiUrl}/otps/verify`, {
         method: 'POST',
@@ -27,16 +33,14 @@ export default function ForgotPassword() {
         body: JSON.stringify({ email, otp }),
       });
 
-      const data = await response.json();
       if (response.ok) {
-        router.push('/reset-password?email=' + email + '&otp=' + otp);
+        //        await router.push(`/reset-password?email=${email}&otp=${otp}`);
       } else {
-        if (data?.errors && typeof data.errors === 'object') {
-          const errorMessages = Object.values(data.errors).flat().join(', ');
-          setError(errorMessages || 'Invalid email or password');
-        } else {
-          setError(data?.message || 'Invalid email or password');
-        }
+        const data = await response.json();
+        const errorMessages = data.errors
+          ? Object.values(data.errors).flat().join(', ')
+          : data.message || 'Invalid OTP';
+        setError(errorMessages);
       }
     } catch (error) {
       console.error('An error occurred:', error);
@@ -47,9 +51,9 @@ export default function ForgotPassword() {
   return (
     <AuthForm
       title="Enter OTP"
-      description="Enter Otp to Change Password"
+      description="Enter OTP to Change Password"
       buttonText="Next"
-      fields={[{ type: 'password', placeholder: 'Enter Otp', name: 'otp' }]}
+      fields={[{ type: 'password', placeholder: 'Enter OTP', name: 'otp' }]}
       onSubmit={handleSubmit}
       paddingTop="25px"
       formWidth="380px"

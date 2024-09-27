@@ -1,9 +1,12 @@
-import { NextResponse } from 'next/server';
+import { NextResponse, NextRequest } from 'next/server';
 import { getToken } from 'next-auth/jwt';
 
-export async function middleware(req) {
+export async function middleware(req: NextRequest) {
   // Retrieve the token using next-auth's getToken function
-  const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
+  const token = await getToken({
+    req,
+    secret: 'P7wO/D0EQE4BgjmIj9I0kX1EINDcajHMoeUNwqZyZKY=',
+  });
   const { pathname } = req.nextUrl;
 
   // Define the public routes that do not require authentication
