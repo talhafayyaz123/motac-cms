@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-floating-promises */
 'use client';
 
 import { useRouter } from 'next/navigation';
@@ -10,7 +11,7 @@ export default function Login() {
   // const { data: session, status } = useSession();
 
   const router = useRouter();
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState<string | null | undefined>(null);
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -25,10 +26,10 @@ export default function Login() {
         password,
       });
 
-      if (result?.error) {
-        setError(result.error);
-      } else {
+      if (result?.ok) {
         router.push('/');
+      } else {
+        setError(result?.error);
       }
     } catch (error) {
       const typedError = error as Error;
