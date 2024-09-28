@@ -14,6 +14,11 @@ import Input from '@/components/ui/Input';
 import Loader from '@/components/ui/Loader';
 import Title from '@/components/ui/Title';
 import AlertService from '@/services/alertService';
+import {
+  fetchDestinations,
+  fetchPriorities,
+  updateDestinationPriority,
+} from '@/services/apiService';
 
 const DataTable = lazy(() => import('@/components/ui/dataTable/DataTable'));
 
@@ -36,15 +41,17 @@ export default function MustSeeAttractions() {
   ];
 
   const [data, setData] = useState<any[]>([]);
+  const [priorities, setPriorities] = useState<any[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [perPage, setPerPage] = useState(12);
   const [activeRowIndex, setActiveRowIndex] = useState<number | null>(null);
 
   useEffect(() => {
     const loadData = async () => {
-      const { fetchDestinations } = await import('@/services/apiService');
       try {
         const fetchedData = await fetchDestinations(1);
+        const destinationPriorities = await fetchPriorities();
+        setPriorities(destinationPriorities);
         setData(fetchedData);
       } catch (error) {
         console.error('Error loading data:', error);
@@ -53,6 +60,37 @@ export default function MustSeeAttractions() {
 
     void loadData();
   }, []);
+
+  const handlePriorityChange = async (
+    rowIndex: number,
+    e: React.ChangeEvent<HTMLSelectElement>,
+  ) => {
+    const selectedPriority = priorities.find(
+      (item) => item.value === e.target.value,
+    );
+
+    if (selectedPriority) {
+      const updatedData = [...data];
+      updatedData[rowIndex].Priority = selectedPriority.value;
+
+      const destinationId = updatedData[rowIndex].destinationId;
+      const priorityId = selectedPriority.priorityId;
+
+      try {
+        await updateDestinationPriority(priorityId, destinationId);
+        setData(updatedData);
+
+        await AlertService.alert(
+          'Successful!',
+          'Priority Updated Successfully',
+          'success',
+          'Done',
+        );
+      } catch (error) {
+        console.error('Error updating priority:', error);
+      }
+    }
+  };
 
   const handleTagRemove = (
     event: React.MouseEvent<HTMLButtonElement>,
@@ -175,17 +213,13 @@ export default function MustSeeAttractions() {
           <div className="relative">
             <Select
               value={item[column]}
-              options={[
-                { value: 'High', label: 'High' },
-                { value: 'Medium', label: 'Medium' },
-                { value: 'Low', label: 'Low' },
-              ]}
-              highlightValue="High"
-              onChange={(e) => {
-                const updatedData = [...data];
-                updatedData[rowIndex].Priority = e.target.value;
-                setData(updatedData);
-              }}
+              options={priorities.map((p) => ({
+                value: p.value,
+                label: p.label,
+                key: p.priorityId,
+              }))}
+              highlightValue="high"
+              onChange={(e) => handlePriorityChange(rowIndex, e)}
             />
           </div>
         );

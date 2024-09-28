@@ -1,24 +1,14 @@
-import { getSession } from 'next-auth/react';
-const backendApiUrl =
-  'http://cms-api-motac.ap-south-1.elasticbeanstalk.com/api/v1';
-
+import { apiClient } from './apiClient';
 export const fetchDestinations = async (typeId: number): Promise<any[]> => {
-  const session = await getSession();
   try {
-    const response = await fetch(
-      `${backendApiUrl}/destinations?typeId=${typeId}`,
-      {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${(session as any).accessToken}`,
-        },
-      },
-    );
+    const result = await apiClient(`/destinations?typeId=${typeId}`, {
+      method: 'GET',
+    });
 
-    const result = await response.json();
     const tagColors = ['#E7ECFC', '#E3EFF8', '#E3F7F8'];
+
     const transformedData = result?.data?.map((item: any) => ({
+      destinationId: item.id,
       Select: '',
       'ID ': item.displayId,
       'Name ': item.title || '',
@@ -41,4 +31,43 @@ export const fetchDestinations = async (typeId: number): Promise<any[]> => {
     return [];
   }
 };
-export const fetchPriority = async () => {};
+
+export const fetchPriorities = async () => {
+  try {
+    const result = await apiClient(`/destinations/priorities`, {
+      method: 'GET',
+    });
+
+    const priorities = result?.map((item: any) => ({
+      value: item.name,
+      label: item.name,
+      priorityId: item.id,
+    }));
+    return priorities;
+  } catch (error) {
+    console.error('An error occurred:', error);
+    return [];
+  }
+};
+
+export const updateDestinationPriority = async (
+  priorityId: number,
+  destinationId: number,
+) => {
+  try {
+    const response = await apiClient(
+      `/destinations/${destinationId}/priority/${priorityId}`,
+      {
+        method: 'PATCH',
+        body: JSON.stringify({ priorityId }),
+      },
+    );
+
+    if (!response?.id) {
+      throw new Error('Failed to update destination priority');
+    }
+    return response;
+  } catch (error) {
+    console.error('Error updating priority:', error);
+  }
+};
