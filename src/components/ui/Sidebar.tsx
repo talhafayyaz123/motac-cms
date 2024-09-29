@@ -241,7 +241,14 @@ const Sidebar = () => {
         />
         <span
           className="text-red-100 text-sm group-hover:text-white"
+          role="button"
+          tabIndex={0}
           onClick={handleLogOut}
+          onKeyDown={(e: React.KeyboardEvent<HTMLSpanElement>) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              handleLogOut;
+            }
+          }}
         >
           Logout
         </span>
