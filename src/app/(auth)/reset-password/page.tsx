@@ -4,9 +4,10 @@
 import React, { FormEvent } from 'react';
 
 import AuthForm from '@/app/(auth)/AuthForm';
+//import { handleAuthRequest } from '@/services/apiService';
 
 export default function ResetPassword() {
-  // const router = useRouter();
+  //const router = useRouter();
   //  const searchParams = useSearchParams();
   //  const [error, setError] = useState<string | null>();
 
@@ -19,33 +20,17 @@ export default function ResetPassword() {
     //    const email = searchParams.get('email') || '';
     //   const otp = searchParams.get('otp') || '';
 
-    /*  try {
-      const backendApiUrl = process.env.NEXT_PUBLIC_BACKEND_API_URL;
+    /*     const result = await handleAuthRequest('resetPassword', {
+      email,
+      password,
+      newPassword,
+      otp,
+    });
 
-      const response = await fetch(`${backendApiUrl}/auth/reset/password`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ email, password, newPassword, otp }),
-      });
-
-      const data = await response.json();
-      if (response.ok) {
-        router.push('/login');
-      } else {
-        // Handle error object
-        if (data?.errors && typeof data.errors === 'object') {
-          // Convert error object to an array of strings
-          const errorMessages = Object.values(data.errors).flat().join(', ');
-          setError(errorMessages || 'Invalid email or password');
-        } else {
-          setError(data?.message || 'Invalid email or password');
-        }
-      }
-    } catch (error) {
-      console.error('An error occurred:', error);
-      setError('An unexpected error occurred. Please try again.');
+    if (result.success) {
+      router.push('/login');
+    } else {
+      setError(result.error);
     } */
   };
 

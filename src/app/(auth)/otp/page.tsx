@@ -1,15 +1,16 @@
 'use client';
 
-//import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 import React, { FormEvent, useState } from 'react';
 
 import AuthForm from '@/app/(auth)/AuthForm';
+import { handleAuthRequest } from '@/services/apiService';
 
 export default function Otp() {
-  //const router = useRouter();
+  const router = useRouter();
   const [error, setError] = useState<string | null>(null);
   //const [email, setEmail] = useState<string>('');
-  const email = 'test@gmail.com';
+  const email = '';
   /*   useEffect(() => {
     if (router.query.email && typeof router.query.email === 'string') {
       setEmail(router.query.email);
@@ -21,30 +22,13 @@ export default function Otp() {
     const form = event.target as HTMLFormElement;
     const otp = form.otp.value;
 
-    try {
-      const backendApiUrl =
-        'http://cms-api-motac.ap-south-1.elasticbeanstalk.com/api/v1';
+    const result = await handleAuthRequest('verifyOtp', { email, otp });
 
-      const response = await fetch(`${backendApiUrl}/otps/verify`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ email, otp }),
-      });
-
-      if (response.ok) {
-        //        await router.push(`/reset-password?email=${email}&otp=${otp}`);
-      } else {
-        const data = await response.json();
-        const errorMessages = data.errors
-          ? Object.values(data.errors).flat().join(', ')
-          : data.message || 'Invalid OTP';
-        setError(errorMessages);
-      }
-    } catch (error) {
-      console.error('An error occurred:', error);
-      setError('An unexpected error occurred. Please try again.');
+    if (result.success) {
+      router.push(`/reset-password?email=${email}&otp=${otp}`);
+    } else {
+      const error = typeof result.error === 'string' ? result.error : null;
+      setError(error);
     }
   };
 

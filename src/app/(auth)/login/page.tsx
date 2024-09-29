@@ -2,10 +2,10 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { signIn } from 'next-auth/react';
 import React, { FormEvent, useState } from 'react';
 
 import AuthForm from '@/app/(auth)/AuthForm';
+import { handleAuthRequest } from '@/services/apiService';
 
 export default function Login() {
   const router = useRouter();
@@ -17,22 +17,12 @@ export default function Login() {
     const email = form.email.value;
     const password = form.password.value;
 
-    try {
-      const result = await signIn('credentials', {
-        redirect: false,
-        email,
-        password,
-      });
+    const result = await handleAuthRequest('login', { email, password });
 
-      if (result?.ok) {
-        router.push('/');
-      } else {
-        setError(result?.error);
-      }
-    } catch (error) {
-      const typedError = error as Error;
-      console.error('Sign-in error:', typedError);
-      setError(typedError.message);
+    if (result.success) {
+      router.push('/');
+    } else {
+      setError(result?.error);
     }
   };
 

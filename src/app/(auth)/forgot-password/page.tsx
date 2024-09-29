@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation';
 import React, { FormEvent, useState } from 'react';
 
 import AuthForm from '@/app/(auth)/AuthForm';
+import { handleAuthRequest } from '@/services/apiService';
 
 export default function ForgotPassword() {
   const [error, setError] = useState<string | null>(null);
@@ -14,28 +15,13 @@ export default function ForgotPassword() {
     const form = event.target as HTMLFormElement;
     const email = form.email.value;
     const userAgent = navigator.userAgent;
+    const result = await handleAuthRequest('requestOtp', { email, userAgent });
 
-    try {
-      const backendApiUrl =
-        'http://cms-api-motac.ap-south-1.elasticbeanstalk.com/api/v1';
-
-      const response = await fetch(`${backendApiUrl}/otps/request`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ email, userAgent }),
-      });
-
-      const data = await response.text();
-      if (response.ok) {
-        router.push('/otp?email=' + email);
-      } else {
-        setError(data || 'An error occurred. Please try again.');
-      }
-    } catch (error) {
-      console.error('An error occurred:', error);
-      setError('An unexpected error occurred. Please try again.');
+    if (result.success) {
+      router.push('/otp?email=' + email);
+    } else {
+      const error = typeof result.error === 'string' ? result.error : null;
+      setError(error);
     }
   };
 

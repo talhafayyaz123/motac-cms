@@ -7,6 +7,7 @@ import React, { useState } from 'react';
 
 import { menuItems } from '@/assets';
 import producLogo from '@/assets/product-logo.svg';
+import { logout } from '@/services/apiService';
 
 interface DropdownItem {
   label: string;
@@ -39,6 +40,11 @@ const Sidebar = () => {
 
   const handleNavigation = (path: string) => {
     router.push(path);
+  };
+
+  const handleLogOut = async () => {
+    await logout();
+    router.push('/login');
   };
 
   return (
@@ -233,7 +239,10 @@ const Sidebar = () => {
           src="/Logouticon.svg"
           className="group-hover:brightness-0 group-hover:invert"
         />
-        <span className="text-red-100 text-sm group-hover:text-white">
+        <span
+          className="text-red-100 text-sm group-hover:text-white"
+          onClick={handleLogOut}
+        >
           Logout
         </span>
       </div>
