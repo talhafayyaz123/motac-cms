@@ -44,6 +44,7 @@ const Sidebar = () => {
 
   const handleLogOut = async () => {
     await logout();
+
     router.push('/login');
   };
 
