@@ -3,7 +3,7 @@
 //import { useRouter, useSearchParams } from 'next/navigation';
 import React, { FormEvent } from 'react';
 
-import AuthForm from '@/app/(auth)/components/AuthForm';
+import AuthForm from '@/app/(auth)/AuthForm';
 
 export default function ResetPassword() {
   // const router = useRouter();

@@ -3,7 +3,7 @@
 //import { useRouter } from 'next/router';
 import React, { FormEvent, useState } from 'react';
 
-import AuthForm from '@/app/(auth)/components/AuthForm';
+import AuthForm from '@/app/(auth)/AuthForm';
 
 export default function Otp() {
   //const router = useRouter();

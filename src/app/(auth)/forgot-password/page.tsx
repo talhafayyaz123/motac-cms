@@ -3,7 +3,7 @@
 import { useRouter } from 'next/navigation';
 import React, { FormEvent, useState } from 'react';
 
-import AuthForm from '@/app/(auth)/components/AuthForm';
+import AuthForm from '@/app/(auth)/AuthForm';
 
 export default function ForgotPassword() {
   const [error, setError] = useState<string | null>(null);

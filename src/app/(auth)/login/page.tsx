@@ -5,11 +5,9 @@ import { useRouter } from 'next/navigation';
 import { signIn } from 'next-auth/react';
 import React, { FormEvent, useState } from 'react';
 
-import AuthForm from '@/app/(auth)/components/AuthForm';
+import AuthForm from '@/app/(auth)/AuthForm';
 
 export default function Login() {
-  // const { data: session, status } = useSession();
-
   const router = useRouter();
   const [error, setError] = useState<string | null | undefined>(null);
 
