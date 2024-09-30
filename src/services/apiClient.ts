@@ -1,6 +1,5 @@
 import { getSession } from 'next-auth/react';
-const backendApiUrl =
-  'http://cms-api-motac.ap-south-1.elasticbeanstalk.com/api/v1';
+const backendApiUrl = 'https://cms.api.motac-dev.com/api/v1';
 
 async function getAccessToken(): Promise<string | null> {
   const session = await getSession();

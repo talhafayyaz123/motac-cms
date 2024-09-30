@@ -12,6 +12,7 @@ import Wrapper from '@/components/ui/dataTable/DataTableWrapper';
 import Input from '@/components/ui/Input';
 import Loader from '@/components/ui/Loader';
 import Title from '@/components/ui/Title';
+import { fetchTeam } from '@/services/apiService';
 
 const DataTable = lazy(() => import('@/components/ui/dataTable/DataTable'));
 
@@ -35,9 +36,14 @@ export default function MyTeam() {
 
   useEffect(() => {
     const loadData = async () => {
-      const { default: generateDummyData } = await import('./DummyData');
-      setData(generateDummyData());
+      try {
+        const fetchedData = await fetchTeam();
+        setData(fetchedData);
+      } catch (error) {
+        console.error('Error loading data:', error);
+      }
     };
+
     void loadData();
   }, []);
 

@@ -1,11 +1,8 @@
-import { getSession, signIn, signOut } from 'next-auth/react';
+import { signIn, signOut } from 'next-auth/react';
 
 import { formatDate } from '@/helpers/utils/utils';
 
 import { apiClient } from './apiClient';
-
-const backendApiUrl =
-  'http://cms-api-motac.ap-south-1.elasticbeanstalk.com/api/v1';
 
 export type AuthRequestType =
   | 'login'
@@ -105,36 +102,6 @@ export const updateDestinationPriority = async (
   }
 };
 
-export const fetchWithAuth = async (
-  url: string,
-  options: RequestInit = {},
-): Promise<any> => {
-  const session = await getSession();
-
-  const authHeaders: Record<string, string> = (session as any)?.accessToken
-    ? {
-        Authorization: `Bearer ${(session as any).accessToken}`,
-      }
-    : {};
-
-  const headers: Record<string, string> = {
-    'Content-Type': 'application/json',
-    ...authHeaders,
-    ...(options.headers as Record<string, string>),
-  };
-
-  const response = await fetch(`${backendApiUrl}${url}`, {
-    ...options,
-    headers,
-  });
-
-  if (!response.ok) {
-    throw new Error(`Error: ${response.statusText}`);
-  }
-
-  return response.json();
-};
-
 export async function handleAuthRequest(
   type: AuthRequestType,
   data: AuthRequestData,
@@ -223,3 +190,33 @@ export async function logout() {
     return false;
   }
 }
+
+///My Team Apis
+export const fetchTeam = async (): Promise<any[]> => {
+  try {
+    const result = await apiClient(`/cms/users`, {
+      method: 'GET',
+    });
+
+    const transformedData = result?.data?.map((item: any) => {
+      const baseData = {
+        Select: '',
+        ID: item.id,
+        'First Name': item.firstName || '',
+        'Last Name': item.lastName || '',
+        'Email Address': item.email,
+        Role: item.role || '',
+        Designation: item.designation || '',
+        Edit: 'Edit',
+        Delete: 'Delete',
+      };
+
+      return baseData;
+    });
+
+    return transformedData;
+  } catch (error) {
+    console.error('An error occurred:', error);
+    return [];
+  }
+};
