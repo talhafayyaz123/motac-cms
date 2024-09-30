@@ -1,5 +1,7 @@
 import { getSession, signIn, signOut } from 'next-auth/react';
+
 import { apiClient } from './apiClient';
+
 import { formatDate } from '@/helpers/utils/utils';
 
 const backendApiUrl =
