@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import React, { useState, lazy, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import EventTableLayout from '@/app/(dashboard)/discover-malaysia/EventTable';
 import Select from '@/components/ui/dataTable/Select';

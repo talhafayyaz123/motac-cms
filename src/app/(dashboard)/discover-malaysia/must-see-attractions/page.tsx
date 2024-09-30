@@ -2,26 +2,17 @@
 
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import React, { useState, Suspense, lazy, useEffect } from 'react';
-import { CiSearch } from 'react-icons/ci';
-import { FaFileExcel } from 'react-icons/fa';
-import { RiCheckDoubleFill } from 'react-icons/ri';
+import React, { useState, useEffect } from 'react';
 
 import EventTableLayout from '@/app/(dashboard)/discover-malaysia/EventTable';
-import Button from '@/components/ui/Button';
-import Wrapper from '@/components/ui/dataTable/DataTableWrapper';
 import Select from '@/components/ui/dataTable/Select';
 import Input from '@/components/ui/Input';
-import Loader from '@/components/ui/Loader';
-import Title from '@/components/ui/Title';
 import AlertService from '@/services/alertService';
 import {
   fetchDestinations,
   fetchPriorities,
   updateDestinationPriority,
 } from '@/services/apiService';
-
-const DataTable = lazy(() => import('@/components/ui/dataTable/DataTable'));
 
 export default function MustSeeAttractions() {
   const router = useRouter();
