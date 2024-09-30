@@ -34,10 +34,11 @@ export const apiClient = async (
     const response = await fetch(`${backendApiUrl}${endpoint}`, config);
 
     if (!response.ok) {
-      const error = await response.json();
-      throw new Error(
-        `Error ${response.status}: ${error.message || response.statusText}`,
-      );
+      const data = await response.json();
+      const errorMessages = data.errors
+        ? Object.values(data.errors).flat().join(', ')
+        : data.message || 'Invalid Input';
+      throw new Error(errorMessages);
     }
 
     return await response.json();
