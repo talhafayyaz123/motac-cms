@@ -1,8 +1,12 @@
-import NextAuth, { NextAuthOptions } from 'next-auth';
+/* eslint-disable prettier/prettier */
+//import { User as DefaultUser, Session } from 'next-auth';
+//import type { NextAuthOptions } from 'next-auth';
+//import { JWT } from 'next-auth/jwt';
+import NextAuth from 'next-auth/next';
 import CredentialsProvider from 'next-auth/providers/credentials';
 
 // NextAuth configuration options
-const authOptions: NextAuthOptions = {
+const authOptions: any = {
   providers: [
     CredentialsProvider({
       name: 'Credentials',
@@ -54,13 +58,13 @@ const authOptions: NextAuthOptions = {
     strategy: 'jwt',
   },
   callbacks: {
-    jwt({ token, user }) {
+    jwt({ token, user }: { token: any; user?: any }) {
       if (user && user.token) {
         token.accessToken = user.token;
       }
       return token;
     },
-    session({ session, token }) {
+    session({ session, token }: { session: any; token: any }) {
       session.accessToken = token.accessToken as string | undefined;
       return session;
     },
@@ -69,6 +73,5 @@ const authOptions: NextAuthOptions = {
   secret: 'P7wO/D0EQE4BgjmIj9I0kX1EINDcajHMoeUNwqZyZKY=',
 };
 
-// Default export of NextAuth
 const handler = NextAuth(authOptions);
 export { handler as GET, handler as POST };
