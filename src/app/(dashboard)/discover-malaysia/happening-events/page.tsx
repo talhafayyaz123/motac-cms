@@ -2,25 +2,17 @@
 
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import React, { useState, Suspense, lazy, useEffect } from 'react';
-import { CiSearch } from 'react-icons/ci';
-import { FaFileExcel } from 'react-icons/fa';
-import { RiCheckDoubleFill } from 'react-icons/ri';
+import React, { useState, useEffect } from 'react';
 
-import Button from '@/components/ui/Button';
-import Wrapper from '@/components/ui/dataTable/DataTableWrapper';
+import EventTableLayout from '@/app/(dashboard)/discover-malaysia/EventTable';
 import Select from '@/components/ui/dataTable/Select';
 import Input from '@/components/ui/Input';
-import Loader from '@/components/ui/Loader';
-import Title from '@/components/ui/Title';
 import AlertService from '@/services/alertService';
 import {
   fetchDestinations,
   fetchPriorities,
   updateDestinationPriority,
 } from '@/services/apiService';
-
-const DataTable = lazy(() => import('@/components/ui/dataTable/DataTable'));
 
 export default function HappeningEvents() {
   const router = useRouter();
@@ -262,87 +254,18 @@ export default function HappeningEvents() {
         return <span>{item[column]}</span>;
     }
   };
-
   return (
-    <main className="h-full">
-      <Title className="font-light ml-2 mb-2 text-[#051225]">
-        Happening Events
-      </Title>
-      <Wrapper>
-        <div className="flex gap-3">
-          <Button variant="primary" icon={<RiCheckDoubleFill />}>
-            Select All
-          </Button>
-          <Button
-            variant="primary"
-            icon={<FaFileExcel className="text-green-600" />}
-            onClick={async () => {
-              try {
-                await AlertService.alert(
-                  'Successful!',
-                  'Downloaded Excel Successfully',
-                  'success',
-                  'Done',
-                );
-              } catch (error) {
-                console.log('something went wrong ');
-              }
-            }}
-          >
-            Download Excel
-          </Button>
-        </div>
-        <div className="flex gap-3">
-          <Button
-            variant="secondary"
-            className="h-10"
-            onClick={() => {
-              router.push(
-                '/discover-malaysia/happening-events/add-happening-event',
-              );
-            }}
-          >
-            Add Event
-          </Button>
-          <Input
-            type="text"
-            placeholder="Search"
-            inputSize="sm"
-            minWidth="400px"
-            className="bg-white"
-            onChange={(e) => console.log(e.target.value)}
-            icon={<CiSearch />}
-          />
-        </div>
-      </Wrapper>
-
-      <div className="bg-white auto">
-        {data && data.length === 0 ? (
-          <Loader />
-        ) : (
-          <Suspense fallback={<Loader />}>
-            <DataTable
-              columns={columns}
-              data={
-                data && data.length > 0
-                  ? data.slice(
-                      (currentPage - 1) * perPage,
-                      currentPage * perPage,
-                    )
-                  : []
-              }
-              renderCell={renderCell}
-              pagination={{
-                total: data?.length,
-                perPage,
-                currentPage,
-                onPageChange: setCurrentPage,
-                onPerPageChange: setPerPage,
-              }}
-            />
-          </Suspense>
-        )}
-      </div>
-    </main>
+    <EventTableLayout
+      tableTitle="Happening Events"
+      buttonTitle="Add Event"
+      data={data}
+      columns={columns}
+      currentPage={currentPage}
+      perPage={perPage}
+      renderCell={renderCell}
+      onPageChange={setCurrentPage}
+      onPerPageChange={setPerPage}
+      addEventRoute="/discover-malaysia/happening-events/add-happening-event"
+    />
   );
 }

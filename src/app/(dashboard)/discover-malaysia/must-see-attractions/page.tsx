@@ -7,6 +7,7 @@ import { CiSearch } from 'react-icons/ci';
 import { FaFileExcel } from 'react-icons/fa';
 import { RiCheckDoubleFill } from 'react-icons/ri';
 
+import EventTableLayout from '@/app/(dashboard)/discover-malaysia/EventTable';
 import Button from '@/components/ui/Button';
 import Wrapper from '@/components/ui/dataTable/DataTableWrapper';
 import Select from '@/components/ui/dataTable/Select';
@@ -263,85 +264,17 @@ export default function MustSeeAttractions() {
   };
 
   return (
-    <main className="h-full">
-      <Title className="font-light ml-2 mb-2 text-[#051225]">
-        Must See Attractions
-      </Title>
-      <Wrapper>
-        <div className="flex gap-3">
-          <Button variant="primary" icon={<RiCheckDoubleFill />}>
-            Select All
-          </Button>
-          <Button
-            variant="primary"
-            icon={<FaFileExcel className="text-green-600" />}
-            onClick={async () => {
-              try {
-                await AlertService.alert(
-                  'Successful!',
-                  'Downloaded Excel Successfully',
-                  'success',
-                  'Done',
-                );
-              } catch (error) {
-                console.log('something went wrong ');
-              }
-            }}
-          >
-            Download Excel
-          </Button>
-        </div>
-        <div className="flex gap-3">
-          <Button
-            variant="secondary"
-            className="h-10"
-            onClick={() => {
-              router.push(
-                '/discover-malaysia/must-see-attractions/add-attraction',
-              );
-            }}
-          >
-            Add Attraction
-          </Button>
-          <Input
-            type="text"
-            placeholder="Search"
-            inputSize="sm"
-            minWidth="400px"
-            className="bg-white"
-            onChange={(e) => console.log(e.target.value)}
-            icon={<CiSearch />}
-          />
-        </div>
-      </Wrapper>
-
-      <div className="bg-white auto">
-        {data && data.length === 0 ? (
-          <Loader />
-        ) : (
-          <Suspense fallback={<Loader />}>
-            <DataTable
-              columns={columns}
-              data={
-                data && data.length > 0
-                  ? data.slice(
-                      (currentPage - 1) * perPage,
-                      currentPage * perPage,
-                    )
-                  : []
-              }
-              renderCell={renderCell}
-              pagination={{
-                total: data?.length,
-                perPage,
-                currentPage,
-                onPageChange: setCurrentPage,
-                onPerPageChange: setPerPage,
-              }}
-            />
-          </Suspense>
-        )}
-      </div>
-    </main>
+    <EventTableLayout
+      tableTitle="See Must Attractions"
+      buttonTitle="Add Attraction"
+      data={data}
+      columns={columns}
+      currentPage={currentPage}
+      perPage={perPage}
+      renderCell={renderCell}
+      onPageChange={setCurrentPage}
+      onPerPageChange={setPerPage}
+      addEventRoute="/discover-malaysia/must-see-attractions/add-attraction"
+    />
   );
 }
