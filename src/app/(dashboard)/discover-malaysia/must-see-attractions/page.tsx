@@ -75,7 +75,6 @@ export default function MustSeeAttractions() {
     const newData = [...data];
     const newRow = { ...newData[rowIndex] };
 
-    // Create a new tag object with a random color
     const newTag = {
       name: newTagName,
       color: tagColors[Math.floor(Math.random() * tagColors.length)],
