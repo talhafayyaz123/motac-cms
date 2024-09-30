@@ -1,8 +1,8 @@
 import { getSession, signIn, signOut } from 'next-auth/react';
 
-import { apiClient } from './apiClient';
-
 import { formatDate } from '@/helpers/utils/utils';
+
+import { apiClient } from './apiClient';
 
 const backendApiUrl =
   'http://cms-api-motac.ap-south-1.elasticbeanstalk.com/api/v1';
