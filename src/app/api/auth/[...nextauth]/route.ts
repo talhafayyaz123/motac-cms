@@ -18,7 +18,7 @@ const authOptions: NextAuthOptions = {
       async authorize(credentials) {
         try {
           const res = await fetch(
-            'http://cms-api-motac.ap-south-1.elasticbeanstalk.com/api/v1/auth/login',
+            'https://cms.api.motac-dev.com/api/v1/auth/login',
             {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
