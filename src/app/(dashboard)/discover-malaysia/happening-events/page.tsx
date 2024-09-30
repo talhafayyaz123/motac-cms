@@ -2,31 +2,30 @@
 
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import React, { useState, lazy, Suspense, useEffect } from 'react';
-import { CiSearch } from 'react-icons/ci';
-import { FaFileExcel } from 'react-icons/fa';
-import { RiCheckDoubleFill } from 'react-icons/ri';
+import React, { useState, useEffect } from 'react';
 
-import Button from '@/components/ui/Button';
-import Wrapper from '@/components/ui/dataTable/DataTableWrapper';
+import EventTableLayout from '@/app/(dashboard)/discover-malaysia/EventTable';
 import Select from '@/components/ui/dataTable/Select';
 import Input from '@/components/ui/Input';
-import Loader from '@/components/ui/Loader';
-import Title from '@/components/ui/Title';
-import { colors } from '@/lib/theme';
-
-const DataTable = lazy(() => import('@/components/ui/dataTable/DataTable'));
+import AlertService from '@/services/alertService';
+import {
+  fetchDestinations,
+  fetchPriorities,
+  updateDestinationPriority,
+} from '@/services/apiService';
 
 export default function HappeningEvents() {
   const router = useRouter();
 
   const availableTags = ['Food', 'Nature', 'Travel'];
+  const tagColors = ['#E7ECFC', '#E3EFF8', '#E3F7F8'];
+
   const columns = [
     'Select',
-    'Event ID',
-    'Event Name',
-    'Event Category',
-    'Event City',
+    'ID ',
+    'Name ',
+    'Category ',
+    'City ',
     'Event Date',
     'Tags',
     'Priority',
@@ -35,19 +34,56 @@ export default function HappeningEvents() {
   ];
 
   const [data, setData] = useState<any[]>([]);
+  const [priorities, setPriorities] = useState<any[]>([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [perPage, setPerPage] = useState(12);
+  const [activeRowIndex, setActiveRowIndex] = useState<number | null>(null);
 
   useEffect(() => {
     const loadData = async () => {
-      const { default: generateDummyData } = await import('./DummyData');
-      setData(generateDummyData());
+      try {
+        const fetchedData = await fetchDestinations(3);
+        const destinationPriorities = await fetchPriorities();
+        setPriorities(destinationPriorities);
+        setData(fetchedData);
+      } catch (error) {
+        console.error('Error loading data:', error);
+      }
     };
 
     void loadData();
   }, []);
 
-  const [currentPage, setCurrentPage] = useState(1);
-  const [perPage, setPerPage] = useState(12);
-  const [activeRowIndex, setActiveRowIndex] = useState<number | null>(null);
+  const handlePriorityChange = async (
+    rowIndex: number,
+    e: React.ChangeEvent<HTMLSelectElement>,
+  ) => {
+    const selectedPriority = priorities.find(
+      (item) => item.value === e.target.value,
+    );
+
+    if (selectedPriority) {
+      const updatedData = [...data];
+      updatedData[rowIndex].Priority = selectedPriority.value;
+
+      const destinationId = updatedData[rowIndex].destinationId;
+      const priorityId = selectedPriority.priorityId;
+
+      try {
+        await updateDestinationPriority(priorityId, destinationId);
+        setData(updatedData);
+
+        await AlertService.alert(
+          'Successful!',
+          'Priority Updated Successfully',
+          'success',
+          'Done',
+        );
+      } catch (error) {
+        console.error('Error updating priority:', error);
+      }
+    }
+  };
 
   const handleTagRemove = (
     event: React.MouseEvent<HTMLButtonElement>,
@@ -66,11 +102,16 @@ export default function HappeningEvents() {
   const handleTagAdd = (
     e: React.MouseEvent<HTMLButtonElement | HTMLDivElement>,
     rowIndex: number,
+    newTagName: string,
   ) => {
-    const target = e.target as HTMLElement;
-    const newTag = target.innerText;
     const newData = [...data];
     const newRow = { ...newData[rowIndex] };
+
+    const newTag = {
+      name: newTagName,
+      color: tagColors[Math.floor(Math.random() * tagColors.length)],
+    };
+
     newRow.Tags = [...newRow.Tags, newTag];
     newData[rowIndex] = newRow;
     setData(newData);
@@ -78,8 +119,9 @@ export default function HappeningEvents() {
 
   const renderTagOptions = (rowIndex: number) => {
     const rowTags = data[rowIndex]?.Tags || [];
-
-    const missingTags = availableTags.filter((tag) => !rowTags.includes(tag));
+    const missingTags = availableTags.filter((tag) =>
+      rowTags.every((rowTag: any) => rowTag.name !== tag),
+    );
 
     return (
       missingTags.length > 0 && (
@@ -87,7 +129,7 @@ export default function HappeningEvents() {
           {missingTags.map((tag) => (
             <div
               key={tag}
-              onClick={(e) => handleTagAdd(e, rowIndex)}
+              onClick={(e) => handleTagAdd(e, rowIndex, tag)}
               role="button"
               tabIndex={0}
               onKeyDown={(e) => {
@@ -115,14 +157,46 @@ export default function HappeningEvents() {
         );
       case 'Edit':
         return (
-          <div className="flex items-center gap-2 justify-center cursor-pointer">
+          <div
+            className="flex items-center gap-2 justify-center cursor-pointer"
+            role="button"
+            tabIndex={0}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+              }
+            }}
+            onClick={() => {
+              router.push(
+                '/discover-malaysia/happening-events/add-happening-event',
+              );
+            }}
+          >
             <Image height={20} alt="edit" width={20} src="/edit_icon.svg" />
             {item[column]}
           </div>
         );
       case 'Delete':
         return (
-          <div className="flex items-center justify-center gap-2 cursor-pointer">
+          <div
+            className="flex items-center justify-center gap-2 cursor-pointer"
+            onClick={async () => {
+              try {
+                await AlertService.confirm(
+                  'Are you sure you want to delete the Selected Field',
+                  'Confirm',
+                  'Cancel',
+                );
+              } catch (error) {
+                console.log('something went wrong ');
+              }
+            }}
+            role="button"
+            tabIndex={0}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+              }
+            }}
+          >
             <Image height={20} alt="delete" width={20} src="/delete_icon.svg" />
             {item[column]}
           </div>
@@ -132,17 +206,13 @@ export default function HappeningEvents() {
           <div className="relative">
             <Select
               value={item[column]}
-              options={[
-                { value: 'High', label: 'High' },
-                { value: 'Medium', label: 'Medium' },
-                { value: 'Low', label: 'Low' },
-              ]}
-              highlightValue="High"
-              onChange={(e) => {
-                const updatedData = [...data];
-                updatedData[rowIndex].Priority = e.target.value;
-                setData(updatedData);
-              }}
+              options={priorities.map((p) => ({
+                value: p.value,
+                label: p.label,
+                key: p.priorityId,
+              }))}
+              highlightValue="high"
+              onChange={(e) => handlePriorityChange(rowIndex, e)}
             />
           </div>
         );
@@ -160,14 +230,14 @@ export default function HappeningEvents() {
               }
             }}
           >
-            {item[column].map((tag: string, index: number) => {
+            {item[column].map((tag: any, index: number) => {
               return (
                 <span
                   key={index}
                   className="px-3 py-1 rounded-full text-xs font-medium"
-                  style={{ backgroundColor: colors[tag] }}
+                  style={{ backgroundColor: tag.color }}
                 >
-                  {tag}
+                  {tag.name}
                   <button
                     onClick={(event) => handleTagRemove(event, rowIndex, index)}
                     className="ml-2 text-gray-500 hover:text-gray-700"
@@ -184,71 +254,18 @@ export default function HappeningEvents() {
         return <span>{item[column]}</span>;
     }
   };
-
   return (
-    <main className="h-full">
-      <Title className="font-light ml-2 mb-2 text-[#051225]">
-        Happening Events
-      </Title>
-      <Wrapper>
-        <div className="flex gap-3">
-          <Button variant="primary" icon={<RiCheckDoubleFill />}>
-            Select All
-          </Button>
-          <Button
-            variant="primary"
-            icon={<FaFileExcel className="text-green-600" />}
-          >
-            Download Excel
-          </Button>
-        </div>
-        <div className="flex gap-3">
-          <Button
-            variant="secondary"
-            className="h-10"
-            onClick={() => {
-              router.push(
-                '/discover-malaysia/happening-events/add-happening-event',
-              );
-            }}
-          >
-            Add Events
-          </Button>
-          <Input
-            type="text"
-            placeholder="Search"
-            inputSize="sm"
-            minWidth="400px"
-            className="bg-white"
-            onChange={(e) => console.log(e.target.value)}
-            icon={<CiSearch />}
-          />
-        </div>
-      </Wrapper>
-
-      <div className="bg-white auto">
-        {data.length == 0 ? (
-          <Loader />
-        ) : (
-          <Suspense fallback={<Loader />}>
-            <DataTable
-              columns={columns}
-              data={data.slice(
-                (currentPage - 1) * perPage,
-                currentPage * perPage,
-              )}
-              renderCell={renderCell}
-              pagination={{
-                total: data.length,
-                perPage,
-                currentPage,
-                onPageChange: setCurrentPage,
-                onPerPageChange: setPerPage,
-              }}
-            />
-          </Suspense>
-        )}
-      </div>
-    </main>
+    <EventTableLayout
+      tableTitle="Happening Events"
+      buttonTitle="Add Event"
+      data={data}
+      columns={columns}
+      currentPage={currentPage}
+      perPage={perPage}
+      renderCell={renderCell}
+      onPageChange={setCurrentPage}
+      onPerPageChange={setPerPage}
+      addEventRoute="/discover-malaysia/happening-events/add-happening-event"
+    />
   );
 }

@@ -2,32 +2,30 @@
 
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import React, { useState, Suspense, lazy, useEffect } from 'react';
-import { CiSearch } from 'react-icons/ci';
-import { FaFileExcel } from 'react-icons/fa';
-import { RiCheckDoubleFill } from 'react-icons/ri';
+import React, { useState, useEffect } from 'react';
 
-import Button from '@/components/ui/Button';
-import Wrapper from '@/components/ui/dataTable/DataTableWrapper';
+import EventTableLayout from '@/app/(dashboard)/discover-malaysia/EventTable';
 import Select from '@/components/ui/dataTable/Select';
 import Input from '@/components/ui/Input';
-import Loader from '@/components/ui/Loader';
-import Title from '@/components/ui/Title';
 import AlertService from '@/services/alertService';
-import { fetchDestinations } from '@/services/apiService';
-
-const DataTable = lazy(() => import('@/components/ui/dataTable/DataTable'));
+import {
+  fetchDestinations,
+  fetchPriorities,
+  updateDestinationPriority,
+} from '@/services/apiService';
 
 export default function MustSeeAttractions() {
   const router = useRouter();
 
   const availableTags = ['Food', 'Nature', 'Travel'];
+  const tagColors = ['#E7ECFC', '#E3EFF8', '#E3F7F8'];
 
   const columns = [
     'Select',
-    'Attraction ID',
-    'Attraction Name',
-    'Attraction City',
+    'ID ',
+    'Name ',
+    'Category ',
+    'City ',
     'Tags',
     'Priority',
     'Edit',
@@ -35,6 +33,7 @@ export default function MustSeeAttractions() {
   ];
 
   const [data, setData] = useState<any[]>([]);
+  const [priorities, setPriorities] = useState<any[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [perPage, setPerPage] = useState(12);
   const [activeRowIndex, setActiveRowIndex] = useState<number | null>(null);
@@ -43,6 +42,8 @@ export default function MustSeeAttractions() {
     const loadData = async () => {
       try {
         const fetchedData = await fetchDestinations(1);
+        const destinationPriorities = await fetchPriorities();
+        setPriorities(destinationPriorities);
         setData(fetchedData);
       } catch (error) {
         console.error('Error loading data:', error);
@@ -51,6 +52,37 @@ export default function MustSeeAttractions() {
 
     void loadData();
   }, []);
+
+  const handlePriorityChange = async (
+    rowIndex: number,
+    e: React.ChangeEvent<HTMLSelectElement>,
+  ) => {
+    const selectedPriority = priorities.find(
+      (item) => item.value === e.target.value,
+    );
+
+    if (selectedPriority) {
+      const updatedData = [...data];
+      updatedData[rowIndex].Priority = selectedPriority.value;
+
+      const destinationId = updatedData[rowIndex].destinationId;
+      const priorityId = selectedPriority.priorityId;
+
+      try {
+        await updateDestinationPriority(priorityId, destinationId);
+        setData(updatedData);
+
+        await AlertService.alert(
+          'Successful!',
+          'Priority Updated Successfully',
+          'success',
+          'Done',
+        );
+      } catch (error) {
+        console.error('Error updating priority:', error);
+      }
+    }
+  };
 
   const handleTagRemove = (
     event: React.MouseEvent<HTMLButtonElement>,
@@ -65,12 +97,11 @@ export default function MustSeeAttractions() {
     newData[rowIndex] = newRow;
     setData(newData);
   };
-  const tagColors = ['#E7ECFC', '#E3EFF8', '#E3F7F8'];
 
   const handleTagAdd = (
     e: React.MouseEvent<HTMLButtonElement | HTMLDivElement>,
     rowIndex: number,
-    newTagName: string, // Accept new tag name as an argument
+    newTagName: string,
   ) => {
     const newData = [...data];
     const newRow = { ...newData[rowIndex] };
@@ -174,17 +205,13 @@ export default function MustSeeAttractions() {
           <div className="relative">
             <Select
               value={item[column]}
-              options={[
-                { value: 'High', label: 'High' },
-                { value: 'Medium', label: 'Medium' },
-                { value: 'Low', label: 'Low' },
-              ]}
-              highlightValue="High"
-              onChange={(e) => {
-                const updatedData = [...data];
-                updatedData[rowIndex].Priority = e.target.value;
-                setData(updatedData);
-              }}
+              options={priorities.map((p) => ({
+                value: p.value,
+                label: p.label,
+                key: p.priorityId,
+              }))}
+              highlightValue="high"
+              onChange={(e) => handlePriorityChange(rowIndex, e)}
             />
           </div>
         );
@@ -228,81 +255,17 @@ export default function MustSeeAttractions() {
   };
 
   return (
-    <main className="h-full">
-      <Title className="font-light ml-2 mb-2 text-[#051225]">
-        Must See Attractions
-      </Title>
-      <Wrapper>
-        <div className="flex gap-3">
-          <Button variant="primary" icon={<RiCheckDoubleFill />}>
-            Select All
-          </Button>
-          <Button
-            variant="primary"
-            icon={<FaFileExcel className="text-green-600" />}
-            onClick={async () => {
-              try {
-                await AlertService.alert(
-                  'Successful!',
-                  'Downloaded Excel Successfully',
-                  'success',
-                  'Done',
-                );
-              } catch (error) {
-                console.log('something went wrong ');
-              }
-            }}
-          >
-            Download Excel
-          </Button>
-        </div>
-        <div className="flex gap-3">
-          <Button
-            variant="secondary"
-            className="h-10"
-            onClick={() => {
-              router.push(
-                '/discover-malaysia/must-see-attractions/add-attraction',
-              );
-            }}
-          >
-            Add Attraction
-          </Button>
-          <Input
-            type="text"
-            placeholder="Search"
-            inputSize="sm"
-            minWidth="400px"
-            className="bg-white"
-            onChange={(e) => console.log(e.target.value)}
-            icon={<CiSearch />}
-          />
-        </div>
-      </Wrapper>
-
-      <div className="bg-white auto">
-        {data.length === 0 ? (
-          <Loader />
-        ) : (
-          <Suspense fallback={<Loader />}>
-            <DataTable
-              columns={columns}
-              data={data.slice(
-                (currentPage - 1) * perPage,
-                currentPage * perPage,
-              )}
-              renderCell={renderCell}
-              pagination={{
-                total: data.length,
-                perPage,
-                currentPage,
-                onPageChange: setCurrentPage,
-                onPerPageChange: setPerPage,
-              }}
-            />
-          </Suspense>
-        )}
-      </div>
-    </main>
+    <EventTableLayout
+      tableTitle="See Must Attractions"
+      buttonTitle="Add Attraction"
+      data={data}
+      columns={columns}
+      currentPage={currentPage}
+      perPage={perPage}
+      renderCell={renderCell}
+      onPageChange={setCurrentPage}
+      onPerPageChange={setPerPage}
+      addEventRoute="/discover-malaysia/must-see-attractions/add-attraction"
+    />
   );
 }
