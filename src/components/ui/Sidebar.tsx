@@ -3,6 +3,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
+//import { signOut } from 'next-auth/react';
 import React, { useState } from 'react';
 
 import { menuItems } from '@/assets';

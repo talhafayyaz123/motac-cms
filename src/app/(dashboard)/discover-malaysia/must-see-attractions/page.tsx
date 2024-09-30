@@ -14,8 +14,7 @@ import Input from '@/components/ui/Input';
 import Loader from '@/components/ui/Loader';
 import Title from '@/components/ui/Title';
 import AlertService from '@/services/alertService';
-
-import fetchData from './destinationData';
+import { fetchDestinations } from '@/services/apiService';
 
 const DataTable = lazy(() => import('@/components/ui/dataTable/DataTable'));
 
@@ -43,7 +42,7 @@ export default function MustSeeAttractions() {
   useEffect(() => {
     const loadData = async () => {
       try {
-        const fetchedData = await fetchData();
+        const fetchedData = await fetchDestinations(1);
         setData(fetchedData);
       } catch (error) {
         console.error('Error loading data:', error);
@@ -76,7 +75,6 @@ export default function MustSeeAttractions() {
     const newData = [...data];
     const newRow = { ...newData[rowIndex] };
 
-    // Create a new tag object with a random color
     const newTag = {
       name: newTagName,
       color: tagColors[Math.floor(Math.random() * tagColors.length)],
