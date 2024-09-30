@@ -3,6 +3,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
+import { signOut } from 'next-auth/react';
 import React, { useState } from 'react';
 
 import { menuItems } from '@/assets';
@@ -233,7 +234,13 @@ const Sidebar = () => {
           src="/Logouticon.svg"
           className="group-hover:brightness-0 group-hover:invert"
         />
-        <span className="text-red-100 text-sm group-hover:text-white">
+        <span
+          className="text-red-100 text-sm group-hover:text-white"
+          onClick={() => signOut()}
+          onKeyDown={() => {}}
+          role="button"
+          tabIndex={0}
+        >
           Logout
         </span>
       </div>
