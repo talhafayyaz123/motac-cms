@@ -14,7 +14,7 @@ import Input from '@/components/ui/Input';
 import Loader from '@/components/ui/Loader';
 import Title from '@/components/ui/Title';
 import AlertService from '@/services/alertService';
-import { fetchDestinations } from '@/services/ApiService';
+import { fetchDestinations } from '@/services/apiService';
 
 const DataTable = lazy(() => import('@/components/ui/dataTable/DataTable'));
 

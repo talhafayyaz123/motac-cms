@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { Montserrat } from 'next/font/google';
 
 import './globals.css';
-import SessionProviderWrapper from './providers/SessionProviderWrapper';
+import SessionProviderWrapper from '@/providers/SessionProviderWrapper';
 
 const montserrat = Montserrat({ subsets: ['latin'] });
 
