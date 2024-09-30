@@ -1,23 +1,35 @@
 'use client';
 
 import Image from 'next/image';
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 import React, { useState, useEffect } from 'react';
 
 import EventTableLayout from '@/app/(dashboard)/discover-malaysia/EventTable';
 import Select from '@/components/ui/dataTable/Select';
 import Input from '@/components/ui/Input';
+import { getDestinationId } from '@/helpers/utils/getDestinationId';
+import { useFetchDestinations } from '@/helpers/utils/useFetchDestinations';
 import AlertService from '@/services/alertService';
 import {
+  deleteDestination,
   fetchDestinations,
   fetchPriorities,
+  fetchRecommendationTags,
   updateDestinationPriority,
 } from '@/services/apiService';
 
 export default function MustSeeAttractions() {
   const router = useRouter();
+  const destinationName = usePathname();
+  const { destinations } = useFetchDestinations();
+  const [destinationId, setDestinationId] = useState<number>(1);
+  const [availableTags, setAvailableTags] = useState<string[]>([]);
 
-  const availableTags = ['Food', 'Nature', 'Travel'];
+  useEffect(() => {
+    const id = getDestinationId(destinationName, destinations);
+    setDestinationId(id);
+  }, [destinationName, destinations]);
+
   const tagColors = ['#E7ECFC', '#E3EFF8', '#E3F7F8'];
 
   const columns = [
@@ -37,11 +49,27 @@ export default function MustSeeAttractions() {
   const [currentPage, setCurrentPage] = useState(1);
   const [perPage, setPerPage] = useState(12);
   const [activeRowIndex, setActiveRowIndex] = useState<number | null>(null);
+  const [searchValue, setSearchValue] = useState<string>('');
+
+  useEffect(() => {
+    const fetchTags = async () => {
+      try {
+        const response = await fetchRecommendationTags();
+        const tags = response.map((item: any) => item?.name);
+        setAvailableTags(tags);
+      } catch (error) {
+        console.error('Error fetching tags:', error);
+      }
+    };
+
+    void fetchTags();
+    // eslint-disable-next-line
+  }, []);
 
   useEffect(() => {
     const loadData = async () => {
       try {
-        const fetchedData = await fetchDestinations(1);
+        const fetchedData = await fetchDestinations(destinationId, searchValue);
         const destinationPriorities = await fetchPriorities();
         setPriorities(destinationPriorities);
         setData(fetchedData);
@@ -51,7 +79,8 @@ export default function MustSeeAttractions() {
     };
 
     void loadData();
-  }, []);
+    // eslint-disable-next-line
+  }, [searchValue]);
 
   const handlePriorityChange = async (
     rowIndex: number,
@@ -65,11 +94,11 @@ export default function MustSeeAttractions() {
       const updatedData = [...data];
       updatedData[rowIndex].Priority = selectedPriority.value;
 
-      const destinationId = updatedData[rowIndex].destinationId;
+      const displayId = updatedData[rowIndex]['ID '];
       const priorityId = selectedPriority.priorityId;
 
       try {
-        await updateDestinationPriority(priorityId, destinationId);
+        await updateDestinationPriority(priorityId, displayId);
         setData(updatedData);
 
         await AlertService.alert(
@@ -180,13 +209,47 @@ export default function MustSeeAttractions() {
             className="flex items-center justify-center gap-2 cursor-pointer"
             onClick={async () => {
               try {
-                await AlertService.confirm(
-                  'Are you sure you want to delete the Selected Field',
+                const result = await AlertService.confirm(
+                  'Are you sure you want to delete the Selected Field?',
                   'Confirm',
                   'Cancel',
                 );
+
+                if (result.isConfirmed) {
+                  try {
+                    // Call the deleteDestination API
+                    const deleteDestinationResponse = await deleteDestination(
+                      item['ID '],
+                    );
+
+                    // If successful, you can reload the page or refetch data
+                    console.log(
+                      'Destination deleted successfully:',
+                      deleteDestinationResponse,
+                    );
+                    await AlertService.alert(
+                      'Successful!',
+                      'Destination deleted Successfully',
+                      'success',
+                      'Done',
+                    );
+                  } catch (error) {
+                    // eslint-disable-next-line
+                    AlertService.alert(
+                      'Error',
+                      'There was a problem deleting the destination.',
+                      'error',
+                      'OK',
+                    );
+                  }
+                } else {
+                  console.log('Deletion canceled');
+                }
               } catch (error) {
-                console.log('something went wrong ');
+                console.error(
+                  'Something went wrong during the confirmation process:',
+                  error,
+                );
               }
             }}
             role="button"
@@ -266,6 +329,7 @@ export default function MustSeeAttractions() {
       onPageChange={setCurrentPage}
       onPerPageChange={setPerPage}
       addEventRoute="/discover-malaysia/must-see-attractions/add-attraction"
+      onSearchChange={setSearchValue}
     />
   );
 }

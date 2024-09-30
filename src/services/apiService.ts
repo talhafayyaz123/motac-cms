@@ -18,11 +18,17 @@ interface AuthRequestData {
   userAgent?: string;
 }
 
-export const fetchDestinations = async (typeId: number): Promise<any[]> => {
+export const fetchDestinations = async (
+  typeId: number,
+  searchValue: string = '',
+): Promise<any[]> => {
   try {
-    const result = await apiClient(`/destinations?typeId=${typeId}`, {
-      method: 'GET',
-    });
+    const result = await apiClient(
+      `/destinations?typeId=${typeId}&search=${searchValue}`,
+      {
+        method: 'GET',
+      },
+    );
 
     const tagColors = ['#E7ECFC', '#E3EFF8', '#E3F7F8'];
 
@@ -82,14 +88,14 @@ export const fetchPriorities = async () => {
 
 export const updateDestinationPriority = async (
   priorityId: number,
-  destinationId: number,
+  displayId: string,
 ) => {
   try {
     const response = await apiClient(
-      `/destinations/${destinationId}/priority/${priorityId}`,
+      `/destinations/${displayId}/priority/${priorityId}`,
       {
         method: 'PATCH',
-        body: JSON.stringify({ priorityId }),
+        body: JSON.stringify({ displayId, priorityId }),
       },
     );
 
@@ -215,6 +221,41 @@ export const fetchTeam = async (): Promise<any[]> => {
     });
 
     return transformedData;
+  } catch (error) {
+    console.error('An error occurred:', error);
+    return [];
+  }
+};
+
+export const deleteDestination = async (displayId: string) => {
+  try {
+    const response = await apiClient(`/destinations/${displayId}`, {
+      method: 'DELETE',
+      body: JSON.stringify({ displayId }),
+    });
+
+    // Check for successful deletion
+    if (!response?.id) {
+      throw new Error('Failed to delete destination');
+    }
+    return response;
+  } catch (error) {
+    console.error('Error deleting destination:', error);
+
+    // Throw an error with a user-friendly message
+    throw new Error(
+      'There was an error deleting the destination. Please try again.',
+    );
+  }
+};
+
+export const fetchRecommendationTags = async (): Promise<any[]> => {
+  try {
+    const result = await apiClient(`/destinations/recommendation/tags`, {
+      method: 'GET',
+    });
+
+    return result;
   } catch (error) {
     console.error('An error occurred:', error);
     return [];

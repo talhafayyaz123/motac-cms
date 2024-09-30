@@ -3,8 +3,8 @@
 import { useRouter } from 'next/navigation';
 import React, { Suspense } from 'react';
 import { CiSearch } from 'react-icons/ci';
-import { FaFileExcel } from 'react-icons/fa';
-import { RiCheckDoubleFill } from 'react-icons/ri';
+// import { FaFileExcel } from 'react-icons/fa';
+// import { RiCheckDoubleFill } from 'react-icons/ri';
 
 import Button from '@/components/ui/Button';
 import DataTable from '@/components/ui/dataTable/DataTable';
@@ -12,7 +12,7 @@ import Wrapper from '@/components/ui/dataTable/DataTableWrapper';
 import Input from '@/components/ui/Input';
 import Loader from '@/components/ui/Loader';
 import Title from '@/components/ui/Title';
-import AlertService from '@/services/alertService';
+// import AlertService from '@/services/alertService';
 
 interface EventTableLayoutProps {
   tableTitle: string;
@@ -26,6 +26,7 @@ interface EventTableLayoutProps {
   onPerPageChange: (perPage: number) => void;
   searchPlaceholder?: string;
   addEventRoute: string;
+  onSearchChange: (search: string) => void;
 }
 
 const EventTableLayout: React.FC<EventTableLayoutProps> = ({
@@ -40,6 +41,7 @@ const EventTableLayout: React.FC<EventTableLayoutProps> = ({
   onPerPageChange,
   searchPlaceholder = 'Search',
   addEventRoute,
+  onSearchChange,
 }) => {
   const router = useRouter();
 
@@ -50,29 +52,7 @@ const EventTableLayout: React.FC<EventTableLayoutProps> = ({
       </Title>
 
       <Wrapper>
-        <div className="flex gap-3">
-          <Button variant="primary" icon={<RiCheckDoubleFill />}>
-            Select All
-          </Button>
-          <Button
-            variant="primary"
-            icon={<FaFileExcel className="text-green-600" />}
-            onClick={async () => {
-              try {
-                await AlertService.alert(
-                  'Successful!',
-                  'Downloaded Excel Successfully',
-                  'success',
-                  'Done',
-                );
-              } catch (error) {
-                console.error('Error downloading Excel:', error);
-              }
-            }}
-          >
-            Download Excel
-          </Button>
-        </div>
+        <div className="flex gap-3"></div>
         <div className="flex gap-3">
           <Button
             variant="secondary"
@@ -87,7 +67,11 @@ const EventTableLayout: React.FC<EventTableLayoutProps> = ({
             inputSize="sm"
             minWidth="400px"
             className="bg-white"
-            onChange={(e) => console.log(e.target.value)}
+            onChange={(e) => {
+              const value = e.target.value;
+              console.log(value);
+              onSearchChange(value); // Call the handler to update search state
+            }}
             icon={<CiSearch />}
           />
         </div>
