@@ -13,11 +13,13 @@ import Input from '@/components/ui/Input';
 import Loader from '@/components/ui/Loader';
 import Title from '@/components/ui/Title';
 import { DeleteTeamMember, fetchTeam } from '@/services/apiService';
+import { useTeamMember } from '@/store/TeamMemberContext';
 
 const DataTable = lazy(() => import('@/components/ui/dataTable/DataTable'));
 
 export default function MyTeam() {
   const router = useRouter();
+  const { setCurrentTeamMember } = useTeamMember();
 
   const columns = [
     'Select',
@@ -31,6 +33,7 @@ export default function MyTeam() {
   ];
 
   const [data, setData] = useState<any[]>([]);
+
   const [currentPage, setCurrentPage] = useState(1);
   const [perPage, setPerPage] = useState(12);
 
@@ -69,21 +72,13 @@ export default function MyTeam() {
         return (
           <div
             className="flex items-center gap-2 justify-center cursor-pointer"
-            // onClick={() => {
-            //   router.push(
-            //     {
-            //       pathname: '/my-team/add-team-member',
-            //       query: {
-            //         id: data[rowIndex]?.ID,
-            //         flag: 'edit',
-            //       },
-            //     },
-            //     '/my-team/add-team-member',
-            //   );
-            // }}
-            // onKeyDown={() => {}}
-            // tabIndex={0}
-            // role="button"
+            onClick={() => {
+              setCurrentTeamMember(data[rowIndex]); // Set the current team member in the context
+              router.push('/my-team/add-team-member'); // Navigate to the edit page
+            }}
+            onKeyDown={() => {}}
+            tabIndex={0}
+            role="button"
           >
             <Image height={20} alt="edit" width={20} src="/edit_icon.svg" />
             {item[column]}
@@ -106,6 +101,7 @@ export default function MyTeam() {
         return <span>{item[column]}</span>;
     }
   };
+
   return (
     <main className="h-full">
       <Title className="font-light ml-2 mb-2">All Team Members</Title>

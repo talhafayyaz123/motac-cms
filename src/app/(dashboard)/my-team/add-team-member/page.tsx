@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 'use client';
 
 import { Formik, Form } from 'formik';
@@ -14,7 +15,9 @@ import {
   fetchTeamDesignations,
   fetchTeamRoles,
   AddTeamMember,
+  UpdateTeamMember,
 } from '@/services/apiService';
+import { useTeamMember } from '@/store/TeamMemberContext';
 
 interface Option {
   value: string;
@@ -22,6 +25,17 @@ interface Option {
 }
 
 export default function AddTeamMemberPage() {
+  const { currentTeamMember, setCurrentTeamMember } = useTeamMember();
+
+  const {
+    ID = '',
+    'First Name': firstName = '',
+    'Last Name': lastName = '',
+    'Email Address': emailAddress = '',
+    Role = '',
+    Designation = '',
+  } = currentTeamMember || {};
+
   const [designation, setDesignation] = useState<Option[]>([]);
   const [role, setRole] = useState<Option[]>([]);
 
@@ -48,7 +62,6 @@ export default function AddTeamMemberPage() {
     void loadDesignations();
   }, []);
 
-  // Validation schema for Formik using Yup
   const validationSchema = Yup.object({
     firstName: Yup.string().required('First Name is required'),
     lastName: Yup.string().required('Last Name is required'),
@@ -61,12 +74,14 @@ export default function AddTeamMemberPage() {
   });
 
   const initialValues = {
-    firstName: '',
-    lastName: '',
-    email: '',
+    firstName: firstName,
+    lastName: lastName,
+    email: emailAddress,
     company: '',
-    designationId: '',
-    roleId: '',
+    designationId:
+      designation.filter((item: any) => item.label === Designation)[0]?.value ||
+      '',
+    roleId: role.filter((item: any) => item.label === Role)[0]?.value || '',
     password: '123456',
     statusId: 1,
   };
@@ -77,11 +92,8 @@ export default function AddTeamMemberPage() {
   ) => {
     try {
       const response: any = await AddTeamMember(values);
-      console.log(response);
 
       if (response?.error) {
-        console.log(response.error);
-
         await AlertService.alert('Error!', response.error, 'error', 'OK');
       } else if (response?.id) {
         await AlertService.alert(
@@ -90,6 +102,43 @@ export default function AddTeamMemberPage() {
           'success',
           'Done',
         );
+        resetForm();
+      }
+    } catch (error: any) {
+      console.error('Unexpected error:', error);
+      await AlertService.alert(
+        'Error!',
+        'An unexpected error occurred',
+        'error',
+        'OK',
+      );
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  const handleUpdate = async (
+    values: any,
+    { setSubmitting, resetForm }: any,
+  ) => {
+    try {
+      const { email, password, ...updatedValues } = values;
+      const response: any = await UpdateTeamMember({
+        data: updatedValues,
+        id: ID,
+      });
+
+      if (response?.error) {
+        await AlertService.alert('Error!', response.error, 'error', 'OK');
+      } else if (response?.id) {
+        await AlertService.alert(
+          'Successful!',
+          'Member Updated Successfully',
+          'success',
+          'Done',
+        );
+        localStorage.removeItem('currentTeamMember');
+        setCurrentTeamMember(null);
         resetForm();
       }
     } catch (error: any) {
@@ -114,7 +163,8 @@ export default function AddTeamMemberPage() {
         <Formik
           initialValues={initialValues}
           validationSchema={validationSchema}
-          onSubmit={handleSubmit}
+          onSubmit={ID ? handleUpdate : handleSubmit}
+          enableReinitialize={true}
         >
           {({ isSubmitting, setFieldValue, values, errors, touched }) => {
             return (
@@ -130,9 +180,9 @@ export default function AddTeamMemberPage() {
                     value={values.firstName}
                     onChange={(e) => setFieldValue('firstName', e.target.value)}
                     error={
-                      touched.firstName && errors.firstName
+                      typeof errors.firstName === 'string'
                         ? errors.firstName
-                        : ''
+                        : undefined
                     }
                   />
 
@@ -146,7 +196,9 @@ export default function AddTeamMemberPage() {
                     value={values.lastName}
                     onChange={(e) => setFieldValue('lastName', e.target.value)}
                     error={
-                      touched.lastName && errors.lastName ? errors.lastName : ''
+                      typeof errors.lastName === 'string'
+                        ? errors.lastName
+                        : undefined
                     }
                   />
 
@@ -181,7 +233,11 @@ export default function AddTeamMemberPage() {
                     minWidth="350px"
                     value={values.email}
                     onChange={(e) => setFieldValue('email', e.target.value)}
-                    error={touched.email && errors.email ? errors.email : ''}
+                    error={
+                      typeof errors.email === 'string'
+                        ? errors.email
+                        : undefined
+                    }
                   />
 
                   {/* Company */}
@@ -220,13 +276,23 @@ export default function AddTeamMemberPage() {
                   <Button variant="danger" type="button">
                     Cancel
                   </Button>
-                  <Button
-                    variant="customBlue"
-                    type="submit"
-                    disabled={isSubmitting}
-                  >
-                    {isSubmitting ? 'Saving...' : 'Save'}
-                  </Button>
+                  {ID ? (
+                    <Button
+                      variant="customBlue"
+                      type="submit"
+                      disabled={isSubmitting}
+                    >
+                      {isSubmitting ? 'Updating...' : 'Update'}
+                    </Button>
+                  ) : (
+                    <Button
+                      variant="customBlue"
+                      type="submit"
+                      disabled={isSubmitting}
+                    >
+                      {isSubmitting ? 'Saving...' : 'Save'}
+                    </Button>
+                  )}
                 </div>
               </Form>
             );

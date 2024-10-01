@@ -301,3 +301,43 @@ export const DeleteTeamMember = async (id: number) => {
     return { error: typedError.message };
   }
 };
+
+export const UpdateTeamMember = async (
+  payload: any,
+): Promise<any[] | { error: string }> => {
+  try {
+    const data = await apiClient(`/cms/users/${payload.id}`, {
+      method: 'PATCH',
+      body: JSON.stringify(payload.data),
+    });
+    return data;
+  } catch (err) {
+    const typedError = err as Error;
+    return { error: typedError.message };
+  }
+};
+
+export const FetchUsers = async (): Promise<any[]> => {
+  try {
+    const result = await apiClient(`/app/users`, {
+      method: 'GET',
+    });
+
+    const transformedData = result?.data?.map((item: any) => ({
+      Select: '',
+      'User ID': item?.displayId,
+      'First Name': item?.firstName,
+      'Last Name': item?.lastName,
+      Email: item?.email,
+      'Phone Number': item?.phoneNumber,
+      Nationality: item?.nationality,
+      Action: 'View',
+      'Reset Link': 'Send Reset Password Link',
+    }));
+
+    return transformedData;
+  } catch (error) {
+    console.error('An error occurred:', error);
+    return [];
+  }
+};
