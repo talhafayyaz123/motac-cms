@@ -220,3 +220,72 @@ export const fetchTeam = async (): Promise<any[]> => {
     return [];
   }
 };
+
+export const fetchTeamRoles = async (): Promise<any[]> => {
+  try {
+    const data = await apiClient(`/cms/users/roles`, {
+      method: 'GET',
+    });
+
+    const transformedData = data?.map((item: any) => ({
+      value: item?.id,
+      label: item?.name,
+    }));
+
+    return transformedData;
+  } catch (error) {
+    console.error('An error occurred:', error);
+    return [];
+  }
+};
+
+export const fetchTeamDesignations = async (): Promise<any[]> => {
+  try {
+    const data = await apiClient(`/cms/users/designations`, {
+      method: 'GET',
+    });
+
+    const transformedData = data?.map((item: any) => ({
+      value: item?.id,
+      label: item?.name,
+    }));
+
+    return transformedData;
+  } catch (error) {
+    console.error('An error occurred:', error);
+    return [];
+  }
+};
+
+export const fetchTeamStatuses = async (): Promise<any[]> => {
+  try {
+    const data = await apiClient(`/cms/users/statuses`, {
+      method: 'GET',
+    });
+
+    const transformedData = data?.map((item: any) => ({
+      value: item?.id,
+      label: item?.name,
+    }));
+
+    return transformedData;
+  } catch (error) {
+    console.error('An error occurred:', error);
+    return [];
+  }
+};
+
+export const AddTeamMember = async (
+  payload: any,
+): Promise<any[] | { error: string }> => {
+  try {
+    const data = await apiClient(`/cms/users`, {
+      method: 'POST',
+      body: JSON.stringify(payload),
+    });
+    return data;
+  } catch (err) {
+    const typedError = err as Error;
+    return { error: typedError.message };
+  }
+};

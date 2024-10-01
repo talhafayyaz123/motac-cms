@@ -11,6 +11,7 @@ interface InputProps
   minWidth?: string;
   sublabel?: string;
   onFileError?: (error: string) => void;
+  error?: string;
 }
 
 const Input: React.FC<InputProps> = ({
@@ -25,7 +26,8 @@ const Input: React.FC<InputProps> = ({
   className = '',
   minWidth = '300px',
   sublabel,
-  onFileError, // Error callback prop
+  onFileError,
+  error,
   ...rest
 }) => {
   const baseStyles =
@@ -103,6 +105,7 @@ const Input: React.FC<InputProps> = ({
           style={{ minWidth }}
           {...rest}
         />
+        {error && <p className="text-red-500 text-xs">{error}</p>}{' '}
       </div>
     </div>
   );

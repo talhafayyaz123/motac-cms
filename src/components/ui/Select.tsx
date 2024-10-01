@@ -13,6 +13,8 @@ interface InputProps {
   multiple?: boolean;
   searchable?: boolean;
   profile?: boolean;
+  name?: string;
+  error?: string;
 }
 
 const Select: React.FC<InputProps> = ({
@@ -24,6 +26,7 @@ const Select: React.FC<InputProps> = ({
   multiple = false,
   searchable = false,
   profile = false,
+  error,
 }) => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
@@ -49,7 +52,7 @@ const Select: React.FC<InputProps> = ({
         ? selectedValues.join(', ')
         : options[0]?.label;
     }
-    return (typeof selectedValues === 'string' && selectedValues) || 'Select';
+    return selectedValues ? selectedValues : 'Select';
   };
 
   const filteredOptions = options.filter((option) =>
@@ -103,6 +106,7 @@ const Select: React.FC<InputProps> = ({
           </div>
         )}
       </div>
+      {error && <p className="text-red-500 text-xs">{error}</p>}{' '}
     </div>
   );
 };
