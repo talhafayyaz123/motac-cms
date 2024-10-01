@@ -10,7 +10,7 @@ import Select from '@/components/ui/dataTable/Select';
 import { chartCategories, chartData } from '@/constants';
 
 // import AreasplineChart from './charts/AreasplineChart';
-import AreasplineChart from './charts/AreasplineChart';
+import AreasplineChart from './charts/AreaChart';
 
 const StatsSection: React.FC = () => {
   return (
