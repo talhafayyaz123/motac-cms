@@ -1,14 +1,12 @@
 'use client';
 
 import Image from 'next/image';
-import { usePathname, useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import React, { useState, useEffect } from 'react';
 
 import EventTableLayout from '@/app/(dashboard)/discover-malaysia/EventTable';
 import Select from '@/components/ui/dataTable/Select';
 import Input from '@/components/ui/Input';
-import { getDestinationId } from '@/helpers/utils/getDestinationId';
-import { useFetchDestinations } from '@/helpers/utils/useFetchDestinations';
 import AlertService from '@/services/alertService';
 import {
   deleteDestination,
@@ -20,15 +18,8 @@ import {
 
 export default function TopExperience() {
   const router = useRouter();
-  const destinationName = usePathname();
-  const { destinations } = useFetchDestinations();
-  const [destinationId, setDestinationId] = useState<number>(2);
+  const [destinationId] = useState<number>(2);
   const [availableTags, setAvailableTags] = useState<string[]>([]);
-
-  useEffect(() => {
-    const id = getDestinationId(destinationName, destinations);
-    setDestinationId(id);
-  }, [destinationName, destinations]);
 
   const tagColors = ['#E7ECFC', '#E3EFF8', '#E3F7F8'];
 
@@ -193,7 +184,9 @@ export default function TopExperience() {
               }
             }}
             onClick={() => {
-              router.push('/discover-malaysia/top-experience/add-experience');
+              router.push(
+                `/discover-malaysia/top-experience/edit-experience?id=${item['ID ']}`,
+              );
             }}
           >
             <Image height={20} alt="edit" width={20} src="/edit_icon.svg" />

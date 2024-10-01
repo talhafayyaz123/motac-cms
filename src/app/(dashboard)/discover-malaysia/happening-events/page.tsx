@@ -1,14 +1,12 @@
 'use client';
 
 import Image from 'next/image';
-import { usePathname, useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import React, { useState, useEffect } from 'react';
 
 import EventTableLayout from '@/app/(dashboard)/discover-malaysia/EventTable';
 import Select from '@/components/ui/dataTable/Select';
 import Input from '@/components/ui/Input';
-import { getDestinationId } from '@/helpers/utils/getDestinationId';
-import { useFetchDestinations } from '@/helpers/utils/useFetchDestinations';
 import AlertService from '@/services/alertService';
 import {
   deleteDestination,
@@ -20,16 +18,9 @@ import {
 
 export default function HappeningEvents() {
   const router = useRouter();
-  const destinationName = usePathname();
-  const { destinations } = useFetchDestinations();
-  const [destinationId, setDestinationId] = useState<number>(3);
+  const [destinationId] = useState<number>(3);
   const [availableTags, setAvailableTags] = useState<string[]>([]);
   const [searchValue, setSearchValue] = useState<string>('');
-
-  useEffect(() => {
-    const id = getDestinationId(destinationName, destinations);
-    setDestinationId(id);
-  }, [destinationName, destinations]);
 
   const tagColors = ['#E7ECFC', '#E3EFF8', '#E3F7F8'];
 
@@ -195,7 +186,7 @@ export default function HappeningEvents() {
             }}
             onClick={() => {
               router.push(
-                '/discover-malaysia/happening-events/add-happening-event',
+                `/discover-malaysia/happening-events/edit-happening-event?id=${item['ID ']}`,
               );
             }}
           >

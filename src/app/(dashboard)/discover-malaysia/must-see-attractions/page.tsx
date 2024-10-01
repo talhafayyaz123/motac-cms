@@ -1,14 +1,12 @@
 'use client';
 
 import Image from 'next/image';
-import { useRouter, usePathname } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import React, { useState, useEffect } from 'react';
 
 import EventTableLayout from '@/app/(dashboard)/discover-malaysia/EventTable';
 import Select from '@/components/ui/dataTable/Select';
 import Input from '@/components/ui/Input';
-import { getDestinationId } from '@/helpers/utils/getDestinationId';
-import { useFetchDestinations } from '@/helpers/utils/useFetchDestinations';
 import AlertService from '@/services/alertService';
 import {
   deleteDestination,
@@ -20,15 +18,8 @@ import {
 
 export default function MustSeeAttractions() {
   const router = useRouter();
-  const destinationName = usePathname();
-  const { destinations } = useFetchDestinations();
-  const [destinationId, setDestinationId] = useState<number>(1);
+  const [destinationId] = useState<number>(1);
   const [availableTags, setAvailableTags] = useState<string[]>([]);
-
-  useEffect(() => {
-    const id = getDestinationId(destinationName, destinations);
-    setDestinationId(id);
-  }, [destinationName, destinations]);
 
   const tagColors = ['#E7ECFC', '#E3EFF8', '#E3F7F8'];
 
@@ -195,7 +186,7 @@ export default function MustSeeAttractions() {
             }}
             onClick={() => {
               router.push(
-                '/discover-malaysia/must-see-attractions/add-attraction',
+                `/discover-malaysia/must-see-attractions/edit-attraction?id=${item['ID ']}`,
               );
             }}
           >

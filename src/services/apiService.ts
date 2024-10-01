@@ -261,3 +261,154 @@ export const fetchRecommendationTags = async (): Promise<any[]> => {
     return [];
   }
 };
+
+export const fetchDestinationsCategories = async (
+  typeId: number,
+): Promise<any[]> => {
+  try {
+    const result = await apiClient(
+      `/destinations/categories?typeId=${typeId}`,
+      {
+        method: 'GET',
+      },
+    );
+
+    return result;
+  } catch (error) {
+    console.error('An error occurred:', error);
+    return [];
+  }
+};
+
+export const fileUpload = async (file: string) => {
+  try {
+    const result = await apiClient(`/files/upload`, {
+      method: 'POST',
+      body: JSON.stringify({ file }),
+    });
+
+    return result;
+  } catch (error) {
+    console.error('An error occurred:', error);
+  }
+};
+
+export const createDestination = async (data: any) => {
+  try {
+    const body: any = {
+      title: data?.title,
+      description: data?.description,
+      openingHours: data?.openingHours,
+      closingHours: data?.closingHours,
+      ageLimit: data?.ageLimit,
+      mapLink: data?.mapLink,
+      address: data?.address,
+      area: data?.area,
+      cityId: data?.city,
+      bannerImageId: 1,
+      images: [1],
+      tags: data?.tags,
+      priorityId: data?.priority,
+      destinationCategoryId: data?.category,
+    };
+
+    if (data?.workingDays) {
+      body.workingDays = data.workingDays;
+    }
+
+    if (data?.happeningStartDate) {
+      body.happeningStartDate = data.happeningStartDate;
+    }
+
+    if (data?.happeningEndDate) {
+      body.happeningEndDate = data.happeningEndDate;
+    }
+    const result = await apiClient(`/destinations`, {
+      method: 'POST',
+      body: JSON.stringify(body),
+    });
+
+    return result;
+  } catch (error) {
+    console.error('An error occurred:', error);
+  }
+};
+
+export const updateDestination = async (displayId: string, data: any) => {
+  try {
+    const body: any = {
+      title: data?.title,
+      description: data?.description,
+      openingHours: data?.openingHours,
+      closingHours: data?.closingHours,
+      ageLimit: data?.ageLimit,
+      mapLink: data?.mapLink,
+      address: data?.address,
+      area: data?.area,
+      cityId: data?.city,
+      bannerImageId: 1,
+      images: [1],
+      tags: data?.tags,
+      priorityId: data?.priority,
+      destinationCategoryId: data?.category,
+    };
+
+    if (data?.workingDays) {
+      body.workingDays = data.workingDays;
+    }
+
+    if (data?.happeningStartDate) {
+      body.happeningStartDate = data.happeningStartDate;
+    }
+
+    if (data?.happeningEndDate) {
+      body.happeningEndDate = data.happeningEndDate;
+    }
+    const result = await apiClient(`/destinations/${displayId}`, {
+      method: 'PATCH',
+      body: JSON.stringify(body),
+    });
+
+    return result;
+  } catch (error) {
+    console.error('An error occurred:', error);
+  }
+};
+
+export const fetchDestinationsById = async (displayId: string) => {
+  try {
+    const result = await apiClient(`/destinations/${displayId}`, {
+      method: 'GET',
+    });
+
+    return result;
+  } catch (error) {
+    console.error('An error occurred:', error);
+  }
+};
+
+export const fetchAreas = async (): Promise<any[]> => {
+  try {
+    const result = await apiClient(`/localities/countries`, {
+      method: 'GET',
+    });
+
+    return result;
+  } catch (error) {
+    console.error('An error occurred:', error);
+    return [];
+  }
+};
+
+export const fetchCities = async (): Promise<any[]> => {
+  try {
+    const result = await apiClient(`/localities/cities`, {
+      method: 'GET',
+    });
+
+    return result;
+  } catch (error) {
+    console.error('An error occurred:', error);
+    return [];
+  }
+};
