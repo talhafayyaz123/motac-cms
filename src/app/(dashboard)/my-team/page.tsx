@@ -12,7 +12,7 @@ import Wrapper from '@/components/ui/dataTable/DataTableWrapper';
 import Input from '@/components/ui/Input';
 import Loader from '@/components/ui/Loader';
 import Title from '@/components/ui/Title';
-import { fetchTeam } from '@/services/apiService';
+import { DeleteTeamMember, fetchTeam } from '@/services/apiService';
 
 const DataTable = lazy(() => import('@/components/ui/dataTable/DataTable'));
 
@@ -47,9 +47,17 @@ export default function MyTeam() {
     void loadData();
   }, []);
 
-  const renderCell = (item: any, column: string) => {
-    console.log(item);
+  const handleDelete = async (id: number) => {
+    const { ID } = data[id];
+    try {
+      const response = await DeleteTeamMember(ID);
+      console.log(response);
+    } catch (error) {
+      console.error('Error loading data:', error);
+    }
+  };
 
+  const renderCell = (item: any, column: string, rowIndex: any) => {
     switch (column) {
       case 'Select':
         return (
@@ -59,14 +67,37 @@ export default function MyTeam() {
         );
       case 'Edit':
         return (
-          <div className="flex items-center gap-2 justify-center cursor-pointer">
+          <div
+            className="flex items-center gap-2 justify-center cursor-pointer"
+            // onClick={() => {
+            //   router.push(
+            //     {
+            //       pathname: '/my-team/add-team-member',
+            //       query: {
+            //         id: data[rowIndex]?.ID,
+            //         flag: 'edit',
+            //       },
+            //     },
+            //     '/my-team/add-team-member',
+            //   );
+            // }}
+            // onKeyDown={() => {}}
+            // tabIndex={0}
+            // role="button"
+          >
             <Image height={20} alt="edit" width={20} src="/edit_icon.svg" />
             {item[column]}
           </div>
         );
       case 'Delete':
         return (
-          <div className="flex items-center justify-center gap-2 cursor-pointer">
+          <div
+            className="flex items-center justify-center gap-2 cursor-pointer"
+            onClick={() => handleDelete(rowIndex)}
+            onKeyDown={() => {}}
+            tabIndex={0}
+            role="button"
+          >
             <Image height={20} alt="delete" width={20} src="/delete_icon.svg" />
             {item[column]}
           </div>

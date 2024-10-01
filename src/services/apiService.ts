@@ -289,3 +289,15 @@ export const AddTeamMember = async (
     return { error: typedError.message };
   }
 };
+
+export const DeleteTeamMember = async (id: number) => {
+  try {
+    const response = await apiClient(`/cms/users/${id}`, {
+      method: 'DELETE',
+    });
+    console.log(response);
+  } catch (err) {
+    const typedError = err as Error;
+    return { error: typedError.message };
+  }
+};
