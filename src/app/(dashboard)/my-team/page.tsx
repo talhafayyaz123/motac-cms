@@ -48,8 +48,6 @@ export default function MyTeam() {
   }, []);
 
   const renderCell = (item: any, column: string) => {
-    console.log(item);
-
     switch (column) {
       case 'Select':
         return (
