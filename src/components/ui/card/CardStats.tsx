@@ -8,6 +8,10 @@ interface CardStatsProps {
   statsData: number;
   children: React.ReactNode;
   isEventFilter?: boolean;
+  handleSelectChange: (
+    event: React.ChangeEvent<HTMLSelectElement>,
+    flag: string,
+  ) => void;
 }
 
 const CardStats: React.FC<CardStatsProps> = ({
@@ -16,6 +20,7 @@ const CardStats: React.FC<CardStatsProps> = ({
   title,
   children,
   isEventFilter = false,
+  handleSelectChange,
 }) => {
   return (
     <div className="flex flex-col relative rounded-xl bg-blue-50 border border-gray-100 p-4 font-medium">
@@ -30,12 +35,13 @@ const CardStats: React.FC<CardStatsProps> = ({
           <div className="h-[max-content]">
             <Select
               options={[
-                { value: 'selectMonth', label: 'Select Month' },
-                { value: 'jan', label: 'Jan' },
-                { value: 'feb', label: 'Feb' },
+                { value: '30', label: 'Last 30 days' },
+                { value: '7', label: 'This week' },
+                { value: '14', label: '14 days' },
               ]}
-              highlightValue="selectMonth"
+              highlightValue={'30'}
               minimalStyle
+              onChange={(event) => handleSelectChange(event, 'happeningEvents')}
             />
           </div>
         </div>

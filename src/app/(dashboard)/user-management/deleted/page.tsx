@@ -10,6 +10,7 @@ import Wrapper from '@/components/ui/dataTable/DataTableWrapper';
 import Input from '@/components/ui/Input';
 import Loader from '@/components/ui/Loader';
 import Title from '@/components/ui/Title';
+import { FetchDeletedUsers } from '@/services/apiService';
 
 const DataTable = lazy(() => import('@/components/ui/dataTable/DataTable'));
 
@@ -24,18 +25,34 @@ export default function UserManagementDeleted() {
     'Nationality',
   ];
 
-  const [data, setData] = useState<any[]>([]);
-
+  const [data, setData] = useState<any[] | { error: string }>([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const [perPage, setPerPage] = useState(12);
+  const [isNoData, setIsNoData] = useState(false);
 
   useEffect(() => {
     const loadData = async () => {
-      const { default: generateDummyData } = await import(
-        '@/components/ui/dataTable/DummyData'
-      );
-      setData(generateDummyData());
+      setIsLoading(true);
+      try {
+        const fetchedData = await FetchDeletedUsers();
+
+        setData(fetchedData);
+
+        if (Array.isArray(fetchedData) && fetchedData.length === 0) {
+          setIsNoData(true);
+        } else {
+          setIsNoData(false);
+        }
+      } catch (error) {
+        console.error('Error loading data:', error);
+        setIsNoData(true);
+        setData({ error: 'An error occurred while fetching data' });
+      } finally {
+        setIsLoading(false);
+      }
     };
+
     void loadData();
   }, []);
 
@@ -51,6 +68,7 @@ export default function UserManagementDeleted() {
         return <span>{item[column]}</span>;
     }
   };
+
   return (
     <main className="h-full">
       <Title className="font-light ml-2 mb-2 text-[#051225]">
@@ -81,9 +99,11 @@ export default function UserManagementDeleted() {
       </Wrapper>
 
       <div className="bg-white auto">
-        {data.length == 0 ? (
+        {isLoading ? (
           <Loader />
-        ) : (
+        ) : isNoData ? (
+          <div className="p-4 text-center text-gray-500">No data available</div>
+        ) : Array.isArray(data) ? (
           <Suspense fallback={<Loader />}>
             <DataTable
               columns={columns}
@@ -101,6 +121,10 @@ export default function UserManagementDeleted() {
               }}
             />
           </Suspense>
+        ) : (
+          <div className="p-4 text-center text-red-500">
+            Error: {data.error}
+          </div>
         )}
       </div>
     </main>

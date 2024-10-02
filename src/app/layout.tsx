@@ -3,6 +3,7 @@ import { Montserrat } from 'next/font/google';
 
 import './globals.css';
 import SessionProviderWrapper from '@/providers/SessionProviderWrapper';
+import { MemberProvider } from '@/store/MemberContext';
 
 const montserrat = Montserrat({ subsets: ['latin'] });
 
@@ -19,7 +20,9 @@ export default function RootLayout({ children }: RootLayoutProps) {
   return (
     <html lang="en">
       <body className={`${montserrat.className} font-markForMC`}>
-        <SessionProviderWrapper>{children}</SessionProviderWrapper>
+        <SessionProviderWrapper>
+          <MemberProvider>{children}</MemberProvider>
+        </SessionProviderWrapper>
       </body>
     </html>
   );
