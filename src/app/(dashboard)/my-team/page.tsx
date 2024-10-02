@@ -12,6 +12,7 @@ import Wrapper from '@/components/ui/dataTable/DataTableWrapper';
 import Input from '@/components/ui/Input';
 import Loader from '@/components/ui/Loader';
 import Title from '@/components/ui/Title';
+import AlertService from '@/services/alertService';
 import { DeleteTeamMember, fetchTeam } from '@/services/apiService';
 import { useMember } from '@/store/MemberContext';
 
@@ -53,10 +54,26 @@ export default function MyTeam() {
   const handleDelete = async (id: number) => {
     const { ID } = data[id];
     try {
-      const response = await DeleteTeamMember(ID);
-      console.log(response);
-    } catch (error) {
-      console.error('Error loading data:', error);
+      const response: any = await DeleteTeamMember(ID);
+      if (response?.error) {
+        await AlertService.alert('Error!', response.error, 'error', 'OK');
+      } else if (response?.id) {
+        await AlertService.alert(
+          'Successful!',
+          'Member Deleted Successfully',
+          'success',
+          'Done',
+        );
+        localStorage.removeItem('currentTeamMember');
+        setCurrentMember(null);
+      }
+    } catch (error: any) {
+      await AlertService.alert(
+        'Error!',
+        'An unexpected error occurred',
+        'error',
+        'OK',
+      );
     }
   };
 
@@ -73,8 +90,8 @@ export default function MyTeam() {
           <div
             className="flex items-center gap-2 justify-center cursor-pointer"
             onClick={() => {
-              setCurrentMember(data[rowIndex]); // Set the current team member in the context
-              router.push('/my-team/add-team-member'); // Navigate to the edit page
+              setCurrentMember(data[rowIndex]);
+              router.push('/my-team/add-team-member');
             }}
             onKeyDown={() => {}}
             tabIndex={0}

@@ -45,8 +45,6 @@ export default function PersonalDetails() {
   const handleDelete = async () => {
     try {
       const response: any = await DeleteActiveMember(userID);
-      console.log(response);
-
       if (response?.error) {
         await AlertService.alert('Error!', response.error, 'error', 'OK');
       } else if (response?.id) {

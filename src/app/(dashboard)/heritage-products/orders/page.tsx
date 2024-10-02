@@ -39,8 +39,6 @@ export default function Orders() {
   const [perPage, setPerPage] = useState(12);
 
   const renderCell = (item: any, column: string) => {
-    console.log(item);
-
     switch (column) {
       case 'Select':
         return (
