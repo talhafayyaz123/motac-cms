@@ -149,6 +149,7 @@ export default function AddAttraction() {
     if (action === 'edit-attraction' && id) {
       void fetchAttraction(id);
     }
+    // eslint-disable-next-line
   }, [action, id]);
 
   useEffect(() => {

@@ -150,6 +150,7 @@ export default function AddExperience() {
     if (action === 'edit-experience' && id) {
       void fetchExperience(id);
     }
+    // eslint-disable-next-line
   }, [action, id]);
 
   useEffect(() => {

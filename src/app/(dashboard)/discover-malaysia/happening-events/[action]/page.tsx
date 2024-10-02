@@ -152,6 +152,7 @@ export default function AddEvent() {
     if (action === 'edit-happening-event' && id) {
       void fetchHappeningEvent(id);
     }
+    // eslint-disable-next-line
   }, [action, id]);
 
   useEffect(() => {

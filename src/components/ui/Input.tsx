@@ -185,6 +185,7 @@ const Input: React.FC<InputProps> = ({
               />
             </div>
             {imagePreview && (
+              /* eslint-disable @next/next/no-img-element */
               <img
                 src={imagePreview}
                 alt=""
