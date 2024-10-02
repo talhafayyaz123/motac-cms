@@ -54,6 +54,7 @@ export const fetchDestinations = async (
         'City ': item.cityName,
         Tags: item.tags
           ? item.tags.map((tag: any) => ({
+              id: tag.id,
               name: tag.name,
               color: tagColors[Math.floor(Math.random() * tagColors.length)],
             }))
@@ -79,7 +80,7 @@ export const fetchDestinations = async (
     };
   } catch (error) {
     console.error('An error occurred:', error);
-    return { data: [], totalRecords: 0 }; // Return an empty array and zero total records on error
+    return { data: [], total: 0 }; // Return an empty array and zero total records on error
   }
 };
 
@@ -249,10 +250,6 @@ export const deleteDestination = async (displayId: string) => {
       body: JSON.stringify({ displayId }),
     });
 
-    // Check for successful deletion
-    if (!response?.id) {
-      throw new Error('Failed to delete destination');
-    }
     return response;
   } catch (error) {
     console.error('Error deleting destination:', error);
@@ -444,5 +441,25 @@ export const fetchCities = async (): Promise<any[]> => {
   } catch (error) {
     console.error('An error occurred:', error);
     return [];
+  }
+};
+
+export const updateDestinationTags = async (
+  displayId: string,
+  tags: number[],
+) => {
+  try {
+    const body = {
+      tags: tags,
+    };
+
+    const result = await apiClient(`/destinations/${displayId}`, {
+      method: 'PATCH',
+      body: JSON.stringify(body),
+    });
+
+    return result;
+  } catch (error) {
+    console.error('An error occurred:', error);
   }
 };

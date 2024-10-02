@@ -118,7 +118,7 @@ const Input: React.FC<InputProps> = ({
   return (
     <div className="flex flex-col" style={{ minWidth }}>
       {label && (
-        <p className="mb-2 text-md text-[#181819] font-normal">
+        <p className="mb-2 text-md text-[#181819] font-semibold">
           {label}
           <span className="text-[0.5rem] ml-12">{sublabel}</span>
         </p>

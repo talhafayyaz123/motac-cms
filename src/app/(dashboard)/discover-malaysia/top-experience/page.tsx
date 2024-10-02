@@ -14,12 +14,15 @@ import {
   fetchPriorities,
   fetchRecommendationTags,
   updateDestinationPriority,
+  updateDestinationTags,
 } from '@/services/apiService';
 
 export default function TopExperience() {
   const router = useRouter();
   const [destinationId] = useState<number>(2);
-  const [availableTags, setAvailableTags] = useState<string[]>([]);
+  const [availableTags, setAvailableTags] = useState<
+    { id: number; name: string }[] | null
+  >(null);
 
   const tagColors = ['#E7ECFC', '#E3EFF8', '#E3F7F8'];
 
@@ -47,13 +50,18 @@ export default function TopExperience() {
     const fetchTags = async () => {
       try {
         const response = await fetchRecommendationTags();
-        const tags = response.map((item: any) => item?.name);
+        const tags = response.map((item: any) => ({
+          id: item?.id,
+          name: item?.name,
+        }));
         setAvailableTags(tags);
       } catch (error) {
         console.error('Error fetching tags:', error);
       }
     };
+
     void fetchTags();
+    // eslint-disable-next-line
   }, []);
 
   useEffect(() => {
@@ -71,7 +79,7 @@ export default function TopExperience() {
         setData(fetchedData);
         setTotalCount(total);
         setLoadingData(false);
-        // Set the total records from the API response
+        // Set the total records from the API respons
       } catch (error) {
         console.error('Error loading data:', error);
         setLoadingData(false);
@@ -80,7 +88,7 @@ export default function TopExperience() {
 
     void loadData();
     // eslint-disable-next-line
-  }, [destinationId, currentPage, perPage]); // Remove searchValue from dependencies
+  }, [destinationId, currentPage, perPage,searchValue]);
 
   const handlePriorityChange = async (
     rowIndex: number,
@@ -112,10 +120,11 @@ export default function TopExperience() {
     }
   };
 
-  const handleTagRemove = (
+  const handleTagRemove = async (
     event: React.MouseEvent<HTMLButtonElement>,
     rowIndex: number,
     tagIndex: number,
+    rowId: string,
   ) => {
     event.stopPropagation();
     const newData = [...data];
@@ -124,39 +133,50 @@ export default function TopExperience() {
     newRow.Tags.splice(tagIndex, 1);
     newData[rowIndex] = newRow;
     setData(newData);
+    const newTagAfterRemove = newRow?.Tags?.map(
+      (item: { id: number }) => item.id,
+    );
+    await updateDestinationTags(rowId, newTagAfterRemove);
   };
 
-  const handleTagAdd = (
+  const handleTagAdd = async (
     e: React.MouseEvent<HTMLButtonElement | HTMLDivElement>,
     rowIndex: number,
-    newTagName: string,
+    tag: { id: number; name: string },
+    rowId: string,
   ) => {
     const newData = [...data];
     const newRow = { ...newData[rowIndex] };
-
-    const newTag = {
-      name: newTagName,
+    const tagWithColor = {
+      id: tag?.id,
+      name: tag?.name,
       color: tagColors[Math.floor(Math.random() * tagColors.length)],
     };
-
-    newRow.Tags = [...newRow.Tags, newTag];
+    newRow.Tags = [...newRow.Tags, tagWithColor];
     newData[rowIndex] = newRow;
     setData(newData);
+    const newTagAfterAddition = newRow?.Tags?.map(
+      (item: { id: number }) => item.id,
+    );
+    await updateDestinationTags(rowId, newTagAfterAddition);
   };
 
-  const renderTagOptions = (rowIndex: number) => {
+  const renderTagOptions = (rowIndex: number, rowId: string) => {
     const rowTags = data[rowIndex]?.Tags || [];
-    const missingTags = availableTags.filter((tag) =>
-      rowTags.every((rowTag: any) => rowTag.name !== tag),
+    const missingTags = availableTags?.filter((tag) =>
+      rowTags.every(
+        (rowTag: any) => rowTag.id !== tag.id && rowTag.name !== tag.name,
+      ),
     );
 
     return (
-      missingTags.length > 0 && (
+      missingTags &&
+      missingTags?.length > 0 && (
         <div className="absolute left-0 z-10 mt-1 bg-white border border-gray-300 rounded-lg shadow-lg p-2">
           {missingTags.map((tag) => (
             <div
-              key={tag}
-              onClick={(e) => handleTagAdd(e, rowIndex, tag)}
+              key={tag?.id}
+              onClick={(e) => handleTagAdd(e, rowIndex, tag, rowId)}
               role="button"
               tabIndex={0}
               onKeyDown={(e) => {
@@ -165,7 +185,7 @@ export default function TopExperience() {
               }}
             >
               <span className="px-3 py-1 rounded-full text-xs font-medium">
-                {tag}
+                {tag?.name}
               </span>
             </div>
           ))}
@@ -300,7 +320,9 @@ export default function TopExperience() {
                 >
                   {tag.name}
                   <button
-                    onClick={(event) => handleTagRemove(event, rowIndex, index)}
+                    onClick={(event) =>
+                      handleTagRemove(event, rowIndex, index, item['ID '])
+                    }
                     className="ml-2 text-gray-500 hover:text-gray-700"
                   >
                     &times;
@@ -308,7 +330,8 @@ export default function TopExperience() {
                 </span>
               );
             })}
-            {activeRowIndex === rowIndex && renderTagOptions(rowIndex)}
+            {activeRowIndex === rowIndex &&
+              renderTagOptions(rowIndex, item['ID '])}
           </div>
         );
       default:

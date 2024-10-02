@@ -1,7 +1,6 @@
 'use client';
 
 import { yupResolver } from '@hookform/resolvers/yup';
-import Image from 'next/image';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 import { useForm, Controller } from 'react-hook-form'; // Import necessary hooks
@@ -50,6 +49,7 @@ export default function AddAttraction() {
     formState: { errors },
     watch,
   } = useForm({
+    mode: 'onTouched',
     resolver: yupResolver(validationSchemaForAttractions),
     defaultValues: {
       title: '',
@@ -247,7 +247,7 @@ export default function AddAttraction() {
         console.log('Uploading file:', file.name);
         const response = await fileUpload(file);
         uploadedImageIds.push(response?.file?.id);
-        console.log('File uploaded successfully:', file.name);
+        console.log('File uploaded successfully:', file?.name);
       }
     }
 
@@ -504,17 +504,25 @@ export default function AddAttraction() {
             <div className="grid grid-cols-4 gap-4 mb-6">
               {images.map((file, index) => (
                 <div key={index} className="relative">
-                  <Image
-                    src={
-                      typeof file === 'string'
-                        ? file
-                        : URL.createObjectURL(file)
-                    } // Handle both existing and new images
-                    alt={`Image ${index + 1}`}
-                    height={100}
-                    width={100}
-                    className="rounded-lg object-cover w-full h-full"
-                  />
+                  {typeof file === 'string' ? (
+                    /* eslint-disable @next/next/no-img-element */
+                    <img
+                      src={file} // This will work for existing image URLs
+                      alt={`${index + 1}`}
+                      height={100}
+                      width={100}
+                      className="rounded-lg object-cover w-full h-full"
+                    />
+                  ) : (
+                    /* eslint-disable @next/next/no-img-element */
+                    <img
+                      src={URL.createObjectURL(file)} // Use a regular <img> for file objects
+                      alt={`${index + 1}`}
+                      height={100}
+                      width={100}
+                      className="rounded-lg object-cover w-full h-full"
+                    />
+                  )}
                   <button
                     type="button"
                     className="absolute top-0 right-0 p-1 bg-red-500 rounded-full"

@@ -31,8 +31,6 @@ export const validationSchemaForExperiences = Yup.object().shape({
   description: Yup.string().required('Description is required'),
   tags: Yup.array().min(1, 'At least one tag must be selected'),
   priority: Yup.number().required('Priority is required'),
-  happeningStartDate: Yup.date().required('Happening start date is required'),
-  happeningEndDate: Yup.date().required('Happening end date is required'),
   images: Yup?.array().optional()?.nullable(),
   bannerImageId: Yup?.number(),
   bannerImage: Yup?.string().nullable(),

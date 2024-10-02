@@ -1,7 +1,6 @@
 'use client';
 
 import { yupResolver } from '@hookform/resolvers/yup';
-import Image from 'next/image';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 import { useForm, Controller } from 'react-hook-form';
@@ -50,6 +49,7 @@ export default function AddExperience() {
     formState: { errors },
     watch,
   } = useForm({
+    mode: 'onTouched',
     resolver: yupResolver(validationSchemaForExperiences),
     defaultValues: {
       title: '',
@@ -64,8 +64,6 @@ export default function AddExperience() {
       description: '',
       tags: [],
       priority: 1,
-      happeningStartDate: new Date(),
-      happeningEndDate: new Date(),
       images,
       bannerImageId: 1,
       bannerImage: null,
@@ -283,7 +281,7 @@ export default function AddExperience() {
               name="description"
               error={errors.description?.message}
             />
-            <div className=" w-1/4 my-5">
+            <div className="mt-5 flex flex-wrap gap-4">
               <Controller
                 control={control}
                 name="openingHours"
@@ -326,42 +324,6 @@ export default function AddExperience() {
                     minWidth="350px"
                     {...field}
                     error={errors.ageLimit?.message}
-                  />
-                )}
-              />
-              <Controller
-                control={control}
-                name="happeningStartDate"
-                render={({ field }) => (
-                  <Input
-                    type="date"
-                    label="Event Start Date"
-                    placeholder="09/15/25"
-                    className="text-xs"
-                    minWidth="350px"
-                    value={
-                      field.value ? field.value.toISOString().slice(0, 10) : ''
-                    } // Convert Date to YYYY-MM-DD
-                    onChange={(e) => field.onChange(new Date(e.target.value))} // Convert string back to Date
-                    error={errors.happeningStartDate?.message}
-                  />
-                )}
-              />
-              <Controller
-                control={control}
-                name="happeningEndDate"
-                render={({ field }) => (
-                  <Input
-                    type="date"
-                    label="Event End Date"
-                    placeholder="09/15/25"
-                    className="text-xs"
-                    value={
-                      field.value ? field.value.toISOString().slice(0, 10) : ''
-                    } // Convert Date to YYYY-MM-DD
-                    onChange={(e) => field.onChange(new Date(e.target.value))} // Convert string back to Date
-                    minWidth="350px"
-                    error={errors.happeningEndDate?.message}
                   />
                 )}
               />
@@ -478,6 +440,7 @@ export default function AddExperience() {
                 )}
               />
             </div>
+            <p className="font-semibold mb-3">Location</p>
             <div className="mt-5 flex flex-wrap gap-4">
               <Controller
                 control={control}
@@ -538,17 +501,25 @@ export default function AddExperience() {
             <div className="grid grid-cols-4 gap-4 mb-6">
               {images.map((file, index) => (
                 <div key={index} className="relative">
-                  <Image
-                    src={
-                      typeof file === 'string'
-                        ? file
-                        : URL.createObjectURL(file)
-                    } // Handle both existing and new images
-                    alt={`Image ${index + 1}`}
-                    height={100}
-                    width={100}
-                    className="rounded-lg object-cover w-full h-full"
-                  />
+                  {typeof file === 'string' ? (
+                    /* eslint-disable @next/next/no-img-element */
+                    <img
+                      src={file} // This will work for existing image URLs
+                      alt={`${index + 1}`}
+                      height={100}
+                      width={100}
+                      className="rounded-lg object-cover w-full h-full"
+                    />
+                  ) : (
+                    /* eslint-disable @next/next/no-img-element */
+                    <img
+                      src={URL.createObjectURL(file)} // Use a regular <img> for file objects
+                      alt={`${index + 1}`}
+                      height={100}
+                      width={100}
+                      className="rounded-lg object-cover w-full h-full"
+                    />
+                  )}
                   <button
                     type="button"
                     className="absolute top-0 right-0 p-1 bg-red-500 rounded-full"

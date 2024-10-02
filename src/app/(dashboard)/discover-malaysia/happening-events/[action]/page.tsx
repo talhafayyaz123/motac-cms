@@ -1,7 +1,6 @@
 'use client';
 
 import { yupResolver } from '@hookform/resolvers/yup';
-import Image from 'next/image';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 import { useForm, Controller } from 'react-hook-form';
@@ -50,6 +49,7 @@ export default function AddEvent() {
     formState: { errors },
     watch,
   } = useForm({
+    mode: 'onTouched',
     resolver: yupResolver(validationSchemaForHappeningEvents),
     defaultValues: {
       title: '',
@@ -286,42 +286,6 @@ export default function AddEvent() {
             <div className="mt-5 flex flex-wrap gap-4">
               <Controller
                 control={control}
-                name="city"
-                render={({ field }) => (
-                  <Select
-                    label="City"
-                    options={cities.map((p) => ({
-                      value: p.id,
-                      label: p.name,
-                      key: p.id,
-                    }))}
-                    selectedValues={field.value}
-                    setSelectedValues={field.onChange}
-                    minWidth="350px"
-                    error={errors.city?.message}
-                  />
-                )}
-              />
-              <Controller
-                control={control}
-                name="priority"
-                render={({ field }) => (
-                  <Select
-                    minWidth="350px"
-                    selectedValues={field.value}
-                    label="Priority"
-                    options={priorities.map((p) => ({
-                      value: p.id,
-                      label: p.name,
-                      key: p.id,
-                    }))}
-                    setSelectedValues={field.onChange}
-                    error={errors.priority?.message}
-                  />
-                )}
-              />
-              <Controller
-                control={control}
                 name="openingHours"
                 render={({ field }) => (
                   <Input
@@ -421,20 +385,27 @@ export default function AddEvent() {
 
               <Controller
                 control={control}
-                name="area"
+                name="tags" // Name for the tags
                 render={({ field }) => (
                   <Select
-                    label="Area"
-                    options={areas.map((p) => ({
+                    label="Tags"
+                    options={categoriesTags.map((p) => ({
                       value: p.id,
                       label: p.name,
                       key: p.id,
                     }))}
-                    selectedValues={field.value}
-                    setSelectedValues={field.onChange}
+                    selectedValues={
+                      Array.isArray(field.value) ? field.value : []
+                    }
+                    multiple
+                    setSelectedValues={(values) => {
+                      const selectedValues = Array.isArray(values)
+                        ? values
+                        : [values];
+                      field.onChange(selectedValues);
+                    }}
                     minWidth="350px"
-                    searchable
-                    error={errors.area?.message}
+                    error={errors.tags?.message}
                   />
                 )}
               />
@@ -489,30 +460,67 @@ export default function AddEvent() {
 
               <Controller
                 control={control}
-                name="tags" // Name for the tags
+                name="priority"
                 render={({ field }) => (
                   <Select
-                    label="Tags"
-                    options={categoriesTags.map((p) => ({
+                    minWidth="350px"
+                    selectedValues={field.value}
+                    label="Priority"
+                    options={priorities.map((p) => ({
                       value: p.id,
                       label: p.name,
                       key: p.id,
                     }))}
-                    selectedValues={
-                      Array.isArray(field.value) ? field.value : []
-                    }
-                    multiple
-                    setSelectedValues={(values) => {
-                      const selectedValues = Array.isArray(values)
-                        ? values
-                        : [values];
-                      field.onChange(selectedValues);
-                    }}
-                    minWidth="350px"
-                    error={errors.tags?.message}
+                    setSelectedValues={field.onChange}
+                    error={errors.priority?.message}
                   />
                 )}
               />
+            </div>
+          </FormContainer>
+
+          <FormContainer className="mt-5">
+            <p className="font-semibold mb-3 text-[#181819]">Location</p>
+            <div className="mt-5 flex flex-wrap gap-4">
+              <Controller
+                control={control}
+                name="city"
+                render={({ field }) => (
+                  <Select
+                    label="City"
+                    options={cities.map((p) => ({
+                      value: p.id,
+                      label: p.name,
+                      key: p.id,
+                    }))}
+                    selectedValues={field.value}
+                    setSelectedValues={field.onChange}
+                    minWidth="350px"
+                    error={errors.city?.message}
+                  />
+                )}
+              />
+
+              <Controller
+                control={control}
+                name="area"
+                render={({ field }) => (
+                  <Select
+                    label="Area"
+                    options={areas.map((p) => ({
+                      value: p.id,
+                      label: p.name,
+                      key: p.id,
+                    }))}
+                    selectedValues={field.value}
+                    setSelectedValues={field.onChange}
+                    minWidth="350px"
+                    searchable
+                    error={errors.area?.message}
+                  />
+                )}
+              />
+
               <Controller
                 control={control}
                 name="address"
@@ -534,17 +542,25 @@ export default function AddEvent() {
             <div className="grid grid-cols-4 gap-4 mb-6">
               {images.map((file, index) => (
                 <div key={index} className="relative">
-                  <Image
-                    src={
-                      typeof file === 'string'
-                        ? file
-                        : URL.createObjectURL(file)
-                    } // Handle both existing and new images
-                    alt={`Image ${index + 1}`}
-                    height={100}
-                    width={100}
-                    className="rounded-lg object-cover w-full h-full"
-                  />
+                  {typeof file === 'string' ? (
+                    /* eslint-disable @next/next/no-img-element */
+                    <img
+                      src={file} // This will work for existing image URLs
+                      alt={`${index + 1}`}
+                      height={100}
+                      width={100}
+                      className="rounded-lg object-cover w-full h-full"
+                    />
+                  ) : (
+                    /* eslint-disable @next/next/no-img-element */
+                    <img
+                      src={URL.createObjectURL(file)} // Use a regular <img> for file objects
+                      alt={`${index + 1}`}
+                      height={100}
+                      width={100}
+                      className="rounded-lg object-cover w-full h-full"
+                    />
+                  )}
                   <button
                     type="button"
                     className="absolute top-0 right-0 p-1 bg-red-500 rounded-full"
