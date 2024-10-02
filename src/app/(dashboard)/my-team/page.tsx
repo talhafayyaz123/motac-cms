@@ -12,12 +12,15 @@ import Wrapper from '@/components/ui/dataTable/DataTableWrapper';
 import Input from '@/components/ui/Input';
 import Loader from '@/components/ui/Loader';
 import Title from '@/components/ui/Title';
-import { fetchTeam } from '@/services/apiService';
+import AlertService from '@/services/alertService';
+import { DeleteTeamMember, fetchTeam } from '@/services/apiService';
+import { useMember } from '@/store/MemberContext';
 
 const DataTable = lazy(() => import('@/components/ui/dataTable/DataTable'));
 
 export default function MyTeam() {
   const router = useRouter();
+  const { setCurrentMember } = useMember();
 
   const columns = [
     'Select',
@@ -31,6 +34,7 @@ export default function MyTeam() {
   ];
 
   const [data, setData] = useState<any[]>([]);
+
   const [currentPage, setCurrentPage] = useState(1);
   const [perPage, setPerPage] = useState(12);
 
@@ -47,9 +51,33 @@ export default function MyTeam() {
     void loadData();
   }, []);
 
-  const renderCell = (item: any, column: string) => {
-    console.log(item);
+  const handleDelete = async (id: number) => {
+    const { ID } = data[id];
+    try {
+      const response: any = await DeleteTeamMember(ID);
+      if (response?.error) {
+        await AlertService.alert('Error!', response.error, 'error', 'OK');
+      } else if (response?.id) {
+        await AlertService.alert(
+          'Successful!',
+          'Member Deleted Successfully',
+          'success',
+          'Done',
+        );
+        localStorage.removeItem('currentTeamMember');
+        setCurrentMember(null);
+      }
+    } catch (error: any) {
+      await AlertService.alert(
+        'Error!',
+        'An unexpected error occurred',
+        'error',
+        'OK',
+      );
+    }
+  };
 
+  const renderCell = (item: any, column: string, rowIndex: any) => {
     switch (column) {
       case 'Select':
         return (
@@ -59,14 +87,29 @@ export default function MyTeam() {
         );
       case 'Edit':
         return (
-          <div className="flex items-center gap-2 justify-center cursor-pointer">
+          <div
+            className="flex items-center gap-2 justify-center cursor-pointer"
+            onClick={() => {
+              setCurrentMember(data[rowIndex]);
+              router.push('/my-team/add-team-member');
+            }}
+            onKeyDown={() => {}}
+            tabIndex={0}
+            role="button"
+          >
             <Image height={20} alt="edit" width={20} src="/edit_icon.svg" />
             {item[column]}
           </div>
         );
       case 'Delete':
         return (
-          <div className="flex items-center justify-center gap-2 cursor-pointer">
+          <div
+            className="flex items-center justify-center gap-2 cursor-pointer"
+            onClick={() => handleDelete(rowIndex)}
+            onKeyDown={() => {}}
+            tabIndex={0}
+            role="button"
+          >
             <Image height={20} alt="delete" width={20} src="/delete_icon.svg" />
             {item[column]}
           </div>
@@ -75,6 +118,7 @@ export default function MyTeam() {
         return <span>{item[column]}</span>;
     }
   };
+
   return (
     <main className="h-full">
       <Title className="font-light ml-2 mb-2">All Team Members</Title>

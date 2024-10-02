@@ -243,6 +243,237 @@ export const fetchTeam = async (): Promise<any[]> => {
   }
 };
 
+export const fetchTeamRoles = async (): Promise<any[]> => {
+  try {
+    const data = await apiClient(`/cms/users/roles`, {
+      method: 'GET',
+    });
+
+    const transformedData = data?.map((item: any) => ({
+      value: item?.id,
+      label: item?.name,
+    }));
+
+    return transformedData;
+  } catch (error) {
+    console.error('An error occurred:', error);
+    return [];
+  }
+};
+
+export const fetchTeamDesignations = async (): Promise<any[]> => {
+  try {
+    const data = await apiClient(`/cms/users/designations`, {
+      method: 'GET',
+    });
+
+    const transformedData = data?.map((item: any) => ({
+      value: item?.id,
+      label: item?.name,
+    }));
+
+    return transformedData;
+  } catch (error) {
+    console.error('An error occurred:', error);
+    return [];
+  }
+};
+
+export const fetchTeamStatuses = async (): Promise<any[]> => {
+  try {
+    const data = await apiClient(`/cms/users/statuses`, {
+      method: 'GET',
+    });
+
+    const transformedData = data?.map((item: any) => ({
+      value: item?.id,
+      label: item?.name,
+    }));
+
+    return transformedData;
+  } catch (error) {
+    console.error('An error occurred:', error);
+    return [];
+  }
+};
+
+export const AddTeamMember = async (
+  payload: any,
+): Promise<any[] | { error: string }> => {
+  try {
+    const data = await apiClient(`/cms/users`, {
+      method: 'POST',
+      body: JSON.stringify(payload),
+    });
+    return data;
+  } catch (err) {
+    const typedError = err as Error;
+    return { error: typedError.message };
+  }
+};
+
+export const DeleteTeamMember = async (id: number) => {
+  try {
+    const response = await apiClient(`/cms/users/${id}`, {
+      method: 'DELETE',
+    });
+    console.log(response);
+  } catch (err) {
+    const typedError = err as Error;
+    return { error: typedError.message };
+  }
+};
+
+export const UpdateTeamMember = async (
+  payload: any,
+): Promise<any[] | { error: string }> => {
+  try {
+    const data = await apiClient(`/cms/users/${payload.id}`, {
+      method: 'PATCH',
+      body: JSON.stringify(payload.data),
+    });
+    return data;
+  } catch (err) {
+    const typedError = err as Error;
+    return { error: typedError.message };
+  }
+};
+
+export const FetchUsers = async (): Promise<any[]> => {
+  try {
+    const result = await apiClient(`/app/users`, {
+      method: 'GET',
+    });
+
+    const transformedData = result?.data?.map((item: any) => ({
+      Select: '',
+      'User ID': item?.displayId,
+      'First Name': item?.firstName,
+      'Last Name': item?.lastName,
+      Email: item?.email,
+      'Phone Number': item?.phoneNumber,
+      Nationality: item?.nationality,
+      Action: 'View',
+      'Reset Link': 'Send Reset Password Link',
+    }));
+
+    return transformedData;
+  } catch (error) {
+    console.error('An error occurred:', error);
+    return [];
+  }
+};
+
+export const FetchDeletedUsers = async (): Promise<
+  any[] | { error: string }
+> => {
+  try {
+    const result = await apiClient(`/app/users?isDeleted=true`, {
+      method: 'GET',
+    });
+
+    const transformedData = result?.data?.map((item: any) => ({
+      Select: '',
+      'User ID': item?.displayId,
+      'First Name': item?.firstName,
+      'Last Name': item?.lastName,
+      Email: item?.email,
+      'Phone Number': item?.phoneNumber,
+      Nationality: item?.nationality,
+    }));
+
+    return transformedData;
+  } catch (err) {
+    const typedError = err as Error;
+    return { error: typedError.message };
+  }
+};
+
+export const DeleteActiveMember = async (id: number) => {
+  try {
+    const response = await apiClient(`/app/users/${id}`, {
+      method: 'DELETE',
+    });
+    return response;
+  } catch (err) {
+    const typedError = err as Error;
+    return { error: typedError.message };
+  }
+};
+
+export const FetchDashboardUsersAndDestinationData = async (
+  startDate: string,
+  endDate: string,
+  limit = 7,
+) => {
+  try {
+    const response = await apiClient(
+      `/dashboards/users-and-destinations?startDate=${startDate}&endDate=${endDate}&limit=${limit}`,
+      {
+        method: 'GET',
+      },
+    );
+    return response;
+  } catch (err) {
+    const typedError = err as Error;
+    return { error: typedError.message };
+  }
+};
+
+export const FetchDashboardUsersData = async (
+  startDate: string,
+  endDate: string,
+) => {
+  try {
+    const response = await apiClient(
+      `/dashboards/users?startDate=${startDate}&endDate=${endDate}`,
+      {
+        method: 'GET',
+      },
+    );
+    return response;
+  } catch (err) {
+    const typedError = err as Error;
+    return { error: typedError.message };
+  }
+};
+
+export const FetchSeeAttractionData = async (
+  startDate: string,
+  endDate: string,
+) => {
+  try {
+    const response = await apiClient(
+      `/dashboards/discover-malaysia?startDate=${startDate}&endDate=${endDate}`,
+      {
+        method: 'GET',
+      },
+    );
+    return response;
+  } catch (err) {
+    const typedError = err as Error;
+    return { error: typedError.message };
+  }
+};
+
+export const FetchHappeningEventsData = async (
+  startDate: string,
+  endDate: string,
+) => {
+  try {
+    const response = await apiClient(
+      `/dashboards/happening-events?startDate=${startDate}&endDate=${endDate}`,
+      {
+        method: 'GET',
+      },
+    );
+    return response;
+  } catch (err) {
+    const typedError = err as Error;
+    return { error: typedError.message };
+  }
+};
+
 export const deleteDestination = async (displayId: string) => {
   try {
     const response = await apiClient(`/destinations/${displayId}`, {

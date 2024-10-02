@@ -17,7 +17,8 @@ interface InputProps {
   multiple?: boolean;
   searchable?: boolean;
   profile?: boolean;
-  error?: string; // New error prop
+  name?: string;
+  error?: string;
 }
 
 const Select: React.FC<InputProps> = ({
