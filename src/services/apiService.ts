@@ -341,3 +341,40 @@ export const FetchUsers = async (): Promise<any[]> => {
     return [];
   }
 };
+
+export const FetchDeletedUsers = async (): Promise<
+  any[] | { error: string }
+> => {
+  try {
+    const result = await apiClient(`/app/users?isDeleted=true`, {
+      method: 'GET',
+    });
+
+    const transformedData = result?.data?.map((item: any) => ({
+      Select: '',
+      'User ID': item?.displayId,
+      'First Name': item?.firstName,
+      'Last Name': item?.lastName,
+      Email: item?.email,
+      'Phone Number': item?.phoneNumber,
+      Nationality: item?.nationality,
+    }));
+
+    return transformedData;
+  } catch (err) {
+    const typedError = err as Error;
+    return { error: typedError.message };
+  }
+};
+
+export const DeleteActiveMember = async (id: number) => {
+  try {
+    const response = await apiClient(`/app/users/${id}`, {
+      method: 'DELETE',
+    });
+    return response;
+  } catch (err) {
+    const typedError = err as Error;
+    return { error: typedError.message };
+  }
+};

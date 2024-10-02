@@ -17,7 +17,7 @@ import {
   AddTeamMember,
   UpdateTeamMember,
 } from '@/services/apiService';
-import { useTeamMember } from '@/store/TeamMemberContext';
+import { useMember } from '@/store/MemberContext';
 
 interface Option {
   value: string;
@@ -25,7 +25,7 @@ interface Option {
 }
 
 export default function AddTeamMemberPage() {
-  const { currentTeamMember, setCurrentTeamMember } = useTeamMember();
+  const { currentMember, setCurrentMember } = useMember();
 
   const {
     ID = '',
@@ -34,7 +34,7 @@ export default function AddTeamMemberPage() {
     'Email Address': emailAddress = '',
     Role = '',
     Designation = '',
-  } = currentTeamMember || {};
+  } = currentMember || {};
 
   const [designation, setDesignation] = useState<Option[]>([]);
   const [role, setRole] = useState<Option[]>([]);
@@ -138,7 +138,7 @@ export default function AddTeamMemberPage() {
           'Done',
         );
         localStorage.removeItem('currentTeamMember');
-        setCurrentTeamMember(null);
+        setCurrentMember(null);
         resetForm();
       }
     } catch (error: any) {

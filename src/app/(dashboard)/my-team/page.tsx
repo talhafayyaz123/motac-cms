@@ -13,13 +13,13 @@ import Input from '@/components/ui/Input';
 import Loader from '@/components/ui/Loader';
 import Title from '@/components/ui/Title';
 import { DeleteTeamMember, fetchTeam } from '@/services/apiService';
-import { useTeamMember } from '@/store/TeamMemberContext';
+import { useMember } from '@/store/MemberContext';
 
 const DataTable = lazy(() => import('@/components/ui/dataTable/DataTable'));
 
 export default function MyTeam() {
   const router = useRouter();
-  const { setCurrentTeamMember } = useTeamMember();
+  const { setCurrentMember } = useMember();
 
   const columns = [
     'Select',
@@ -73,7 +73,7 @@ export default function MyTeam() {
           <div
             className="flex items-center gap-2 justify-center cursor-pointer"
             onClick={() => {
-              setCurrentTeamMember(data[rowIndex]); // Set the current team member in the context
+              setCurrentMember(data[rowIndex]); // Set the current team member in the context
               router.push('/my-team/add-team-member'); // Navigate to the edit page
             }}
             onKeyDown={() => {}}

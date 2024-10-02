@@ -13,10 +13,12 @@ import Input from '@/components/ui/Input';
 import Loader from '@/components/ui/Loader';
 import Title from '@/components/ui/Title';
 import { FetchUsers } from '@/services/apiService';
+import { useMember } from '@/store/MemberContext';
 
 const DataTable = lazy(() => import('@/components/ui/dataTable/DataTable'));
 
 export default function UserManagementActive() {
+  const { setCurrentMember } = useMember();
   const router = useRouter();
   const columns = [
     'Select',
@@ -31,23 +33,33 @@ export default function UserManagementActive() {
   ];
 
   const [data, setData] = useState<any[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const [perPage, setPerPage] = useState(12);
+  const [isNoData, setIsNoData] = useState(false);
 
   useEffect(() => {
     const loadData = async () => {
+      setIsLoading(true);
       try {
         const fetchedData = await FetchUsers();
         setData(fetchedData);
+        if (fetchedData.length === 0) {
+          setIsNoData(true);
+        } else {
+          setIsNoData(false);
+        }
       } catch (error) {
         console.error('Error loading data:', error);
+        setIsNoData(true);
+      } finally {
+        setIsLoading(false);
       }
     };
 
     void loadData();
   }, []);
-
-  const renderCell = (item: any, column: string) => {
+  const renderCell = (item: any, column: string, rowIndex: any) => {
     switch (column) {
       case 'Select':
         return (
@@ -61,6 +73,7 @@ export default function UserManagementActive() {
           <div
             className="flex items-center gap-1 cursor-pointer"
             onClick={() => {
+              setCurrentMember(data[rowIndex]);
               router.push('/user-management/add-user-personal-details');
             }}
             role="button"
@@ -115,10 +128,11 @@ export default function UserManagementActive() {
           icon={<CiSearch />}
         />
       </Wrapper>
-
       <div className="bg-white auto">
-        {data.length == 0 ? (
+        {isLoading ? (
           <Loader />
+        ) : isNoData ? (
+          <div className="p-4 text-center text-gray-500">No data available</div>
         ) : (
           <Suspense fallback={<Loader />}>
             <DataTable
@@ -138,7 +152,7 @@ export default function UserManagementActive() {
             />
           </Suspense>
         )}
-      </div>
+      </div>{' '}
     </main>
   );
 }
