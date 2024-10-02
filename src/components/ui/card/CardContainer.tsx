@@ -5,6 +5,7 @@ interface CardContainerProps {
   children: React.ReactNode;
   customClasses?: string;
   showStats?: boolean;
+  stats?: number;
 }
 
 const CardContainer: React.FC<CardContainerProps> = ({
@@ -12,6 +13,7 @@ const CardContainer: React.FC<CardContainerProps> = ({
   children,
   customClasses = '',
   showStats = false,
+  stats,
 }) => {
   return (
     <div
@@ -23,7 +25,7 @@ const CardContainer: React.FC<CardContainerProps> = ({
           <div>
             <p className="text-xs text-gray-500">New Users This Month</p>
             <p className="text-4xl text-[#364ea2] text-center font-markForMC">
-              3,000
+              {stats}
             </p>
           </div>
           <div></div>

@@ -1,16 +1,16 @@
+import { formatISOStringToYYYYMMDD } from '@/helpers/utils/utils';
 import React, { useState } from 'react';
 
-const CustomDatePicker: React.FC = () => {
+interface CustomDatePickerProps {
+  data: string[];
+}
+
+const CustomDatePicker: React.FC<CustomDatePickerProps> = ({ data }) => {
   const currentDate = new Date();
   const [month, setMonth] = useState<string>(
     currentDate.toLocaleString('default', { month: 'long' }),
   );
   const [year, setYear] = useState<number>(currentDate.getFullYear());
-  const [events] = useState<{ [key: string]: string[] }>({
-    '2024-09-06': ['Event 1'],
-    '2024-09-26': ['Event 3'],
-    '2024-09-15': ['Event 2'],
-  });
   // const [selectedDate, setSelectedDate] = useState<string | null>(null);
 
   // Get the number of days in the selected month
@@ -20,6 +20,12 @@ const CustomDatePicker: React.FC = () => {
   };
 
   const daysInMonth = getDaysInMonth(month, year);
+
+  const events = data?.reduce((acc: Record<string, string[]>, item: string) => {
+    const formattedDate = formatISOStringToYYYYMMDD(item);
+    acc[formattedDate] = ['Event'];
+    return acc;
+  }, {});
 
   const changeMonth = (direction: 'prev' | 'next') => {
     const monthNames = [
@@ -83,23 +89,16 @@ const CustomDatePicker: React.FC = () => {
       const dateKey = `${year}-${String(new Date(`${month} 1, ${year}`).getMonth() + 1).padStart(2, '0')}-${i.toString().padStart(2, '0')}`;
 
       // Check if the day has any events
-      const hasEvent = events[dateKey];
-      // const isSelected = selectedDate === dateKey;
+      const hasEvent = events && events[dateKey] ? events[dateKey] : null;
 
       days.push(
         <div
           role="button"
-          // onKeyDown={(e) => {
-          //   if (e.key === 'Enter' || e.key === ' ') {
-          //     handleDateClick(i);
-          //   }
-          // }}
           tabIndex={0}
           key={i}
-          // onClick={() => handleDateClick(i)}
           className={`h-9 w-9 flex m-1 items-center justify-center cursor-default hover:rounded-full
-            ${hasEvent ? 'bg-blue-100 text-white font-bold rounded-full' : ''} 
-           `}
+          ${hasEvent ? 'bg-blue-100 text-white font-bold rounded-full' : ''} 
+         `}
         >
           {i}
         </div>,

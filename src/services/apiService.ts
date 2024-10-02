@@ -378,3 +378,76 @@ export const DeleteActiveMember = async (id: number) => {
     return { error: typedError.message };
   }
 };
+
+export const FetchDashboardUsersAndDestinationData = async (
+  startDate: string,
+  endDate: string,
+  limit = 7,
+) => {
+  try {
+    const response = await apiClient(
+      `/dashboards/users-and-destinations?startDate=${startDate}&endDate=${endDate}&limit=${limit}`,
+      {
+        method: 'GET',
+      },
+    );
+    return response;
+  } catch (err) {
+    const typedError = err as Error;
+    return { error: typedError.message };
+  }
+};
+
+export const FetchDashboardUsersData = async (
+  startDate: string,
+  endDate: string,
+) => {
+  try {
+    const response = await apiClient(
+      `/dashboards/users?startDate=${startDate}&endDate=${endDate}`,
+      {
+        method: 'GET',
+      },
+    );
+    return response;
+  } catch (err) {
+    const typedError = err as Error;
+    return { error: typedError.message };
+  }
+};
+
+export const FetchSeeAttractionData = async (
+  startDate: string,
+  endDate: string,
+) => {
+  try {
+    const response = await apiClient(
+      `/dashboards/discover-malaysia?startDate=${startDate}&endDate=${endDate}`,
+      {
+        method: 'GET',
+      },
+    );
+    return response;
+  } catch (err) {
+    const typedError = err as Error;
+    return { error: typedError.message };
+  }
+};
+
+export const FetchHappeningEventsData = async (
+  startDate: string,
+  endDate: string,
+) => {
+  try {
+    const response = await apiClient(
+      `/dashboards/happening-events?startDate=${startDate}&endDate=${endDate}`,
+      {
+        method: 'GET',
+      },
+    );
+    return response;
+  } catch (err) {
+    const typedError = err as Error;
+    return { error: typedError.message };
+  }
+};
