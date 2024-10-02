@@ -48,6 +48,7 @@ export default function AddEvent() {
     handleSubmit,
     setValue,
     formState: { errors },
+    watch,
   } = useForm({
     resolver: yupResolver(validationSchemaForHappeningEvents),
     defaultValues: {
@@ -65,6 +66,9 @@ export default function AddEvent() {
       priority: 1,
       happeningStartDate: new Date(),
       happeningEndDate: new Date(),
+      images,
+      bannerImageId: 1,
+      bannerImage: null,
     },
   });
 
@@ -125,6 +129,18 @@ export default function AddEvent() {
         data.tags.map((tag: { id: number }) => tag.id),
       );
       setValue('priority', priorityId);
+      setValue('bannerImageId', data?.bannerImageId);
+      setValue('bannerImage', data?.bannerImage?.path);
+      // Set existing images and their IDs
+      const existingImages = data.images.map(
+        (image: { id: number; path: string }) => image.path,
+      );
+      const existingImageIds = data.images.map(
+        (image: { id: number }) => image.id,
+      );
+
+      setImages(existingImages);
+      setValue('images', existingImageIds);
       setIsLoading(false);
     } catch (error) {
       console.error('Error fetching happening event:', error);
@@ -148,12 +164,20 @@ export default function AddEvent() {
   };
 
   const handleFilesChange = (files: File[]) => {
-    console.log('New valid files added:', files);
+    setImages((prevImages) => {
+      const uniqueFiles = files.filter((file) => !prevImages.includes(file)); // Filter out duplicates
+      console.log('Unique files to be added:', uniqueFiles); // Log unique files
+
+      return [...prevImages, ...uniqueFiles]; // Update the state with unique files
+    });
   };
 
-  const handleBase64ValueChange = async (base64Value: string) => {
-    // const stringValue = base64ToBinaryString(base64Value.split(',')[1]);
-    await fileUpload(base64Value);
+  const handleBase64ValueChange = async (base64Value: File | null) => {
+    if (base64Value) {
+      const response = await fileUpload(base64Value);
+      setValue('bannerImageId', response?.file?.id);
+      setValue('bannerImage', response?.file?.path);
+    }
   };
 
   const onSubmit = async (data: any) => {
@@ -165,16 +189,70 @@ export default function AddEvent() {
       priority: data.priority,
     };
 
+    const newImageIds = await uploadImages();
+
+    const existingImageIds = data.images || [];
+    if (newImageIds) {
+    }
+    setValue('images', [...existingImageIds, ...newImageIds]);
+
     try {
       if (action === 'edit-happening-event' && id) {
-        await updateDestination(id, transformedData);
+        const response = await updateDestination(id, transformedData);
+        if (response?.status) {
+          await AlertService.alert(
+            'Successful!',
+            'Update Happening Event Success',
+            'success',
+            'Ok',
+          );
+          router.push('/discover-malaysia/must-see-attractions');
+        } else {
+          await AlertService.alert(
+            'Error',
+            (response.error as string) || 'Something went wrong',
+            'error',
+            'Try Again',
+          );
+        }
       } else {
-        await createDestination(transformedData);
+        const response = await createDestination(transformedData);
+        if (response?.status) {
+          await AlertService.alert(
+            'Successful!',
+            'Add Happening Event Success',
+            'success',
+            'Ok',
+          );
+          router.push('/discover-malaysia/happening-events');
+        } else {
+          await AlertService.alert(
+            'Error',
+            (response.error as string) || 'Something went wrong',
+            'error',
+            'Try Again',
+          );
+        }
       }
-      // router.push('/discover-malaysia/happening-events/add-happening-event');
     } catch (error) {
       console.error('Error submitting form:', error);
     }
+  };
+
+  const uploadImages = async () => {
+    const uploadedImageIds: number[] = [];
+
+    for (const file of images) {
+      if (file instanceof File) {
+        // Only upload if it's a new file
+        console.log('Uploading file:', file.name);
+        const response = await fileUpload(file);
+        uploadedImageIds.push(response?.file?.id);
+        console.log('File uploaded successfully:', file.name);
+      }
+    }
+
+    return uploadedImageIds;
   };
   return (
     <main className="h-full">
@@ -361,30 +439,38 @@ export default function AddEvent() {
                 )}
               />
 
-              <Input
-                label="Banner Image"
-                className="text-xs"
-                minWidth="350px"
-                type="file"
-                onFileError={async () => {
-                  try {
-                    await AlertService.alert(
-                      '',
-                      'Only images with 16:9 aspect ratio are allowed',
-                      'warning',
-                      'OK',
-                    );
-                  } catch (error) {
-                    console.log('something went wrong ');
-                  }
-                }}
-                onChange={(e) => {
-                  const input = e.target as HTMLInputElement;
-                  if (input.files && input.files[0]) {
-                    console.log('Image uploaded successfully', input.files[0]);
-                  }
-                }}
-                onBase64ValueChange={handleBase64ValueChange}
+              <Controller
+                name="bannerImage"
+                control={control}
+                defaultValue={null} // Default value for the file input
+                render={({ field }) => (
+                  <Input
+                    label="Banner Image"
+                    className="text-xs"
+                    minWidth="350px"
+                    defaultImagePath={
+                      action === 'add-attraction'
+                        ? undefined
+                        : watch('bannerImage')
+                    }
+                    type="file"
+                    onFileError={async () => {
+                      await AlertService.alert(
+                        '',
+                        'Only images with 16:9 aspect ratio are allowed',
+                        'warning',
+                        'OK',
+                      );
+                    }}
+                    onChange={(e) => {
+                      const input = e.target as HTMLInputElement;
+                      if (input.files && input.files[0]) {
+                        field.onChange(input.files[0]); // Update form state
+                      }
+                    }}
+                    onBase64ValueChange={handleBase64ValueChange}
+                  />
+                )}
               />
               <Controller
                 control={control}
@@ -449,22 +535,23 @@ export default function AddEvent() {
               {images.map((file, index) => (
                 <div key={index} className="relative">
                   <Image
-                    src={URL.createObjectURL(file)}
-                    alt={file.name}
+                    src={
+                      typeof file === 'string'
+                        ? file
+                        : URL.createObjectURL(file)
+                    } // Handle both existing and new images
+                    alt={`Image ${index + 1}`}
                     height={100}
                     width={100}
-                    className="rounded-lg object-cover w-full h-auto aspect-[16/9]"
+                    className="rounded-lg object-cover w-full h-full"
                   />
-
                   <button
+                    type="button"
+                    className="absolute top-0 right-0 p-1 bg-red-500 rounded-full"
                     onClick={() => removeImage(index)}
-                    className="absolute top-2 right-2 bg-white text-blue-700 p-2 rounded-full shadow-md"
                   >
-                    <FaTrashAlt />
+                    <FaTrashAlt className="text-white" />
                   </button>
-                  <p className="text-center mt-2 text-sm text-gray-500">
-                    {file.name}
-                  </p>
                 </div>
               ))}
             </div>

@@ -27,6 +27,8 @@ interface EventTableLayoutProps {
   searchPlaceholder?: string;
   addEventRoute: string;
   onSearchChange: (search: string) => void;
+  totalCount: number;
+  loading: boolean;
 }
 
 const EventTableLayout: React.FC<EventTableLayoutProps> = ({
@@ -42,6 +44,8 @@ const EventTableLayout: React.FC<EventTableLayoutProps> = ({
   searchPlaceholder = 'Search',
   addEventRoute,
   onSearchChange,
+  totalCount,
+  loading,
 }) => {
   const router = useRouter();
 
@@ -78,19 +82,16 @@ const EventTableLayout: React.FC<EventTableLayoutProps> = ({
       </Wrapper>
 
       <div className="bg-white auto">
-        {data && data.length === 0 ? (
+        {(data && data.length === 0) || loading ? (
           <Loader />
         ) : (
           <Suspense fallback={<Loader />}>
             <DataTable
               columns={columns}
-              data={data.slice(
-                (currentPage - 1) * perPage,
-                currentPage * perPage,
-              )}
+              data={data}
               renderCell={renderCell}
               pagination={{
-                total: data.length,
+                total: totalCount,
                 perPage,
                 currentPage,
                 onPageChange,

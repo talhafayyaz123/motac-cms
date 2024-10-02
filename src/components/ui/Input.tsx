@@ -1,7 +1,5 @@
-'use client';
-
 import Image from 'next/image';
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { GiCancel } from 'react-icons/gi';
 
 interface InputProps
@@ -12,8 +10,9 @@ interface InputProps
   minWidth?: string;
   sublabel?: string;
   onFileError?: (error: string) => void;
-  onBase64ValueChange?: (base64Value: string) => void; // New prop for base64 value
+  onBase64ValueChange?: (base64Value: File | null) => void;
   error?: string | undefined;
+  defaultImagePath?: string | null; // Add prop for default image path (edit case)
 }
 
 const Input: React.FC<InputProps> = ({
@@ -28,14 +27,18 @@ const Input: React.FC<InputProps> = ({
   className = '',
   minWidth = '300px',
   sublabel,
-  onFileError, // Error callback prop
-  onBase64ValueChange, // Base64 callback prop
+  onFileError,
+  onBase64ValueChange,
   error,
+  defaultImagePath,
   ...rest
 }) => {
-  const [, setBase64Value] = useState<string>(''); // State to store the actual base64 value
-  const [displayText, setDisplayText] = useState<string>(''); // State to show "Image" in the input after upload
-  const [isUploaded, setIsUploaded] = useState<boolean>(false); // Track if file is uploaded
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const [, setBase64Value] = useState<string>('');
+  const [displayText, setDisplayText] = useState<string>('');
+  const [isUploaded, setIsUploaded] = useState<boolean>(false);
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [showModal, setShowModal] = useState<boolean>(false);
 
   const baseStyles =
     'block w-full border rounded-xl focus:outline-none focus:ring-2 focus:ring-offset-2 transition ease-in-out duration-150';
@@ -49,6 +52,7 @@ const Input: React.FC<InputProps> = ({
     : 'bg-white text-gray-900';
   const combinedStyles = `${className} ${baseStyles} ${sizeStyles[inputSize]} ${disabledStyles}`;
 
+  // Handle file change (for both add and re-upload cases)
   const handleFileChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
       const file = e.target.files?.[0];
@@ -59,9 +63,9 @@ const Input: React.FC<InputProps> = ({
         reader.onload = (event) => {
           if (event.target?.result) {
             img.src = event.target.result as string;
-            setBase64Value(event.target.result as string); // Set the base64 value for storing
-            setDisplayText('Image'); // Set display text to "Image"
-            onBase64ValueChange?.(event.target.result as string); // Reset base64 value on re-upload
+            setBase64Value(event.target.result as string);
+            setDisplayText('Image');
+            setImagePreview(event.target.result as string);
           }
         };
 
@@ -72,28 +76,44 @@ const Input: React.FC<InputProps> = ({
           if (Math.abs(aspectRatio - expectedRatio) > 0.01) {
             onFileError?.('Only images with 16:9 aspect ratio are allowed');
             e.target.value = '';
-            setBase64Value(''); // Reset image if error
-            setDisplayText(''); // Reset display text
-            onBase64ValueChange?.(''); // Reset base64 value on re-upload
+            setBase64Value('');
+            setDisplayText('');
+            setImagePreview(null);
+            onBase64ValueChange?.(null);
           } else {
-            setIsUploaded(true); // Mark as uploaded if valid
-            setDisplayText('Image'); // Show "Image" in the input after successful upload
-            onChange?.(e); // Pass the event to parent component
+            setIsUploaded(true);
+            setDisplayText('Image');
+            onChange?.(e); // Trigger field onChange for form update
+            onBase64ValueChange?.(file);
           }
         };
 
         reader.readAsDataURL(file);
       }
     },
-    [onChange, onFileError],
+    [onChange, onFileError, onBase64ValueChange],
   );
 
+  // Handle re-upload case
   const handleReupload = () => {
-    setIsUploaded(false); // Reset the uploaded state to allow re-upload
-    setBase64Value(''); // Reset image if error
+    setIsUploaded(false);
+    setBase64Value('');
     setDisplayText('');
-    onBase64ValueChange?.(''); // Reset base64 value on re-upload
+    setImagePreview(null);
+    onBase64ValueChange?.(null);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = ''; // Reset input file field
+    }
   };
+
+  // Handle default image path (edit case)
+  useEffect(() => {
+    if (defaultImagePath) {
+      setIsUploaded(true);
+      setDisplayText('Image');
+      setImagePreview(defaultImagePath); // Set the default image path as preview
+    }
+  }, [defaultImagePath]);
 
   return (
     <div className="flex flex-col" style={{ minWidth }}>
@@ -103,26 +123,29 @@ const Input: React.FC<InputProps> = ({
           <span className="text-[0.5rem] ml-12">{sublabel}</span>
         </p>
       )}
+      {/* Upload button */}
       {!isUploaded && type === 'file' && (
         <label htmlFor={label} className={`${combinedStyles} flex justify-end`}>
           <Image alt="image" src="/photo.svg" height={20} width={20} />
         </label>
       )}
+      {/* Display uploaded image */}
       {isUploaded && type === 'file' && (
         <div className="relative">
           <input
             type="text"
-            value={displayText} // Show "Image" as the display text
+            value={displayText}
             readOnly
-            className={`${combinedStyles} border-gray-300 shadow-sm placeholder-black underline !text-[#51afec]`}
+            className={`${combinedStyles} border-gray-300 shadow-sm placeholder-black underline !text-[#51afec] cursor-pointer`}
             style={{ minWidth }}
+            onClick={() => setShowModal(true)} // Open modal to preview
           />
           <GiCancel
             color="#51afec"
-            className="absolute top-1/4 right-2 cursor-pointer" // Make the image clickable
+            className="absolute top-1/4 right-2 cursor-pointer"
             height={20}
             width={20}
-            onClick={handleReupload}
+            onClick={handleReupload} // Handle re-upload
           />
         </div>
       )}
@@ -132,12 +155,14 @@ const Input: React.FC<InputProps> = ({
             {icon}
           </span>
         )}
+        {/* File input (hidden if already uploaded) */}
         <input
-          type={isUploaded ? 'hidden' : type} // Set input type to hidden if uploaded
+          type={isUploaded ? 'hidden' : type}
           id={label}
+          ref={fileInputRef}
           placeholder={placeholder}
           value={value}
-          onChange={type === 'file' ? handleFileChange : onChange} // Use the new handler for file inputs
+          onChange={type === 'file' ? handleFileChange : onChange}
           className={`${combinedStyles} ${
             type === 'file' && 'hidden'
           } ${icon ? 'pl-12' : ''} border-gray-300 shadow-sm placeholder-black`}
@@ -147,6 +172,28 @@ const Input: React.FC<InputProps> = ({
         />
         {error && <p className="text-red-500 text-xs mt-1">{error}</p>}
       </div>
+
+      {/* Modal for displaying the uploaded image */}
+      {showModal && (
+        <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
+          <div className="bg-white p-6 rounded-lg max-w-lg w-full">
+            <div className="flex justify-end mb-4">
+              <GiCancel
+                className="text-black cursor-pointer"
+                size={24}
+                onClick={() => setShowModal(false)} // Close modal
+              />
+            </div>
+            {imagePreview && (
+              <img
+                src={imagePreview}
+                alt=""
+                className="max-w-full h-auto rounded-lg"
+              />
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
 };

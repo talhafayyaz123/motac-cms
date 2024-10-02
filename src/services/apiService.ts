@@ -20,11 +20,25 @@ interface AuthRequestData {
 
 export const fetchDestinations = async (
   typeId: number,
+  currentPage: number = 1,
+  perPage: number = 10,
   searchValue: string = '',
-): Promise<any[]> => {
+): Promise<{ data: any[]; total: number }> => {
   try {
+    // Build the query string
+    const queryParams = new URLSearchParams({
+      typeId: typeId.toString(),
+      page: currentPage.toString(),
+      limit: perPage.toString(),
+    });
+
+    // Only add search parameter if searchValue is not an empty string
+    if (searchValue) {
+      queryParams.append('search', searchValue);
+    }
+
     const result = await apiClient(
-      `/destinations?typeId=${typeId}&search=${searchValue}`,
+      `/destinations?${queryParams.toString()}`, // Use built query parameters
       {
         method: 'GET',
       },
@@ -34,8 +48,6 @@ export const fetchDestinations = async (
 
     const transformedData = result?.data?.map((item: any) => {
       const baseData = {
-        destinationId: item.id,
-        Select: '',
         'ID ': item.displayId,
         'Name ': item.title || '',
         'Category ': item.destinationCategoryName || '',
@@ -61,10 +73,13 @@ export const fetchDestinations = async (
       return baseData;
     });
 
-    return transformedData;
+    return {
+      data: transformedData,
+      total: result?.totalRecords || 0, // Assuming the API response includes totalRecords
+    };
   } catch (error) {
     console.error('An error occurred:', error);
-    return [];
+    return { data: [], totalRecords: 0 }; // Return an empty array and zero total records on error
   }
 };
 
@@ -280,14 +295,17 @@ export const fetchDestinationsCategories = async (
   }
 };
 
-export const fileUpload = async (file: string) => {
-  try {
-    const result = await apiClient(`/files/upload`, {
-      method: 'POST',
-      body: JSON.stringify({ file }),
-    });
+export const fileUpload = async (file: File) => {
+  const formData = new FormData();
+  formData.append('file', file);
 
-    return result;
+  try {
+    const response = await apiClient('/files/upload', {
+      method: 'POST',
+      body: formData,
+      isFileUpload: true,
+    });
+    return response;
   } catch (error) {
     console.error('An error occurred:', error);
   }
@@ -305,12 +323,13 @@ export const createDestination = async (data: any) => {
       address: data?.address,
       area: data?.area,
       cityId: data?.city,
-      bannerImageId: 1,
-      images: [1],
       tags: data?.tags,
       priorityId: data?.priority,
       destinationCategoryId: data?.category,
     };
+
+    body.images = data?.images ? data.images : [];
+    body.bannerImageId = data?.bannerImageId ? data.bannerImageId : 1;
 
     if (data?.workingDays) {
       body.workingDays = data.workingDays;
@@ -328,9 +347,16 @@ export const createDestination = async (data: any) => {
       body: JSON.stringify(body),
     });
 
-    return result;
+    return {
+      status: true,
+      data: result,
+    };
   } catch (error) {
     console.error('An error occurred:', error);
+    return {
+      status: false,
+      error: error,
+    };
   }
 };
 
@@ -346,12 +372,13 @@ export const updateDestination = async (displayId: string, data: any) => {
       address: data?.address,
       area: data?.area,
       cityId: data?.city,
-      bannerImageId: 1,
-      images: [1],
       tags: data?.tags,
       priorityId: data?.priority,
       destinationCategoryId: data?.category,
     };
+
+    body.images = data?.images ? data.images : [];
+    body.bannerImageId = data?.bannerImageId ? data.bannerImageId : 1;
 
     if (data?.workingDays) {
       body.workingDays = data.workingDays;
@@ -369,9 +396,16 @@ export const updateDestination = async (displayId: string, data: any) => {
       body: JSON.stringify(body),
     });
 
-    return result;
+    return {
+      status: true,
+      data: result,
+    };
   } catch (error) {
     console.error('An error occurred:', error);
+    return {
+      status: false,
+      error: error,
+    };
   }
 };
 

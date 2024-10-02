@@ -25,7 +25,6 @@ export default function HappeningEvents() {
   const tagColors = ['#E7ECFC', '#E3EFF8', '#E3F7F8'];
 
   const columns = [
-    'Select',
     'ID ',
     'Name ',
     'Category ',
@@ -40,8 +39,10 @@ export default function HappeningEvents() {
   const [data, setData] = useState<any[]>([]);
   const [priorities, setPriorities] = useState<any[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [perPage, setPerPage] = useState(12);
+  const [perPage, setPerPage] = useState(10);
   const [activeRowIndex, setActiveRowIndex] = useState<number | null>(null);
+  const [totalCount, setTotalCount] = useState(0);
+  const [loadingData, setLoadingData] = useState<boolean>(false);
 
   useEffect(() => {
     const fetchTags = async () => {
@@ -61,18 +62,27 @@ export default function HappeningEvents() {
   useEffect(() => {
     const loadData = async () => {
       try {
-        const fetchedData = await fetchDestinations(destinationId, searchValue);
+        setLoadingData(true);
+        const { data: fetchedData, total } = await fetchDestinations(
+          destinationId,
+          currentPage,
+          perPage,
+          searchValue,
+        );
         const destinationPriorities = await fetchPriorities();
         setPriorities(destinationPriorities);
         setData(fetchedData);
+        setTotalCount(total);
+        setLoadingData(false);
       } catch (error) {
         console.error('Error loading data:', error);
+        setLoadingData(false);
       }
     };
 
     void loadData();
     // eslint-disable-next-line
-  }, [searchValue]);
+  }, [destinationId, currentPage, perPage]); // Remove searchValue from dependencies
 
   const handlePriorityChange = async (
     rowIndex: number,
@@ -316,10 +326,18 @@ export default function HappeningEvents() {
       currentPage={currentPage}
       perPage={perPage}
       renderCell={renderCell}
-      onPageChange={setCurrentPage}
-      onPerPageChange={setPerPage}
+      onPageChange={(page) => setCurrentPage(page)} // Update page on change
+      onPerPageChange={(newPerPage) => {
+        setPerPage(newPerPage);
+        setCurrentPage(1); // Reset to first page on perPage change
+      }}
       addEventRoute="/discover-malaysia/happening-events/add-happening-event"
-      onSearchChange={setSearchValue}
+      onSearchChange={(value) => {
+        setSearchValue(value);
+        setCurrentPage(1); // Reset to first page on search
+      }}
+      totalCount={totalCount}
+      loading={loadingData}
     />
   );
 }

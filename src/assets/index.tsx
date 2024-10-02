@@ -1151,7 +1151,7 @@ export const menuItems = [
         label: 'Restaurants',
         path: '/discover-malaysia/restaurants',
         icon: RestaurantsIcon,
-        disabled: false,
+        disabled: true,
       },
       {
         label: 'Recommended Trips',
