@@ -14,6 +14,7 @@ import StatsSection from '@/components/ui/dashboard/StatsSections';
 import UserStats from '@/components/ui/dashboard/UserStates';
 import Select from '@/components/ui/dataTable/Select';
 // import DataTable from '@/components/ui/dataTable/DataTable';
+import Loader from '@/components/ui/Loader';
 import {
   chartCategories,
   chartData,
@@ -28,7 +29,6 @@ import {
   FetchHappeningEventsData,
   FetchSeeAttractionData,
 } from '@/services/apiService';
-import Loader from '@/components/ui/Loader';
 
 // import generateDummyDataForARTrails from './DummyData';
 
