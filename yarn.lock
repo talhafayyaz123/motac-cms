@@ -430,6 +430,13 @@
   resolved "https://registry.npmjs.org/@types/json5/-/json5-0.0.29.tgz"
   integrity sha512-dRLjCWHYg4oaA77cxO64oO+7JwCwnIzkZPdrrC71jQmQtlhM556pwKo5bUzqvZndkVbeFLIIi+9TC40JNF5hNQ==
 
+"@types/next-auth@^3.15.0":
+  version "3.15.0"
+  resolved "https://registry.npmjs.org/@types/next-auth/-/next-auth-3.15.0.tgz"
+  integrity sha512-ZVfejlu81YiIRX1m0iKAfvZ3nK7K9EyZWhNARNKsFop8kNAgEvMnlKpTpwN59xkK2OhyWLagPuiDAVBYSO9jSA==
+  dependencies:
+    next-auth "*"
+
 "@types/node@*", "@types/node@^20":
   version "20.16.1"
   resolved "https://registry.npmjs.org/@types/node/-/node-20.16.1.tgz"
@@ -2682,7 +2689,7 @@ negotiator@^0.6.3:
   resolved "https://registry.npmjs.org/negotiator/-/negotiator-0.6.3.tgz"
   integrity sha512-+EUsqGPLsM+j/zdChZjsnX51g4XrHFOIXwfnCVPGlQk/k5giakcKsuxCObBRu6DSm9opw/O6slWbJdghQM4bBg==
 
-next-auth@^4.24.8:
+next-auth@*, next-auth@^4.24.8:
   version "4.24.8"
   resolved "https://registry.npmjs.org/next-auth/-/next-auth-4.24.8.tgz"
   integrity sha512-SLt3+8UCtklsotnz2p+nB4aN3IHNmpsQFAZ24VLxGotWGzSxkBh192zxNhm/J5wgkcrDWVp0bwqvW0HksK/Lcw==
