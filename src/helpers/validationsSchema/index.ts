@@ -4,7 +4,10 @@ export const validationSchemaForAttractions = Yup.object().shape({
   title: Yup.string().required('Title is required'),
   openingHours: Yup.string().required('Opening hours are required'),
   closingHours: Yup.string().required('Closing hours are required'),
-  ageLimit: Yup.number()?.required('Age Limitation are required'),
+  ageLimit: Yup.number()
+    .required('Age Limitation is required')
+    .max(99, 'Age cannot exceed 99')
+    .typeError('Age must be a number'),
   mapLink: Yup.string().required().url('Must be a valid URL'),
   address: Yup.string().required('Address is required'),
   category: Yup.number().required('Category is required'),
@@ -22,7 +25,10 @@ export const validationSchemaForExperiences = Yup.object().shape({
   title: Yup.string().required('Title is required'),
   openingHours: Yup.string().required('Opening hours are required'),
   closingHours: Yup.string().required('Closing hours are required'),
-  ageLimit: Yup.number()?.required('Age Limitation are required'),
+  ageLimit: Yup.number()
+    .required('Age Limitation is required')
+    .max(99, 'Age cannot exceed 99')
+    .typeError('Age must be a number'),
   mapLink: Yup.string().required().url('Must be a valid URL'),
   address: Yup.string().required('Address is required'),
   category: Yup.number().required('Category is required'),
@@ -40,7 +46,10 @@ export const validationSchemaForHappeningEvents = Yup.object().shape({
   title: Yup.string().required('Title is required'),
   openingHours: Yup.string().required('Opening hours are required'),
   closingHours: Yup.string().required('Closing hours are required'),
-  ageLimit: Yup.number()?.required('Age Limitation are required'),
+  ageLimit: Yup.number()
+    .required('Age Limitation is required')
+    .max(99, 'Age cannot exceed 99')
+    .typeError('Age must be a number'),
   mapLink: Yup.string().required().url('Must be a valid URL'),
   address: Yup.string().required('Address is required'),
   category: Yup.number().required('Category is required'),

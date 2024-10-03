@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect, useRef } from 'react';
 import { FaChevronDown } from 'react-icons/fa';
 
 interface Option {
@@ -34,6 +34,24 @@ const Select: React.FC<InputProps> = ({
 }) => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
+  const dropdownRef = useRef<HTMLDivElement>(null); // Create a ref for dropdown
+
+  // Close the dropdown when clicking outside
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
+        setDropdownOpen(false);
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside);
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [dropdownRef]);
 
   // Toggle option selection
   const handleOptionToggle = (optionValue: number | string) => {
@@ -95,7 +113,7 @@ const Select: React.FC<InputProps> = ({
   return (
     <div className="flex flex-col mb-4" style={{ minWidth }}>
       {label && <p className="mb-2 text-md text-black">{label}</p>}
-      <div className="relative">
+      <div ref={dropdownRef} className="relative">
         <div
           className={`block text-sm w-full ${
             profile
@@ -135,7 +153,7 @@ const Select: React.FC<InputProps> = ({
                   className={`px-4 py-2 cursor-pointer text-sm ${
                     Array.isArray(selectedValues)
                       ? selectedValues.includes(option.value)
-                        ? 'bg-blue-100 text-white'
+                        ? 'bg-white text-blue-200'
                         : 'hover:bg-gray-100'
                       : selectedValues === option.value
                         ? 'bg-blue-100 text-white'

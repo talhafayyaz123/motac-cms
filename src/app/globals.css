@@ -63,3 +63,16 @@ body {
 .sidebar-scroll-bar::-webkit-scrollbar-track {
   background-color: #f5f5f5;
 }
+
+.custom-scroll {
+  overflow-y: auto;
+}
+
+.custom-scroll::-webkit-scrollbar {
+  display: none; /* For Chrome, Safari, and Opera */
+}
+
+.custom-scroll {
+  -ms-overflow-style: none; /* For Internet Explorer and Edge */
+  scrollbar-width: none; /* For Firefox */
+}

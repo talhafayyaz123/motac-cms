@@ -59,7 +59,7 @@ const EventTableLayout: React.FC<EventTableLayoutProps> = ({
 
       <Wrapper>
         <div className="flex gap-3"></div>
-        <div className="flex gap-3">
+        <div className="flex gap-3 items-center">
           <Button
             variant="secondary"
             className="h-10"
@@ -68,6 +68,7 @@ const EventTableLayout: React.FC<EventTableLayoutProps> = ({
             {buttonTitle}
           </Button>
           <Input
+            marginBottom="0"
             type="text"
             placeholder={searchPlaceholder}
             inputSize="sm"
