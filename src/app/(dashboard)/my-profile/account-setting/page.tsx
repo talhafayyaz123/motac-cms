@@ -2,11 +2,12 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 'use client';
 
-import { Formik, Form } from 'formik';
+import { yupResolver } from '@hookform/resolvers/yup';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 import React, { useEffect, useState } from 'react';
+import { useForm, Controller } from 'react-hook-form';
 import * as Yup from 'yup';
 
 import FormContainer from '@/components/container/FormContainer';
@@ -35,13 +36,19 @@ interface TeamMember {
   updatedAt: string;
 }
 
+interface FormValues {
+  firstName: string;
+  lastName: string;
+  email: string;
+  company: string;
+  phoneNumber: string;
+}
+
 function AccountSettings() {
   const router = useRouter();
   const [data, setData] = useState<TeamMember | null>(null);
   const [loading, setLoading] = useState(false);
   const { data: session } = useSession();
-
-  console.log(data);
 
   const loadData = async () => {
     try {
@@ -85,7 +92,7 @@ function AccountSettings() {
     }
   };
 
-  // Validation schema using Yup
+  // Yup validation schema
   const validationSchema = Yup.object({
     firstName: Yup.string().required('First Name is required'),
     lastName: Yup.string().required('Last Name is required'),
@@ -93,18 +100,39 @@ function AccountSettings() {
       .email('Invalid email format')
       .required('Email is required'),
     company: Yup.string().required('Company is required'),
+    phoneNumber: Yup.string().required('Phone Number is required'),
   });
 
-  // Initial values fetched from the session
-  const initialValues = {
-    firstName: data?.firstName || '',
-    lastName: data?.lastName || '',
-    email: data?.email || '',
-    company: data?.company || '',
-    phoneNumber: data?.phoneNumber || '',
-  };
+  // react-hook-form initialization
+  const {
+    control,
+    handleSubmit,
+    reset,
+    formState: { errors, isSubmitting },
+  } = useForm<FormValues>({
+    resolver: yupResolver(validationSchema),
+    defaultValues: {
+      firstName: '',
+      lastName: '',
+      email: '',
+      company: '',
+      phoneNumber: '',
+    },
+  });
 
-  const handleUpdate = async (values: any, { setSubmitting }: any) => {
+  useEffect(() => {
+    if (data) {
+      reset({
+        firstName: data.firstName,
+        lastName: data.lastName,
+        email: data.email,
+        company: data.company,
+        phoneNumber: data.phoneNumber || '',
+      });
+    }
+  }, [data, reset]);
+
+  const onSubmit = async (values: FormValues) => {
     const { email, ...updatedValues } = values;
     try {
       const response: any = await UpdateTeamMember({
@@ -132,8 +160,6 @@ function AccountSettings() {
         'error',
         'OK',
       );
-    } finally {
-      setSubmitting(false);
     }
   };
 
@@ -160,53 +186,53 @@ function AccountSettings() {
         />
       </div>
       <div className="h-28 w-28 rounded-full border border-blue-100 mt-10"></div>
-      <Formik
-        initialValues={initialValues}
-        validationSchema={validationSchema}
-        onSubmit={handleUpdate}
-        enableReinitialize={true}
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className="mt-10 flex flex-wrap gap-4 w-[75%]"
       >
-        {({ values, errors, touched, handleChange, handleBlur }) => (
-          <Form className="mt-10 flex flex-wrap gap-4 w-[75%]">
+        {/* First Name */}
+        <Controller
+          name="firstName"
+          control={control}
+          render={({ field }) => (
             <Input
               label="First Name"
-              name="firstName"
               placeholder="First Name"
               className="text-xs"
               minWidth="350px"
-              value={values.firstName}
-              onChange={handleChange}
-              onBlur={handleBlur}
-              error={
-                touched.firstName && errors.firstName
-                  ? errors.firstName
-                  : undefined
-              }
+              {...field}
+              error={errors.firstName?.message}
             />
+          )}
+        />
+
+        {/* Last Name */}
+        <Controller
+          name="lastName"
+          control={control}
+          render={({ field }) => (
             <Input
               label="Last Name"
-              name="lastName"
               placeholder="Last Name"
               className="text-xs"
               minWidth="350px"
-              value={values.lastName}
-              onChange={handleChange}
-              onBlur={handleBlur}
-              error={
-                touched.lastName && errors.lastName
-                  ? errors.lastName
-                  : undefined
-              }
+              {...field}
+              error={errors.lastName?.message}
             />
+          )}
+        />
+
+        {/* Phone Number */}
+        <Controller
+          name="phoneNumber"
+          control={control}
+          render={({ field }) => (
             <Input
               label="Phone Number"
-              name="phoneNumber"
               placeholder="+66 123 456 789"
               className="text-xs"
               minWidth="350px"
-              value={values.phoneNumber}
-              onChange={handleChange}
-              onBlur={handleBlur}
+              {...field}
               icon={
                 <Image
                   alt="flag"
@@ -215,46 +241,55 @@ function AccountSettings() {
                   src="/malaysia_flag.png"
                 />
               }
-              error={
-                touched.phoneNumber && errors.phoneNumber
-                  ? errors.phoneNumber
-                  : undefined
-              }
+              error={errors.phoneNumber?.message}
             />
+          )}
+        />
+
+        {/* Email */}
+        <Controller
+          name="email"
+          control={control}
+          render={({ field }) => (
             <Input
               label="Email Address"
-              name="email"
               placeholder="Email"
               className="text-xs"
               minWidth="350px"
-              value={values.email}
-              onChange={handleChange}
-              onBlur={handleBlur}
+              {...field}
               disabled
-              error={touched.email && errors.email ? errors.email : undefined}
+              error={errors.email?.message}
             />
+          )}
+        />
+
+        {/* Company */}
+        <Controller
+          name="company"
+          control={control}
+          render={({ field }) => (
             <Input
               label="Company"
-              name="company"
               placeholder="Company"
               className="text-xs"
               minWidth="350px"
-              value={values.company}
-              onChange={handleChange}
-              onBlur={handleBlur}
-              error={
-                touched.company && errors.company ? errors.company : undefined
-              }
+              {...field}
+              error={errors.company?.message}
             />
+          )}
+        />
 
-            <div className="w-full flex justify-start mt-8 mb-16">
-              <Button minWidth="160px" variant="customBlue" type="submit">
-                Update
-              </Button>
-            </div>
-          </Form>
-        )}
-      </Formik>
+        <div className="w-full flex justify-start mt-8 mb-16">
+          <Button
+            minWidth="160px"
+            variant="customBlue"
+            type="submit"
+            disabled={isSubmitting}
+          >
+            Update
+          </Button>
+        </div>
+      </form>
     </FormContainer>
   );
 }
