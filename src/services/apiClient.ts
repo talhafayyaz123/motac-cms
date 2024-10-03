@@ -1,4 +1,5 @@
 import { getSession } from 'next-auth/react';
+
 const backendApiUrl = 'https://cms.api.motac-dev.com/api/v1';
 
 async function getAccessToken(): Promise<string | null> {
@@ -8,6 +9,7 @@ async function getAccessToken(): Promise<string | null> {
 
 interface FetchOptions extends RequestInit {
   headers?: Record<string, string>;
+  isFileUpload?: boolean;
 }
 
 export const apiClient = async (
@@ -17,10 +19,13 @@ export const apiClient = async (
   try {
     const accessToken = await getAccessToken();
 
-    const defaultHeaders = {
-      'Content-Type': 'application/json',
+    const defaultHeaders: Record<string, string> = {
       ...(accessToken ? { Authorization: `Bearer ${accessToken}` } : {}),
     };
+
+    if (!options.isFileUpload) {
+      defaultHeaders['Content-Type'] = 'application/json';
+    }
 
     const config: FetchOptions = {
       ...options,

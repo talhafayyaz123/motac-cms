@@ -9,19 +9,24 @@ import Select from '@/components/ui/dataTable/Select';
 import Input from '@/components/ui/Input';
 import AlertService from '@/services/alertService';
 import {
+  deleteDestination,
   fetchDestinations,
   fetchPriorities,
+  fetchRecommendationTags,
   updateDestinationPriority,
+  updateDestinationTags,
 } from '@/services/apiService';
 
 export default function TopExperience() {
   const router = useRouter();
+  const [destinationId] = useState<number>(2);
+  const [availableTags, setAvailableTags] = useState<
+    { id: number; name: string }[] | null
+  >(null);
 
-  const availableTags = ['Food', 'Nature', 'Travel'];
   const tagColors = ['#E7ECFC', '#E3EFF8', '#E3F7F8'];
 
   const columns = [
-    'Select',
     'ID ',
     'Name ',
     'Category ',
@@ -35,23 +40,55 @@ export default function TopExperience() {
   const [data, setData] = useState<any[]>([]);
   const [priorities, setPriorities] = useState<any[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [perPage, setPerPage] = useState(12);
+  const [perPage, setPerPage] = useState(10);
   const [activeRowIndex, setActiveRowIndex] = useState<number | null>(null);
+  const [searchValue, setSearchValue] = useState<string>('');
+  const [totalCount, setTotalCount] = useState(0);
+  const [loadingData, setLoadingData] = useState<boolean>(false);
+
+  useEffect(() => {
+    const fetchTags = async () => {
+      try {
+        const response = await fetchRecommendationTags();
+        const tags = response.map((item: any) => ({
+          id: item?.id,
+          name: item?.name,
+        }));
+        setAvailableTags(tags);
+      } catch (error) {
+        console.error('Error fetching tags:', error);
+      }
+    };
+
+    void fetchTags();
+    // eslint-disable-next-line
+  }, []);
 
   useEffect(() => {
     const loadData = async () => {
       try {
-        const fetchedData = await fetchDestinations(2);
+        setLoadingData(true);
+        const { data: fetchedData, total } = await fetchDestinations(
+          destinationId,
+          currentPage,
+          perPage,
+          searchValue,
+        );
         const destinationPriorities = await fetchPriorities();
         setPriorities(destinationPriorities);
         setData(fetchedData);
+        setTotalCount(total);
+        setLoadingData(false);
+        // Set the total records from the API respons
       } catch (error) {
         console.error('Error loading data:', error);
+        setLoadingData(false);
       }
     };
 
     void loadData();
-  }, []);
+    // eslint-disable-next-line
+  }, [destinationId, currentPage, perPage,searchValue]);
 
   const handlePriorityChange = async (
     rowIndex: number,
@@ -65,13 +102,12 @@ export default function TopExperience() {
       const updatedData = [...data];
       updatedData[rowIndex].Priority = selectedPriority.value;
 
-      const destinationId = updatedData[rowIndex].destinationId;
+      const displayId = updatedData[rowIndex]['ID'];
       const priorityId = selectedPriority.priorityId;
 
       try {
-        await updateDestinationPriority(priorityId, destinationId);
+        await updateDestinationPriority(priorityId, displayId);
         setData(updatedData);
-
         await AlertService.alert(
           'Successful!',
           'Priority Updated Successfully',
@@ -84,10 +120,11 @@ export default function TopExperience() {
     }
   };
 
-  const handleTagRemove = (
+  const handleTagRemove = async (
     event: React.MouseEvent<HTMLButtonElement>,
     rowIndex: number,
     tagIndex: number,
+    rowId: string,
   ) => {
     event.stopPropagation();
     const newData = [...data];
@@ -96,39 +133,50 @@ export default function TopExperience() {
     newRow.Tags.splice(tagIndex, 1);
     newData[rowIndex] = newRow;
     setData(newData);
+    const newTagAfterRemove = newRow?.Tags?.map(
+      (item: { id: number }) => item.id,
+    );
+    await updateDestinationTags(rowId, newTagAfterRemove);
   };
 
-  const handleTagAdd = (
+  const handleTagAdd = async (
     e: React.MouseEvent<HTMLButtonElement | HTMLDivElement>,
     rowIndex: number,
-    newTagName: string,
+    tag: { id: number; name: string },
+    rowId: string,
   ) => {
     const newData = [...data];
     const newRow = { ...newData[rowIndex] };
-
-    const newTag = {
-      name: newTagName,
+    const tagWithColor = {
+      id: tag?.id,
+      name: tag?.name,
       color: tagColors[Math.floor(Math.random() * tagColors.length)],
     };
-
-    newRow.Tags = [...newRow.Tags, newTag];
+    newRow.Tags = [...newRow.Tags, tagWithColor];
     newData[rowIndex] = newRow;
     setData(newData);
+    const newTagAfterAddition = newRow?.Tags?.map(
+      (item: { id: number }) => item.id,
+    );
+    await updateDestinationTags(rowId, newTagAfterAddition);
   };
 
-  const renderTagOptions = (rowIndex: number) => {
+  const renderTagOptions = (rowIndex: number, rowId: string) => {
     const rowTags = data[rowIndex]?.Tags || [];
-    const missingTags = availableTags.filter((tag) =>
-      rowTags.every((rowTag: any) => rowTag.name !== tag),
+    const missingTags = availableTags?.filter((tag) =>
+      rowTags.every(
+        (rowTag: any) => rowTag.id !== tag.id && rowTag.name !== tag.name,
+      ),
     );
 
     return (
-      missingTags.length > 0 && (
+      missingTags &&
+      missingTags?.length > 0 && (
         <div className="absolute left-0 z-10 mt-1 bg-white border border-gray-300 rounded-lg shadow-lg p-2">
           {missingTags.map((tag) => (
             <div
-              key={tag}
-              onClick={(e) => handleTagAdd(e, rowIndex, tag)}
+              key={tag?.id}
+              onClick={(e) => handleTagAdd(e, rowIndex, tag, rowId)}
               role="button"
               tabIndex={0}
               onKeyDown={(e) => {
@@ -137,7 +185,7 @@ export default function TopExperience() {
               }}
             >
               <span className="px-3 py-1 rounded-full text-xs font-medium">
-                {tag}
+                {tag?.name}
               </span>
             </div>
           ))}
@@ -165,7 +213,9 @@ export default function TopExperience() {
               }
             }}
             onClick={() => {
-              router.push('/discover-malaysia/top-experience/add-experience');
+              router.push(
+                `/discover-malaysia/top-experience/edit-experience?id=${item['ID ']}`,
+              );
             }}
           >
             <Image height={20} alt="edit" width={20} src="/edit_icon.svg" />
@@ -178,13 +228,47 @@ export default function TopExperience() {
             className="flex items-center justify-center gap-2 cursor-pointer"
             onClick={async () => {
               try {
-                await AlertService.confirm(
-                  'Are you sure you want to delete the Selected Field',
+                const result = await AlertService.confirm(
+                  'Are you sure you want to delete the Selected Field?',
                   'Confirm',
                   'Cancel',
                 );
+
+                if (result.isConfirmed) {
+                  try {
+                    // Call the deleteDestination API
+                    const deleteDestinationResponse = await deleteDestination(
+                      item['ID '],
+                    );
+
+                    // If successful, you can reload the page or refetch data
+                    console.log(
+                      'Destination deleted successfully:',
+                      deleteDestinationResponse,
+                    );
+                    await AlertService.alert(
+                      'Successful!',
+                      'Destination deleted Successfully',
+                      'success',
+                      'Done',
+                    );
+                  } catch (error) {
+                    // eslint-disable-next-line
+                    AlertService.alert(
+                      'Error',
+                      'There was a problem deleting the destination.',
+                      'error',
+                      'OK',
+                    );
+                  }
+                } else {
+                  console.log('Deletion canceled');
+                }
               } catch (error) {
-                console.log('something went wrong ');
+                console.error(
+                  'Something went wrong during the confirmation process:',
+                  error,
+                );
               }
             }}
             role="button"
@@ -236,7 +320,9 @@ export default function TopExperience() {
                 >
                   {tag.name}
                   <button
-                    onClick={(event) => handleTagRemove(event, rowIndex, index)}
+                    onClick={(event) =>
+                      handleTagRemove(event, rowIndex, index, item['ID '])
+                    }
                     className="ml-2 text-gray-500 hover:text-gray-700"
                   >
                     &times;
@@ -244,7 +330,8 @@ export default function TopExperience() {
                 </span>
               );
             })}
-            {activeRowIndex === rowIndex && renderTagOptions(rowIndex)}
+            {activeRowIndex === rowIndex &&
+              renderTagOptions(rowIndex, item['ID '])}
           </div>
         );
       default:
@@ -261,9 +348,18 @@ export default function TopExperience() {
       currentPage={currentPage}
       perPage={perPage}
       renderCell={renderCell}
-      onPageChange={setCurrentPage}
-      onPerPageChange={setPerPage}
+      onPageChange={(page) => setCurrentPage(page)} // Update page on change
+      onPerPageChange={(newPerPage) => {
+        setPerPage(newPerPage);
+        setCurrentPage(1); // Reset to first page on perPage change
+      }}
       addEventRoute="/discover-malaysia/top-experience/add-experience"
+      onSearchChange={(value) => {
+        setSearchValue(value);
+        setCurrentPage(1); // Reset to first page on search
+      }}
+      totalCount={totalCount}
+      loading={loadingData}
     />
   );
 }

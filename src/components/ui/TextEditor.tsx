@@ -1,8 +1,9 @@
 'use client';
 
 import dynamic from 'next/dynamic';
-import React, { useState } from 'react';
+import React from 'react';
 import 'react-quill/dist/quill.snow.css';
+import { Controller } from 'react-hook-form';
 
 const ReactQuill = dynamic(() => import('react-quill'), { ssr: false });
 
@@ -20,18 +21,30 @@ const modules = {
   ],
 };
 
-const TextEditor = () => {
-  const [value, setValue] = useState('');
+// Define the props interface
+interface TextEditorProps {
+  control: any;
+  name: string;
+  error?: string | undefined;
+}
 
+const TextEditor: React.FC<TextEditorProps> = ({ control, name, error }) => {
   return (
     <div className="border border-[#DEDBDB] rounded-xl overflow-hidden">
-      <ReactQuill
-        value={value}
-        onChange={setValue}
-        modules={modules}
-        theme="snow"
-        placeholder="Write something..."
+      <Controller
+        control={control}
+        name={name}
+        render={({ field: { onChange, value } }) => (
+          <ReactQuill
+            value={value}
+            onChange={onChange}
+            modules={modules}
+            theme="snow"
+            placeholder="Write something..."
+          />
+        )}
       />
+      {error && <p className="m-1 text-red-500 text-xs">{error}</p>}
     </div>
   );
 };

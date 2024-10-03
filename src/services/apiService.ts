@@ -18,24 +18,43 @@ interface AuthRequestData {
   userAgent?: string;
 }
 
-export const fetchDestinations = async (typeId: number): Promise<any[]> => {
+export const fetchDestinations = async (
+  typeId: number,
+  currentPage: number = 1,
+  perPage: number = 10,
+  searchValue: string = '',
+): Promise<{ data: any[]; total: number }> => {
   try {
-    const result = await apiClient(`/destinations?typeId=${typeId}`, {
-      method: 'GET',
+    // Build the query string
+    const queryParams = new URLSearchParams({
+      typeId: typeId.toString(),
+      page: currentPage.toString(),
+      limit: perPage.toString(),
     });
+
+    // Only add search parameter if searchValue is not an empty string
+    if (searchValue) {
+      queryParams.append('search', searchValue);
+    }
+
+    const result = await apiClient(
+      `/destinations?${queryParams.toString()}`, // Use built query parameters
+      {
+        method: 'GET',
+      },
+    );
 
     const tagColors = ['#E7ECFC', '#E3EFF8', '#E3F7F8'];
 
     const transformedData = result?.data?.map((item: any) => {
       const baseData = {
-        destinationId: item.id,
-        Select: '',
         'ID ': item.displayId,
         'Name ': item.title || '',
         'Category ': item.destinationCategoryName || '',
         'City ': item.cityName,
         Tags: item.tags
           ? item.tags.map((tag: any) => ({
+              id: tag.id,
               name: tag.name,
               color: tagColors[Math.floor(Math.random() * tagColors.length)],
             }))
@@ -55,10 +74,13 @@ export const fetchDestinations = async (typeId: number): Promise<any[]> => {
       return baseData;
     });
 
-    return transformedData;
+    return {
+      data: transformedData,
+      total: result?.totalRecords || 0, // Assuming the API response includes totalRecords
+    };
   } catch (error) {
     console.error('An error occurred:', error);
-    return [];
+    return { data: [], total: 0 }; // Return an empty array and zero total records on error
   }
 };
 
@@ -82,14 +104,14 @@ export const fetchPriorities = async () => {
 
 export const updateDestinationPriority = async (
   priorityId: number,
-  destinationId: number,
+  displayId: string,
 ) => {
   try {
     const response = await apiClient(
-      `/destinations/${destinationId}/priority/${priorityId}`,
+      `/destinations/${displayId}/priority/${priorityId}`,
       {
         method: 'PATCH',
-        body: JSON.stringify({ priorityId }),
+        body: JSON.stringify({ displayId, priorityId }),
       },
     );
 
@@ -449,5 +471,226 @@ export const FetchHappeningEventsData = async (
   } catch (err) {
     const typedError = err as Error;
     return { error: typedError.message };
+  }
+};
+
+export const deleteDestination = async (displayId: string) => {
+  try {
+    const response = await apiClient(`/destinations/${displayId}`, {
+      method: 'DELETE',
+      body: JSON.stringify({ displayId }),
+    });
+
+    return response;
+  } catch (error) {
+    console.error('Error deleting destination:', error);
+
+    // Throw an error with a user-friendly message
+    throw new Error(
+      'There was an error deleting the destination. Please try again.',
+    );
+  }
+};
+
+export const fetchRecommendationTags = async (): Promise<any[]> => {
+  try {
+    const result = await apiClient(`/destinations/recommendation/tags`, {
+      method: 'GET',
+    });
+
+    return result;
+  } catch (error) {
+    console.error('An error occurred:', error);
+    return [];
+  }
+};
+
+export const fetchDestinationsCategories = async (
+  typeId: number,
+): Promise<any[]> => {
+  try {
+    const result = await apiClient(
+      `/destinations/categories?typeId=${typeId}`,
+      {
+        method: 'GET',
+      },
+    );
+
+    return result;
+  } catch (error) {
+    console.error('An error occurred:', error);
+    return [];
+  }
+};
+
+export const fileUpload = async (file: File) => {
+  const formData = new FormData();
+  formData.append('file', file);
+
+  try {
+    const response = await apiClient('/files/upload', {
+      method: 'POST',
+      body: formData,
+      isFileUpload: true,
+    });
+    return response;
+  } catch (error) {
+    console.error('An error occurred:', error);
+  }
+};
+
+export const createDestination = async (data: any) => {
+  try {
+    const body: any = {
+      title: data?.title,
+      description: data?.description,
+      openingHours: data?.openingHours,
+      closingHours: data?.closingHours,
+      ageLimit: data?.ageLimit,
+      mapLink: data?.mapLink,
+      address: data?.address,
+      area: data?.area,
+      cityId: data?.city,
+      tags: data?.tags,
+      priorityId: data?.priority,
+      destinationCategoryId: data?.category,
+    };
+
+    body.images = data?.images ? data.images : [];
+    body.bannerImageId = data?.bannerImageId ? data.bannerImageId : 1;
+
+    if (data?.workingDays) {
+      body.workingDays = data.workingDays;
+    }
+
+    if (data?.happeningStartDate) {
+      body.happeningStartDate = data.happeningStartDate;
+    }
+
+    if (data?.happeningEndDate) {
+      body.happeningEndDate = data.happeningEndDate;
+    }
+    const result = await apiClient(`/destinations`, {
+      method: 'POST',
+      body: JSON.stringify(body),
+    });
+
+    return {
+      status: true,
+      data: result,
+    };
+  } catch (error) {
+    console.error('An error occurred:', error);
+    return {
+      status: false,
+      error: error,
+    };
+  }
+};
+
+export const updateDestination = async (displayId: string, data: any) => {
+  try {
+    const body: any = {
+      title: data?.title,
+      description: data?.description,
+      openingHours: data?.openingHours,
+      closingHours: data?.closingHours,
+      ageLimit: data?.ageLimit,
+      mapLink: data?.mapLink,
+      address: data?.address,
+      area: data?.area,
+      cityId: data?.city,
+      tags: data?.tags,
+      priorityId: data?.priority,
+      destinationCategoryId: data?.category,
+    };
+
+    body.images = data?.images ? data.images : [];
+    body.bannerImageId = data?.bannerImageId ? data.bannerImageId : 1;
+
+    if (data?.workingDays) {
+      body.workingDays = data.workingDays;
+    }
+
+    if (data?.happeningStartDate) {
+      body.happeningStartDate = data.happeningStartDate;
+    }
+
+    if (data?.happeningEndDate) {
+      body.happeningEndDate = data.happeningEndDate;
+    }
+    const result = await apiClient(`/destinations/${displayId}`, {
+      method: 'PATCH',
+      body: JSON.stringify(body),
+    });
+
+    return {
+      status: true,
+      data: result,
+    };
+  } catch (error) {
+    console.error('An error occurred:', error);
+    return {
+      status: false,
+      error: error,
+    };
+  }
+};
+
+export const fetchDestinationsById = async (displayId: string) => {
+  try {
+    const result = await apiClient(`/destinations/${displayId}`, {
+      method: 'GET',
+    });
+
+    return result;
+  } catch (error) {
+    console.error('An error occurred:', error);
+  }
+};
+
+export const fetchAreas = async (): Promise<any[]> => {
+  try {
+    const result = await apiClient(`/localities/countries`, {
+      method: 'GET',
+    });
+
+    return result;
+  } catch (error) {
+    console.error('An error occurred:', error);
+    return [];
+  }
+};
+
+export const fetchCities = async (): Promise<any[]> => {
+  try {
+    const result = await apiClient(`/localities/cities`, {
+      method: 'GET',
+    });
+
+    return result;
+  } catch (error) {
+    console.error('An error occurred:', error);
+    return [];
+  }
+};
+
+export const updateDestinationTags = async (
+  displayId: string,
+  tags: number[],
+) => {
+  try {
+    const body = {
+      tags: tags,
+    };
+
+    const result = await apiClient(`/destinations/${displayId}`, {
+      method: 'PATCH',
+      body: JSON.stringify(body),
+    });
+
+    return result;
+  } catch (error) {
+    console.error('An error occurred:', error);
   }
 };
