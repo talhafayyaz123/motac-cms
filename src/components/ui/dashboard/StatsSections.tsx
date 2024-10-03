@@ -137,9 +137,11 @@ const StatsSection: React.FC = () => {
                     {statsData?.activeUserCount}
                   </p>
                   <p className="text-xs font-semibold text-blue-200 mt-7">
-                    {(statsData?.percentageChange ?? 0 > 0)
-                      ? `${Math.round(statsData?.percentageChange ?? 0)} % Increase`
-                      : `${Math.round(statsData?.percentageChange ?? 0)} % Decrease`}
+                    {typeof statsData?.percentageChange === 'number'
+                      ? statsData.percentageChange > 0
+                        ? `${Math.round(statsData.percentageChange)}% Increase`
+                        : `${Math.round(statsData.percentageChange)}% Decrease`
+                      : 'No data available'}
                   </p>
                 </div>
                 <div className="flex flex-col space-y-10">
@@ -153,7 +155,7 @@ const StatsSection: React.FC = () => {
                   </div>
                   <div className="flex-auto text-left">
                     <p className="text-xs text-gray-50 font-medium">
-                      Deleted Users
+                      Inactive Users
                     </p>
                     <p className="text-xl font-semibold text-blue-200">
                       {statsData?.inactiveUserCount}

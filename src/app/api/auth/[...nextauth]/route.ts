@@ -2,6 +2,7 @@
 //import { User as DefaultUser, Session } from 'next-auth';
 //import type { NextAuthOptions } from 'next-auth';
 //import { JWT } from 'next-auth/jwt';
+/* eslint-disable prettier/prettier */
 import NextAuth from 'next-auth/next';
 import CredentialsProvider from 'next-auth/providers/credentials';
 
@@ -36,7 +37,8 @@ const authOptions: any = {
           const user = await res.json();
 
           if (res.ok && user) {
-            return { ...user, token: user.token };
+            // Return the full user object
+            return user;
           } else {
             throw new Error('Invalid credentials');
           }
@@ -59,13 +61,20 @@ const authOptions: any = {
   },
   callbacks: {
     jwt({ token, user }: { token: any; user?: any }) {
-      if (user && user.token) {
+      if (user) {
         token.accessToken = user.token;
+        token.refreshToken = user.refresh_token;
+        token.tokenExpires = user.token_expires;
+        token.user = user.user;
       }
       return token;
     },
     session({ session, token }: { session: any; token: any }) {
-      session.accessToken = token.accessToken as string | undefined;
+      session.accessToken = token.accessToken;
+      session.refreshToken = token.refreshToken;
+      session.tokenExpires = token.tokenExpires;
+      session.user = token.user;
+
       return session;
     },
   },

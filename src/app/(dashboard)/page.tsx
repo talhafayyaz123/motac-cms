@@ -157,7 +157,7 @@ export default function Dashboard() {
       value: statsData?.activeUserCount ?? 0,
     },
     {
-      label: 'Deleted Users',
+      label: 'Inactive Users',
       value: statsData?.inactiveUserCount ?? 0,
     },
   ];
