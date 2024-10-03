@@ -1,9 +1,9 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 'use client';
 
-import { Formik, Form } from 'formik';
+import { yupResolver } from '@hookform/resolvers/yup';
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
+import { useForm, Controller } from 'react-hook-form';
 import * as Yup from 'yup';
 
 import FormContainer from '@/components/container/FormContainer';
@@ -38,33 +38,8 @@ export default function AddTeamMemberPage() {
     Designation = '',
   } = currentMember || {};
 
-  console.log(Designation);
-
   const [designation, setDesignation] = useState<Option[]>([]);
   const [role, setRole] = useState<Option[]>([]);
-
-  useEffect(() => {
-    const loadRoles = async () => {
-      try {
-        const fetchedData = await fetchTeamRoles();
-        setRole(fetchedData);
-      } catch (error) {
-        console.error('Error loading roles:', error);
-      }
-    };
-
-    const loadDesignations = async () => {
-      try {
-        const fetchedData = await fetchTeamDesignations();
-        setDesignation(fetchedData);
-      } catch (error) {
-        console.error('Error loading designations:', error);
-      }
-    };
-
-    void loadRoles();
-    void loadDesignations();
-  }, []);
 
   const validationSchema = Yup.object({
     firstName: Yup.string().required('First Name is required'),
@@ -77,30 +52,90 @@ export default function AddTeamMemberPage() {
     roleId: Yup.string().required('Role is required'),
   });
 
-  const initialValues = {
-    firstName: firstName || '',
-    lastName: lastName || '',
-    email: emailAddress || '',
-    company: '',
-    designationId:
-      designation.find((item: Option) => item.label === Designation)?.value ||
-      '',
-    roleId: role.find((item: Option) => item.label === Role)?.value || '',
-    password: '123456',
-    statusId: 1,
+  const {
+    control,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+    reset,
+  } = useForm({
+    defaultValues: {
+      firstName: firstName || '',
+      lastName: lastName || '',
+      email: emailAddress || '',
+      company: '',
+      designationId: '',
+      roleId: '',
+    },
+    resolver: yupResolver(validationSchema),
+    mode: 'onSubmit',
+  });
+
+  useEffect(() => {
+    const loadRoles = async () => {
+      try {
+        const fetchedRoles = await fetchTeamRoles();
+        setRole(fetchedRoles);
+      } catch (error) {
+        console.error('Error loading roles:', error);
+      }
+    };
+
+    const loadDesignations = async () => {
+      try {
+        const fetchedDesignations = await fetchTeamDesignations();
+        setDesignation(fetchedDesignations);
+      } catch (error) {
+        console.error('Error loading designations:', error);
+      }
+    };
+
+    void loadRoles();
+    void loadDesignations();
+  }, []);
+
+  useEffect(() => {
+    if (designation.length && role.length) {
+      reset({
+        firstName: firstName || '',
+        lastName: lastName || '',
+        email: emailAddress || '',
+        company: '',
+        designationId:
+          designation.find((item: Option) => item.label === Designation)
+            ?.value || '',
+        roleId: role.find((item: Option) => item.label === Role)?.value || '',
+      });
+    }
+  }, [
+    designation,
+    role,
+    firstName,
+    lastName,
+    emailAddress,
+    Designation,
+    Role,
+    reset,
+  ]);
+
+  const onSubmit = async (values: any) => {
+    const payload = {
+      ...values,
+      designationId: Number(values?.designationId),
+      roleId: Number(values?.roleId),
+      password: '123456',
+      statusId: 1,
+    };
+
+    if (ID) {
+      return handleUpdate(payload);
+    } else {
+      return handleAdd(payload);
+    }
   };
 
-  console.log(
-    designation.filter((item: any) => item.label === Designation)[0]?.value,
-  );
-
-  const handleSubmit = async (
-    values: any,
-    { setSubmitting, resetForm }: any,
-  ) => {
+  const handleAdd = async (values: any) => {
     try {
       const response: any = await AddTeamMember(values);
-
       if (response?.error) {
         await AlertService.alert('Error!', response.error, 'error', 'OK');
       } else if (response?.id) {
@@ -110,9 +145,9 @@ export default function AddTeamMemberPage() {
           'success',
           'Done',
         );
-        resetForm();
+        reset();
       }
-    } catch (error: any) {
+    } catch (error) {
       console.error('Unexpected error:', error);
       await AlertService.alert(
         'Error!',
@@ -120,17 +155,14 @@ export default function AddTeamMemberPage() {
         'error',
         'OK',
       );
-    } finally {
-      setSubmitting(false);
     }
   };
 
-  const handleUpdate = async (
-    values: any,
-    { setSubmitting, resetForm }: any,
-  ) => {
+  const handleUpdate = async (values: any) => {
     try {
-      const { email, password, ...updatedValues } = values;
+      const { ...updatedValues } = values;
+      delete updatedValues['email'];
+      delete updatedValues['password'];
       const response: any = await UpdateTeamMember({
         data: updatedValues,
         id: ID,
@@ -149,9 +181,9 @@ export default function AddTeamMemberPage() {
         );
         localStorage.removeItem('currentTeamMember');
         setCurrentMember(null);
-        resetForm();
+        reset();
       }
-    } catch (error: any) {
+    } catch (error) {
       localStorage.removeItem('currentTeamMember');
       setCurrentMember(null);
       console.error('Unexpected error:', error);
@@ -161,8 +193,6 @@ export default function AddTeamMemberPage() {
         'error',
         'OK',
       );
-    } finally {
-      setSubmitting(false);
     }
   };
 
@@ -172,145 +202,130 @@ export default function AddTeamMemberPage() {
         <Title>Member Detail</Title>
       </div>
       <FormContainer>
-        <Formik
-          initialValues={initialValues}
-          validationSchema={validationSchema}
-          onSubmit={ID ? handleUpdate : handleSubmit}
-          enableReinitialize={true}
-        >
-          {({ isSubmitting, setFieldValue, values, errors, touched }) => {
-            return (
-              <Form>
-                <div className="mt-5 flex flex-wrap gap-4">
-                  {/* First Name */}
-                  <Input
-                    label="First Name*"
-                    name="firstName"
-                    placeholder="John"
-                    className="text-xs"
-                    minWidth="350px"
-                    value={values.firstName}
-                    onChange={(e) => setFieldValue('firstName', e.target.value)}
-                    error={
-                      typeof errors.firstName === 'string'
-                        ? errors.firstName
-                        : undefined
-                    }
-                  />
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <div className="mt-5 flex flex-wrap gap-4">
+            {/* First Name */}
+            <Controller
+              name="firstName"
+              control={control}
+              render={({ field }) => (
+                <Input
+                  label="First Name*"
+                  placeholder="John"
+                  className="text-xs"
+                  minWidth="350px"
+                  {...field}
+                  error={errors.firstName?.message as string | undefined}
+                />
+              )}
+            />
 
-                  {/* Last Name */}
-                  <Input
-                    label="Last Name*"
-                    name="lastName"
-                    placeholder="Doe"
-                    className="text-xs"
-                    minWidth="350px"
-                    value={values.lastName}
-                    onChange={(e) => setFieldValue('lastName', e.target.value)}
-                    error={
-                      typeof errors.lastName === 'string'
-                        ? errors.lastName
-                        : undefined
-                    }
-                  />
+            {/* Last Name */}
+            <Controller
+              name="lastName"
+              control={control}
+              render={({ field }) => (
+                <Input
+                  label="Last Name*"
+                  placeholder="Doe"
+                  className="text-xs"
+                  minWidth="350px"
+                  {...field}
+                  error={errors.lastName?.message as string | undefined}
+                />
+              )}
+            />
 
-                  {/* Designation */}
-                  <Select
-                    label="Designation*"
-                    name="designationId"
-                    options={designation}
-                    selectedValues={values?.designationId}
-                    setSelectedValues={(value) =>
-                      setFieldValue('designationId', value)
-                    }
-                    error={
-                      touched.designationId && errors.designationId
-                        ? errors.designationId
-                        : ''
-                    }
-                    minWidth="350px"
-                  />
+            {/* Designation */}
+            <Controller
+              name="designationId"
+              control={control}
+              render={({ field }) => (
+                <Select
+                  label="Designation*"
+                  options={designation}
+                  selectedValues={field.value}
+                  setSelectedValues={field.onChange}
+                  error={errors.designationId?.message}
+                  minWidth="350px"
+                />
+              )}
+            />
 
-                  {/* Email */}
-                  <Input
-                    label="Work Email Address*"
-                    disabled={ID ? true : false}
-                    sublabel="(Please Add Work Email Only)"
-                    name="email"
-                    placeholder="johndoe@gmail.com"
-                    className="text-xs"
-                    minWidth="350px"
-                    value={values.email}
-                    onChange={(e) => setFieldValue('email', e.target.value)}
-                    error={
-                      typeof errors.email === 'string'
-                        ? errors.email
-                        : undefined
-                    }
-                  />
+            {/* Email */}
+            <Controller
+              name="email"
+              control={control}
+              render={({ field }) => (
+                <Input
+                  label="Work Email Address*"
+                  sublabel="(Please Add Work Email Only)"
+                  placeholder="johndoe@gmail.com"
+                  className="text-xs"
+                  minWidth="350px"
+                  {...field}
+                  disabled={!!ID}
+                  error={errors.email?.message as string | undefined}
+                />
+              )}
+            />
 
-                  {/* Company */}
-                  <Input
-                    label="Company*"
-                    name="company"
-                    placeholder="Organization"
-                    className="text-xs"
-                    minWidth="350px"
-                    value={values.company}
-                    onChange={(e) => setFieldValue('company', e.target.value)}
-                    error={
-                      touched.company && errors.company ? errors.company : ''
-                    }
-                  />
+            {/* Company */}
+            <Controller
+              name="company"
+              control={control}
+              render={({ field }) => (
+                <Input
+                  label="Company*"
+                  placeholder="Organization"
+                  className="text-xs"
+                  minWidth="350px"
+                  {...field}
+                  error={errors.company?.message}
+                />
+              )}
+            />
 
-                  {/* Role */}
-                  <Select
-                    label="Role*"
-                    name="roleId"
-                    options={role}
-                    selectedValues={values.roleId}
-                    setSelectedValues={(value) =>
-                      setFieldValue('roleId', value)
-                    }
-                    error={touched.roleId && errors.roleId ? errors.roleId : ''}
-                    minWidth="350px"
-                  />
-                </div>
+            {/* Role */}
+            <Controller
+              name="roleId"
+              control={control}
+              render={({ field }) => (
+                <Select
+                  label="Role*"
+                  options={role}
+                  selectedValues={field.value}
+                  setSelectedValues={field.onChange}
+                  error={errors.roleId?.message}
+                  minWidth="350px"
+                />
+              )}
+            />
+          </div>
 
-                <div className="w-full flex justify-end gap-3 p-10">
-                  <Button
-                    variant="danger"
-                    type="button"
-                    onClick={() => {
-                      router.push('/my-team');
-                      localStorage.removeItem('currentTeamMember');
-                      setCurrentMember(null);
-                    }}
-                  >
-                    Cancel
-                  </Button>
-                  {ID ? (
-                    <Button
-                      variant="customBlue"
-                      type="submit"
-                      disabled={isSubmitting}
-                    >
-                      {isSubmitting ? 'Updating...' : 'Update'}
-                    </Button>
-                  ) : (
-                    <Button
-                      variant="customBlue"
-                      type="submit"
-                      disabled={isSubmitting}
-                    >
-                      {isSubmitting ? 'Saving...' : 'Save'}
-                    </Button>
-                  )}
-                </div>
-              </Form>
-            );
-          }}
-        </Formik>
+          <div className="w-full flex justify-end gap-3 p-10">
+            <Button
+              variant="danger"
+              type="button"
+              onClick={() => {
+                router.push('/my-team');
+                localStorage.removeItem('currentTeamMember');
+                setCurrentMember(null);
+              }}
+            >
+              Cancel
+            </Button>
+            <Button variant="customBlue" type="submit" disabled={isSubmitting}>
+              {isSubmitting
+                ? ID
+                  ? 'Updating...'
+                  : 'Saving...'
+                : ID
+                  ? 'Update'
+                  : 'Save'}
+            </Button>
+          </div>
+        </form>
       </FormContainer>
     </main>
   );

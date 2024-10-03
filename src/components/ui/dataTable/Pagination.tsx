@@ -21,8 +21,6 @@ const Pagination: React.FC<PaginationProps> = ({
   onPageChange,
   onPerPageChange,
 }) => {
-  console.log(onPageChange);
-
   const totalPages = Math.ceil(total / perPage);
 
   const handlePrev = () => {
