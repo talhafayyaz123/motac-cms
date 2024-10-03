@@ -219,10 +219,11 @@ export async function logout() {
 export const fetchTeam = async (
   pageNumber = 1,
   itemsPerPage = 10,
+  search = '',
 ): Promise<any> => {
   try {
     const result = await apiClient(
-      `/cms/users?page=${pageNumber}&limit=${itemsPerPage}`,
+      `/cms/users?page=${pageNumber}&limit=${itemsPerPage}&search=${search}`,
       {
         method: 'GET',
       },

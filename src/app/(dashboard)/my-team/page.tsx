@@ -12,6 +12,7 @@ import Wrapper from '@/components/ui/dataTable/DataTableWrapper';
 import Input from '@/components/ui/Input';
 import Loader from '@/components/ui/Loader';
 import Title from '@/components/ui/Title';
+import useDebounce from '@/hooks/useDebounce';
 import AlertService from '@/services/alertService';
 import { DeleteTeamMember, fetchTeam } from '@/services/apiService';
 import { useMember } from '@/store/MemberContext';
@@ -39,12 +40,18 @@ export default function MyTeam() {
   const [totalCount, setTotalCount] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
   const [isNoData, setIsNoData] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
+  const debouncedSearchTerm = useDebounce(searchTerm, 700);
 
   useEffect(() => {
     const loadData = async () => {
       setIsLoading(true);
       try {
-        const fetchedData = await fetchTeam(currentPage, perPage);
+        const fetchedData = await fetchTeam(
+          currentPage,
+          perPage,
+          debouncedSearchTerm,
+        );
         setData(fetchedData?.data || []);
         setTotalCount(fetchedData?.total || 0);
 
@@ -62,7 +69,7 @@ export default function MyTeam() {
     };
 
     void loadData();
-  }, [currentPage, perPage]);
+  }, [currentPage, perPage, debouncedSearchTerm]);
 
   const handleDelete = async (id: number) => {
     const { ID } = data[id];
@@ -163,7 +170,7 @@ export default function MyTeam() {
             inputSize="sm"
             minWidth="400px"
             className="bg-white"
-            onChange={(e) => console.log(e.target.value)}
+            onChange={(e) => setSearchTerm(e.target.value)}
             icon={<CiSearch />}
           />
         </div>
