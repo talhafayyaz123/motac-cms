@@ -13,6 +13,7 @@ interface InputProps
   onBase64ValueChange?: (base64Value: File | null) => void;
   error?: string | undefined;
   defaultImagePath?: string | null; // Add prop for default image path (edit case)
+  marginBottom?: string | null;
 }
 
 const Input: React.FC<InputProps> = ({
@@ -31,6 +32,7 @@ const Input: React.FC<InputProps> = ({
   onBase64ValueChange,
   error,
   defaultImagePath,
+  marginBottom = '3',
   ...rest
 }) => {
   const fileInputRef = useRef<HTMLInputElement | null>(null);
@@ -149,7 +151,7 @@ const Input: React.FC<InputProps> = ({
           />
         </div>
       )}
-      <div className="relative mb-3">
+      <div className={`relative mb-${marginBottom}`}>
         {icon && (
           <span className="absolute inset-y-0 left-0 flex items-center pl-4 text-2xl text-black">
             {icon}

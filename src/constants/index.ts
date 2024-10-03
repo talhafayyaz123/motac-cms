@@ -48,3 +48,7 @@ export const seriesData = [
     data: [6, 12, 8],
   },
 ];
+
+export const attractionDestinationId = 1;
+export const topExperienceDestinationId = 2;
+export const happeningEventsDestinationId = 3;

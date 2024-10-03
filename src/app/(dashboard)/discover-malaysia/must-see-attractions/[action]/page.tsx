@@ -15,6 +15,7 @@ import Loader from '@/components/ui/Loader';
 import Select from '@/components/ui/Select';
 import TextEditor from '@/components/ui/TextEditor';
 import Title from '@/components/ui/Title';
+import { attractionDestinationId } from '@/constants';
 import { validationSchemaForAttractions } from '@/helpers/validationsSchema';
 import AlertService from '@/services/alertService';
 import {
@@ -81,7 +82,7 @@ export default function AddAttraction() {
     try {
       const [categories, tags, citiesData, areasData, priorityData] =
         await Promise.all([
-          fetchDestinationsCategories(1),
+          fetchDestinationsCategories(attractionDestinationId),
           fetchRecommendationTags(),
           fetchCities(),
           fetchAreas(),
@@ -162,6 +163,11 @@ export default function AddAttraction() {
     const newImages = [...images];
     newImages.splice(index, 1);
     setImages(newImages);
+
+    // Update the form's images field (sync with React Hook Form)
+    const currentImageIds = watch('images') || [];
+    const updatedImageIds = currentImageIds.filter((_, i) => i !== index);
+    setValue('images', updatedImageIds);
   };
 
   const handleFilesChange = (files: File[]) => {
@@ -183,20 +189,20 @@ export default function AddAttraction() {
 
   const onSubmit = async (data: any) => {
     setIsFormLoading(true);
-    const transformedData = {
-      ...data,
-      category: data.category,
-      area: data.area,
-      city: data.city,
-      priority: data.priority,
-    };
-
     const newImageIds = await uploadImages();
 
     const existingImageIds = data.images || [];
     if (newImageIds) {
     }
     setValue('images', [...existingImageIds, ...newImageIds]);
+    const transformedData = {
+      ...data,
+      category: data.category,
+      area: data.area,
+      city: data.city,
+      priority: data.priority,
+      images: [...existingImageIds, ...newImageIds],
+    };
 
     try {
       if (action === 'edit-attraction' && id) {
@@ -532,7 +538,7 @@ export default function AddAttraction() {
                   )}
                   <button
                     type="button"
-                    className="absolute top-0 right-0 p-1 bg-red-500 rounded-full"
+                    className="absolute top-2 right-2 p-1 bg-red-500 rounded-full"
                     onClick={() => removeImage(index)}
                   >
                     <FaTrashAlt className="text-white" />
@@ -554,7 +560,7 @@ export default function AddAttraction() {
               ) : action === 'add-attraction' ? (
                 'Add'
               ) : (
-                'Edit'
+                'Update'
               )}
             </Button>
             <Button

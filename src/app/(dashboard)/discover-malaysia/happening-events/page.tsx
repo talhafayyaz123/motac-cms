@@ -7,6 +7,7 @@ import React, { useState, useEffect } from 'react';
 import EventTableLayout from '@/app/(dashboard)/discover-malaysia/EventTable';
 import Select from '@/components/ui/dataTable/Select';
 import Input from '@/components/ui/Input';
+import { happeningEventsDestinationId } from '@/constants';
 import AlertService from '@/services/alertService';
 import {
   deleteDestination,
@@ -19,7 +20,6 @@ import {
 
 export default function HappeningEvents() {
   const router = useRouter();
-  const [destinationId] = useState<number>(3);
   const [availableTags, setAvailableTags] = useState<
     { id: number; name: string }[] | null
   >(null);
@@ -72,7 +72,7 @@ export default function HappeningEvents() {
       try {
         setLoadingData(true);
         const { data: fetchedData, total } = await fetchDestinations(
-          destinationId,
+          happeningEventsDestinationId,
           currentPage,
           perPage,
           searchValue,
@@ -96,7 +96,7 @@ export default function HappeningEvents() {
 
     void loadData();
     // eslint-disable-next-line
-  }, [destinationId, currentPage, perPage,searchValue]);
+  }, [happeningEventsDestinationId, currentPage, perPage, searchValue]);
 
   const handlePriorityChange = async (
     rowIndex: number,
@@ -178,7 +178,7 @@ export default function HappeningEvents() {
     return (
       missingTags &&
       missingTags?.length > 0 && (
-        <div className="absolute left-0 z-10 mt-1 bg-white border border-gray-300 rounded-lg shadow-lg p-2">
+        <div className="absolute overflow-y-auto h-20 left-0 z-10 mt-1 bg-white border border-gray-300 rounded-lg shadow-lg p-2 custom-scroll">
           {missingTags.map((tag) => (
             <div
               key={tag?.id}
@@ -298,7 +298,7 @@ export default function HappeningEvents() {
                 label: p.label,
                 key: p.priorityId,
               }))}
-              highlightValue="high"
+              highlightValue={item[column]}
               onChange={(e) => handlePriorityChange(rowIndex, e)}
             />
           </div>

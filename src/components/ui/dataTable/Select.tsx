@@ -6,7 +6,6 @@ interface SelectProps {
   options: Array<{ value: string; label: string }>;
   highlightValue?: string;
   minimalStyle?: boolean;
-  defaultOptionText?: string;
 }
 
 const Select: React.FC<SelectProps> = ({
@@ -15,7 +14,6 @@ const Select: React.FC<SelectProps> = ({
   options,
   highlightValue,
   minimalStyle = false,
-  defaultOptionText = 'Priority',
 }) => {
   return (
     <div className="relative">
@@ -34,11 +32,6 @@ const Select: React.FC<SelectProps> = ({
    }`}
         style={{ appearance: 'none' }}
       >
-        {!minimalStyle && (
-          <option value="none" selected disabled>
-            {defaultOptionText}
-          </option>
-        )}
         {options.map((option) => (
           <option
             key={option.value}
@@ -53,7 +46,7 @@ const Select: React.FC<SelectProps> = ({
         className={`absolute inset-y-0 right-[-10px] flex items-center pr-4 pointer-events-none`}
       >
         <svg
-          className="w-4 h-4 text-gray-500"
+          className="w-4 h-4 text-white"
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
