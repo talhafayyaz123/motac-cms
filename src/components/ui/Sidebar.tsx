@@ -4,11 +4,11 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 //import { signOut } from 'next-auth/react';
+import { signOut } from 'next-auth/react';
 import React, { useState } from 'react';
 
 import { menuItems } from '@/assets';
 import producLogo from '@/assets/product-logo.svg';
-import { logout } from '@/services/apiService';
 
 interface DropdownItem {
   label: string;
@@ -43,11 +43,7 @@ const Sidebar = () => {
     router.push(path);
   };
 
-  const handleLogOut = async () => {
-    await logout();
-
-    router.push('/login');
-  };
+  const handleLogout = async () => await signOut();
 
   return (
     <div className="w-full h-full flex flex-col py-5 pl-7">
@@ -229,8 +225,8 @@ const Sidebar = () => {
 
       <div
         className="p-2 hover:bg-blue-100 cursor-pointer gap-1 flex items-center rounded-lg group"
-        onClick={() => router.push('/login')}
         onKeyDown={() => {}}
+        onClick={handleLogout}
         role="button"
         tabIndex={0}
       >
@@ -241,17 +237,7 @@ const Sidebar = () => {
           src="/Logouticon.svg"
           className="group-hover:brightness-0 group-hover:invert"
         />
-        <span
-          className="text-red-100 text-sm group-hover:text-white"
-          role="button"
-          tabIndex={0}
-          onClick={handleLogOut}
-          onKeyDown={(e: React.KeyboardEvent<HTMLSpanElement>) => {
-            if (e.key === 'Enter' || e.key === ' ') {
-              handleLogOut;
-            }
-          }}
-        >
+        <span className="text-red-100 text-sm group-hover:text-white">
           Logout
         </span>
       </div>
