@@ -129,6 +129,8 @@ export default function AddTeamMemberPage() {
       });
 
       if (response?.error) {
+        localStorage.removeItem('currentTeamMember');
+        setCurrentMember(null);
         await AlertService.alert('Error!', response.error, 'error', 'OK');
       } else if (response?.id) {
         await AlertService.alert(
@@ -142,6 +144,8 @@ export default function AddTeamMemberPage() {
         resetForm();
       }
     } catch (error: any) {
+      localStorage.removeItem('currentTeamMember');
+      setCurrentMember(null);
       console.error('Unexpected error:', error);
       await AlertService.alert(
         'Error!',
@@ -226,6 +230,7 @@ export default function AddTeamMemberPage() {
                   {/* Email */}
                   <Input
                     label="Work Email Address*"
+                    disabled={ID ? true : false}
                     sublabel="(Please Add Work Email Only)"
                     name="email"
                     placeholder="johndoe@gmail.com"

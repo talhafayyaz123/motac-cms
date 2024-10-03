@@ -46,6 +46,8 @@ export default function PersonalDetails() {
     try {
       const response: any = await DeleteActiveMember(userID);
       if (response?.error) {
+        localStorage.removeItem('currentTeamMember');
+        setCurrentMember(null);
         await AlertService.alert('Error!', response.error, 'error', 'OK');
       } else if (response?.id) {
         await AlertService.alert(
@@ -64,6 +66,8 @@ export default function PersonalDetails() {
         'error',
         'OK',
       );
+      localStorage.removeItem('currentTeamMember');
+      setCurrentMember(null);
     }
   };
 
