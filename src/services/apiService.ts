@@ -215,11 +215,18 @@ export async function logout() {
 }
 
 ///My Team Apis
-export const fetchTeam = async (): Promise<any[]> => {
+
+export const fetchTeam = async (
+  pageNumber = 1,
+  itemsPerPage = 10,
+): Promise<any> => {
   try {
-    const result = await apiClient(`/cms/users`, {
-      method: 'GET',
-    });
+    const result = await apiClient(
+      `/cms/users?page=${pageNumber}&limit=${itemsPerPage}`,
+      {
+        method: 'GET',
+      },
+    );
 
     const transformedData = result?.data?.map((item: any) => {
       const baseData = {
@@ -237,7 +244,7 @@ export const fetchTeam = async (): Promise<any[]> => {
       return baseData;
     });
 
-    return transformedData;
+    return { data: transformedData, total: result.totalRecords };
   } catch (error) {
     console.error('An error occurred:', error);
     return [];
@@ -340,11 +347,17 @@ export const UpdateTeamMember = async (
   }
 };
 
-export const FetchUsers = async (): Promise<any[]> => {
+export const FetchUsers = async (
+  pageNumber = 1,
+  itemsPerPage = 10,
+): Promise<{ data: any[]; total: number }> => {
   try {
-    const result = await apiClient(`/app/users`, {
-      method: 'GET',
-    });
+    const result = await apiClient(
+      `/app/users?page=${pageNumber}&limit=${itemsPerPage}`,
+      {
+        method: 'GET',
+      },
+    );
 
     const transformedData = result?.data?.map((item: any) => ({
       Select: '',
@@ -358,20 +371,24 @@ export const FetchUsers = async (): Promise<any[]> => {
       'Reset Link': 'Send Reset Password Link',
     }));
 
-    return transformedData;
+    return { data: transformedData, total: result.totalRecords };
   } catch (error) {
     console.error('An error occurred:', error);
-    return [];
+    return { data: [], total: 0 };
   }
 };
 
-export const FetchDeletedUsers = async (): Promise<
-  any[] | { error: string }
-> => {
+export const FetchDeletedUsers = async (
+  pageNumber = 1,
+  itemsPerPage = 10,
+): Promise<{ data: any[]; total: number }> => {
   try {
-    const result = await apiClient(`/app/users?isDeleted=true`, {
-      method: 'GET',
-    });
+    const result = await apiClient(
+      `/app/users?page=${pageNumber}&limit=${itemsPerPage}&isDeleted=true`,
+      {
+        method: 'GET',
+      },
+    );
 
     const transformedData = result?.data?.map((item: any) => ({
       Select: '',
@@ -383,10 +400,10 @@ export const FetchDeletedUsers = async (): Promise<
       Nationality: item?.nationality,
     }));
 
-    return transformedData;
-  } catch (err) {
-    const typedError = err as Error;
-    return { error: typedError.message };
+    return { data: transformedData, total: result.totalRecords };
+  } catch (error) {
+    console.error('An error occurred:', error);
+    return { data: [], total: 0 };
   }
 };
 
