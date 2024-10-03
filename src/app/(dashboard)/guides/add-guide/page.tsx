@@ -5,7 +5,7 @@ import React from 'react';
 import FormContainer from '@/components/container/FormContainer';
 import Button from '@/components/ui/Button';
 import Input from '@/components/ui/Input';
-import TextEditor from '@/components/ui/TextEditor';
+// import TextEditor from '@/components/ui/TextEditor';
 import Title from '@/components/ui/Title';
 
 export default function AddGuide() {
@@ -21,7 +21,7 @@ export default function AddGuide() {
           placeholder="Explore the Petronas Twin Towers"
           className="text-xs mb-3"
         />
-        <TextEditor />
+        {/* <TextEditor /> */}
         <div className="mt-5 flex flex-wrap gap-4">
           <Input
             label="City"
