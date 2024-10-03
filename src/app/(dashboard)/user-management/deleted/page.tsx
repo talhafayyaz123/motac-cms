@@ -10,6 +10,7 @@ import Wrapper from '@/components/ui/dataTable/DataTableWrapper';
 import Input from '@/components/ui/Input';
 import Loader from '@/components/ui/Loader';
 import Title from '@/components/ui/Title';
+import useDebounce from '@/hooks/useDebounce';
 import { FetchDeletedUsers } from '@/services/apiService';
 
 const DataTable = lazy(() => import('@/components/ui/dataTable/DataTable'));
@@ -31,12 +32,18 @@ export default function UserManagementDeleted() {
   const [perPage, setPerPage] = useState(12);
   const [isNoData, setIsNoData] = useState(false);
   const [totalCount, setTotalCount] = useState(0);
+  const [searchTerm, setSearchTerm] = useState('');
+  const debouncedSearchTerm = useDebounce(searchTerm, 700);
 
   useEffect(() => {
     const loadData = async () => {
       setIsLoading(true);
       try {
-        const fetchedData = await FetchDeletedUsers(currentPage, perPage);
+        const fetchedData = await FetchDeletedUsers(
+          currentPage,
+          perPage,
+          debouncedSearchTerm,
+        );
         setData(fetchedData?.data);
         setTotalCount(fetchedData?.total);
         if (Array.isArray(fetchedData) && fetchedData?.data?.length === 0) {
@@ -54,7 +61,7 @@ export default function UserManagementDeleted() {
     };
 
     void loadData();
-  }, [currentPage, perPage]);
+  }, [currentPage, perPage, debouncedSearchTerm]);
 
   const renderCell = (item: any, column: string) => {
     switch (column) {
@@ -93,7 +100,7 @@ export default function UserManagementDeleted() {
           inputSize="sm"
           minWidth="400px"
           className="bg-white !border-0"
-          onChange={(e) => console.log(e.target.value)}
+          onChange={(e) => setSearchTerm(e.target.value)}
           icon={<CiSearch />}
         />
       </Wrapper>

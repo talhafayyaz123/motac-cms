@@ -350,10 +350,11 @@ export const UpdateTeamMember = async (
 export const FetchUsers = async (
   pageNumber = 1,
   itemsPerPage = 10,
+  search = '',
 ): Promise<{ data: any[]; total: number }> => {
   try {
     const result = await apiClient(
-      `/app/users?page=${pageNumber}&limit=${itemsPerPage}`,
+      `/app/users?page=${pageNumber}&limit=${itemsPerPage}&search=${search}`,
       {
         method: 'GET',
       },
@@ -381,10 +382,11 @@ export const FetchUsers = async (
 export const FetchDeletedUsers = async (
   pageNumber = 1,
   itemsPerPage = 10,
+  search = '',
 ): Promise<{ data: any[]; total: number }> => {
   try {
     const result = await apiClient(
-      `/app/users?page=${pageNumber}&limit=${itemsPerPage}&isDeleted=true`,
+      `/app/users?page=${pageNumber}&limit=${itemsPerPage}&search=${search}&isDeleted=true`,
       {
         method: 'GET',
       },
