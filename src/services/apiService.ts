@@ -250,6 +250,19 @@ export const fetchTeam = async (
   }
 };
 
+export const fetchSpecificTeamMember = async (id: number): Promise<any> => {
+  try {
+    const result = await apiClient(`/cms/users/${id}`, {
+      method: 'GET',
+    });
+
+    return result;
+  } catch (error) {
+    console.error('An error occurred:', error);
+    return [];
+  }
+};
+
 export const fetchTeamRoles = async (): Promise<any[]> => {
   try {
     const data = await apiClient(`/cms/users/roles`, {

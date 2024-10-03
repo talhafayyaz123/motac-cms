@@ -2,6 +2,7 @@
 'use client';
 
 import { Formik, Form } from 'formik';
+import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 import * as Yup from 'yup';
 
@@ -25,6 +26,7 @@ interface Option {
 }
 
 export default function AddTeamMemberPage() {
+  const router = useRouter();
   const { currentMember, setCurrentMember } = useMember();
 
   const {
@@ -35,6 +37,8 @@ export default function AddTeamMemberPage() {
     Role = '',
     Designation = '',
   } = currentMember || {};
+
+  console.log(Designation);
 
   const [designation, setDesignation] = useState<Option[]>([]);
   const [role, setRole] = useState<Option[]>([]);
@@ -74,17 +78,21 @@ export default function AddTeamMemberPage() {
   });
 
   const initialValues = {
-    firstName: firstName,
-    lastName: lastName,
-    email: emailAddress,
+    firstName: firstName || '',
+    lastName: lastName || '',
+    email: emailAddress || '',
     company: '',
     designationId:
-      designation.filter((item: any) => item.label === Designation)[0]?.value ||
+      designation.find((item: Option) => item.label === Designation)?.value ||
       '',
-    roleId: role.filter((item: any) => item.label === Role)[0]?.value || '',
+    roleId: role.find((item: Option) => item.label === Role)?.value || '',
     password: '123456',
     statusId: 1,
   };
+
+  console.log(
+    designation.filter((item: any) => item.label === Designation)[0]?.value,
+  );
 
   const handleSubmit = async (
     values: any,
@@ -211,11 +219,7 @@ export default function AddTeamMemberPage() {
                     label="Designation*"
                     name="designationId"
                     options={designation}
-                    selectedValues={
-                      typeof values?.designationId === 'number'
-                        ? designation[values?.designationId - 1]?.label
-                        : ''
-                    }
+                    selectedValues={values?.designationId}
                     setSelectedValues={(value) =>
                       setFieldValue('designationId', value)
                     }
@@ -264,11 +268,7 @@ export default function AddTeamMemberPage() {
                     label="Role*"
                     name="roleId"
                     options={role}
-                    selectedValues={
-                      typeof values?.roleId === 'number'
-                        ? role[values?.roleId - 1]?.label
-                        : ''
-                    }
+                    selectedValues={values.roleId}
                     setSelectedValues={(value) =>
                       setFieldValue('roleId', value)
                     }
@@ -278,7 +278,15 @@ export default function AddTeamMemberPage() {
                 </div>
 
                 <div className="w-full flex justify-end gap-3 p-10">
-                  <Button variant="danger" type="button">
+                  <Button
+                    variant="danger"
+                    type="button"
+                    onClick={() => {
+                      router.push('/my-team');
+                      localStorage.removeItem('currentTeamMember');
+                      setCurrentMember(null);
+                    }}
+                  >
                     Cancel
                   </Button>
                   {ID ? (
