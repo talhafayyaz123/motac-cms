@@ -1,21 +1,21 @@
 'use client';
 import { useRouter } from 'next/navigation';
-import React, { useState } from 'react';
+import React from 'react';
 
 import FormContainer from '@/components/container/FormContainer';
 import Button from '@/components/ui/Button';
 import Input from '@/components/ui/Input';
-import Select from '@/components/ui/Select';
+// import Select from '@/components/ui/Select';
 import Title from '@/components/ui/Title';
 import AlertService from '@/services/alertService';
 
 export default function AddRestaurant() {
   const router = useRouter();
 
-  const [selectedTags, setSelectedTags] = useState<string[]>([]);
-  const [categoty, setCategory] = useState<string>('');
-  const [city, setCity] = useState<string>('');
-  const [area, setArea] = useState<string>('');
+  // const [selectedTags, setSelectedTags] = useState<string[]>([]);
+  // const [categoty, setCategory] = useState<string>('');
+  // const [city, setCity] = useState<string>('');
+  // const [area, setArea] = useState<string>('');
 
   return (
     <main className="h-full">
@@ -34,13 +34,13 @@ export default function AddRestaurant() {
           className="text-xs"
         />
         <div className="mt-5 flex flex-wrap gap-4">
-          <Select
+          {/* <Select
             label="Category"
             options={[{ value: 'Cultural', label: 'Cultural' }]}
             selectedValues={categoty}
             setSelectedValues={setCategory}
             minWidth="350px"
-          />
+          /> */}
           <Input
             label="Opening Hours / Closing Hours"
             placeholder="Daily 9:00 Am - 9:00 Pm"
@@ -53,7 +53,7 @@ export default function AddRestaurant() {
             className="text-xs"
             minWidth="350px"
           />
-          <Select
+          {/* <Select
             label="Tags"
             options={[
               { value: 'Food', label: 'Food' },
@@ -64,7 +64,7 @@ export default function AddRestaurant() {
             multiple
             setSelectedValues={setSelectedTags}
             minWidth="350px"
-          />
+          /> */}
           <Input
             label="Banner Image"
             className="text-xs"
@@ -92,14 +92,14 @@ export default function AddRestaurant() {
         </div>
         <p className="mt-5 text-md text-[#181819] font-normal">Location</p>
         <div className="mt-5 flex flex-wrap gap-4">
-          <Select
+          {/* <Select
             label="City"
             options={[{ value: 'Kuala Lumpur', label: 'Kuala Lumpur' }]}
             selectedValues={city}
             setSelectedValues={setCity}
             minWidth="350px"
-          />
-          <Select
+          /> */}
+          {/* <Select
             label="Area"
             options={[
               { value: 'Kuala Lumpur', label: 'Kuala Lumpur' },
@@ -109,7 +109,7 @@ export default function AddRestaurant() {
             setSelectedValues={setArea}
             minWidth="350px"
             searchable
-          />
+          /> */}
           <Input
             label="Address"
             placeholder="Kuala Lumpur City Centre (KLCC), 43 Jalan Ampan"
