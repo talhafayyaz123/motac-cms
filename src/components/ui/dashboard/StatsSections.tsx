@@ -201,7 +201,6 @@ const StatsSection: React.FC = () => {
           <ComingSoonFeature />
           <ComingSoonFeature />
         </div>
-        ;
         <div className="flex flex-col gap-6 h-full w-full lg:w-3/12">
           <div className="relative rounded-xl overflow-hidden bg-white border border-gray-100 p-4 h-full">
             <div className="absolute left-1/2 top-0 transform -translate-x-1/2 w-2/3 h-1 bg-purple-100 rounded-bl-xl rounded-br-xl"></div>

@@ -30,16 +30,16 @@ export default function UserManagementDeleted() {
   const [currentPage, setCurrentPage] = useState(1);
   const [perPage, setPerPage] = useState(12);
   const [isNoData, setIsNoData] = useState(false);
+  const [totalCount, setTotalCount] = useState(0);
 
   useEffect(() => {
     const loadData = async () => {
       setIsLoading(true);
       try {
-        const fetchedData = await FetchDeletedUsers();
-
-        setData(fetchedData);
-
-        if (Array.isArray(fetchedData) && fetchedData.length === 0) {
+        const fetchedData = await FetchDeletedUsers(currentPage, perPage);
+        setData(fetchedData?.data);
+        setTotalCount(fetchedData?.total);
+        if (Array.isArray(fetchedData) && fetchedData?.data?.length === 0) {
           setIsNoData(true);
         } else {
           setIsNoData(false);
@@ -54,7 +54,7 @@ export default function UserManagementDeleted() {
     };
 
     void loadData();
-  }, []);
+  }, [currentPage, perPage]);
 
   const renderCell = (item: any, column: string) => {
     switch (column) {
@@ -107,13 +107,10 @@ export default function UserManagementDeleted() {
           <Suspense fallback={<Loader />}>
             <DataTable
               columns={columns}
-              data={data.slice(
-                (currentPage - 1) * perPage,
-                currentPage * perPage,
-              )}
+              data={data}
               renderCell={renderCell}
               pagination={{
-                total: data.length,
+                total: totalCount,
                 perPage,
                 currentPage,
                 onPageChange: setCurrentPage,
@@ -123,7 +120,7 @@ export default function UserManagementDeleted() {
           </Suspense>
         ) : (
           <div className="p-4 text-center text-red-500">
-            Error: {data.error}
+            Error: {data?.error}
           </div>
         )}
       </div>

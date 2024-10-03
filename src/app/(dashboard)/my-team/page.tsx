@@ -34,22 +34,35 @@ export default function MyTeam() {
   ];
 
   const [data, setData] = useState<any[]>([]);
-
   const [currentPage, setCurrentPage] = useState(1);
   const [perPage, setPerPage] = useState(12);
+  const [totalCount, setTotalCount] = useState(0);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isNoData, setIsNoData] = useState(false);
 
   useEffect(() => {
     const loadData = async () => {
+      setIsLoading(true);
       try {
-        const fetchedData = await fetchTeam();
-        setData(fetchedData);
+        const fetchedData = await fetchTeam(currentPage, perPage);
+        setData(fetchedData?.data || []);
+        setTotalCount(fetchedData?.total || 0);
+
+        if (fetchedData?.data?.length === 0) {
+          setIsNoData(true);
+        } else {
+          setIsNoData(false);
+        }
       } catch (error) {
         console.error('Error loading data:', error);
+        setIsNoData(true);
+      } finally {
+        setIsLoading(false);
       }
     };
 
     void loadData();
-  }, []);
+  }, [currentPage, perPage]);
 
   const handleDelete = async (id: number) => {
     const { ID } = data[id];
@@ -157,19 +170,18 @@ export default function MyTeam() {
       </Wrapper>
 
       <div className="bg-white auto">
-        {data.length == 0 ? (
+        {isLoading ? (
           <Loader />
+        ) : isNoData ? (
+          <div className="p-4 text-center text-gray-500">No data available</div>
         ) : (
           <Suspense fallback={<Loader />}>
             <DataTable
               columns={columns}
-              data={data.slice(
-                (currentPage - 1) * perPage,
-                currentPage * perPage,
-              )}
+              data={data}
               renderCell={renderCell}
               pagination={{
-                total: data.length,
+                total: totalCount,
                 perPage,
                 currentPage,
                 onPageChange: setCurrentPage,
