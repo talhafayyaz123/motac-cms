@@ -32,7 +32,7 @@ function SecuritySettings() {
             { value: 'Security Setting', label: 'Security Setting' },
           ]}
           selectedValues={settingComponent}
-          setSelectedValues={handleSettingChange}
+          setSelectedValues={handleSettingChange as any}
           minWidth="200px"
           profile
         />
