@@ -45,6 +45,7 @@ export default function MustSeeAttractions() {
   const [searchValue, setSearchValue] = useState<string>('');
   const [totalCount, setTotalCount] = useState(0);
   const [loadingData, setLoadingData] = useState<boolean>(false);
+  const [isNoData, setIsNoData] = useState(false);
 
   useEffect(() => {
     const fetchTags = async () => {
@@ -77,11 +78,17 @@ export default function MustSeeAttractions() {
         const destinationPriorities = await fetchPriorities();
         setPriorities(destinationPriorities);
         setData(fetchedData);
+        if (Array.isArray(fetchedData) && fetchedData.length === 0) {
+          setIsNoData(true);
+        } else {
+          setIsNoData(false);
+        }
         setTotalCount(total);
         setLoadingData(false);
       } catch (error) {
         console.error('Error loading data:', error);
         setLoadingData(false);
+        setIsNoData(false);
       }
     };
 
@@ -360,6 +367,7 @@ export default function MustSeeAttractions() {
       }}
       totalCount={totalCount}
       loading={loadingData}
+      isNoData={isNoData}
     />
   );
 }

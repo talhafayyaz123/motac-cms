@@ -9,6 +9,7 @@ import { FaTrashAlt } from 'react-icons/fa';
 import FormContainer from '@/components/container/FormContainer';
 import Button from '@/components/ui/Button';
 import DropZone from '@/components/ui/DropZone';
+import FormLoader from '@/components/ui/FormLoader';
 import Input from '@/components/ui/Input';
 import Loader from '@/components/ui/Loader';
 import Select from '@/components/ui/Select';
@@ -42,11 +43,12 @@ export default function AddAttraction() {
     { id: number; name: string }[]
   >([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [isFormBtnLoading, setIsFormLoading] = useState(false);
   const {
     control,
     handleSubmit,
     setValue,
-    formState: { errors },
+    formState: { errors, isSubmitting },
     watch,
   } = useForm({
     mode: 'onTouched',
@@ -180,6 +182,7 @@ export default function AddAttraction() {
   };
 
   const onSubmit = async (data: any) => {
+    setIsFormLoading(true);
     const transformedData = {
       ...data,
       category: data.category,
@@ -198,6 +201,7 @@ export default function AddAttraction() {
     try {
       if (action === 'edit-attraction' && id) {
         const response = await updateDestination(id, transformedData);
+        setIsFormLoading(false);
         if (response?.status) {
           await AlertService.alert(
             'Successful!',
@@ -216,6 +220,7 @@ export default function AddAttraction() {
         }
       } else {
         const response = await createDestination(transformedData);
+        setIsFormLoading(false);
         if (response?.status) {
           await AlertService.alert(
             'Successful!',
@@ -236,6 +241,7 @@ export default function AddAttraction() {
       // router.push('/discover-malaysia/must-see-attractions');
     } catch (error) {
       console.error('Error submitting form:', error);
+      setIsFormLoading(false);
     }
   };
 
@@ -537,8 +543,19 @@ export default function AddAttraction() {
             <DropZone onChange={handleFilesChange} setImages={setImages} />
           </FormContainer>
           <div className="w-full flex justify-end gap-3 p-10">
-            <Button variant="customBlue" type="submit" title="Submit">
-              {action === 'add-attraction' ? 'Add' : 'Edit'}
+            <Button
+              variant="customBlue"
+              type="submit"
+              title="Submit"
+              disabled={isSubmitting || Object.keys(errors).length > 0}
+            >
+              {isFormBtnLoading ? (
+                <FormLoader /> // Small loader icon inside the button
+              ) : action === 'add-attraction' ? (
+                'Add'
+              ) : (
+                'Edit'
+              )}
             </Button>
             <Button
               variant="danger"

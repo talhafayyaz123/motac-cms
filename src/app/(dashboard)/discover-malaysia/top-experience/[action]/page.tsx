@@ -9,6 +9,7 @@ import { FaTrashAlt } from 'react-icons/fa';
 import FormContainer from '@/components/container/FormContainer';
 import Button from '@/components/ui/Button';
 import DropZone from '@/components/ui/DropZone';
+import FormLoader from '@/components/ui/FormLoader';
 import Input from '@/components/ui/Input';
 import Loader from '@/components/ui/Loader';
 import Select from '@/components/ui/Select';
@@ -42,11 +43,12 @@ export default function AddExperience() {
     { id: number; name: string }[]
   >([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [isFormBtnLoading, setIsFormLoading] = useState(false);
   const {
     control,
     handleSubmit,
     setValue,
-    formState: { errors },
+    formState: { errors, isSubmitting },
     watch,
   } = useForm({
     mode: 'onTouched',
@@ -180,6 +182,7 @@ export default function AddExperience() {
   };
 
   const onSubmit = async (data: any) => {
+    setIsFormLoading(true);
     const transformedData = {
       ...data,
       category: data.category,
@@ -198,6 +201,7 @@ export default function AddExperience() {
     try {
       if (action === 'edit-experience' && id) {
         const response = await updateDestination(id, transformedData);
+        setIsFormLoading(false);
         if (response?.status) {
           await AlertService.alert(
             'Successful!',
@@ -216,6 +220,7 @@ export default function AddExperience() {
         }
       } else {
         const response = await createDestination(transformedData);
+        setIsFormLoading(false);
         if (response?.status) {
           await AlertService.alert(
             'Successful!',
@@ -235,6 +240,7 @@ export default function AddExperience() {
       }
     } catch (error) {
       console.error('Error submitting form:', error);
+      setIsFormLoading(false);
     }
   };
 
@@ -544,8 +550,19 @@ export default function AddExperience() {
             >
               Cancel
             </Button>
-            <Button variant="customBlue" type="submit" title="Submit">
-              {action === 'add-experience' ? 'Add' : 'Edit'}
+            <Button
+              variant="customBlue"
+              type="submit"
+              title="Submit"
+              disabled={isSubmitting || Object.keys(errors).length > 0}
+            >
+              {isFormBtnLoading ? (
+                <FormLoader /> // Small loader icon inside the button
+              ) : action === 'add-experience' ? (
+                'Add'
+              ) : (
+                'Edit'
+              )}
             </Button>{' '}
           </div>
         </form>
