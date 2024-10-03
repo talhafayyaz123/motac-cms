@@ -67,7 +67,8 @@ export const fetchDestinations = async (
       if (typeId === 3) {
         return {
           ...baseData,
-          'Event Date': formatDate(item.happeningEndDate) || '',
+          'Event Start Date': formatDate(item.happeningStartDate) || '',
+          'Event End Date': formatDate(item.happeningEndDate) || '',
         };
       }
 

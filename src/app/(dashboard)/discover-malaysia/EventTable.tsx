@@ -29,6 +29,7 @@ interface EventTableLayoutProps {
   onSearchChange: (search: string) => void;
   totalCount: number;
   loading: boolean;
+  isNoData?: boolean;
 }
 
 const EventTableLayout: React.FC<EventTableLayoutProps> = ({
@@ -46,6 +47,7 @@ const EventTableLayout: React.FC<EventTableLayoutProps> = ({
   onSearchChange,
   totalCount,
   loading,
+  isNoData,
 }) => {
   const router = useRouter();
 
@@ -82,9 +84,11 @@ const EventTableLayout: React.FC<EventTableLayoutProps> = ({
       </Wrapper>
 
       <div className="bg-white auto">
-        {(data && data.length === 0) || loading ? (
+        {loading ? (
           <Loader />
-        ) : (
+        ) : isNoData ? (
+          <div className="p-4 text-center text-gray-500">No data available</div>
+        ) : Array.isArray(data) ? (
           <Suspense fallback={<Loader />}>
             <DataTable
               columns={columns}
@@ -99,6 +103,8 @@ const EventTableLayout: React.FC<EventTableLayoutProps> = ({
               }}
             />
           </Suspense>
+        ) : (
+          <></>
         )}
       </div>
     </main>
