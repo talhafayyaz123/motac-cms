@@ -724,3 +724,18 @@ export const updateDestinationTags = async (
     console.error('An error occurred:', error);
   }
 };
+
+export const resetPassword = async (
+  payload: any,
+): Promise<any[] | { error: string }> => {
+  try {
+    const data = await apiClient(`/reset/password`, {
+      method: 'POST',
+      body: JSON.stringify(payload),
+    });
+    return data;
+  } catch (err) {
+    const typedError = err as Error;
+    return { error: typedError.message };
+  }
+};
