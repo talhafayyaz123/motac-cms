@@ -583,20 +583,24 @@ export const createDestination = async (data: any) => {
       ageLimit: data?.ageLimit,
       mapLink: data?.mapLink,
       address: data?.address,
-      area: data?.area,
-      cityId: data?.city,
+      cityId: data?.cityId, // Ensure cityId is compulsory
       tags: data?.tags,
       priorityId: data?.priority,
       destinationCategoryId: data?.category,
+      images: data?.images ? data.images : [],
+      bannerImageId: data?.bannerImageId ? data.bannerImageId : 1,
     };
 
-    body.images = data?.images ? data.images : [];
-    body.bannerImageId = data?.bannerImageId ? data.bannerImageId : 1;
-
-    if (data?.workingDays) {
-      body.workingDays = data.workingDays;
+    // Create Scenario 1: Send areaId if selected
+    if (data?.areaId) {
+      body.areaId = data.areaId;
+    }
+    // Create Scenario 2: Send custom area name if new area was entered
+    else if (data?.area) {
+      body.area = data.area;
     }
 
+    // Optional fields
     if (data?.happeningStartDate) {
       body.happeningStartDate = data.happeningStartDate;
     }
@@ -604,6 +608,7 @@ export const createDestination = async (data: any) => {
     if (data?.happeningEndDate) {
       body.happeningEndDate = data.happeningEndDate;
     }
+
     const result = await apiClient(`/destinations`, {
       method: 'POST',
       body: JSON.stringify(body),
@@ -632,16 +637,25 @@ export const updateDestination = async (displayId: string, data: any) => {
       ageLimit: data?.ageLimit,
       mapLink: data?.mapLink,
       address: data?.address,
-      area: data?.area,
-      cityId: data?.city,
       tags: data?.tags,
+      cityId: data?.cityId, // Make sure cityId is sent when area name is being updated
       priorityId: data?.priority,
       destinationCategoryId: data?.category,
+      images: data?.images ? data.images : [],
+      bannerImageId: data?.bannerImageId ? data.bannerImageId : 1,
     };
 
-    body.images = data?.images ? data.images : [];
-    body.bannerImageId = data?.bannerImageId ? data.bannerImageId : 1;
+    // Update Scenario 1: Send areaId if selected
+    if (data?.areaId) {
+      body.areaId = data.areaId;
+    }
+    // Update Scenario 2: Send custom area name and cityId
+    else if (data?.area) {
+      body.area = data.area;
+      body.cityId = data.cityId; // Send cityId along with the custom area name
+    }
 
+    // Optional fields
     if (data?.workingDays) {
       body.workingDays = data.workingDays;
     }
@@ -653,6 +667,7 @@ export const updateDestination = async (displayId: string, data: any) => {
     if (data?.happeningEndDate) {
       body.happeningEndDate = data.happeningEndDate;
     }
+
     const result = await apiClient(`/destinations/${displayId}`, {
       method: 'PATCH',
       body: JSON.stringify(body),
@@ -683,9 +698,9 @@ export const fetchDestinationsById = async (displayId: string) => {
   }
 };
 
-export const fetchAreas = async (): Promise<any[]> => {
+export const fetchAreas = async (cityId: number): Promise<any[]> => {
   try {
-    const result = await apiClient(`/localities/countries`, {
+    const result = await apiClient(`/localities/${cityId}`, {
       method: 'GET',
     });
 

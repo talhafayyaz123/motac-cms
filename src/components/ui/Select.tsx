@@ -19,6 +19,7 @@ interface InputProps {
   profile?: boolean;
   name?: string;
   error?: string;
+  maxWidth?: string;
 }
 
 const Select: React.FC<InputProps> = ({
@@ -27,6 +28,7 @@ const Select: React.FC<InputProps> = ({
   selectedValues,
   setSelectedValues,
   minWidth = '300px',
+  maxWidth = '350px',
   multiple = false,
   searchable = false,
   profile = false,
@@ -111,7 +113,7 @@ const Select: React.FC<InputProps> = ({
   );
 
   return (
-    <div className="flex flex-col mb-4" style={{ minWidth }}>
+    <div className="flex flex-col mb-4" style={{ minWidth, maxWidth }}>
       {label && <p className="mb-2 text-md text-black">{label}</p>}
       <div ref={dropdownRef} className="relative">
         <div

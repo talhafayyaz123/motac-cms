@@ -7,6 +7,7 @@ import { useForm, Controller } from 'react-hook-form'; // Import necessary hooks
 import { FaTrashAlt } from 'react-icons/fa';
 
 import FormContainer from '@/components/container/FormContainer';
+import AreaSelect from '@/components/ui/AreaSelect';
 import Button from '@/components/ui/Button';
 import DropZone from '@/components/ui/DropZone';
 import FormLoader from '@/components/ui/FormLoader';
@@ -15,7 +16,11 @@ import Loader from '@/components/ui/Loader';
 import Select from '@/components/ui/Select';
 import TextEditor from '@/components/ui/TextEditor';
 import Title from '@/components/ui/Title';
-import { attractionDestinationId } from '@/constants';
+import {
+  attractionDestinationId,
+  timeOptions,
+  workingDaysOptions,
+} from '@/constants';
 import { validationSchemaForAttractions } from '@/helpers/validationsSchema';
 import AlertService from '@/services/alertService';
 import {
@@ -62,14 +67,15 @@ export default function AddAttraction() {
       mapLink: '',
       address: '',
       category: 1,
-      area: '',
-      city: 1,
+      area: { id: null, name: '' },
+      cityId: 1,
       description: '',
       tags: [],
       priority: 1,
       images,
       bannerImageId: 1,
       bannerImage: null,
+      workingDays: '',
     },
   });
   const [priorities, setPriorities] = useState<{ id: number; name: string }[]>(
@@ -80,21 +86,18 @@ export default function AddAttraction() {
 
   const fetchInitialData = async () => {
     try {
-      const [categories, tags, citiesData, areasData, priorityData] =
-        await Promise.all([
-          fetchDestinationsCategories(attractionDestinationId),
-          fetchRecommendationTags(),
-          fetchCities(),
-          fetchAreas(),
-          fetchPriorities(),
-        ]);
+      const [categories, tags, citiesData, priorityData] = await Promise.all([
+        fetchDestinationsCategories(attractionDestinationId),
+        fetchRecommendationTags(),
+        fetchCities(),
+        fetchPriorities(),
+      ]);
 
       setDestinationsCategories(
         categories.map(({ id, name }) => ({ id, name })),
       );
       setCategoriesTags(tags.map(({ id, name }) => ({ id, name })));
       setCities(citiesData.map(({ id, name }) => ({ id, name })));
-      setAreas(areasData.map(({ name }) => ({ id: name, name })));
       setPriorities(
         priorityData.map((priority: any) => ({
           id: priority.priorityId,
@@ -106,13 +109,39 @@ export default function AddAttraction() {
     }
   };
 
+  // Use useEffect to watch for city changes and refetch areas
+  useEffect(() => {
+    const fetchAreasData = async (cityId: number) => {
+      try {
+        if (cityId) {
+          const areasData = await fetchAreas(cityId);
+          setAreas(areasData?.map(({ id, name }) => ({ id, name })));
+        }
+      } catch (error) {
+        console.error('Error loading areas:', error);
+      }
+    };
+
+    // Watch for changes to cityId
+    const cityId = watch('cityId');
+
+    // Reset area value and fetch areas if cityId changes
+    if (cityId) {
+      // Reset area to null whenever city changes
+      setValue('area', null as any);
+      void fetchAreasData(cityId);
+    }
+    // eslint-disable-next-line
+  }, [watch('cityId')]);
+
   const fetchAttraction = async (attractionId: string) => {
     try {
       setIsLoading(true);
       const data = await fetchDestinationsById(attractionId);
       const destinationCategoryId = data.destinationCategory?.id;
-      const areaId = data.area?.id;
       const priorityId = data.priority?.id;
+      const areaName = data.area?.name;
+      const areaId = data.area?.id;
 
       setValue('title', data.title);
       setValue('openingHours', data.openingHours);
@@ -121,8 +150,9 @@ export default function AddAttraction() {
       setValue('mapLink', data.mapLink);
       setValue('address', data.address);
       setValue('category', destinationCategoryId);
-      setValue('area', areaId);
-      setValue('city', data.area?.city?.id);
+      setValue('area', { id: areaId, name: areaName });
+      setValue('cityId', data?.area?.city?.id);
+      setValue('workingDays', data.workingDays);
       setValue('description', data.description);
       setValue(
         'tags',
@@ -189,20 +219,40 @@ export default function AddAttraction() {
 
   const onSubmit = async (data: any) => {
     setIsFormLoading(true);
-    const newImageIds = await uploadImages();
 
+    const newImageIds = await uploadImages();
     const existingImageIds = data.images || [];
+
     if (newImageIds) {
     }
     setValue('images', [...existingImageIds, ...newImageIds]);
-    const transformedData = {
+
+    const cityId = Number(data.cityId); // CityId is always required
+    const areaId = data.area?.id ? Number(data.area.id) : null;
+
+    const transformedData: any = {
       ...data,
-      category: data.category,
-      area: data.area,
-      city: data.city,
-      priority: data.priority,
+      cityId, // Always include cityId
       images: [...existingImageIds, ...newImageIds],
     };
+
+    // Scenario 1: If areaId exists (user selected from dropdown), send areaId
+    if (areaId) {
+      transformedData.areaId = areaId;
+    }
+    // Scenario 2: If areaId does not exist (user entered custom area), send area name instead of areaId
+    else if (data.area?.name) {
+      transformedData.area = data.area.name;
+    }
+
+    // Additional logic for update:
+    if (action === 'edit-attraction' && id) {
+      if (!areaId && data.area?.name) {
+        // Scenario 2 for Update: If custom area name is entered, send both area and cityId
+        transformedData.area = data.area.name;
+        transformedData.cityId = cityId; // Send cityId with custom area
+      }
+    }
 
     try {
       if (action === 'edit-attraction' && id) {
@@ -244,7 +294,6 @@ export default function AddAttraction() {
           );
         }
       }
-      // router.push('/discover-malaysia/must-see-attractions');
     } catch (error) {
       console.error('Error submitting form:', error);
       setIsFormLoading(false);
@@ -303,12 +352,12 @@ export default function AddAttraction() {
                 control={control}
                 name="openingHours"
                 render={({ field }) => (
-                  <Input
+                  <Select
                     label="Opening Hours"
-                    placeholder="Daily 9:00 Am - 9:00 Pm"
-                    className="text-xs"
+                    options={timeOptions}
+                    selectedValues={field.value}
+                    setSelectedValues={field.onChange}
                     minWidth="350px"
-                    {...field}
                     error={errors.openingHours?.message}
                   />
                 )}
@@ -318,13 +367,28 @@ export default function AddAttraction() {
                 control={control}
                 name="closingHours"
                 render={({ field }) => (
-                  <Input
+                  <Select
                     label="Closing Hours"
-                    placeholder="Daily 9:00 Am - 9:00 Pm"
-                    className="text-xs"
+                    options={timeOptions}
+                    selectedValues={field.value}
+                    setSelectedValues={field.onChange}
                     minWidth="350px"
-                    {...field}
                     error={errors.closingHours?.message}
+                  />
+                )}
+              />
+
+              <Controller
+                control={control}
+                name="workingDays"
+                render={({ field }) => (
+                  <Select
+                    label="Working Days"
+                    options={workingDaysOptions} // Using the new working days options
+                    selectedValues={field.value}
+                    setSelectedValues={field.onChange}
+                    minWidth="350px"
+                    error={errors.workingDays?.message}
                   />
                 )}
               />
@@ -433,6 +497,7 @@ export default function AddAttraction() {
                       field.onChange(selectedValues);
                     }}
                     minWidth="350px"
+                    maxWidth="350px"
                     error={errors.tags?.message}
                   />
                 )}
@@ -460,7 +525,7 @@ export default function AddAttraction() {
             <div className="mt-5 flex flex-wrap gap-4">
               <Controller
                 control={control}
-                name="city"
+                name="cityId"
                 render={({ field }) => (
                   <Select
                     label="City"
@@ -472,7 +537,7 @@ export default function AddAttraction() {
                     selectedValues={field.value}
                     setSelectedValues={field.onChange}
                     minWidth="350px"
-                    error={errors.city?.message}
+                    error={errors.cityId?.message}
                   />
                 )}
               />
@@ -481,21 +546,35 @@ export default function AddAttraction() {
                 control={control}
                 name="area"
                 render={({ field }) => (
-                  <Select
+                  <AreaSelect
                     label="Area"
                     options={areas.map((p) => ({
                       value: p.id,
                       label: p.name,
-                      key: p.id,
                     }))}
-                    selectedValues={field.value}
-                    setSelectedValues={field.onChange}
+                    selectedValues={
+                      field.value as {
+                        id: number | string | null;
+                        name: string;
+                      } | null
+                    } // Expecting { id, name } or null
+                    setSelectedValues={(selected) => {
+                      const selectedArea = selected
+                        ? {
+                            id: selected.id, // This will be null for custom options
+                            name: selected.name,
+                          }
+                        : null;
+
+                      field.onChange(selectedArea); // Set the selected area object
+                    }}
                     minWidth="350px"
                     searchable
-                    error={errors.area?.message}
+                    error={errors.area?.message} // Display validation errors if any
                   />
                 )}
               />
+
               <Controller
                 control={control}
                 name="address"
