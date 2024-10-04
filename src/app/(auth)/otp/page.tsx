@@ -2,16 +2,17 @@
 'use client';
 
 import { useRouter, useSearchParams } from 'next/navigation';
-import React, { FormEvent, useEffect, useState } from 'react';
+import React, { FormEvent, useEffect, useState, Suspense } from 'react';
 
 import AuthForm from '@/app/(auth)/AuthForm';
 import { handleAuthRequest } from '@/services/apiService';
 
-export default function Otp() {
+function OtpComponent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [error, setError] = useState<string | null>(null);
   const [email, setEmail] = useState<string>('');
+
   useEffect(() => {
     const emailFromUrl = searchParams.get('email');
     if (emailFromUrl) {
@@ -49,5 +50,13 @@ export default function Otp() {
       formPadding="50px"
       error={error}
     />
+  );
+}
+
+export default function Otp() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <OtpComponent />
+    </Suspense>
   );
 }
