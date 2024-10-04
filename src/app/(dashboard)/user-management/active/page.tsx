@@ -22,7 +22,7 @@ export default function UserManagementActive() {
   const { setCurrentMember } = useMember();
   const router = useRouter();
   const columns = [
-    'Select',
+    // 'Select',
     'User ID',
     'First Name',
     'Last Name',
@@ -30,7 +30,7 @@ export default function UserManagementActive() {
     'Phone Number',
     'Nationality',
     'Action',
-    'Reset Link',
+    // 'Reset Link',
   ];
 
   const [data, setData] = useState<any[]>([]);
@@ -98,12 +98,12 @@ export default function UserManagementActive() {
           </div>
         );
 
-      case 'Reset Link':
-        return (
-          <div className="flex items-center gap-2 cursor-pointer">
-            <span className="text-blue-200 underline">{item[column]}</span>
-          </div>
-        );
+      // case 'Reset Link':
+      //   return (
+      //     <div className="flex items-center gap-2 cursor-pointer">
+      //       <span className="text-blue-200 underline">{item[column]}</span>
+      //     </div>
+      //   );
 
       default:
         return <span>{item[column]}</span>;
@@ -127,16 +127,17 @@ export default function UserManagementActive() {
             Download Excel
           </Button>
         </div>
-
-        <Input
-          type="text"
-          placeholder="Search"
-          inputSize="sm"
-          minWidth="400px"
-          className="bg-white !border-0"
-          onChange={(e) => setSearchTerm(e.target.value)}
-          icon={<CiSearch />}
-        />
+        <div className=" flex items-end">
+          <Input
+            type="text"
+            placeholder="Search"
+            inputSize="sm"
+            minWidth="400px"
+            className="bg-white !border-0"
+            onChange={(e) => setSearchTerm(e.target.value)}
+            icon={<CiSearch />}
+          />
+        </div>
       </Wrapper>
       <div className="bg-white auto">
         {isLoading ? (

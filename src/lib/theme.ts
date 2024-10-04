@@ -15,4 +15,6 @@ export const colors: { [key: string]: string } = {
   Jungle: '#E7ECFC',
   Trekking: '#E3EFF8',
   Wildlife: '#E3F7F8',
+  admin: '#0E9C6C',
+  supervisor: '#364EA2',
 };

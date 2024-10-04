@@ -13,6 +13,7 @@ import Input from '@/components/ui/Input';
 import Loader from '@/components/ui/Loader';
 import Title from '@/components/ui/Title';
 import useDebounce from '@/hooks/useDebounce';
+import { colors } from '@/lib/theme';
 import AlertService from '@/services/alertService';
 import { DeleteTeamMember, fetchTeam } from '@/services/apiService';
 import { useMember } from '@/store/MemberContext';
@@ -24,7 +25,7 @@ export default function MyTeam() {
   const { setCurrentMember } = useMember();
 
   const columns = [
-    'Select',
+    // 'Select',
     'First Name',
     'Last Name',
     'Designation',
@@ -96,6 +97,8 @@ export default function MyTeam() {
   };
 
   const renderCell = (item: any, column: string, rowIndex: any) => {
+    console.log(column);
+
     switch (column) {
       case 'Select':
         return (
@@ -131,6 +134,12 @@ export default function MyTeam() {
             <Image height={20} alt="delete" width={20} src="/delete_icon.svg" />
             {item[column]}
           </div>
+        );
+      case 'Role':
+        return (
+          <span className="capitalize" style={{ color: colors[item[column]] }}>
+            {item[column]}
+          </span>
         );
       default:
         return <span>{item[column]}</span>;
