@@ -52,3 +52,24 @@ export const seriesData = [
 export const attractionDestinationId = 1;
 export const topExperienceDestinationId = 2;
 export const happeningEventsDestinationId = 3;
+
+export const timeOptions = Array.from({ length: 24 }, (_, i) => {
+  const hour = i % 12 === 0 ? 12 : i % 12;
+  const period = i < 12 ? 'AM' : 'PM';
+  const label = `${hour}:00 ${period}`;
+  return { value: `${hour}:00 ${period}`, label };
+});
+
+export const workingDaysOptions = [
+  { value: 'Mon-Sun', label: 'Mon-Sun' },
+  { value: 'Mon-Fri', label: 'Mon-Fri' },
+  { value: 'Sat-Sun', label: 'Sat-Sun' },
+  { value: 'Mon-Sat', label: 'Mon-Sat' },
+  { value: 'Mon', label: 'Mon' },
+  { value: 'Tue', label: 'Tue' },
+  { value: 'Wed', label: 'Wed' },
+  { value: 'Thu', label: 'Thu' },
+  { value: 'Fri', label: 'Fri' },
+  { value: 'Sat', label: 'Sat' },
+  { value: 'Sun', label: 'Sun' },
+];
