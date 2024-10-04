@@ -9,9 +9,9 @@ import * as Yup from 'yup';
 import FormContainer from '@/components/container/FormContainer';
 import Button from '@/components/ui/Button';
 import Input from '@/components/ui/Input';
+import Loader from '@/components/ui/Loader'; // Assuming you have a loader component
 import Select from '@/components/ui/Select';
 import Title from '@/components/ui/Title';
-import Loader from '@/components/ui/Loader'; // Assuming you have a loader component
 import AlertService from '@/services/alertService';
 import {
   fetchTeamDesignations,

@@ -15,7 +15,6 @@ import Title from '@/components/ui/Title';
 import useDebounce from '@/hooks/useDebounce';
 import { FetchUsers } from '@/services/apiService';
 import { useMember } from '@/store/MemberContext';
-import { BsColumns } from 'react-icons/bs';
 
 const DataTable = lazy(() => import('@/components/ui/dataTable/DataTable'));
 

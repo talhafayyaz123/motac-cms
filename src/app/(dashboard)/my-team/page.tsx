@@ -13,10 +13,10 @@ import Input from '@/components/ui/Input';
 import Loader from '@/components/ui/Loader';
 import Title from '@/components/ui/Title';
 import useDebounce from '@/hooks/useDebounce';
+import { colors } from '@/lib/theme';
 import AlertService from '@/services/alertService';
 import { DeleteTeamMember, fetchTeam } from '@/services/apiService';
 import { useMember } from '@/store/MemberContext';
-import { colors } from '@/lib/theme';
 
 const DataTable = lazy(() => import('@/components/ui/dataTable/DataTable'));
 
