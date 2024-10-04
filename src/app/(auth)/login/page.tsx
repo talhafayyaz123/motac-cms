@@ -3,6 +3,7 @@
 
 import { useRouter } from 'next/navigation';
 import React, { FormEvent, useState } from 'react';
+import { GoEye, GoEyeClosed } from 'react-icons/go';
 
 import AuthForm from '@/app/(auth)/AuthForm';
 import { handleAuthRequest } from '@/services/apiService';
@@ -10,6 +11,7 @@ import { handleAuthRequest } from '@/services/apiService';
 export default function Login() {
   const router = useRouter();
   const [error, setError] = useState<string | null | undefined>(null);
+  const [viewPass, setViewPass] = useState(false);
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -34,9 +36,23 @@ export default function Login() {
       fields={[
         { type: 'email', placeholder: 'Enter your email', name: 'email' },
         {
-          type: 'password',
+          type: viewPass ? 'text' : 'password',
           placeholder: 'Enter your password',
           name: 'password',
+          icon: !viewPass ? (
+            <GoEye
+              onClick={() => {
+                setViewPass(!viewPass);
+              }}
+            />
+          ) : (
+            <GoEyeClosed
+              onClick={() => {
+                setViewPass(!viewPass);
+              }}
+            />
+          ),
+          iconPlacement: 'right',
         },
       ]}
       onSubmit={handleSubmit}

@@ -79,6 +79,9 @@ const StatsSection: React.FC = () => {
             { value: '30', label: 'Last 30 days' },
             { value: '7', label: 'This week' },
             { value: '14', label: '14 days' },
+            { value: '90', label: 'Last 3 Months' },
+            { value: '180', label: 'Last 6 Months' },
+            { value: '365', label: 'This Year' },
           ]}
           highlightValue={'30'}
           minimalStyle
@@ -119,7 +122,7 @@ const StatsSection: React.FC = () => {
               <Image
                 src={locationIcon}
                 alt="location-icon"
-                className="w-14 h-14 object-cover aspect-[16/9]"
+                className="w-14 h-14 object-cover aspect-[16/9] absolute top-3 right-3"
               />
             </div>
           </div>
@@ -171,7 +174,7 @@ const StatsSection: React.FC = () => {
               color="#364EA2"
               fillColorStart="#778FDF"
               fillColorEnd="transparent"
-              width={288}
+              width={260}
               height={150}
             />
           </div>

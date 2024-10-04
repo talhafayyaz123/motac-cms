@@ -40,6 +40,9 @@ const CardStats: React.FC<CardStatsProps> = ({
                 { value: '30', label: 'Last 30 days' },
                 { value: '7', label: 'This week' },
                 { value: '14', label: '14 days' },
+                { value: '90', label: 'Last 3 Months' },
+                { value: '180', label: 'Last 6 Months' },
+                { value: '365', label: 'This Year' },
               ]}
               highlightValue={'30'}
               minimalStyle

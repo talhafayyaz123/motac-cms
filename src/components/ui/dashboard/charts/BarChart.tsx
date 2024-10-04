@@ -15,7 +15,7 @@ const BarChart: React.FC<BarChartProps> = ({
   seriesData,
 }) => {
   const getColorForBar = (index: number): string => {
-    const colors = ['#364EA2'];
+    const colors = ['#364EA2', '#778FDF', '#4466D9'];
     return colors[index % colors.length];
   };
 

@@ -21,6 +21,7 @@ const AttractionList: React.FC<AttractionListProps> = ({ statsData }) => {
             width={15}
             alt="location"
             src="/Location_icon.svg"
+            className="mt-[-15px] ml-[-10px]"
           />
         </div>
       ))}

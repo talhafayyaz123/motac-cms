@@ -185,7 +185,16 @@ function AccountSettings() {
           profile
         />
       </div>
-      <div className="h-28 w-28 rounded-full border border-blue-100 mt-10"></div>
+      <div className="h-28 w-28 rounded-full border border-blue-100 mt-10 flex items-center justify-center relative">
+        <Image height={60} alt="user" width={60} src="/user_icon.svg" />
+        <Image
+          height={40}
+          alt="user"
+          width={40}
+          src="/camera_icon.svg"
+          className="absolute right-[-10px] bottom-0"
+        />
+      </div>
       <form
         onSubmit={handleSubmit(onSubmit)}
         className="mt-10 flex flex-wrap gap-4 w-[75%]"
