@@ -1,10 +1,11 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 'use client';
 
 import { useRouter } from 'next/navigation';
 import React, { FormEvent, useState } from 'react';
 
 import AuthForm from '@/app/(auth)/AuthForm';
-import { handleAuthRequest } from '@/services/apiService';
+import { requestOtp } from '@/services/apiService';
 
 export default function ForgotPassword() {
   const [error, setError] = useState<string | null>(null);
@@ -15,13 +16,18 @@ export default function ForgotPassword() {
     const form = event.target as HTMLFormElement;
     const email = form.email.value;
     const userAgent = navigator.userAgent;
-    const result = await handleAuthRequest('requestOtp', { email, userAgent });
 
-    if (result.success) {
+    const result = await requestOtp({ email, userAgent });
+
+    console.log(result);
+
+    if (result.success && result.response === 'Otp sent') {
       router.push('/otp?email=' + email);
     } else {
-      const error = typeof result.error === 'string' ? result.error : null;
-      setError(error);
+      router.push('/otp?email=' + email);
+      const error =
+        typeof result.error === 'string' ? result.error : 'Unknown error';
+      // setError(error);
     }
   };
 

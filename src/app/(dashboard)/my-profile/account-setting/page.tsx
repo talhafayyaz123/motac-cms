@@ -41,7 +41,7 @@ interface FormValues {
   lastName: string;
   email: string;
   company: string;
-  phoneNumber: string;
+  phoneNumber?: string;
 }
 
 function AccountSettings() {
@@ -100,7 +100,7 @@ function AccountSettings() {
       .email('Invalid email format')
       .required('Email is required'),
     company: Yup.string().required('Company is required'),
-    phoneNumber: Yup.string().required('Phone Number is required'),
+    phoneNumber: Yup.string(),
   });
 
   // react-hook-form initialization
