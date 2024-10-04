@@ -3,10 +3,10 @@
 
 import { useRouter } from 'next/navigation';
 import React, { FormEvent, useState } from 'react';
+import { GoEye, GoEyeClosed } from 'react-icons/go';
 
 import AuthForm from '@/app/(auth)/AuthForm';
 import { handleAuthRequest } from '@/services/apiService';
-import { GoEye, GoEyeClosed } from 'react-icons/go';
 
 export default function Login() {
   const router = useRouter();
