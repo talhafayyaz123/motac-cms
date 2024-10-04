@@ -6,6 +6,7 @@ export const chartCategories = [
   'May',
   'Jun',
   'Jul',
+  'Aug',
   'Sep',
   'Oct',
   'Nov',

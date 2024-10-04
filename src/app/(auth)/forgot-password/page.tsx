@@ -35,7 +35,7 @@ export default function ForgotPassword() {
     <AuthForm
       title="Forgot Password?"
       description="Please Enter Your Registered Email To Reset Password"
-      buttonText="Send Otp"
+      buttonText="Send OTP"
       fields={[
         { type: 'email', placeholder: 'Enter your email', name: 'email' },
       ]}
