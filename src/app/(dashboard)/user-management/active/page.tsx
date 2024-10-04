@@ -3,11 +3,8 @@
 import { useRouter } from 'next/navigation';
 import React, { useState, lazy, useEffect, Suspense } from 'react';
 import { CiSearch } from 'react-icons/ci';
-import { FaFileExcel } from 'react-icons/fa';
 import { IoEyeSharp } from 'react-icons/io5';
-import { RiCheckDoubleFill } from 'react-icons/ri';
 
-import Button from '@/components/ui/Button';
 import Wrapper from '@/components/ui/dataTable/DataTableWrapper';
 import Input from '@/components/ui/Input';
 import Loader from '@/components/ui/Loader';
@@ -116,17 +113,7 @@ export default function UserManagementActive() {
         User Management
       </Title>
       <Wrapper>
-        <div className="flex gap-3">
-          <Button variant="primary" icon={<RiCheckDoubleFill />}>
-            Select All
-          </Button>
-          <Button
-            variant="primary"
-            icon={<FaFileExcel className="text-green-600" />}
-          >
-            Download Excel
-          </Button>
-        </div>
+        <div className="flex"></div>
         <div className=" flex items-end">
           <Input
             type="text"

@@ -4,8 +4,6 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import React, { lazy, Suspense, useEffect, useState } from 'react';
 import { CiSearch } from 'react-icons/ci';
-import { FaFileExcel } from 'react-icons/fa';
-import { RiCheckDoubleFill } from 'react-icons/ri';
 
 import Button from '@/components/ui/Button';
 import Wrapper from '@/components/ui/dataTable/DataTableWrapper';
@@ -150,17 +148,7 @@ export default function MyTeam() {
     <main className="h-full">
       <Title className="font-light ml-2 mb-2">All Team Members</Title>
       <Wrapper>
-        <div className="flex gap-3">
-          <Button variant="primary" icon={<RiCheckDoubleFill />}>
-            Select All
-          </Button>
-          <Button
-            variant="primary"
-            icon={<FaFileExcel className="text-green-600" />}
-          >
-            Download Excel
-          </Button>
-        </div>
+        <div className="flex"></div>
 
         <div className="flex gap-3">
           <Button
