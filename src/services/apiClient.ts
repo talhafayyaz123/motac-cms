@@ -45,6 +45,9 @@ export const apiClient = async (
       throw new Error(errorMessages);
     }
 
+    if (response.status === 204 || response.statusText === 'No Content') {
+      return;
+    }
     return await response.json();
   } catch (error) {
     console.error('API Error:', error);
