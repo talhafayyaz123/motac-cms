@@ -145,6 +145,7 @@ export default function AddTeamMemberPage() {
           'Done',
         );
         reset();
+        router.push('/my-team');
       }
     } catch (error) {
       console.error('Unexpected error:', error);
