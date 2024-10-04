@@ -127,7 +127,7 @@ export default function UserManagementActive() {
             Download Excel
           </Button>
         </div>
-        <div className="border border-black-100 flex items-end">
+        <div className=" flex items-end">
           <Input
             type="text"
             placeholder="Search"
