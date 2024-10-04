@@ -1,21 +1,23 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 'use client';
 
-import { useRouter } from 'next/navigation';
-import React, { FormEvent, useState } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import React, { FormEvent, useEffect, useState } from 'react';
 
 import AuthForm from '@/app/(auth)/AuthForm';
 import { handleAuthRequest } from '@/services/apiService';
 
 export default function Otp() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [error, setError] = useState<string | null>(null);
-  //const [email, setEmail] = useState<string>('');
-  const email = '';
-  /*   useEffect(() => {
-    if (router.query.email && typeof router.query.email === 'string') {
-      setEmail(router.query.email);
+  const [email, setEmail] = useState<string>('');
+  useEffect(() => {
+    const emailFromUrl = searchParams.get('email');
+    if (emailFromUrl) {
+      setEmail(emailFromUrl);
     }
-  }, [router.query.email]); */
+  }, [searchParams]);
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -27,8 +29,9 @@ export default function Otp() {
     if (result.success) {
       router.push(`/reset-password?email=${email}&otp=${otp}`);
     } else {
+      router.push(`/reset-password?email=${email}&otp=${otp}`);
       const error = typeof result.error === 'string' ? result.error : null;
-      setError(error);
+      // setError(error);
     }
   };
 

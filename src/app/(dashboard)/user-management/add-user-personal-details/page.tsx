@@ -1,7 +1,8 @@
 'use client';
 
-import { Formik, Form } from 'formik';
-import React from 'react';
+import { yupResolver } from '@hookform/resolvers/yup';
+import React, { useEffect } from 'react';
+import { useForm, Controller } from 'react-hook-form';
 import * as Yup from 'yup';
 
 import FormContainer from '@/components/container/FormContainer';
@@ -11,6 +12,14 @@ import Title from '@/components/ui/Title';
 import AlertService from '@/services/alertService';
 import { DeleteActiveMember } from '@/services/apiService';
 import { useMember } from '@/store/MemberContext';
+
+interface FormValues {
+  firstName: string;
+  lastName: string;
+  phoneNumber: string;
+  email: string;
+  nationality: string;
+}
 
 export default function PersonalDetails() {
   const { currentMember, setCurrentMember } = useMember();
@@ -34,13 +43,41 @@ export default function PersonalDetails() {
     nationality: Yup.string().required('Nationality is required'),
   });
 
-  const initialValues = {
-    firstName: firstName,
-    lastName: lastName,
-    phoneNumber: phoneNumber,
-    email: Email,
-    nationality: Nationality,
-  };
+  const {
+    control,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm<FormValues>({
+    resolver: yupResolver(validationSchema),
+    defaultValues: {
+      firstName: '',
+      lastName: '',
+      phoneNumber: '',
+      email: '',
+      nationality: '',
+    },
+  });
+
+  useEffect(() => {
+    if (currentMember) {
+      reset({
+        firstName,
+        lastName,
+        phoneNumber,
+        email: Email,
+        nationality: Nationality,
+      });
+    }
+  }, [
+    currentMember,
+    reset,
+    firstName,
+    lastName,
+    phoneNumber,
+    Email,
+    Nationality,
+  ]);
 
   const handleDelete = async () => {
     try {
@@ -71,6 +108,10 @@ export default function PersonalDetails() {
     }
   };
 
+  const onSubmit = (data: FormValues) => {
+    console.log('Form Submitted:', data);
+  };
+
   return (
     <main className="h-full">
       <div className="sticky top-0 bg-white w-full py-8 z-50 flex justify-between">
@@ -83,129 +124,137 @@ export default function PersonalDetails() {
       </div>
 
       <FormContainer>
-        <Formik
-          initialValues={initialValues}
-          validationSchema={validationSchema}
-          onSubmit={() => console.log('hello')}
-          enableReinitialize={true}
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          className="mt-5 flex pb-40 flex-wrap gap-4"
         >
-          {({ setFieldValue, values, errors, touched }) => (
-            <Form className="mt-5 flex pb-40 flex-wrap gap-4">
+          {/* First Name */}
+          <Controller
+            name="firstName"
+            control={control}
+            render={({ field }) => (
               <Input
                 label="First Name"
-                name="firstName"
-                placeholder="John"
                 disabled
+                placeholder="John"
                 className="text-xs"
                 minWidth="350px"
-                value={values.firstName}
-                onChange={(e) => setFieldValue('firstName', e.target.value)}
-                error={
-                  touched.firstName && typeof errors.firstName === 'string'
-                    ? errors.firstName
-                    : undefined
-                }
+                {...field}
+                error={errors.firstName?.message}
               />
+            )}
+          />
 
+          {/* Last Name */}
+          <Controller
+            name="lastName"
+            control={control}
+            render={({ field }) => (
               <Input
                 label="Last Name"
-                name="lastName"
-                placeholder="Doe"
                 disabled
+                placeholder="Doe"
                 className="text-xs"
                 minWidth="350px"
-                value={values.lastName}
-                onChange={(e) => setFieldValue('lastName', e.target.value)}
-                error={
-                  touched.lastName && typeof errors.lastName === 'string'
-                    ? errors.lastName
-                    : undefined
-                }
+                {...field}
+                error={errors.lastName?.message}
               />
+            )}
+          />
 
+          {/* Phone Number */}
+          <Controller
+            name="phoneNumber"
+            control={control}
+            render={({ field }) => (
               <Input
                 label="Phone Number"
-                name="phoneNumber"
                 disabled
                 placeholder="+60 12-345 6789"
                 className="text-xs"
                 minWidth="350px"
-                value={values.phoneNumber}
-                onChange={(e) => setFieldValue('phoneNumber', e.target.value)}
-                error={
-                  touched.phoneNumber && typeof errors.phoneNumber === 'string'
-                    ? errors.phoneNumber
-                    : undefined
-                }
+                {...field}
+                error={errors.phoneNumber?.message}
               />
+            )}
+          />
 
+          {/* Email */}
+          <Controller
+            name="email"
+            control={control}
+            render={({ field }) => (
               <Input
                 label="Email"
                 disabled
-                name="email"
                 placeholder="johndoe@gmail.com"
                 className="text-xs"
                 minWidth="350px"
-                value={values.email}
-                onChange={(e) => setFieldValue('email', e.target.value)}
-                error={
-                  touched.email && typeof errors.email === 'string'
-                    ? errors.email
-                    : undefined
-                }
+                {...field}
+                error={errors.email?.message}
               />
+            )}
+          />
 
+          {/* Nationality */}
+          <Controller
+            name="nationality"
+            control={control}
+            render={({ field }) => (
               <Input
                 label="Nationality"
                 disabled
-                name="nationality"
                 placeholder="United Kingdom"
                 className="text-xs"
                 minWidth="350px"
-                value={values.nationality}
-                onChange={(e) => setFieldValue('nationality', e.target.value)}
-                error={
-                  touched.nationality && typeof errors.nationality === 'string'
-                    ? errors.nationality
-                    : undefined
-                }
+                {...field}
+                error={errors.nationality?.message}
               />
+            )}
+          />
 
-              <Input
-                label="Gender"
-                disabled
-                placeholder="Male"
-                className="text-xs"
-                minWidth="350px"
-              />
-              <Input
-                label="View Image"
-                className="text-xs"
-                disabled
-                minWidth="350px"
-                type="file"
-                onFileError={async () => {
-                  try {
-                    await AlertService.alert(
-                      '',
-                      'Only images with 16:9 aspect ratio are allowed',
-                      'warning',
-                      'OK',
-                    );
-                  } catch (error) {
-                    console.log('something went wrong ');
-                  }
-                }}
-                onChange={(e) => {
-                  const input = e.target as HTMLInputElement;
-                  if (input.files && input.files[0]) {
-                    console.log('Image uploaded successfully', input.files[0]);
-                  }
-                }}
-              />
-            </Form>
-          )}
-        </Formik>
+          {/* Gender - static field */}
+          <Input
+            label="Gender"
+            disabled
+            placeholder="Male"
+            className="text-xs"
+            minWidth="350px"
+          />
+
+          {/* Image upload */}
+          <Input
+            label="View Image"
+            className="text-xs"
+            disabled
+            minWidth="350px"
+            type="file"
+            onFileError={async () => {
+              try {
+                await AlertService.alert(
+                  '',
+                  'Only images with 16:9 aspect ratio are allowed',
+                  'warning',
+                  'OK',
+                );
+              } catch (error) {
+                console.log('something went wrong');
+              }
+            }}
+            onChange={(e) => {
+              const input = e.target as HTMLInputElement;
+              if (input.files && input.files[0]) {
+                console.log('Image uploaded successfully', input.files[0]);
+              }
+            }}
+          />
+
+          <div className="w-full flex justify-end gap-3 p-10">
+            <Button variant="customBlue" type="submit">
+              Save
+            </Button>
+          </div>
+        </form>
       </FormContainer>
     </main>
   );
