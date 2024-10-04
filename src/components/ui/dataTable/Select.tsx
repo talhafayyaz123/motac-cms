@@ -48,7 +48,7 @@ const Select: React.FC<SelectProps> = ({
         className={`absolute inset-y-0 right-[-10px] flex items-center pr-4 pointer-events-none`}
       >
         <svg
-          className="w-4 h-4 text-white"
+          className="w-4 h-4 text-gray-700"
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
