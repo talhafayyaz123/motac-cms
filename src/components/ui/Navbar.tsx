@@ -42,7 +42,7 @@ const Navbar = () => {
   };
 
   return (
-    <div className="bg-white p-8 flex justify-between items-center relative">
+    <div className="bg-white p-6 flex justify-between items-center relative">
       <div className="flex items-center max-h-max gap-4">
         {pathname !== '/' && (
           <div
@@ -59,7 +59,7 @@ const Navbar = () => {
             <FaCaretLeft className="text-white text-3xl" />
           </div>
         )}
-        <Title className="absolute bottom-5">
+        <Title className={`${pathname === '/' && 'absolute bottom-8'} `}>
           {pathname === '/' ? 'Dashboard' : parsePathToTitle(requiredPath)}
         </Title>
       </div>
@@ -80,13 +80,15 @@ const Navbar = () => {
             }
           }}
         >
-          <Image
-            src="/user.jpg"
-            alt="Profile"
-            width={60}
-            height={60}
-            className="h-[50px] rounded-full object-cover aspect-[16/9]"
-          />
+          <div className="border-black-100 border-2 rounded-full h-[60px] w-[60px] overflow-hidden">
+            <Image
+              src="/user.jpg"
+              alt="Profile"
+              width={60}
+              height={60}
+              className="object-cover h-full w-full" // Ensure image fills the container
+            />
+          </div>
           {showProfileDropdown && renderProfileDropdownOption()}
           <div>
             <p className="text-sm font-semibold">George Alex</p>

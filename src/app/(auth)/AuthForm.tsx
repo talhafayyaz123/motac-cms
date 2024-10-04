@@ -11,7 +11,13 @@ interface AuthFormProps {
   title?: string;
   description: string;
   buttonText: string;
-  fields: { type: string; placeholder: string; name: string }[];
+  fields: {
+    type: string;
+    placeholder: string;
+    name: string;
+    icon?: React.ReactNode;
+    iconPlacement?: string;
+  }[];
   onSubmit: (event: FormEvent<HTMLFormElement>) => void;
   forgotPasswordLink?: string;
   paddingTop: string;
@@ -117,6 +123,8 @@ const AuthForm: React.FC<AuthFormProps> = ({
                   minWidth="200px"
                   className="bg-white !border-0 !border-b-2 focus:outline-none focus:ring-0 !rounded-none"
                   name={field.name}
+                  icon={field.icon}
+                  iconPlacement={field.iconPlacement}
                 />
               </div>
             ))}

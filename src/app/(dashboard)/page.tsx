@@ -82,26 +82,17 @@ export default function Dashboard() {
 
     try {
       if (flag === 'userManagement') {
-        setLoadingUserManagement(true);
         const fetchedData = await FetchDashboardUsersData(startDate, endDate);
         setStatsData(fetchedData);
-        setLoadingUserManagement(false);
       } else if (flag === 'happeningEvents') {
-        setLoadingEvents(true);
         const fetchedData = await FetchHappeningEventsData(startDate, endDate);
         setHappeningEventsData(fetchedData);
-        setLoadingEvents(false);
       } else {
-        setLoadingAttractions(true);
         const fetchedData = await FetchSeeAttractionData(startDate, endDate);
         setSeeAttractionData(fetchedData);
-        setLoadingAttractions(false);
       }
     } catch (error) {
       console.error('Error loading data:', error);
-      setLoadingUserManagement(false);
-      setLoadingAttractions(false);
-      setLoadingEvents(false);
     }
   };
 
@@ -209,6 +200,9 @@ export default function Dashboard() {
                 { value: '30', label: 'Last 30 days' },
                 { value: '7', label: 'This week' },
                 { value: '14', label: '14 days' },
+                { value: '90', label: 'Last 3 Months' },
+                { value: '180', label: 'Last 6 Months' },
+                { value: '365', label: 'This Year' },
               ]}
               highlightValue={'30'}
               minimalStyle
@@ -241,6 +235,9 @@ export default function Dashboard() {
                       { value: '30', label: 'Last 30 days' },
                       { value: '7', label: 'This week' },
                       { value: '14', label: '14 days' },
+                      { value: '90', label: 'Last 3 Months' },
+                      { value: '180', label: 'Last 6 Months' },
+                      { value: '365', label: 'This Year' },
                     ]}
                     highlightValue={'30'}
                     minimalStyle

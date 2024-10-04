@@ -14,6 +14,7 @@ interface InputProps
   error?: string | undefined;
   defaultImagePath?: string | null; // Add prop for default image path (edit case)
   marginBottom?: string | null;
+  iconPlacement?: string | null;
 }
 
 const Input: React.FC<InputProps> = ({
@@ -33,6 +34,7 @@ const Input: React.FC<InputProps> = ({
   error,
   defaultImagePath,
   marginBottom,
+  iconPlacement = 'left',
   ...rest
 }) => {
   const fileInputRef = useRef<HTMLInputElement | null>(null);
@@ -153,7 +155,9 @@ const Input: React.FC<InputProps> = ({
       )}
       <div className={`relative mb-${marginBottom}`}>
         {icon && (
-          <span className="absolute inset-y-0 left-0 flex items-center pl-4 text-2xl text-black">
+          <span
+            className={`absolute inset-y-0 ${iconPlacement === 'right' ? 'right-0' : 'left-0'} flex items-center pl-4 text-2xl text-black`}
+          >
             {icon}
           </span>
         )}
@@ -167,7 +171,7 @@ const Input: React.FC<InputProps> = ({
           onChange={type === 'file' ? handleFileChange : onChange}
           className={`${combinedStyles} ${
             type === 'file' && 'hidden'
-          } ${icon ? 'pl-12' : ''} border-gray-300 shadow-sm placeholder-black`}
+          } ${icon && iconPlacement === 'left' ? 'pl-12' : ''} border-gray-300 shadow-sm placeholder-black`}
           disabled={disabled}
           style={{ minWidth }}
           {...rest}
