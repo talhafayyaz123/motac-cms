@@ -1,8 +1,7 @@
 'use client';
 
-import { Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import React, { FormEvent, useState } from 'react';
+import React, { Suspense, FormEvent, useState } from 'react';
 
 import AuthForm from '@/app/(auth)/AuthForm';
 import { handleAuthRequest } from '@/services/apiService';
