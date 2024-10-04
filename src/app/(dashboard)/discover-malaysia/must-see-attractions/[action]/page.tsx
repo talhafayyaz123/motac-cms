@@ -319,9 +319,7 @@ export default function AddAttraction() {
   return (
     <main className="h-full">
       <div className="sticky top-0 bg-white w-full py-8 z-50">
-        <Title className="text-[#051225] font-medium">
-          {action === 'add-attraction' ? 'Add Attraction' : 'Edit Attraction'}
-        </Title>
+        <Title className="text-[#051225] font-bold">Detailed View</Title>
       </div>
       {isLoading ? (
         <Loader />
@@ -521,14 +519,14 @@ export default function AddAttraction() {
                 )}
               />
             </div>
-            <p className="mt-5 text-md text-[#181819] font-normal">Location</p>
+            <p className="mt-5 text-md text-[#181819] font-bold">Location</p>
             <div className="mt-5 flex flex-wrap gap-4">
               <Controller
                 control={control}
                 name="cityId"
                 render={({ field }) => (
                   <Select
-                    label="City"
+                    label="State"
                     options={cities.map((p) => ({
                       value: p.id,
                       label: p.name,
@@ -617,10 +615,10 @@ export default function AddAttraction() {
                   )}
                   <button
                     type="button"
-                    className="absolute top-2 right-2 p-1 bg-red-500 rounded-full"
+                    className="absolute bottom-2 right-2 p-1 bg-[#e9dbda] rounded-md"
                     onClick={() => removeImage(index)}
                   >
-                    <FaTrashAlt className="text-white" />
+                    <FaTrashAlt size={20} className="text-[#364ea2]" />
                   </button>
                 </div>
               ))}

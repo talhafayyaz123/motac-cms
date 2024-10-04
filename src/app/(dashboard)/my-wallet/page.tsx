@@ -39,7 +39,7 @@ export default function MyWallet() {
   const data = generateDummyData();
 
   const [currentPage, setCurrentPage] = useState(1);
-  const [perPage, setPerPage] = useState(12);
+  const [perPage, setPerPage] = useState(10);
 
   const tagStyle: Record<StatusType, { background: string; border: string }> = {
     Success: {

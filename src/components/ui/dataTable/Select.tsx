@@ -1,5 +1,7 @@
 import React from 'react';
 
+import { parsePathToTitle } from '@/helpers/utils/utils';
+
 interface SelectProps {
   value?: string;
   onChange?: (event: React.ChangeEvent<HTMLSelectElement>) => void;
@@ -23,7 +25,7 @@ const Select: React.FC<SelectProps> = ({
         className={`${
           minimalStyle
             ? 'border border-gray-300 text-gray-700 py-2 pl-3 pr-8 focus:ring-blue-500'
-            : 'ring-1 ring-gray-500 ring-offset-2'
+            : 'ring-1 ring-gray-500 ring-offset-0'
         } 
    py-1 pl-3 pr-8 text-sm rounded-md outline-none ${
      value === highlightValue
@@ -32,13 +34,13 @@ const Select: React.FC<SelectProps> = ({
    }`}
         style={{ appearance: 'none' }}
       >
-        {options.map((option) => (
+        {options?.map((option) => (
           <option
             key={option.value}
             value={option.value}
             className="bg-white !text-gray-900"
           >
-            {option.label}
+            {parsePathToTitle(option.label)}
           </option>
         ))}
       </select>

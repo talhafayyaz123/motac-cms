@@ -35,7 +35,7 @@ export default function Products() {
   const data = generateDummyData();
 
   const [currentPage, setCurrentPage] = useState(1);
-  const [perPage, setPerPage] = useState(12);
+  const [perPage, setPerPage] = useState(10);
 
   const renderCell = (item: any, column: string) => {
     switch (column) {
