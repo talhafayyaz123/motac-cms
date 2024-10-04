@@ -32,7 +32,7 @@ const Input: React.FC<InputProps> = ({
   onBase64ValueChange,
   error,
   defaultImagePath,
-  marginBottom = '3',
+  marginBottom,
   ...rest
 }) => {
   const fileInputRef = useRef<HTMLInputElement | null>(null);

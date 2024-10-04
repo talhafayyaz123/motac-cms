@@ -11,6 +11,7 @@ import Button from '@/components/ui/Button';
 import Input from '@/components/ui/Input';
 import Select from '@/components/ui/Select';
 import Title from '@/components/ui/Title';
+import Loader from '@/components/ui/Loader'; // Assuming you have a loader component
 import AlertService from '@/services/alertService';
 import {
   fetchTeamDesignations,
@@ -40,6 +41,7 @@ export default function AddTeamMemberPage() {
 
   const [designation, setDesignation] = useState<Option[]>([]);
   const [role, setRole] = useState<Option[]>([]);
+  const [loading, setLoading] = useState<boolean>(true); // New loader state
 
   const validationSchema = Yup.object({
     firstName: Yup.string().required('First Name is required'),
@@ -71,26 +73,23 @@ export default function AddTeamMemberPage() {
   });
 
   useEffect(() => {
-    const loadRoles = async () => {
+    const loadRolesAndDesignations = async () => {
+      setLoading(true); // Set loader to true before starting to fetch
       try {
-        const fetchedRoles = await fetchTeamRoles();
+        const [fetchedRoles, fetchedDesignations] = await Promise.all([
+          fetchTeamRoles(),
+          fetchTeamDesignations(),
+        ]);
         setRole(fetchedRoles);
-      } catch (error) {
-        console.error('Error loading roles:', error);
-      }
-    };
-
-    const loadDesignations = async () => {
-      try {
-        const fetchedDesignations = await fetchTeamDesignations();
         setDesignation(fetchedDesignations);
       } catch (error) {
-        console.error('Error loading designations:', error);
+        console.error('Error loading roles or designations:', error);
+      } finally {
+        setLoading(false); // Set loader to false after fetching completes
       }
     };
 
-    void loadRoles();
-    void loadDesignations();
+    void loadRolesAndDesignations();
   }, []);
 
   useEffect(() => {
@@ -195,6 +194,10 @@ export default function AddTeamMemberPage() {
       );
     }
   };
+
+  if (loading) {
+    return <Loader />; // Display loader while fetching roles and designations
+  }
 
   return (
     <main className="h-full">

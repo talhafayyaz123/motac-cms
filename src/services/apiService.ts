@@ -408,7 +408,7 @@ export const FetchUsers = async (
       'Phone Number': item?.phoneNumber,
       Nationality: item?.nationality,
       Action: 'View',
-      'Reset Link': 'Send Reset Password Link',
+      // 'Reset Link': 'Send Reset Password Link',
     }));
 
     return { data: transformedData, total: result.totalRecords };

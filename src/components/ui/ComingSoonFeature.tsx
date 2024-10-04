@@ -27,7 +27,7 @@ const ComingSoonFeature: React.FC<ComingSoonFeatureProps> = ({
       {/* Overlay background */}
       <div className="absolute inset-0 bg-white opacity-60 z-10" />
 
-      <div className="relative z-20 text-center text-xs">
+      <div className="relative z-20 text-center text-xs font-extralight">
         Feature Coming Soon
       </div>
     </div>

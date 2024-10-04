@@ -17,7 +17,7 @@ const DataTable = lazy(() => import('@/components/ui/dataTable/DataTable'));
 
 export default function UserManagementDeleted() {
   const columns = [
-    'Select',
+    // 'Select',
     'User ID',
     'First Name',
     'Last Name',

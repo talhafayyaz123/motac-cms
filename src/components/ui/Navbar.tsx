@@ -42,7 +42,7 @@ const Navbar = () => {
   };
 
   return (
-    <div className="bg-white p-8 flex justify-between items-center">
+    <div className="bg-white p-8 flex justify-between items-center relative">
       <div className="flex items-center max-h-max gap-4">
         {pathname !== '/' && (
           <div
@@ -59,7 +59,7 @@ const Navbar = () => {
             <FaCaretLeft className="text-white text-3xl" />
           </div>
         )}
-        <Title>
+        <Title className="absolute bottom-5">
           {pathname === '/' ? 'Dashboard' : parsePathToTitle(requiredPath)}
         </Title>
       </div>

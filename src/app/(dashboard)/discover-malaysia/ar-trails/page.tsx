@@ -15,7 +15,7 @@ import generateDummyData from './DummyData';
 
 export default function ArTrails() {
   const columns = [
-    'Select',
+    // 'Select',
     'Name of AR Trail',
     'Location of Trail',
     'AR Trail Category',
