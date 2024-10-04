@@ -74,19 +74,17 @@ export default function MyTeam() {
   const handleDelete = async (id: number) => {
     const { ID } = data[id];
     try {
-      const response: any = await DeleteTeamMember(ID);
-      if (response?.error) {
-        await AlertService.alert('Error!', response.error, 'error', 'OK');
-      } else if (response?.id) {
-        await AlertService.alert(
-          'Successful!',
-          'Member Deleted Successfully',
-          'success',
-          'Done',
-        );
-        localStorage.removeItem('currentTeamMember');
-        setCurrentMember(null);
-      }
+      await DeleteTeamMember(ID);
+      await AlertService.alert(
+        'Successful!',
+        'Member Deleted Successfully',
+        'success',
+        'Done',
+      );
+      localStorage.removeItem('currentTeamMember');
+      setCurrentMember(null);
+      const filteredData = data.filter((member) => member.ID !== ID);
+      setData(filteredData);
     } catch (error: any) {
       await AlertService.alert(
         'Error!',
