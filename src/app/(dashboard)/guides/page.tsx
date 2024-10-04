@@ -33,7 +33,7 @@ export default function Guides() {
 
   const [data, setData] = useState<any[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [perPage, setPerPage] = useState(12);
+  const [perPage, setPerPage] = useState(10);
   const [activeRowIndex, setActiveRowIndex] = useState<number | null>(null);
 
   useEffect(() => {

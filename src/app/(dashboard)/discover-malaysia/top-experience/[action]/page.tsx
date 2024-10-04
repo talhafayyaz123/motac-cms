@@ -319,7 +319,7 @@ export default function AddExperience() {
   return (
     <main className="h-full">
       <div className="sticky top-0 bg-white w-full py-8 z-50">
-        <Title>Detailed View</Title>
+        <Title className="text-[#051225] font-bold">Detailed View</Title>
       </div>
       {isLoading ? (
         <Loader />
@@ -520,14 +520,14 @@ export default function AddExperience() {
                 )}
               />
             </div>
-            <p className="font-semibold mb-3">Location</p>
+            <p className="font-bold mb-3">Location</p>
             <div className="mt-5 flex flex-wrap gap-4">
               <Controller
                 control={control}
                 name="cityId"
                 render={({ field }) => (
                   <Select
-                    label="City"
+                    label="State"
                     options={cities.map((p) => ({
                       value: p.id,
                       label: p.name,
@@ -615,10 +615,10 @@ export default function AddExperience() {
                   )}
                   <button
                     type="button"
-                    className="absolute top-2 right-2 p-1 bg-red-500 rounded-full"
+                    className="absolute bottom-2 right-2 p-1 bg-[#e9dbda] rounded-md"
                     onClick={() => removeImage(index)}
                   >
-                    <FaTrashAlt className="text-white" />
+                    <FaTrashAlt size={20} className="text-[#364ea2]" />
                   </button>
                 </div>
               ))}

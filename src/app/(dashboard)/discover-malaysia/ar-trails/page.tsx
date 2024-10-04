@@ -28,7 +28,7 @@ export default function ArTrails() {
   const [data, setData] = useState(generateDummyData());
 
   const [currentPage, setCurrentPage] = useState(1);
-  const [perPage, setPerPage] = useState(12);
+  const [perPage, setPerPage] = useState(10);
 
   const handleTagRemove = (rowIndex: number, tagIndex: number) => {
     const newData = [...data];

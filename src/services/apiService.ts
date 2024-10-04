@@ -51,7 +51,7 @@ export const fetchDestinations = async (
         'ID ': item.displayId,
         'Name ': item.title || '',
         'Category ': item.destinationCategoryName || '',
-        'City ': item.cityName,
+        'States ': item.cityName,
         Tags: item.tags
           ? item.tags.map((tag: any) => ({
               id: tag.id,

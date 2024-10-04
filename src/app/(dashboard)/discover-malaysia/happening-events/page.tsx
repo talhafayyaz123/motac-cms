@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 
 import EventTableLayout from '@/app/(dashboard)/discover-malaysia/EventTable';
 import Select from '@/components/ui/dataTable/Select';
@@ -31,7 +31,7 @@ export default function HappeningEvents() {
     'ID ',
     'Name ',
     'Category ',
-    'City ',
+    'States ',
     'Event Start Date',
     'Event End Date',
     'Tags',
@@ -48,6 +48,8 @@ export default function HappeningEvents() {
   const [totalCount, setTotalCount] = useState(0);
   const [loadingData, setLoadingData] = useState<boolean>(false);
   const [isNoData, setIsNoData] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement | null>(null);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   useEffect(() => {
     const fetchTags = async () => {
@@ -178,7 +180,12 @@ export default function HappeningEvents() {
     return (
       missingTags &&
       missingTags?.length > 0 && (
-        <div className="absolute overflow-y-auto h-20 left-0 z-10 mt-1 bg-white border border-gray-300 rounded-lg shadow-lg p-2 custom-scroll">
+        <div
+          ref={dropdownRef}
+          className={`absolute overflow-y-auto h-20 left-0 z-10 mt-1 bg-white border border-gray-300 rounded-lg shadow-lg p-2 custom-scroll ${
+            isDropdownOpen ? 'block' : 'hidden'
+          }`}
+        >
           {missingTags.map((tag) => (
             <div
               key={tag?.id}
@@ -199,6 +206,25 @@ export default function HappeningEvents() {
       )
     );
   };
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
+        setIsDropdownOpen(false); // Close the dropdown if clicked outside
+      }
+    };
+
+    // Bind the event listener
+    document.addEventListener('mousedown', handleClickOutside);
+
+    // Cleanup the event listener on component unmount
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
 
   const renderCell = (item: any, column: string, rowIndex: any) => {
     switch (column) {
@@ -307,9 +333,10 @@ export default function HappeningEvents() {
         return (
           <div
             className={`${item[column]?.length === 0 && 'p-2'} flex gap-1 relative`}
-            onClick={() =>
-              setActiveRowIndex(rowIndex === activeRowIndex ? null : rowIndex)
-            }
+            onClick={() => {
+              setActiveRowIndex(rowIndex === activeRowIndex ? null : rowIndex);
+              setIsDropdownOpen(rowIndex !== activeRowIndex); // toggle dropdown open state
+            }}
             role="button"
             tabIndex={0}
             onKeyDown={(e) => {
