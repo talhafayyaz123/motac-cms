@@ -1,6 +1,7 @@
 'use client';
 
 import { yupResolver } from '@hookform/resolvers/yup';
+import { useRouter } from 'next/navigation';
 import React, { useEffect } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import * as Yup from 'yup';
@@ -23,6 +24,7 @@ interface FormValues {
 
 export default function PersonalDetails() {
   const { currentMember, setCurrentMember } = useMember();
+  const router = useRouter();
 
   const {
     'User ID': userID = '',
@@ -81,21 +83,16 @@ export default function PersonalDetails() {
 
   const handleDelete = async () => {
     try {
-      const response: any = await DeleteActiveMember(userID);
-      if (response?.error) {
-        localStorage.removeItem('currentTeamMember');
-        setCurrentMember(null);
-        await AlertService.alert('Error!', response.error, 'error', 'OK');
-      } else if (response?.id) {
-        await AlertService.alert(
-          'Successful!',
-          'Member Deleted Successfully',
-          'success',
-          'Done',
-        );
-        localStorage.removeItem('currentTeamMember');
-        setCurrentMember(null);
-      }
+      await DeleteActiveMember(userID);
+      await AlertService.alert(
+        'Successful!',
+        'Member Deleted Successfully',
+        'success',
+        'Done',
+      );
+      localStorage.removeItem('currentTeamMember');
+      setCurrentMember(null);
+      router.push('/user-management/active');
     } catch (error: any) {
       await AlertService.alert(
         'Error!',
@@ -103,8 +100,6 @@ export default function PersonalDetails() {
         'error',
         'OK',
       );
-      localStorage.removeItem('currentTeamMember');
-      setCurrentMember(null);
     }
   };
 
