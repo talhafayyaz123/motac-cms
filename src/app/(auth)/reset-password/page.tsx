@@ -1,12 +1,13 @@
 'use client';
 
+import { Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import React, { FormEvent, useState } from 'react';
 
 import AuthForm from '@/app/(auth)/AuthForm';
 import { handleAuthRequest } from '@/services/apiService';
 
-export default function ResetPassword() {
+function ResetPasswordComponent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [error, setError] = useState<string | null>(null);
@@ -63,5 +64,13 @@ export default function ResetPassword() {
       formPadding="30px"
       error={error} // Display the error
     />
+  );
+}
+
+export default function ResetPassword() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <ResetPasswordComponent />
+    </Suspense>
   );
 }
