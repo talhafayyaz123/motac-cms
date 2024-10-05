@@ -243,12 +243,6 @@ export default function PersonalDetails() {
               }
             }}
           />
-
-          <div className="w-full flex justify-end gap-3 p-10">
-            <Button variant="customBlue" type="submit">
-              Save
-            </Button>
-          </div>
         </form>
       </FormContainer>
     </main>

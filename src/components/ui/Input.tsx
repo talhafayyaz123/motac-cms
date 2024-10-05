@@ -143,7 +143,7 @@ const Input: React.FC<InputProps> = ({
             readOnly
             className={`${combinedStyles} border-gray-300 shadow-sm placeholder-black underline !text-[#51afec] cursor-pointer`}
             style={{ minWidth }}
-            onClick={() => setShowModal(true)} // Open modal to preview
+            onClick={() => setShowModal(true)}
           />
           <GiCancel
             color="#51afec"
