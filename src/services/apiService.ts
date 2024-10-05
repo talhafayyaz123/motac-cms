@@ -535,12 +535,10 @@ export const FetchHappeningEventsData = async (
 
 export const deleteDestination = async (displayId: string) => {
   try {
-    const response = await apiClient(`/destinations/${displayId}`, {
+    await apiClient(`/destinations/${displayId}`, {
       method: 'DELETE',
       body: JSON.stringify({ displayId }),
     });
-
-    return response;
   } catch (error) {
     console.error('Error deleting destination:', error);
 
@@ -612,8 +610,8 @@ export const createDestination = async (data: any) => {
       tags: data?.tags,
       priorityId: data?.priority,
       destinationCategoryId: data?.category,
-      images: data?.images ? data.images : [],
-      bannerImageId: data?.bannerImageId ? data.bannerImageId : 1,
+      images: data?.images,
+      bannerImageId: data?.bannerImageId,
       workingDays: data?.workingDays,
     };
 
@@ -667,8 +665,8 @@ export const updateDestination = async (displayId: string, data: any) => {
       cityId: data?.cityId, // Make sure cityId is sent when area name is being updated
       priorityId: data?.priority,
       destinationCategoryId: data?.category,
-      images: data?.images ? data.images : [],
-      bannerImageId: data?.bannerImageId ? data.bannerImageId : 1,
+      images: data?.images,
+      bannerImageId: data?.bannerImageId,
       workingDays: data?.workingDays,
     };
 

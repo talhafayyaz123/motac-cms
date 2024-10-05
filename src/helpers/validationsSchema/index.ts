@@ -58,9 +58,9 @@ export const validationSchemaForAttractions = Yup.object().shape({
   description: Yup.string().required('Description is required'),
   tags: Yup.array().min(1, 'At least one tag must be selected'),
   priority: Yup.number().required('Priority is required'),
-  images: Yup.array().optional().nullable(),
+  images: Yup.array()?.optional().nullable(),
   bannerImageId: Yup.number().nullable(),
-  bannerImage: Yup.string().nullable(),
+  bannerImage: Yup.string().required('Banner image is required'),
 });
 
 export const validationSchemaForExperiences = Yup.object().shape({
@@ -121,9 +121,9 @@ export const validationSchemaForExperiences = Yup.object().shape({
   description: Yup.string().required('Description is required'),
   tags: Yup.array().min(1, 'At least one tag must be selected'),
   priority: Yup.number().required('Priority is required'),
-  images: Yup?.array().optional()?.nullable(),
-  bannerImageId: Yup?.number(),
-  bannerImage: Yup?.string().nullable(),
+  images: Yup.array()?.optional().nullable(),
+  bannerImageId: Yup.number().nullable(),
+  bannerImage: Yup.string().required('Banner image is required'),
 });
 
 export const validationSchemaForHappeningEvents = Yup.object().shape({
@@ -185,8 +185,17 @@ export const validationSchemaForHappeningEvents = Yup.object().shape({
   tags: Yup.array().min(1, 'At least one tag must be selected'),
   priority: Yup.number().required('Priority is required'),
   happeningStartDate: Yup.date().required('Happening start date is required'),
-  happeningEndDate: Yup.date().required('Happening end date is required'),
-  images: Yup?.array().optional()?.nullable(),
-  bannerImageId: Yup?.number(),
-  bannerImage: Yup?.string().nullable(),
+  happeningEndDate: Yup.date()
+    .required('Happening end date is required')
+    .test(
+      'is-end-date-after-start-date',
+      'End date must be after or equal to start date',
+      function (value) {
+        const { happeningStartDate } = this.parent;
+        return value ? value >= happeningStartDate : false;
+      },
+    ),
+  images: Yup.array()?.optional().nullable(),
+  bannerImageId: Yup.number().nullable(),
+  bannerImage: Yup.string().required('Banner image is required'),
 });
