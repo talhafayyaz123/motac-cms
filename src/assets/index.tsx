@@ -199,7 +199,7 @@ const ExploringDestinationsIcon: React.FC<IconProps> = ({ color = '#fff' }) => (
       d="M13.494,1.075a1.464,1.464,0,0,1,1.8,1.8L12.766,11.9a1.464,1.464,0,0,1-1.013,1.013L2.731,15.449a1.464,1.464,0,0,1-1.8-1.8L3.459,4.622A1.464,1.464,0,0,1,4.473,3.609ZM10.1,6.46a2.548,2.548,0,1,0,0,3.6A2.548,2.548,0,0,0,10.1,6.46Z"
       transform="translate(-0.869 -1.019)"
       fill={color}
-      fill-rule="evenodd"
+      fillRule="evenodd"
     />
   </svg>
 );
@@ -625,7 +625,7 @@ const RecommendedTripIcon: React.FC<IconProps> = () => (
     viewBox="0 0 16 16"
   >
     <defs>
-      <clipPath id="clip-path">
+      <clipPath id="clipPath">
         <rect
           id="Rectangle_32971"
           data-name="Rectangle 32971"
@@ -634,13 +634,13 @@ const RecommendedTripIcon: React.FC<IconProps> = () => (
         />
       </clipPath>
     </defs>
-    <g id="Group_87327" data-name="Group 87327" clip-path="url(#clip-path)">
+    <g id="Group_87327" data-name="Group 87327" clipPath="url(#clipPath)">
       <path
         id="Path_92549"
         data-name="Path 92549"
         d="M5.034,14.7a2.858,2.858,0,0,0,1.229.278h6.11A2.857,2.857,0,0,0,15.2,12.562l.715-4.575a2.286,2.286,0,0,0-2.258-2.639H9.9V2.653a1.857,1.857,0,0,0-3.478-.907L4.048,5.986a1.714,1.714,0,0,0-.219.838v6.22a1.714,1.714,0,0,0,.977,1.547ZM1.186,6.2A1.139,1.139,0,0,0,.047,7.334v5.843a1.139,1.139,0,0,0,1.139,1.139h.568a.571.571,0,0,0,.571-.571V6.766a.571.571,0,0,0-.572-.571Z"
         transform="translate(0.007 0.114)"
-        fill-rule="evenodd"
+        fillRule="evenodd"
       />
     </g>
   </svg>
@@ -884,7 +884,7 @@ const HeritageProductsIcon: React.FC<IconProps> = ({ color = '#fff' }) => (
     viewBox="0 0 22 22"
   >
     <defs>
-      <clipPath id="clip-path">
+      <clipPath id="clipPath">
         <rect
           id="Rectangle_32967"
           data-name="Rectangle 32967"
@@ -894,14 +894,14 @@ const HeritageProductsIcon: React.FC<IconProps> = ({ color = '#fff' }) => (
         />
       </clipPath>
     </defs>
-    <g id="Group_87324" data-name="Group 87324" clip-path="url(#clip-path)">
+    <g id="Group_87324" data-name="Group 87324" clipPath="url(#clipPath)">
       <path
         id="Path_92545"
         data-name="Path 92545"
         d="M11,.066a1.9,1.9,0,0,0-.964.263L10,.348.717,6.43h0a1.5,1.5,0,0,0-.6,1.824,1.687,1.687,0,0,0,1.6,1.032H20.287a1.687,1.687,0,0,0,1.6-1.032,1.5,1.5,0,0,0-.6-1.824h0L12,.348l-.032-.02A1.9,1.9,0,0,0,11,.066ZM0,18.627a1.493,1.493,0,0,1,1.571-1.4h.086a.793.793,0,0,1,0-.085V12.1a.786.786,0,0,1,.786-.786H5.053a.786.786,0,0,1,.786.786v5.046a.8.8,0,0,1,0,.085H8.911a.8.8,0,0,1,0-.085V12.1a.786.786,0,0,1,.786-.786h2.615a.786.786,0,0,1,.786.786v5.046a.793.793,0,0,1,0,.085h3.077a.8.8,0,0,1,0-.085V12.1a.786.786,0,0,1,.786-.786h2.615a.786.786,0,0,1,.786.786v5.046a.8.8,0,0,1,0,.085h.086A1.493,1.493,0,0,1,22,18.627v1.835a1.493,1.493,0,0,1-1.571,1.4H1.571A1.493,1.493,0,0,1,0,20.461Z"
         transform="translate(0 0.038)"
         fill={color}
-        fill-rule="evenodd"
+        fillRule="evenodd"
       />
     </g>
   </svg>
@@ -920,7 +920,7 @@ const ProductIcon: React.FC<IconProps> = ({ color = '#fff' }) => (
       d="M7.677,0a1.842,1.842,0,0,0-.734.152L.678,3.078l-.015.007a1.162,1.162,0,0,0,0,2.076l.016.008,6.251,2.9.012.005a1.844,1.844,0,0,0,1.468,0l6.264-2.923.015-.007a1.162,1.162,0,0,0,0-2.076l-.017-.008L8.422.16,8.41.155A1.842,1.842,0,0,0,7.677,0Zm7.6,7.56a.823.823,0,0,1-.4,1.091L8.442,11.617h0a1.877,1.877,0,0,1-1.558,0l0,0L.477,8.653A.822.822,0,0,1,1.168,7.16l6.4,2.962a.232.232,0,0,0,.19,0l6.43-2.962A.823.823,0,0,1,15.278,7.562Zm-.4,4.655a.823.823,0,0,0-.688-1.494L7.757,13.685a.237.237,0,0,1-.1.021.232.232,0,0,1-.095-.02l-6.4-2.962a.822.822,0,0,0-.691,1.493l6.4,2.963,0,0a1.877,1.877,0,0,0,1.558,0h0Z"
       transform="translate(0 -0.002)"
       fill={color}
-      fill-rule="evenodd"
+      fillRule="evenodd"
     />
   </svg>
 );
@@ -934,7 +934,7 @@ const OrderIcon: React.FC<IconProps> = () => (
     viewBox="0 0 14 14"
   >
     <defs>
-      <clipPath id="clip-path">
+      <clipPath id="clipPath">
         <rect
           id="Rectangle_32975"
           data-name="Rectangle 32975"
@@ -943,12 +943,12 @@ const OrderIcon: React.FC<IconProps> = () => (
         />
       </clipPath>
     </defs>
-    <g id="Group_87338" data-name="Group 87338" clip-path="url(#clip-path)">
+    <g id="Group_87338" data-name="Group 87338" clipPath="url(#clipPath)">
       <path
         id="Path_92556"
         data-name="Path 92556"
         d="M0,2A1.5,1.5,0,0,1,1.5.5h11A1.5,1.5,0,0,1,14,2V3.5A1.5,1.5,0,0,1,12.5,5H1.5A1.5,1.5,0,0,1,0,3.5ZM13,6.25H1V12a1.5,1.5,0,0,0,1.5,1.5h9A1.5,1.5,0,0,0,13,12ZM5.5,7.875a.625.625,0,0,0,0,1.25h3a.625.625,0,0,0,0-1.25Z"
-        fill-rule="evenodd"
+        fillRule="evenodd"
       />
     </g>
   </svg>
@@ -963,7 +963,7 @@ const TravelKitIcon: React.FC<IconProps> = ({ color = '#fff' }) => (
     viewBox="0 0 23 23"
   >
     <defs>
-      <clipPath id="clip-path">
+      <clipPath id="clipPath">
         <rect
           id="Rectangle_32968"
           data-name="Rectangle 32968"
@@ -978,7 +978,7 @@ const TravelKitIcon: React.FC<IconProps> = ({ color = '#fff' }) => (
       id="Group_87325"
       data-name="Group 87325"
       transform="translate(0 -0.221)"
-      clip-path="url(#clip-path)"
+      clipPath="url(#clipPath)"
     >
       <path
         id="Path_92546"
@@ -986,7 +986,7 @@ const TravelKitIcon: React.FC<IconProps> = ({ color = '#fff' }) => (
         d="M11.61,3.238A2.9,2.9,0,0,0,8.829,5.311h5.563A2.9,2.9,0,0,0,11.61,3.238ZM7.8,2.329A5.391,5.391,0,0,0,6.29,5.276,1.047,1.047,0,0,1,6.3,5.39V22.648q0,.04,0,.079H16.928q0-.039,0-.079V5.39a1.077,1.077,0,0,1,.006-.114A5.391,5.391,0,0,0,7.8,2.329ZM19,5.311q0,.039,0,.079V22.648q0,.04,0,.079h.079a4.147,4.147,0,0,0,4.147-4.147V9.458a4.147,4.147,0,0,0-4.147-4.147Zm-14.849,0h.079q0,.039,0,.079V22.648q0,.04,0,.079H4.147A4.147,4.147,0,0,1,0,18.58V9.458A4.147,4.147,0,0,1,4.147,5.311Z"
         transform="translate(0 0.494)"
         fill={color}
-        fill-rule="evenodd"
+        fillRule="evenodd"
       />
     </g>
   </svg>
@@ -1079,7 +1079,7 @@ const MyTeamIcon: React.FC<IconProps> = ({ color = '#fff' }) => (
       d="M12.467,6.175A4.675,4.675,0,1,1,7.792,1.5,4.675,4.675,0,0,1,12.467,6.175ZM7.792,12.409A7.792,7.792,0,0,0,0,20.2a.779.779,0,0,0,.779.779H14.8a.779.779,0,0,0,.779-.779A7.792,7.792,0,0,0,7.792,12.409ZM21.039,20.98H17.419a2.725,2.725,0,0,0,.113-.779,9.725,9.725,0,0,0-3.883-7.783q.187-.009.377-.009A7.792,7.792,0,0,1,21.818,20.2.779.779,0,0,1,21.039,20.98ZM14.026,10.85a4.675,4.675,0,0,1-1.352-.2,6.623,6.623,0,0,0,0-8.953,4.676,4.676,0,1,1,1.352,9.152Z"
       transform="translate(0 -1.5)"
       fill={color}
-      fill-rule="evenodd"
+      fillRule="evenodd"
     />
   </svg>
 );
