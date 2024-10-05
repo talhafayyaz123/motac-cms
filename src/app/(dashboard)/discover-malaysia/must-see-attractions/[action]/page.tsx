@@ -54,7 +54,8 @@ export default function AddAttraction() {
     control,
     handleSubmit,
     setValue,
-    formState: { errors, isSubmitting },
+    formState: { errors },
+    setFocus,
     watch,
   } = useForm({
     mode: 'onTouched',
@@ -316,6 +317,25 @@ export default function AddAttraction() {
     return uploadedImageIds;
   };
 
+  const handleError = (errors: any) => {
+    const errorFields = Object.keys(errors);
+
+    if (errorFields.length > 0) {
+      const firstErrorField = errorFields[0];
+      const errorElement = document.querySelector(
+        `[name="${firstErrorField}"]`,
+      );
+
+      // Scroll the field into view
+      if (errorElement) {
+        errorElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+
+      // Focus on the first invalid field using setFocus
+      setFocus(firstErrorField as any);
+    }
+  };
+
   return (
     <main className="h-full">
       <div className="sticky top-0 bg-white w-full py-8 z-50">
@@ -324,7 +344,7 @@ export default function AddAttraction() {
       {isLoading ? (
         <Loader />
       ) : (
-        <form onSubmit={handleSubmit(onSubmit)}>
+        <form onSubmit={handleSubmit(onSubmit, handleError)}>
           <FormContainer>
             <p className="font-semibold mb-3 text-[#181819]">Main Info</p>
             <Controller
@@ -626,12 +646,7 @@ export default function AddAttraction() {
             <DropZone onChange={handleFilesChange} setImages={setImages} />
           </FormContainer>
           <div className="w-full flex justify-end gap-3 p-10">
-            <Button
-              variant="customBlue"
-              type="submit"
-              title="Submit"
-              disabled={isSubmitting || Object.keys(errors).length > 0}
-            >
+            <Button variant="customBlue" type="submit" title="Submit">
               {isFormBtnLoading ? (
                 <FormLoader /> // Small loader icon inside the button
               ) : action === 'add-attraction' ? (

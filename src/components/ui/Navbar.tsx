@@ -47,7 +47,7 @@ const Navbar = () => {
         {pathname !== '/' && (
           <div
             className="h-8 w-8 rounded-full bg-gray-900 flex items-center justify-start"
-            onClick={() => router.push('/')}
+            onClick={() => router.back()}
             role="button"
             tabIndex={0}
             onKeyDown={(e) => {
