@@ -42,6 +42,8 @@ export default function AddAttraction() {
   const action = pathname?.split('/').pop();
   const id = searchParams?.get('id');
   const [images, setImages] = useState<File[]>([]);
+  console.log(images);
+
   const [categoriesTags, setCategoriesTags] = useState<
     { id: number; name: string }[]
   >([]);

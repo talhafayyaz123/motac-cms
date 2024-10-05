@@ -14,10 +14,7 @@ const BarChart: React.FC<BarChartProps> = ({
   categories,
   seriesData,
 }) => {
-  const getColorForBar = (index: number): string => {
-    const colors = ['#364EA2', '#778FDF', '#4466D9'];
-    return colors[index % colors.length];
-  };
+  const colors = ['#4466D9', '#364EA2', '#778FDF'];
 
   const options: Highcharts.Options = {
     chart: {
@@ -53,15 +50,16 @@ const BarChart: React.FC<BarChartProps> = ({
     },
     series: seriesData.map((data) => ({
       ...data,
-      data: (data.data || []).map((point: any): any => {
+      data: (data.data || []).map((point: any, index: number): any => {
         if (typeof point === 'number') {
-          return { y: point, color: getColorForBar(point) };
-        } else if (Array.isArray(point) && typeof point[1] === 'number') {
-          return { y: point[1], color: getColorForBar(point[1]) };
-        } else if (typeof point === 'object' && point !== null) {
-          return { ...point, color: getColorForBar((point as any).y) };
+          return { y: point, color: colors[index] };
         }
-        return point; // Fallback case
+        // else if (Array.isArray(point) && typeof point[1] === 'number') {
+        //   return { y: point[1], color: getColorForBar(point[1]) };
+        // } else if (typeof point === 'object' && point !== null) {
+        //   return { ...point, color: getColorForBar((point as any).y) };
+        // }
+        // return point; // Fallback case
       }),
     })),
     responsive: {
