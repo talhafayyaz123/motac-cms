@@ -1,5 +1,5 @@
-import Image from 'next/image';
 import React from 'react';
+import { FaLocationDot } from 'react-icons/fa6';
 
 interface AttractionListProps {
   statsData: {
@@ -16,12 +16,9 @@ const AttractionList: React.FC<AttractionListProps> = ({ statsData }) => {
 
           <div className="border-t w-full border-dotted border-gray-500 flex-1"></div>
 
-          <Image
-            height={15}
-            width={15}
-            alt="location"
-            src="/Location_icon.svg"
-            className="mt-[-15px] ml-[-10px]"
+          <FaLocationDot
+            className="text-[#4b6bd9] mt-[-15px] ml-[-8px]"
+            size={18}
           />
         </div>
       ))}

@@ -83,16 +83,24 @@ export default function PersonalDetails() {
 
   const handleDelete = async () => {
     try {
-      await DeleteActiveMember(userID);
-      await AlertService.alert(
-        'Successful!',
-        'Member Deleted Successfully',
-        'success',
-        'Done',
+      const result = await AlertService.confirm(
+        'Are you sure you want to delete this member?',
+        'Yes, delete it!',
+        'Cancel',
       );
-      localStorage.removeItem('currentTeamMember');
-      setCurrentMember(null);
-      router.push('/user-management/active');
+
+      if (result.isConfirmed) {
+        await DeleteActiveMember(userID);
+        await AlertService.alert(
+          'Successful!',
+          'Member Deleted Successfully',
+          'success',
+          'Done',
+        );
+        localStorage.removeItem('currentTeamMember');
+        setCurrentMember(null);
+        router.push('/user-management/active');
+      }
     } catch (error: any) {
       await AlertService.alert(
         'Error!',

@@ -21,7 +21,8 @@ const ComingSoonFeature: React.FC<ComingSoonFeatureProps> = ({
         height: height,
         minHeight: minHeight,
         width: '100%',
-        background: 'radial-gradient(ellipse, #364EA2 0%, white 100%)',
+        background:
+          'radial-gradient(ellipse at center, rgba(118,136,235,0.3) 0%, rgba(255,255,255,1) 70%)', // Updated gradient based on the image
       }}
     >
       {/* Overlay background */}
