@@ -38,6 +38,9 @@ export const apiClient = async (
     const response = await fetch(`${backendApiUrl}${endpoint}`, config);
 
     if (!response.ok) {
+      // if (response.status === 401) {
+      //   await signOut();
+      // }
       const data = await response.json();
       const errorMessages = data.errors
         ? Object.values(data.errors).flat().join(', ')

@@ -29,7 +29,7 @@ const Navbar = () => {
   const renderProfileDropdownOption = () => {
     return (
       <div
-        className="absolute bottom-[-40px] z-50 flex items-center gap-2 text-xs p-2 bg-white rounded-md shadow"
+        className="absolute bottom-[-40px] z-[9999] flex items-center gap-2 text-xs p-2 bg-white rounded-md shadow"
         onClick={() => router.push('/my-profile/account-setting')}
         role="button"
         tabIndex={0}

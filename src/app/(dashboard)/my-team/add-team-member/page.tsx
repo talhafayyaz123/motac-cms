@@ -18,6 +18,7 @@ import {
   fetchTeamRoles,
   AddTeamMember,
   UpdateTeamMember,
+  fetchSpecificTeamMember,
 } from '@/services/apiService';
 import { useMember } from '@/store/MemberContext';
 
@@ -30,14 +31,7 @@ export default function AddTeamMemberPage() {
   const router = useRouter();
   const { currentMember, setCurrentMember } = useMember();
 
-  const {
-    ID = '',
-    'First Name': firstName = '',
-    'Last Name': lastName = '',
-    'Email Address': emailAddress = '',
-    Role = '',
-    Designation = '',
-  } = currentMember || {};
+  const { ID = '' } = currentMember || {};
 
   const [designation, setDesignation] = useState<Option[]>([]);
   const [role, setRole] = useState<Option[]>([]);
@@ -61,9 +55,9 @@ export default function AddTeamMemberPage() {
     reset,
   } = useForm({
     defaultValues: {
-      firstName: firstName || '',
-      lastName: lastName || '',
-      email: emailAddress || '',
+      firstName: '',
+      lastName: '',
+      email: '',
       company: '',
       designationId: '',
       roleId: '',
@@ -73,48 +67,47 @@ export default function AddTeamMemberPage() {
   });
 
   useEffect(() => {
-    const loadRolesAndDesignations = async () => {
+    const loadMemberData = async () => {
       setLoading(true); // Set loader to true before starting to fetch
       try {
-        const [fetchedRoles, fetchedDesignations] = await Promise.all([
-          fetchTeamRoles(),
-          fetchTeamDesignations(),
-        ]);
+        const [fetchedRoles, fetchedDesignations, fetchedMember] =
+          await Promise.all([
+            fetchTeamRoles(),
+            fetchTeamDesignations(),
+            ID ? fetchSpecificTeamMember(Number(ID)) : Promise.resolve(null),
+          ]);
+
         setRole(fetchedRoles);
         setDesignation(fetchedDesignations);
+
+        if (fetchedMember) {
+          reset({
+            firstName: fetchedMember.firstName || '',
+            lastName: fetchedMember.lastName || '',
+            email: fetchedMember.email || '',
+            company: fetchedMember.company || '',
+            designationId:
+              fetchedDesignations.find(
+                (item: Option) => item.label === fetchedMember.designation,
+              )?.value || '',
+            roleId:
+              fetchedRoles.find(
+                (item: Option) => item.label === fetchedMember.role,
+              )?.value || '',
+          });
+        }
       } catch (error) {
-        console.error('Error loading roles or designations:', error);
+        console.error(
+          'Error loading roles, designations, or member data:',
+          error,
+        );
       } finally {
         setLoading(false); // Set loader to false after fetching completes
       }
     };
 
-    void loadRolesAndDesignations();
-  }, []);
-
-  useEffect(() => {
-    if (designation.length && role.length) {
-      reset({
-        firstName: firstName || '',
-        lastName: lastName || '',
-        email: emailAddress || '',
-        company: '',
-        designationId:
-          designation.find((item: Option) => item.label === Designation)
-            ?.value || '',
-        roleId: role.find((item: Option) => item.label === Role)?.value || '',
-      });
-    }
-  }, [
-    designation,
-    role,
-    firstName,
-    lastName,
-    emailAddress,
-    Designation,
-    Role,
-    reset,
-  ]);
+    void loadMemberData();
+  }, [ID, reset]);
 
   const onSubmit = async (values: any) => {
     const payload = {
@@ -286,7 +279,7 @@ export default function AddTeamMemberPage() {
                   className="text-xs"
                   minWidth="350px"
                   {...field}
-                  error={errors.company?.message}
+                  error={errors.company?.message as string | undefined}
                 />
               )}
             />
