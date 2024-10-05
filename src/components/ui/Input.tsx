@@ -119,6 +119,7 @@ const Input: React.FC<InputProps> = ({
     }
   }, [defaultImagePath]);
 
+  const today = new Date().toISOString().split('T')[0];
   return (
     <div className="flex flex-col" style={{ minWidth }}>
       {label && (
@@ -174,6 +175,7 @@ const Input: React.FC<InputProps> = ({
           } ${icon && iconPlacement === 'left' ? 'pl-12' : ''} border-gray-300 shadow-sm placeholder-black`}
           disabled={disabled}
           style={{ minWidth }}
+          min={type === 'date' ? today : undefined} // Disable past dates for date input
           {...rest}
         />
         {error && <p className="text-red-500 text-xs mt-1">{error}</p>}

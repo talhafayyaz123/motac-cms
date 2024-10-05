@@ -76,8 +76,8 @@ export default function AddEvent() {
       happeningStartDate: new Date(),
       happeningEndDate: new Date(),
       images,
-      bannerImageId: 1,
-      bannerImage: null,
+      bannerImageId: null,
+      bannerImage: '',
       workingDays: '',
     },
   });
@@ -162,6 +162,8 @@ export default function AddEvent() {
         'tags',
         data.tags.map((tag: { id: number }) => tag.id),
       );
+      setValue('happeningStartDate', data.happeningStartDate);
+      setValue('happeningEndDate', data.happeningEndDate);
       setValue('priority', priorityId);
       setValue('bannerImageId', data?.bannerImageId);
       setValue('bannerImage', data?.bannerImage?.path);
@@ -267,7 +269,7 @@ export default function AddEvent() {
             'success',
             'Ok',
           );
-          router.push('/discover-malaysia/must-see-attractions');
+          router.push('/discover-malaysia/happening-events');
         } else {
           await AlertService.alert(
             'Error',
@@ -423,8 +425,12 @@ export default function AddEvent() {
                     className="text-xs"
                     minWidth="350px"
                     value={
-                      field.value ? field.value.toISOString().slice(0, 10) : ''
-                    } // Convert Date to YYYY-MM-DD
+                      field.value
+                        ? field.value instanceof Date
+                          ? field.value.toISOString().slice(0, 10) // Convert Date to YYYY-MM-DD
+                          : new Date(field.value).toISOString().slice(0, 10) // Ensure ISO string is parsed to Date
+                        : ''
+                    }
                     onChange={(e) => field.onChange(new Date(e.target.value))} // Convert string back to Date
                     error={errors.happeningStartDate?.message}
                   />
@@ -440,8 +446,12 @@ export default function AddEvent() {
                     placeholder="09/15/25"
                     className="text-xs"
                     value={
-                      field.value ? field.value.toISOString().slice(0, 10) : ''
-                    } // Convert Date to YYYY-MM-DD
+                      field.value
+                        ? field.value instanceof Date
+                          ? field.value.toISOString().slice(0, 10) // Convert Date to YYYY-MM-DD
+                          : new Date(field.value).toISOString().slice(0, 10) // Ensure ISO string is parsed to Date
+                        : ''
+                    }
                     onChange={(e) => field.onChange(new Date(e.target.value))} // Convert string back to Date
                     minWidth="350px"
                     error={errors.happeningEndDate?.message}
@@ -512,12 +522,12 @@ export default function AddEvent() {
               <Controller
                 name="bannerImage"
                 control={control}
-                defaultValue={null} // Default value for the file input
                 render={({ field }) => (
                   <Input
                     label="Banner Image"
                     className="text-xs"
                     minWidth="350px"
+                    error={errors.bannerImage?.message}
                     defaultImagePath={
                       action === 'add-attraction'
                         ? undefined

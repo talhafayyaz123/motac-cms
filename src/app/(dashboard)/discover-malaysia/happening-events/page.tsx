@@ -269,21 +269,17 @@ export default function HappeningEvents() {
                 if (result.isConfirmed) {
                   try {
                     // Call the deleteDestination API
-                    const deleteDestinationResponse = await deleteDestination(
-                      item['ID '],
-                    );
+                    await deleteDestination(item['ID ']);
 
                     // If successful, you can reload the page or refetch data
-                    console.log(
-                      'Destination deleted successfully:',
-                      deleteDestinationResponse,
-                    );
+                    console.log('Destination deleted successfully:');
                     await AlertService.alert(
                       'Successful!',
                       'Destination deleted Successfully',
                       'success',
                       'Done',
                     );
+                    window?.location?.reload();
                   } catch (error) {
                     // eslint-disable-next-line
                     AlertService.alert(

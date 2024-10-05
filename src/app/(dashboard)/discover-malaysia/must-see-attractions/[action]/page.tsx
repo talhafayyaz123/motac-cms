@@ -76,8 +76,8 @@ export default function AddAttraction() {
       tags: [],
       priority: 1,
       images,
-      bannerImageId: 1,
-      bannerImage: null,
+      bannerImageId: null,
+      bannerImage: '',
       workingDays: '',
     },
   });
@@ -432,12 +432,12 @@ export default function AddAttraction() {
               <Controller
                 name="bannerImage"
                 control={control}
-                defaultValue={null} // Default value for the file input
                 render={({ field }) => (
                   <Input
                     label="Banner Image"
                     className="text-xs"
                     minWidth="350px"
+                    error={errors.bannerImage?.message}
                     defaultImagePath={
                       action === 'add-attraction'
                         ? undefined
