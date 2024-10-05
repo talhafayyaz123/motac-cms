@@ -6,6 +6,15 @@ const nextConfig = {
         protocol: 'https',
         hostname: 'via.placeholder.com',
       },
+
+      {
+        protocol: 'http',
+        hostname: 'motac-assets.s3.ap-south-1.amazonaws.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'motac-assets.s3.ap-south-1.amazonaws.com',
+      },
     ],
   },
 };

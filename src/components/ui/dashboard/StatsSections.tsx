@@ -113,7 +113,7 @@ const StatsSection: React.FC = () => {
             <div className="flex">
               <div className="flex-auto">
                 <p className="text-3xl font-semibold text-blue-200">
-                  {statsData?.newAttractions?.count ?? 'N/A'}
+                  {statsData?.newExperienceCount ?? 'N/A'}
                 </p>
                 <p className="text-xs text-gray-50 font-medium">
                   New Locations Added
