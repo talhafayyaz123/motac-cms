@@ -24,7 +24,7 @@ const Select: React.FC<SelectProps> = ({
         onChange={onChange}
         className={`${
           minimalStyle
-            ? 'border border-gray-300 text-gray-700 py-2 pl-3 pr-8 focus:ring-blue-500'
+            ? 'border border-gray-300 text-gray-700 py-2 pl-3 pr-8 focus:ring-blue-100'
             : 'ring-1 ring-gray-500 ring-offset-0'
         } 
    py-1 pl-3 pr-8 text-sm rounded-md outline-none ${
@@ -48,7 +48,7 @@ const Select: React.FC<SelectProps> = ({
         className={`absolute inset-y-0 right-[-10px] flex items-center pr-4 pointer-events-none`}
       >
         <svg
-          className="w-4 h-4 text-gray-700"
+          className="w-4 h-4 text-white"
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"

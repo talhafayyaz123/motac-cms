@@ -614,6 +614,7 @@ export const createDestination = async (data: any) => {
       destinationCategoryId: data?.category,
       images: data?.images ? data.images : [],
       bannerImageId: data?.bannerImageId ? data.bannerImageId : 1,
+      workingDays: data?.workingDays,
     };
 
     // Create Scenario 1: Send areaId if selected
@@ -668,6 +669,7 @@ export const updateDestination = async (displayId: string, data: any) => {
       destinationCategoryId: data?.category,
       images: data?.images ? data.images : [],
       bannerImageId: data?.bannerImageId ? data.bannerImageId : 1,
+      workingDays: data?.workingDays,
     };
 
     // Update Scenario 1: Send areaId if selected
@@ -678,11 +680,6 @@ export const updateDestination = async (displayId: string, data: any) => {
     else if (data?.area) {
       body.area = data.area;
       body.cityId = data.cityId; // Send cityId along with the custom area name
-    }
-
-    // Optional fields
-    if (data?.workingDays) {
-      body.workingDays = data.workingDays;
     }
 
     if (data?.happeningStartDate) {

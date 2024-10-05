@@ -132,7 +132,9 @@ const Select: React.FC<InputProps> = ({
           role="button" // Set role for better accessibility
         >
           {displaySelected()}
-          <span className="absolute inset-y-0 right-0 flex items-center pr-4 text-black">
+          <span
+            className={`absolute inset-y-0 right-0 flex items-center ${multiple ? 'pr-2' : 'pr-4'} text-black`}
+          >
             <FaChevronDown />
           </span>
         </div>
