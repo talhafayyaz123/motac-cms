@@ -70,31 +70,13 @@ function SecuritySettings() {
         email: session?.user?.email,
       });
 
-      if (response?.status === 200) {
-        console.log('Password reset successful', response);
-        await AlertService.alert(
-          'Successful!',
-          'Password reset successfully.',
-          'success',
-          'OK',
-        );
-      } else if (response?.error) {
-        console.error('Failed to reset password:', response.error);
-        await AlertService.alert(
-          'Error!',
-          response.error || 'Failed to reset password.',
-          'error',
-          'OK',
-        );
-      } else {
-        console.error('Unexpected response:', response);
-        await AlertService.alert(
-          'Error!',
-          'Failed to reset password.',
-          'error',
-          'OK',
-        );
-      }
+      console.log('Password reset successful', response);
+      await AlertService.alert(
+        'Successful!',
+        'Password reset successfully.',
+        'success',
+        'OK',
+      );
     } catch (error) {
       console.error('Error resetting password:', error);
       await AlertService.alert(
