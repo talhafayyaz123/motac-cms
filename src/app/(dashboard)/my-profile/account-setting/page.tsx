@@ -1,12 +1,13 @@
-/* eslint-disable @typescript-eslint/ban-ts-comment */
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 'use client';
 
 import { yupResolver } from '@hookform/resolvers/yup';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import * as Yup from 'yup';
 
@@ -18,6 +19,7 @@ import Select from '@/components/ui/Select';
 import AlertService from '@/services/alertService';
 import {
   fetchSpecificTeamMember,
+  fileUpload,
   UpdateTeamMember,
 } from '@/services/apiService';
 
@@ -49,34 +51,14 @@ function AccountSettings() {
   const [data, setData] = useState<TeamMember | null>(null);
   const [loading, setLoading] = useState(false);
   const { data: session } = useSession();
-
-  const loadData = async () => {
-    try {
-      setLoading(true);
-
-      // @ts-expect-error
-      const userId = session?.user?.id;
-
-      if (userId) {
-        const response = await fetchSpecificTeamMember(userId);
-        setData(response);
-      } else {
-        console.log('User ID not found');
-      }
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    void loadData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [session]);
-
+  const [profilePicture, setProfilePicture] = useState<string | null>(null);
   const [settingComponent, setSettingComponent] =
     useState<string>('Account Setting');
+  const [imageId, setImageId] = useState('');
+
+  console.log(profilePicture);
+
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   const handleSettingChange = (
     value: string | number | (string | number)[],
@@ -89,6 +71,52 @@ function AccountSettings() {
       } else {
         router.push('/my-profile/account-setting');
       }
+    }
+  };
+
+  const loadData = async () => {
+    try {
+      setLoading(true);
+      // @ts-ignore
+      const userId = session?.user?.id;
+
+      if (userId) {
+        const response = await fetchSpecificTeamMember(userId);
+        setData(response);
+        setProfilePicture(response?.photo?.path);
+      } else {
+        console.log('User ID not found');
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    void loadData();
+  }, [session]);
+
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setProfilePicture(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+
+      const response = await fileUpload(file);
+      setImageId(response?.file?.id);
+    }
+  };
+
+  const handleCameraClick = () => {
+    if (fileInputRef.current) {
+      fileInputRef.current.click();
+    } else {
+      console.log('File input ref is null');
     }
   };
 
@@ -134,9 +162,13 @@ function AccountSettings() {
 
   const onSubmit = async (values: FormValues) => {
     const { email, ...updatedValues } = values;
+    const payload = {
+      ...updatedValues,
+      photoId: imageId ? imageId : '',
+    };
     try {
       const response: any = await UpdateTeamMember({
-        data: updatedValues,
+        data: payload,
         // @ts-expect-error
         id: session?.user?.id,
       });
@@ -185,14 +217,36 @@ function AccountSettings() {
           profile
         />
       </div>
-      <div className="h-28 w-28 rounded-full border border-blue-100 mt-10 flex items-center justify-center relative">
-        <Image height={60} alt="user" width={60} src="/user_icon.svg" />
+      <div className="h-28 w-28 rounded-full border border-blue-100 mt-10 relative">
+        {/* Show profile picture if available */}
+        <div className="h-full w-full flex items-center justify-center rounded-full overflow-hidden">
+          {profilePicture ? (
+            <Image
+              height={100}
+              alt="user"
+              width={100}
+              src={profilePicture}
+              className="w-full h-full"
+            />
+          ) : (
+            <Image height={60} alt="user" width={60} src="/user_icon.svg" />
+          )}
+        </div>
+        {/* Hidden input for file upload */}
+        <input
+          ref={fileInputRef}
+          type="file"
+          accept="image/*"
+          onChange={handleFileChange}
+          className="hidden"
+        />
         <Image
           height={40}
           alt="user"
           width={40}
           src="/camera_icon.svg"
-          className="absolute right-[-10px] bottom-0"
+          className="absolute right-[-10px] bottom-0 cursor-pointer"
+          onClick={handleCameraClick} // Trigger file input click on camera icon click
         />
       </div>
       <form

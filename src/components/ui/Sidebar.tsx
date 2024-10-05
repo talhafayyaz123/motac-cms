@@ -9,6 +9,7 @@ import React, { useState } from 'react';
 
 import { menuItems } from '@/assets';
 import producLogo from '@/assets/product-logo.svg';
+import { useMember } from '@/store/MemberContext';
 
 interface DropdownItem {
   label: string;
@@ -17,6 +18,8 @@ interface DropdownItem {
 }
 
 const Sidebar = () => {
+  const { setCurrentMember } = useMember();
+
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
   const [openSubDropdown, setOpenSubDropdown] = useState<string | null>(
     'Traveler Sim',
@@ -41,6 +44,8 @@ const Sidebar = () => {
 
   const handleNavigation = (path: string) => {
     router.push(path);
+    localStorage.removeItem('currentTeamMember');
+    setCurrentMember(null);
   };
 
   const handleLogout = async () => await signOut();

@@ -182,6 +182,7 @@ export default function AddTeamMemberPage() {
         localStorage.removeItem('currentTeamMember');
         setCurrentMember(null);
         reset();
+        router.push('/my-team');
       }
     } catch (error) {
       localStorage.removeItem('currentTeamMember');

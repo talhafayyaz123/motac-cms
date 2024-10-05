@@ -163,7 +163,19 @@ export default function Dashboard() {
       name: 'Fruits',
       data: seeAttractionData?.newExperienceByCategory
         ?.slice(0, 3)
-        .map((item: any) => parseInt(item.count, 10)),
+        .sort((a: any, b: any) => parseInt(b.count, 10) - parseInt(a.count, 10))
+        .map((item: any) => parseInt(item.count, 10))
+        .reduce(
+          (acc: number[], val: number, index: number, array: number[]) => {
+            if (array.length === 3) {
+              acc[1] = array[0];
+              acc[2] = array[1];
+              acc[0] = array[2];
+            }
+            return acc;
+          },
+          [],
+        ),
     },
   ];
 
@@ -215,20 +227,18 @@ export default function Dashboard() {
       <CardContainer title="Discover Malaysia">
         <div className="flex lg:flex-row flex-col justify-between gap-4 w-full font-medium">
           <div className="flex rounded-xl bg-blue-50 border border-gray-100 gap-4 font-medium p-4 lg:w-[68%] w-full">
-            <div className="p-2 flex flex-col w-1/2">
-              <p className="text-xs text-black-100 mb-4 font-bold">
-                Must See Attraction
-              </p>
-              <p className="text-xs text-gray-50 font-bold mb-2">
-                Total Attraction
-              </p>
-              <p className="text-4xl font-semibold text-blue-100 mb-3">
-                {seeAttractionData?.newAttractionsCount}
-              </p>
-              <MapChart
-                data={dummyMapDataOne}
-                visibleCountries={dummyMapVisibleCountriesOne}
-              />
+            <div className=" flex flex-col w-1/2 gap-4">
+              <p className="text-xs text-black-100 mb-4">Must See Attraction</p>
+              <div>
+                <p className="text-xs text-black-100">Total Attraction</p>
+                <p className="text-4xl font-semibold text-blue-100 mb-3">
+                  {seeAttractionData?.newAttractionsCount}
+                </p>
+                <MapChart
+                  data={dummyMapDataOne}
+                  visibleCountries={dummyMapVisibleCountriesOne}
+                />
+              </div>
             </div>
             <div className="flex flex-col w-1/2 relative">
               <div className="flex lg:flex-row flex-col-reverse justify-between gap-2">
@@ -259,7 +269,7 @@ export default function Dashboard() {
                 </p>
                 <p className="text-4xl font-semibold text-blue-100 mb-3">26</p>
                 <div className="flex py-2 items-center w-full">
-                  <div className="transform translate-y-1/2 absolute left-0 h-1/3 lg:border-l lg:border-gray-300" />
+                  <div className="transform translate-y-1/2 absolute left-0 h-1/2 lg:border-l lg:border-gray-300 top-10" />
                   <BarChart
                     categories={categoriesForBar}
                     seriesData={seriesData}
