@@ -52,6 +52,7 @@ export default function AddAttraction() {
   >([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isFormBtnLoading, setIsFormLoading] = useState(false);
+  const [isFormError, setIsFormError] = useState(false);
   const {
     control,
     handleSubmit,
@@ -226,80 +227,91 @@ export default function AddAttraction() {
     const newImageIds = await uploadImages();
     const existingImageIds = data.images || [];
 
-    if (newImageIds) {
-    }
-    setValue('images', [...existingImageIds, ...newImageIds]);
-
-    const cityId = Number(data.cityId); // CityId is always required
-    const areaId = data.area?.id ? Number(data.area.id) : null;
-
-    const transformedData: any = {
-      ...data,
-      cityId, // Always include cityId
-      images: [...existingImageIds, ...newImageIds],
-    };
-
-    // Scenario 1: If areaId exists (user selected from dropdown), send areaId
-    if (areaId) {
-      transformedData.areaId = areaId;
-    }
-    // Scenario 2: If areaId does not exist (user entered custom area), send area name instead of areaId
-    else if (data.area?.name) {
-      transformedData.area = data.area.name;
-    }
-
-    // Additional logic for update:
-    if (action === 'edit-attraction' && id) {
-      if (!areaId && data.area?.name) {
-        // Scenario 2 for Update: If custom area name is entered, send both area and cityId
-        transformedData.area = data.area.name;
-        transformedData.cityId = cityId; // Send cityId with custom area
-      }
-    }
-
-    try {
-      if (action === 'edit-attraction' && id) {
-        const response = await updateDestination(id, transformedData);
-        setIsFormLoading(false);
-        if (response?.status) {
-          await AlertService.alert(
-            'Successful!',
-            'Update Attraction Success',
-            'success',
-            'Ok',
-          );
-          router.push('/discover-malaysia/must-see-attractions');
-        } else {
-          await AlertService.alert(
-            'Error',
-            (response.error as string) || 'Something went wrong',
-            'error',
-            'Try Again',
-          );
-        }
-      } else {
-        const response = await createDestination(transformedData);
-        setIsFormLoading(false);
-        if (response?.status) {
-          await AlertService.alert(
-            'Successful!',
-            'Add Attraction Success',
-            'success',
-            'Ok',
-          );
-          router.push('/discover-malaysia/must-see-attractions');
-        } else {
-          await AlertService.alert(
-            'Error',
-            (response.error as string) || 'Something went wrong',
-            'error',
-            'Try Again',
-          );
-        }
-      }
-    } catch (error) {
-      console.error('Error submitting form:', error);
+    // Combine existing and new images
+    const allImageIds = [...existingImageIds, ...newImageIds];
+    // Check if there are no images uploaded
+    if (allImageIds.length === 0) {
       setIsFormLoading(false);
+      setIsFormError(true);
+      return; // Stop form submission if no images are uploaded
+    } else {
+      setIsFormError(false);
+      setIsFormLoading(true);
+      if (newImageIds) {
+      }
+      setValue('images', [...existingImageIds, ...newImageIds]);
+
+      const cityId = Number(data.cityId); // CityId is always required
+      const areaId = data.area?.id ? Number(data.area.id) : null;
+
+      const transformedData: any = {
+        ...data,
+        cityId, // Always include cityId
+        images: [...existingImageIds, ...newImageIds],
+      };
+
+      // Scenario 1: If areaId exists (user selected from dropdown), send areaId
+      if (areaId) {
+        transformedData.areaId = areaId;
+      }
+      // Scenario 2: If areaId does not exist (user entered custom area), send area name instead of areaId
+      else if (data.area?.name) {
+        transformedData.area = data.area.name;
+      }
+
+      // Additional logic for update:
+      if (action === 'edit-attraction' && id) {
+        if (!areaId && data.area?.name) {
+          // Scenario 2 for Update: If custom area name is entered, send both area and cityId
+          transformedData.area = data.area.name;
+          transformedData.cityId = cityId; // Send cityId with custom area
+        }
+      }
+
+      try {
+        if (action === 'edit-attraction' && id) {
+          const response = await updateDestination(id, transformedData);
+          setIsFormLoading(false);
+          if (response?.status) {
+            await AlertService.alert(
+              'Successful!',
+              'Update Attraction Success',
+              'success',
+              'Ok',
+            );
+            router.push('/discover-malaysia/must-see-attractions');
+          } else {
+            await AlertService.alert(
+              'Error',
+              (response.error as string) || 'Something went wrong',
+              'error',
+              'Try Again',
+            );
+          }
+        } else {
+          const response = await createDestination(transformedData);
+          setIsFormLoading(false);
+          if (response?.status) {
+            await AlertService.alert(
+              'Successful!',
+              'Add Attraction Success',
+              'success',
+              'Ok',
+            );
+            router.push('/discover-malaysia/must-see-attractions');
+          } else {
+            await AlertService.alert(
+              'Error',
+              (response.error as string) || 'Something went wrong',
+              'error',
+              'Try Again',
+            );
+          }
+        }
+      } catch (error) {
+        console.error('Error submitting form:', error);
+        setIsFormLoading(false);
+      }
     }
   };
 
@@ -613,6 +625,11 @@ export default function AddAttraction() {
           </FormContainer>
           <FormContainer className="mt-5">
             <p className="font-semibold mb-3">Images</p>
+            {isFormError && (
+              <p className="text-red-500 text-xs italic">
+                Please upload at least one image
+              </p>
+            )}
             <div className="grid grid-cols-4 gap-4 mb-6">
               {images.map((file, index) => (
                 <div key={index} className="relative">
