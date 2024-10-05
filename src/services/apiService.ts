@@ -768,9 +768,12 @@ export const resetPassword = async (
   payload: any,
 ): Promise<any[] | { error: string }> => {
   try {
-    const data = await apiClient(`/reset/password`, {
+    const payloadToSend = { ...payload };
+    delete payloadToSend['confirmPassword'];
+
+    const data = await apiClient(`/auth/reset/password`, {
       method: 'POST',
-      body: JSON.stringify(payload),
+      body: JSON.stringify(payloadToSend),
     });
     return data;
   } catch (err) {

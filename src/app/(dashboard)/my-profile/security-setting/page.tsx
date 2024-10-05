@@ -3,6 +3,7 @@
 
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useRouter } from 'next/navigation';
+import { useSession } from 'next-auth/react';
 import React, { useState } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import * as yup from 'yup';
@@ -31,6 +32,8 @@ const schema = yup
 
 function SecuritySettings() {
   const router = useRouter();
+  const { data: session } = useSession();
+
   const [settingComponent, setSettingComponent] =
     useState<string>('Security Setting');
 
@@ -60,11 +63,12 @@ function SecuritySettings() {
   // Handle form submission
   // Handle form submission
   const onSubmit = async (data: any) => {
-    console.log('Form values:', data);
-
     try {
       // @ts-ignore
-      const response: ResetPasswordResponse = await resetPassword(data);
+      const response: ResetPasswordResponse = await resetPassword({
+        ...data,
+        email: session?.user?.email,
+      });
 
       if (response?.status === 200) {
         console.log('Password reset successful', response);
