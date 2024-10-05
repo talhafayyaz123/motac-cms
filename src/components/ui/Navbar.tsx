@@ -3,7 +3,7 @@
 import Image from 'next/image';
 import { usePathname, useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { FaCaretLeft, FaUser } from 'react-icons/fa';
 
 import { parsePathToTitle } from '@/helpers/utils/utils';
@@ -13,6 +13,7 @@ import Title from './Title';
 const Navbar = () => {
   const [showProfileDropdown, setShowProfileDropdown] =
     useState<boolean>(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
   const pathname = usePathname();
   const router = useRouter();
@@ -43,6 +44,22 @@ const Navbar = () => {
       </div>
     );
   };
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
+        setShowProfileDropdown(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [dropdownRef]);
 
   return (
     <div className="bg-white p-6 flex justify-between items-center relative">
@@ -82,6 +99,7 @@ const Navbar = () => {
             if (e.key === 'Enter' || e.key === ' ') {
             }
           }}
+          ref={dropdownRef}
         >
           {session?.user ? (
             <>
