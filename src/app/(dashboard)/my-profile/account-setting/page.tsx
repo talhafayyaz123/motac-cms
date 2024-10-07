@@ -56,8 +56,6 @@ function AccountSettings() {
     useState<string>('Account Setting');
   const [imageId, setImageId] = useState('');
 
-  console.log(profilePicture);
-
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   const handleSettingChange = (
@@ -167,6 +165,7 @@ function AccountSettings() {
       photoId: imageId ? imageId : '',
     };
     try {
+      setLoading(true);
       const response: any = await UpdateTeamMember({
         data: payload,
         // @ts-expect-error
@@ -177,11 +176,15 @@ function AccountSettings() {
         await AlertService.alert('Error!', response.error, 'error', 'OK');
       } else if (response?.id) {
         void loadData();
+        setLoading(false);
         await AlertService.alert(
           'Successful!',
           'Member Updated Successfully',
           'success',
           'Done',
+          () => {
+            window.location.reload();
+          },
         );
       }
     } catch (error: any) {
@@ -192,6 +195,8 @@ function AccountSettings() {
         'error',
         'OK',
       );
+    } finally {
+      setLoading(false);
     }
   };
 

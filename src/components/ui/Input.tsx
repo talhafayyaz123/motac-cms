@@ -15,6 +15,7 @@ interface InputProps
   defaultImagePath?: string | null; // Add prop for default image path (edit case)
   marginBottom?: string | null;
   iconPlacement?: string | null;
+  isFileUploaded?: boolean;
 }
 
 const Input: React.FC<InputProps> = ({
@@ -35,10 +36,12 @@ const Input: React.FC<InputProps> = ({
   defaultImagePath,
   marginBottom,
   iconPlacement = 'left',
+  isFileUploaded = false,
   ...rest
 }) => {
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const [, setBase64Value] = useState<string>('');
+
   const [displayText, setDisplayText] = useState<string>('');
   const [isUploaded, setIsUploaded] = useState<boolean>(false);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
@@ -145,13 +148,15 @@ const Input: React.FC<InputProps> = ({
             style={{ minWidth }}
             onClick={() => setShowModal(true)}
           />
-          <GiCancel
-            color="#51afec"
-            className="absolute top-1/4 right-2 cursor-pointer"
-            height={20}
-            width={20}
-            onClick={handleReupload} // Handle re-upload
-          />
+          {!isFileUploaded && (
+            <GiCancel
+              color="#51afec"
+              className="absolute top-1/4 right-2 cursor-pointer"
+              height={20}
+              width={20}
+              onClick={handleReupload} // Handle re-upload
+            />
+          )}
         </div>
       )}
       <div className={`relative mb-${marginBottom}`}>
