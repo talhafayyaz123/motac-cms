@@ -8,7 +8,13 @@ import ComingSoonFeature from '@/components/ui/ComingSoonFeature';
 import AttractionList from '@/components/ui/dashboard/AttractionList';
 import Select from '@/components/ui/dataTable/Select';
 import { chartCategories, chartData } from '@/constants';
-import { formatDateToYYYYMMDD, subtractDays } from '@/helpers/utils/utils';
+import {
+  formatDateToYYYYMMDD,
+  getDaysPassedThisMonth,
+  getDaysPassedThisWeek,
+  getDaysPassedThisYear,
+  subtractDays,
+} from '@/helpers/utils/utils';
 import { FetchDashboardUsersAndDestinationData } from '@/services/apiService';
 
 import AreasplineChart from './charts/AreaChart';
@@ -36,6 +42,12 @@ const StatsSection: React.FC = () => {
   const endDate = formatDateToYYYYMMDD(currentDate);
   const adjustedDate = subtractDays(currentDate, 30);
   const startDate = formatDateToYYYYMMDD(adjustedDate);
+
+  const daysPassedYear = getDaysPassedThisYear();
+
+  const daysPassedMonth = getDaysPassedThisMonth();
+
+  const daysPassedWeek = getDaysPassedThisWeek();
 
   const handleSelectChange = async (
     event: React.ChangeEvent<HTMLSelectElement>,
@@ -77,15 +89,16 @@ const StatsSection: React.FC = () => {
         <Select
           options={[
             { value: '30', label: 'Last 30 days' },
-            { value: '7', label: 'This week' },
-            { value: '14', label: '14 days' },
+            { value: `${daysPassedWeek}`, label: 'This Week' },
+            { value: '7', label: 'Last 7 days' },
+            { value: `${daysPassedMonth}`, label: 'This Month' },
             { value: '90', label: 'Last 3 Months' },
             { value: '180', label: 'Last 6 Months' },
-            { value: '365', label: 'This Year' },
+            { value: `${daysPassedYear}`, label: 'This Year' },
           ]}
           highlightValue={'30'}
           minimalStyle
-          onChange={handleSelectChange}
+          onChange={(event) => handleSelectChange(event)}
         />
       </div>
       <div className="lg:max-h-96 lg:h-full h-auto w-full flex lg:flex-row flex-col justify-between gap-6">

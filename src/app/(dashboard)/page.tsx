@@ -16,14 +16,18 @@ import Select from '@/components/ui/dataTable/Select';
 // import DataTable from '@/components/ui/dataTable/DataTable';
 import Loader from '@/components/ui/Loader';
 import {
-  chartCategories,
-  chartData,
   dummyMapDataOne,
   // dummyMapDataTwo,
   dummyMapVisibleCountriesOne,
   // dummyMapVisibleCountriesTwo,
 } from '@/constants';
-import { formatDateToYYYYMMDD, subtractDays } from '@/helpers/utils/utils';
+import {
+  formatDateToYYYYMMDD,
+  getDaysPassedThisMonth,
+  getDaysPassedThisWeek,
+  getDaysPassedThisYear,
+  subtractDays,
+} from '@/helpers/utils/utils';
 import {
   FetchDashboardUsersData,
   FetchHappeningEventsData,
@@ -35,11 +39,11 @@ import {
 interface UserStats {
   totalUserCount: number;
   newSignedUpUserCount: number;
+  graphData: Record<string, number>; // For dates and counts
   previousActiveUserCount: number;
   activeUserCount: number;
   inactiveUserCount: number;
   percentageChange: number;
-  newExperienceCount: number;
 }
 
 interface ExperienceCategory {
@@ -77,6 +81,7 @@ export default function Dashboard() {
     flag: string,
   ) => {
     const selectedValue = event.target.value;
+
     const adjustedDate = subtractDays(currentDate, parseInt(selectedValue));
     const startDate = formatDateToYYYYMMDD(adjustedDate);
 
@@ -157,6 +162,7 @@ export default function Dashboard() {
     seeAttractionData?.newExperienceByCategory
       ?.slice(0, 3)
       .map((item: any) => item.destination_category_name) || [];
+
   const seriesData = [
     {
       type: 'column' as const,
@@ -179,6 +185,19 @@ export default function Dashboard() {
     },
   ];
 
+  const categories = statsData?.graphData
+    ? Object.keys(statsData.graphData)
+    : [];
+  const graphData = statsData?.graphData
+    ? Object.values(statsData.graphData)
+    : [];
+
+  const daysPassedYear = getDaysPassedThisYear();
+
+  const daysPassedMonth = getDaysPassedThisMonth();
+
+  const daysPassedWeek = getDaysPassedThisWeek();
+
   if (loadingUserManagement || loadingAttractions || loadingEvents) {
     return (
       <div>
@@ -198,8 +217,8 @@ export default function Dashboard() {
         <div className="flex">
           <UserStats stats={statsArray} />
           <AreasplineChart
-            categories={chartCategories}
-            data={chartData}
+            categories={categories}
+            data={graphData}
             title="New Users this Month"
             color="#364EA2"
             fillColorStart="#778FDF"
@@ -210,11 +229,12 @@ export default function Dashboard() {
             <Select
               options={[
                 { value: '30', label: 'Last 30 days' },
-                { value: '7', label: 'This week' },
-                { value: '14', label: '14 days' },
+                { value: `${daysPassedWeek}`, label: 'This Week' },
+                { value: '7', label: 'Last 7 days' },
+                { value: `${daysPassedMonth}`, label: 'This Month' },
                 { value: '90', label: 'Last 3 Months' },
                 { value: '180', label: 'Last 6 Months' },
-                { value: '365', label: 'This Year' },
+                { value: `${daysPassedYear}`, label: 'This Year' },
               ]}
               highlightValue={'30'}
               minimalStyle
@@ -249,16 +269,17 @@ export default function Dashboard() {
                   <Select
                     options={[
                       { value: '30', label: 'Last 30 days' },
-                      { value: '7', label: 'This week' },
-                      { value: '14', label: '14 days' },
+                      { value: `${daysPassedWeek}`, label: 'This Week' },
+                      { value: '7', label: 'Last 7 days' },
+                      { value: `${daysPassedMonth}`, label: 'This Month' },
                       { value: '90', label: 'Last 3 Months' },
                       { value: '180', label: 'Last 6 Months' },
-                      { value: '365', label: 'This Year' },
+                      { value: `${daysPassedYear}`, label: 'This Year' },
                     ]}
                     highlightValue={'30'}
                     minimalStyle
                     onChange={(event) =>
-                      handleSelectChange(event, 'topExperience')
+                      handleSelectChange(event, 'userManagement')
                     }
                   />
                 </div>

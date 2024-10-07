@@ -1,6 +1,11 @@
 import React from 'react';
 
 import Select from '@/components/ui/dataTable/Select';
+import {
+  getDaysPassedThisMonth,
+  getDaysPassedThisWeek,
+  getDaysPassedThisYear,
+} from '@/helpers/utils/utils';
 
 interface CardStatsProps {
   title: string;
@@ -22,6 +27,12 @@ const CardStats: React.FC<CardStatsProps> = ({
   isEventFilter = false,
   handleSelectChange,
 }) => {
+  const daysPassedYear = getDaysPassedThisYear();
+
+  const daysPassedMonth = getDaysPassedThisMonth();
+
+  const daysPassedWeek = getDaysPassedThisWeek();
+
   return (
     <div className="flex flex-col relative rounded-xl bg-blue-50 border border-gray-100 p-4 font-medium">
       <p className="text-xs text-black-100 p-2 font-bold">{title}</p>
@@ -38,15 +49,16 @@ const CardStats: React.FC<CardStatsProps> = ({
             <Select
               options={[
                 { value: '30', label: 'Last 30 days' },
-                { value: '7', label: 'This week' },
-                { value: '14', label: '14 days' },
+                { value: `${daysPassedWeek}`, label: 'This Week' },
+                { value: '7', label: 'Last 7 days' },
+                { value: `${daysPassedMonth}`, label: 'This Month' },
                 { value: '90', label: 'Last 3 Months' },
                 { value: '180', label: 'Last 6 Months' },
-                { value: '365', label: 'This Year' },
+                { value: `${daysPassedYear}`, label: 'This Year' },
               ]}
               highlightValue={'30'}
               minimalStyle
-              onChange={(event) => handleSelectChange(event, 'happeningEvents')}
+              onChange={(event) => handleSelectChange(event, 'userManagement')}
             />
           </div>
         </div>
