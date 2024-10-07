@@ -68,7 +68,7 @@ export default function AddExperience() {
       ageLimit: 1,
       mapLink: '',
       address: '',
-      category: 1,
+      category: topExperienceDestinationId,
       area: { id: null, name: '' },
       cityId: 1,
       description: '',
