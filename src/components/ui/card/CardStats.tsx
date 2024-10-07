@@ -58,7 +58,7 @@ const CardStats: React.FC<CardStatsProps> = ({
               ]}
               highlightValue={'30'}
               minimalStyle
-              onChange={(event) => handleSelectChange(event, 'userManagement')}
+              onChange={(event) => handleSelectChange(event, 'happeningEvents')}
             />
           </div>
         </div>

@@ -279,16 +279,18 @@ export default function Dashboard() {
                     highlightValue={'30'}
                     minimalStyle
                     onChange={(event) =>
-                      handleSelectChange(event, 'userManagement')
+                      handleSelectChange(event, 'topExperience')
                     }
                   />
                 </div>
               </div>
               <div className="p-2">
-                <p className="text-xs  text-gray-50 font-bold mb-2">
+                <p className="text-xs  text-gray-50 font-bold">
                   Experiences Offered
                 </p>
-                <p className="text-4xl font-semibold text-blue-100 mb-3">26</p>
+                <p className="text-4xl font-semibold text-blue-100 mb-3">
+                  {seeAttractionData?.newExperienceByCategory?.length}
+                </p>
                 <div className="flex py-2 items-center w-full">
                   <div className="transform translate-y-1/2 absolute left-0 h-1/2 lg:border-l lg:border-gray-300 top-10" />
                   <BarChart

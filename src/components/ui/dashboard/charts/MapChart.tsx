@@ -3,9 +3,8 @@ import worldMapData from '@highcharts/map-collection/custom/world.geo.json';
 import Highcharts from 'highcharts';
 import HighchartsMap from 'highcharts/modules/map';
 import HighchartsReact from 'highcharts-react-official';
-import React from 'react';
+import React, { memo } from 'react';
 
-// Initialize the map module
 if (typeof Highcharts === 'object') {
   HighchartsMap(Highcharts);
 }
@@ -97,4 +96,4 @@ const MapChart: React.FC<MapChartProps> = ({
   );
 };
 
-export default MapChart;
+export default memo(MapChart);

@@ -24,6 +24,7 @@ interface FormValues {
 
 export default function PersonalDetails() {
   const { currentMember, setCurrentMember } = useMember();
+
   const router = useRouter();
 
   const {
