@@ -1,10 +1,11 @@
 'use client';
 
+import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import React, { useState, lazy, useEffect, Suspense } from 'react';
-import { CiSearch } from 'react-icons/ci';
-import { IoEyeSharp } from 'react-icons/io5';
 
+import { SearchIcon } from '@/assets';
+import viewIcon from '@/assets/view-icon.svg';
 import Wrapper from '@/components/ui/dataTable/DataTableWrapper';
 import Input from '@/components/ui/Input';
 import Loader from '@/components/ui/Loader';
@@ -90,7 +91,7 @@ export default function UserManagementActive() {
               }
             }}
           >
-            <IoEyeSharp className="text-blue-200" />
+            <Image alt="View Icon" src={viewIcon} />
             <span>{item[column]}</span>
           </div>
         );
@@ -122,7 +123,7 @@ export default function UserManagementActive() {
             minWidth="400px"
             className="bg-white !border-0"
             onChange={(e) => setSearchTerm(e.target.value)}
-            icon={<CiSearch />}
+            icon={<SearchIcon />}
           />
         </div>
       </Wrapper>

@@ -664,6 +664,15 @@ export default function AddExperience() {
             <DropZone setImages={setImages} onChange={handleFilesChange} />
           </FormContainer>
           <div className="w-full flex justify-end gap-3 p-10">
+            <Button variant="customBlue" type="submit" title="Submit">
+              {isFormBtnLoading ? (
+                <FormLoader /> // Small loader icon inside the button
+              ) : action === 'add-experience' ? (
+                'Add'
+              ) : (
+                'Update'
+              )}
+            </Button>{' '}
             <Button
               variant="danger"
               onClick={() => {
@@ -674,15 +683,6 @@ export default function AddExperience() {
             >
               Cancel
             </Button>
-            <Button variant="customBlue" type="submit" title="Submit">
-              {isFormBtnLoading ? (
-                <FormLoader /> // Small loader icon inside the button
-              ) : action === 'add-experience' ? (
-                'Add'
-              ) : (
-                'Update'
-              )}
-            </Button>{' '}
           </div>
         </form>
       )}

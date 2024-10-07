@@ -3,10 +3,10 @@
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
-import { CiSearch } from 'react-icons/ci';
 import { FaFileExcel, FaRegEdit, FaTrashAlt } from 'react-icons/fa';
 import { RiCheckDoubleFill } from 'react-icons/ri';
 
+import { SearchIcon } from '@/assets';
 import Button from '@/components/ui/Button';
 import DataTable from '@/components/ui/dataTable/DataTable';
 import Wrapper from '@/components/ui/dataTable/DataTableWrapper';
@@ -126,7 +126,7 @@ export default function Products() {
             minWidth="400px"
             className="bg-white"
             onChange={(e) => console.log(e.target.value)}
-            icon={<CiSearch />}
+            icon={<SearchIcon />}
           />
         </div>
       </Wrapper>
