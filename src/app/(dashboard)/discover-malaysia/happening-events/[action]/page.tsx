@@ -161,7 +161,11 @@ export default function AddEvent() {
       setValue('cityId', data?.area?.city?.id);
       const areaName = data.area?.name;
       const areaId = data.area?.id;
-      setValue('area', { id: areaId, name: areaName });
+      // Delay setting the area to ensure the form is ready
+      setTimeout(() => {
+        setValue('area', { id: areaId, name: areaName });
+        console.log('area set after timeout:', getValues('area'));
+      }, 0); // Slight delay to ensure the form is ready
       console.log('area: ', getValues('area'));
       setValue('workingDays', data.workingDays);
       setValue('description', data.description);
