@@ -42,7 +42,6 @@ export default function AddAttraction() {
   const action = pathname?.split('/').pop();
   const id = searchParams?.get('id');
   const [images, setImages] = useState<File[]>([]);
-  console.log(images);
 
   const [categoriesTags, setCategoriesTags] = useState<
     { id: number; name: string }[]
@@ -72,7 +71,7 @@ export default function AddAttraction() {
       address: '',
       category: attractionDestinationId,
       area: { id: null, name: '' },
-      cityId: 1,
+      cityId: undefined,
       description: '',
       tags: [],
       priority: 1,
@@ -113,30 +112,17 @@ export default function AddAttraction() {
     }
   };
 
-  // Use useEffect to watch for city changes and refetch areas
-  useEffect(() => {
-    const fetchAreasData = async (cityId: number) => {
-      try {
-        if (cityId) {
-          const areasData = await fetchAreas(cityId);
-          setAreas(areasData?.map(({ id, name }) => ({ id, name })));
-        }
-      } catch (error) {
-        console.error('Error loading areas:', error);
+  const fetchAreasData = async (cityId: number) => {
+    try {
+      if (cityId) {
+        const areasData = await fetchAreas(cityId);
+        setAreas(areasData?.map(({ id, name }) => ({ id, name })));
+        setValue('area', null as any); // Reset area
       }
-    };
-
-    // Watch for changes to cityId
-    const cityId = watch('cityId');
-
-    // Reset area value and fetch areas if cityId changes
-    if (cityId) {
-      // Reset area to null whenever city changes
-      setValue('area', null as any);
-      void fetchAreasData(cityId);
+    } catch (error) {
+      console.error('Error loading areas:', error);
     }
-    // eslint-disable-next-line
-  }, [watch('cityId')]);
+  };
 
   const fetchAttraction = async (attractionId: string) => {
     try {
@@ -144,8 +130,6 @@ export default function AddAttraction() {
       const data = await fetchDestinationsById(attractionId);
       const destinationCategoryId = data.destinationCategory?.id;
       const priorityId = data.priority?.id;
-      const areaName = data.area?.name;
-      const areaId = data.area?.id;
 
       setValue('title', data.title);
       setValue('openingHours', data.openingHours);
@@ -154,8 +138,10 @@ export default function AddAttraction() {
       setValue('mapLink', data.mapLink);
       setValue('address', data.address);
       setValue('category', destinationCategoryId);
-      setValue('area', { id: areaId, name: areaName });
       setValue('cityId', data?.area?.city?.id);
+      const areaName = data.area?.name;
+      const areaId = data.area?.id;
+      setValue('area', { id: areaId, name: areaName });
       setValue('workingDays', data.workingDays);
       setValue('description', data.description);
       setValue(
@@ -567,7 +553,10 @@ export default function AddAttraction() {
                       key: p.id,
                     }))}
                     selectedValues={field.value}
-                    setSelectedValues={field.onChange}
+                    setSelectedValues={(event) => {
+                      field.onChange(event);
+                      void fetchAreasData(event as number);
+                    }}
                     minWidth="350px"
                     error={errors.cityId?.message}
                   />

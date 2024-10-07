@@ -7,7 +7,6 @@ import usersIcon from '@/assets/users-icon.svg';
 import ComingSoonFeature from '@/components/ui/ComingSoonFeature';
 import AttractionList from '@/components/ui/dashboard/AttractionList';
 import Select from '@/components/ui/dataTable/Select';
-import { chartCategories, chartData } from '@/constants';
 import {
   formatDateToYYYYMMDD,
   getDaysPassedThisMonth,
@@ -28,6 +27,7 @@ interface UserStats {
   totalUserCount: number;
   newSignedUpUserCount: number;
   previousActiveUserCount: number;
+  activeUserGraphData: Record<string, number>;
   activeUserCount: number;
   inactiveUserCount: number;
   percentageChange: number;
@@ -82,6 +82,13 @@ const StatsSection: React.FC = () => {
 
     void loadData();
   }, [startDate, endDate]);
+
+  const categories = statsData?.activeUserGraphData
+    ? Object.keys(statsData.activeUserGraphData)
+    : [];
+  const graphData = statsData?.activeUserGraphData
+    ? Object.values(statsData.activeUserGraphData)
+    : [];
 
   return (
     <div className="bg-blue-150 p-6 rounded-xl border border-gray-100 mb-6">
@@ -181,8 +188,8 @@ const StatsSection: React.FC = () => {
               </div>
             </div>
             <AreasplineChart
-              categories={chartCategories}
-              data={chartData}
+              categories={categories}
+              data={graphData}
               title=""
               color="#364EA2"
               fillColorStart="#778FDF"

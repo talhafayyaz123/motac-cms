@@ -39,8 +39,8 @@ const MapChart: React.FC<MapChartProps> = ({
       text: title,
     },
     mapNavigation: {
-      enabled: false,
-      enableDoubleClickZoom: false,
+      enabled: false, // Disable map navigation (zoom, pan)
+      enableDoubleClickZoom: false, // Disable double-click zoom
     },
     colorAxis: {
       min: 0,
@@ -53,15 +53,19 @@ const MapChart: React.FC<MapChartProps> = ({
         joinBy: ['iso-a2', 'code'], // Matches country code with data (iso-a2 is the standard code)
         states: {
           hover: {
-            color: '#BADA55',
+            enabled: false, // Disable hover effects
           },
         },
         dataLabels: {
           enabled: false,
           format: '{point.name}',
         },
+        allowPointSelect: false, // Disable point selection
       },
     ],
+    tooltip: {
+      enabled: false, // Disable tooltips
+    },
     responsive: {
       rules: [
         {

@@ -473,6 +473,18 @@ export const DeleteActiveMember = async (id: number) => {
   }
 };
 
+export const FetchActiveMember = async (id: number) => {
+  try {
+    const response = await apiClient(`/app/users/${id}`, {
+      method: 'GET',
+    });
+    return response;
+  } catch (err) {
+    const typedError = err as Error;
+    return { error: typedError.message };
+  }
+};
+
 export const FetchDashboardUsersAndDestinationData = async (
   startDate: string,
   endDate: string,
