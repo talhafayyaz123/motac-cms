@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 'use client';
 // import { useState } from 'react';
 
@@ -151,7 +152,7 @@ export default function Dashboard() {
   };
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  /*  const calculateStartAndEndDates = () => {
+  const calculateStartAndEndDates = () => {
     const currentMonthNumber = currentDate.getMonth();
     const { monthStartDate, monthEndDate } = getMonthStartAndEnd(
       currentYear,
@@ -162,7 +163,7 @@ export default function Dashboard() {
     const newEndDate = formatDateToYYYYMMDD(monthEndDate);
 
     return { newStartDate, newEndDate };
-  }; */
+  };
 
   useEffect(() => {
     const loadData = async () => {
@@ -192,9 +193,12 @@ export default function Dashboard() {
     const loadHappeningEventsData = async () => {
       setLoadingEvents(true);
       try {
-        //const { newStartDate, newEndDate } = calculateStartAndEndDates();
+        const { newStartDate, newEndDate } = calculateStartAndEndDates();
 
-        const fetchedData = await FetchHappeningEventsData(startDate, endDate);
+        const fetchedData = await FetchHappeningEventsData(
+          newStartDate,
+          newEndDate,
+        );
 
         setHappeningEventsData(fetchedData);
       } catch (error) {

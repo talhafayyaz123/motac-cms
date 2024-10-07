@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import Select from '@/components/ui/dataTable/Select';
 
@@ -25,7 +25,10 @@ const CardStats: React.FC<CardStatsProps> = ({
 }) => {
   const currentDate = new Date();
   const currentYear = currentDate.getFullYear();
-  const currentMonth = currentDate.getMonth();
+
+  const [selectedMonth, setSelectedMonth] = useState<string>(
+    currentDate.getMonth().toString(),
+  );
 
   const monthsOptions = Array.from({ length: 12 }, (v, i) => {
     const monthName = new Date(currentYear, i, 1).toLocaleString('default', {
@@ -33,6 +36,11 @@ const CardStats: React.FC<CardStatsProps> = ({
     });
     return { value: i.toString(), label: monthName };
   });
+
+  const handleMonthChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    setSelectedMonth(event.target.value);
+    handleSelectChange(event, 'happeningEvents', 'events');
+  };
 
   return (
     <div className="flex flex-col relative rounded-xl bg-blue-50 border border-gray-100 p-4 font-medium">
@@ -49,11 +57,9 @@ const CardStats: React.FC<CardStatsProps> = ({
           <div className="h-[max-content]">
             <Select
               options={monthsOptions}
-              highlightValue={currentMonth.toString()}
+              value={selectedMonth} // Use state to manage the selected value
               minimalStyle
-              onChange={(event) =>
-                handleSelectChange(event, 'happeningEvents', 'events')
-              }
+              onChange={handleMonthChange} // Update selected month on change
             />
           </div>
         </div>
