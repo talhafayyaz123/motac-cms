@@ -72,7 +72,7 @@ export default function AddAttraction() {
       address: '',
       category: attractionDestinationId,
       area: { id: null, name: '' },
-      cityId: 1,
+      cityId: undefined,
       description: '',
       tags: [],
       priority: 1,

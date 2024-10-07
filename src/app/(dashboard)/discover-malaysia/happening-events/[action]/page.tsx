@@ -70,7 +70,7 @@ export default function AddEvent() {
       address: '',
       category: happeningEventsDestinationId,
       area: { id: null, name: '' },
-      cityId: 1,
+      cityId: undefined,
       description: '',
       tags: [],
       priority: 1,

@@ -70,7 +70,7 @@ export default function AddExperience() {
       address: '',
       category: topExperienceDestinationId,
       area: { id: null, name: '' },
-      cityId: 1,
+      cityId: undefined,
       description: '',
       tags: [],
       priority: 1,
