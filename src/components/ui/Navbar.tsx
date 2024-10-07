@@ -1,3 +1,5 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 'use client';
 
 import Image from 'next/image';
@@ -7,12 +9,16 @@ import React, { useState, useEffect, useRef } from 'react';
 import { FaCaretLeft, FaUser } from 'react-icons/fa';
 
 import { parsePathToTitle } from '@/helpers/utils/utils';
+import { fetchSpecificTeamMember } from '@/services/apiService';
 
 import Title from './Title';
 
 const Navbar = () => {
   const [showProfileDropdown, setShowProfileDropdown] =
     useState<boolean>(false);
+
+  const [profilePicture, setProfilePicture] = useState<string | null>(null);
+
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   const pathname = usePathname();
@@ -26,6 +32,26 @@ const Navbar = () => {
     pathnameChunks?.length === 3
       ? pathnameChunks[1]
       : pathnameChunks[pathnameChunks?.length - 1];
+
+  const loadData = async () => {
+    try {
+      // @ts-ignore
+      const userId = session?.user?.id;
+
+      if (userId) {
+        const response = await fetchSpecificTeamMember(userId);
+        setProfilePicture(response?.photo?.path);
+      } else {
+        console.log('User ID not found');
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    void loadData();
+  }, [session]);
 
   const renderProfileDropdownOption = () => {
     return (
@@ -105,7 +131,7 @@ const Navbar = () => {
             <>
               <div className="border-black-100 border-2 rounded-full h-[60px] w-[60px] overflow-hidden">
                 <Image
-                  src={session?.user?.photo?.path ?? '/user.jpg'}
+                  src={profilePicture ?? '/user.jpg'}
                   alt="Profile"
                   width={60}
                   height={60}

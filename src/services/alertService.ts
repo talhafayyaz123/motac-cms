@@ -18,6 +18,7 @@ const AlertService = {
     text: string,
     icon: 'success' | 'error' | 'warning' | 'info',
     confirmButtonText: string,
+    callback?: () => void, // Optional callback function
   ) => {
     return Swal.fire({
       title,
@@ -29,6 +30,10 @@ const AlertService = {
         title: 'text-black',
         confirmButton: `${baseStyles} ${variantStyles.customBlue}`,
       },
+    }).then((result) => {
+      if (result.isConfirmed && callback) {
+        callback(); // Invoke the callback if the alert is confirmed and the callback is provided
+      }
     });
   },
 
