@@ -22,7 +22,7 @@ const schema = yup
     newPassword: yup
       .string()
       .required('New password is required')
-      .min(8, 'Password must be at least 8 characters'),
+      .min(6, 'Password must be at least 8 characters'),
     confirmPassword: yup
       .string()
       .oneOf([yup.ref('newPassword')], 'Passwords must match')
@@ -70,18 +70,22 @@ function SecuritySettings() {
         email: session?.user?.email,
       });
 
-      console.log('Password reset successful', response);
-      await AlertService.alert(
-        'Successful!',
-        'Password reset successfully.',
-        'success',
-        'OK',
-      );
+      console.log(response);
+
+      if (response?.error) {
+        await AlertService.alert('Error!', response.error, 'error', 'OK');
+      } else if (response?.message) {
+        await AlertService.alert(
+          'Successful!',
+          response?.message,
+          'success',
+          'Done',
+        );
+      }
     } catch (error) {
-      console.error('Error resetting password:', error);
       await AlertService.alert(
         'Error!',
-        'An unexpected error occurred while resetting the password.',
+        'An unexpected error occurred',
         'error',
         'OK',
       );
