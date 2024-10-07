@@ -1,8 +1,8 @@
 'use client';
 
 import React, { useState, lazy, Suspense, useEffect } from 'react';
-import { CiSearch } from 'react-icons/ci';
 
+import { SearchIcon } from '@/assets';
 import Wrapper from '@/components/ui/dataTable/DataTableWrapper';
 import Input from '@/components/ui/Input';
 import Loader from '@/components/ui/Loader';
@@ -88,7 +88,7 @@ export default function UserManagementDeleted() {
           minWidth="400px"
           className="bg-white !border-0"
           onChange={(e) => setSearchTerm(e.target.value)}
-          icon={<CiSearch />}
+          icon={<SearchIcon />}
         />
       </Wrapper>
 

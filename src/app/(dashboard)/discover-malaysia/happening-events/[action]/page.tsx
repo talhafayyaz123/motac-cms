@@ -713,14 +713,6 @@ export default function AddEvent() {
             <DropZone setImages={setImages} onChange={handleFilesChange} />
           </FormContainer>
           <div className="w-full flex justify-end gap-3 p-10">
-            <Button
-              variant="danger"
-              onClick={() => {
-                router.push('/discover-malaysia/happening-events');
-              }}
-            >
-              Cancel
-            </Button>
             <Button variant="customBlue" type="submit" title="Submit">
               {isFormBtnLoading ? (
                 <FormLoader /> // Small loader icon inside the button
@@ -729,6 +721,14 @@ export default function AddEvent() {
               ) : (
                 'Update'
               )}
+            </Button>
+            <Button
+              variant="danger"
+              onClick={() => {
+                router.push('/discover-malaysia/happening-events');
+              }}
+            >
+              Cancel
             </Button>
           </div>
         </form>

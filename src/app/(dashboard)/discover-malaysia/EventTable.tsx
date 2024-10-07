@@ -2,10 +2,10 @@
 
 import { useRouter } from 'next/navigation';
 import React, { Suspense } from 'react';
-import { CiSearch } from 'react-icons/ci';
 // import { FaFileExcel } from 'react-icons/fa';
 // import { RiCheckDoubleFill } from 'react-icons/ri';
 
+import { SearchIcon } from '@/assets';
 import Button from '@/components/ui/Button';
 import DataTable from '@/components/ui/dataTable/DataTable';
 import Wrapper from '@/components/ui/dataTable/DataTableWrapper';
@@ -79,7 +79,7 @@ const EventTableLayout: React.FC<EventTableLayoutProps> = ({
               console.log(value);
               onSearchChange(value); // Call the handler to update search state
             }}
-            icon={<CiSearch />}
+            icon={<SearchIcon />}
           />
         </div>
       </Wrapper>

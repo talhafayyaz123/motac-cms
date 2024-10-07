@@ -3,8 +3,8 @@
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import React, { lazy, Suspense, useEffect, useState } from 'react';
-import { CiSearch } from 'react-icons/ci';
 
+import { SearchIcon } from '@/assets';
 import Button from '@/components/ui/Button';
 import Wrapper from '@/components/ui/dataTable/DataTableWrapper';
 import Input from '@/components/ui/Input';
@@ -174,7 +174,7 @@ export default function MyTeam() {
             minWidth="400px"
             className="bg-white"
             onChange={(e) => setSearchTerm(e.target.value)}
-            icon={<CiSearch />}
+            icon={<SearchIcon />}
           />
         </div>
       </Wrapper>
