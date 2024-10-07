@@ -55,7 +55,6 @@ export default function AddEvent() {
     control,
     handleSubmit,
     setValue,
-    getValues,
     formState: { errors },
     setFocus,
     watch,
@@ -160,13 +159,8 @@ export default function AddEvent() {
       setValue('category', destinationCategoryId);
       setValue('cityId', data?.area?.city?.id);
       const areaName = data.area?.name;
-      const areaId = data.area?.id;
-      // Delay setting the area to ensure the form is ready
-      setTimeout(() => {
-        setValue('area', { id: areaId, name: areaName });
-        console.log('area set after timeout:', getValues('area'));
-      }, 0); // Slight delay to ensure the form is ready
-      console.log('area: ', getValues('area'));
+      const areaId = data.areaId;
+      setValue('area', { id: areaId, name: areaName });
       setValue('workingDays', data.workingDays);
       setValue('description', data.description);
       setValue(
@@ -194,6 +188,7 @@ export default function AddEvent() {
       setIsLoading(false);
     }
   };
+  console.log(watch('area'), '----------------------------------------');
 
   useEffect(() => {
     if (action === 'edit-happening-event' && id) {
