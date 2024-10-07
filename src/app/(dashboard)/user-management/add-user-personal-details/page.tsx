@@ -12,6 +12,7 @@ import * as Yup from 'yup';
 import FormContainer from '@/components/container/FormContainer';
 import Button from '@/components/ui/Button';
 import Input from '@/components/ui/Input';
+import Loader from '@/components/ui/Loader';
 import Title from '@/components/ui/Title';
 import AlertService from '@/services/alertService';
 import { DeleteActiveMember, FetchActiveMember } from '@/services/apiService';
@@ -46,6 +47,7 @@ interface FormValues {
 export default function PersonalDetails() {
   const { currentMember, setCurrentMember } = useMember();
   const [data, setData] = useState<FetchedUser | null>(null);
+  const [loading, setLoading] = useState(false);
   const [profileImage, setProfileImage] = useState<string | File | null>(null); // State to manage image upload
   const router = useRouter();
   const { 'User ID': userID = '' } = currentMember || {};
@@ -85,12 +87,19 @@ export default function PersonalDetails() {
     const loadData = async () => {
       try {
         if (userID) {
+          setLoading(true);
           const response = await FetchActiveMember(userID);
-          setData(response);
-          setValue('profileImage', response?.photo?.path); // Set the existing profile image if available
+          if (response) {
+            setData(response);
+            setValue('profileImage', response?.photo?.path);
+            setLoading(false);
+          }
         }
       } catch (error) {
         console.log(error);
+        setLoading(false);
+      } finally {
+        setLoading(false);
       }
     };
     void loadData();
@@ -148,6 +157,14 @@ export default function PersonalDetails() {
   const onSubmit = (data: FormValues) => {
     console.log('Form Submitted:', data);
   };
+
+  if (loading) {
+    return (
+      <div>
+        <Loader />
+      </div>
+    );
+  }
 
   return (
     <main className="h-full">
