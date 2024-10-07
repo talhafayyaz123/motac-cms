@@ -6,6 +6,12 @@ async function getAccessToken(): Promise<string | null> {
   const session = await getSession();
   return session ? (session as any).accessToken : null;
 }
+const authEndpoints = [
+  '/auth/login',
+  '/otps/request',
+  '/auth/forgot/password',
+  '/otps/verify',
+];
 
 interface FetchOptions extends RequestInit {
   headers?: Record<string, string>;
@@ -38,7 +44,7 @@ export const apiClient = async (
     const response = await fetch(`${backendApiUrl}${endpoint}`, config);
 
     if (!response.ok) {
-      if (response.status === 401) {
+      if (response.status === 401 && !authEndpoints.includes(endpoint)) {
         await signOut();
       }
       const data = await response.json();
