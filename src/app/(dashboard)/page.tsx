@@ -13,14 +13,8 @@ import MapChart from '@/components/ui/dashboard/charts/MapChart';
 import StatsSection from '@/components/ui/dashboard/StatsSections';
 import UserStats from '@/components/ui/dashboard/UserStates';
 import Select from '@/components/ui/dataTable/Select';
-// import DataTable from '@/components/ui/dataTable/DataTable';
 import Loader from '@/components/ui/Loader';
-import {
-  dummyMapDataOne,
-  // dummyMapDataTwo,
-  dummyMapVisibleCountriesOne,
-  // dummyMapVisibleCountriesTwo,
-} from '@/constants';
+import { dummyMapDataOne, dummyMapVisibleCountriesOne } from '@/constants';
 import {
   formatDateToYYYYMMDD,
   getDaysPassedThisMonth,
@@ -34,12 +28,10 @@ import {
   FetchSeeAttractionData,
 } from '@/services/apiService';
 
-// import generateDummyDataForARTrails from './DummyData';
-
 interface UserStats {
   totalUserCount: number;
   newSignedUpUserCount: number;
-  graphData: Record<string, number>; // For dates and counts
+  graphData: Record<string, number>;
   previousActiveUserCount: number;
   activeUserCount: number;
   inactiveUserCount: number;
