@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 'use client';
 // import { useState } from 'react';
 
@@ -59,38 +60,101 @@ export default function Dashboard() {
   const [happeningEventsData, setHappeningEventsData] =
     useState<EventData | null>(null);
 
+  const [currentMonth, setCurrentMonth] = useState<string>(
+    new Date().toLocaleString('default', { month: 'long' }),
+  );
+
   const [loadingUserManagement, setLoadingUserManagement] = useState(false);
   const [loadingAttractions, setLoadingAttractions] = useState(false);
   const [loadingEvents, setLoadingEvents] = useState(false);
 
   const currentDate = new Date();
+  const currentYear = currentDate.getFullYear();
   const endDate = formatDateToYYYYMMDD(currentDate);
   const adjustedDate = subtractDays(currentDate, 30);
   const startDate = formatDateToYYYYMMDD(adjustedDate);
 
+  const getMonthStartAndEnd = (
+    year: number,
+    month: number,
+  ): { monthStartDate: Date; monthEndDate: Date } => {
+    const monthStartDate = new Date(year, month, 1);
+    const monthEndDate = new Date(year, month + 1, 0);
+    return { monthStartDate, monthEndDate };
+  };
+
+  const monthNames = [
+    'January',
+    'February',
+    'March',
+    'April',
+    'May',
+    'June',
+    'July',
+    'August',
+    'September',
+    'October',
+    'November',
+    'December',
+  ];
+
   const handleSelectChange = async (
     event: React.ChangeEvent<HTMLSelectElement>,
     flag: string,
+    eventFlag?: string,
   ) => {
-    const selectedValue = event.target.value;
+    let startDate: string | undefined;
+    let endDate: string = formatDateToYYYYMMDD(currentDate);
+    if (eventFlag === 'events') {
+      const selectedValue = event.target.value;
+      const selectedMonth = parseInt(selectedValue);
 
-    const adjustedDate = subtractDays(currentDate, parseInt(selectedValue));
-    const startDate = formatDateToYYYYMMDD(adjustedDate);
+      const { monthStartDate, monthEndDate } = getMonthStartAndEnd(
+        currentYear,
+        selectedMonth,
+      );
+
+      startDate = formatDateToYYYYMMDD(monthStartDate);
+      endDate = formatDateToYYYYMMDD(monthEndDate);
+      setCurrentMonth(monthNames[selectedMonth]);
+    } else {
+      const selectedValue = event.target.value;
+      const adjustedDate = subtractDays(currentDate, parseInt(selectedValue));
+      startDate = formatDateToYYYYMMDD(adjustedDate);
+      endDate = formatDateToYYYYMMDD(currentDate);
+    }
 
     try {
-      if (flag === 'userManagement') {
+      if (flag === 'userManagement' && startDate) {
         const fetchedData = await FetchDashboardUsersData(startDate, endDate);
         setStatsData(fetchedData);
-      } else if (flag === 'happeningEvents') {
+      } else if (flag === 'happeningEvents' && startDate) {
         const fetchedData = await FetchHappeningEventsData(startDate, endDate);
         setHappeningEventsData(fetchedData);
       } else {
-        const fetchedData = await FetchSeeAttractionData(startDate, endDate);
+        const fetchedData = await FetchSeeAttractionData(
+          startDate || '',
+          endDate,
+        );
         setSeeAttractionData(fetchedData);
       }
     } catch (error) {
       console.error('Error loading data:', error);
     }
+  };
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const calculateStartAndEndDates = () => {
+    const currentMonthNumber = currentDate.getMonth();
+    const { monthStartDate, monthEndDate } = getMonthStartAndEnd(
+      currentYear,
+      currentMonthNumber,
+    );
+
+    const newStartDate = formatDateToYYYYMMDD(monthStartDate);
+    const newEndDate = formatDateToYYYYMMDD(monthEndDate);
+
+    return { newStartDate, newEndDate };
   };
 
   useEffect(() => {
@@ -121,7 +185,13 @@ export default function Dashboard() {
     const loadHappeningEventsData = async () => {
       setLoadingEvents(true);
       try {
-        const fetchedData = await FetchHappeningEventsData(startDate, endDate);
+        const { newStartDate, newEndDate } = calculateStartAndEndDates();
+
+        const fetchedData = await FetchHappeningEventsData(
+          newStartDate,
+          newEndDate,
+        );
+
         setHappeningEventsData(fetchedData);
       } catch (error) {
         console.error('Error loading data:', error);
@@ -300,7 +370,11 @@ export default function Dashboard() {
             statsData={happeningEventsData?.upcomingEventCount ?? 0}
             handleSelectChange={handleSelectChange}
           >
-            <CustomDatePicker data={happeningEventsData?.eventDates || []} />
+            <CustomDatePicker
+              currentMonth={currentMonth}
+              setMonth={setCurrentMonth}
+              data={happeningEventsData?.eventDates || []}
+            />
           </CardStats>
         </div>
       </CardContainer>
