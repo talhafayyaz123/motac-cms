@@ -81,7 +81,6 @@ export default function Dashboard() {
     flag: string,
   ) => {
     const selectedValue = event.target.value;
-    console.log(selectedValue);
 
     const adjustedDate = subtractDays(currentDate, parseInt(selectedValue));
     const startDate = formatDateToYYYYMMDD(adjustedDate);
