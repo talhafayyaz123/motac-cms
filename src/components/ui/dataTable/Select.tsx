@@ -4,6 +4,7 @@ import { parsePathToTitle } from '@/helpers/utils/utils';
 
 interface SelectProps {
   value?: string;
+  defaultValue?: string; // Add defaultValue prop
   onChange?: (event: React.ChangeEvent<HTMLSelectElement>) => void;
   options: Array<{ value: string; label: string }>;
   highlightValue?: string;
@@ -12,6 +13,7 @@ interface SelectProps {
 
 const Select: React.FC<SelectProps> = ({
   value,
+  defaultValue, // Use defaultValue prop
   onChange,
   options,
   highlightValue,
@@ -20,7 +22,7 @@ const Select: React.FC<SelectProps> = ({
   return (
     <div className="relative">
       <select
-        value={value}
+        value={value || defaultValue} // Fallback to defaultValue if no value is provided
         onChange={onChange}
         className={`${
           minimalStyle
