@@ -50,3 +50,26 @@ export function subtractDays(date: Date, days: number) {
   result.setDate(result.getDate() - days);
   return result;
 }
+
+export const getDaysPassedThisYear = () => {
+  const startOfYear = new Date(new Date().getFullYear(), 0, 1);
+  const today = new Date();
+  const differenceInTime = today.getTime() - startOfYear.getTime();
+  const daysPassed = Math.floor(differenceInTime / (1000 * 3600 * 24));
+  return daysPassed;
+};
+
+export const getDaysPassedThisMonth = () => {
+  const today = new Date();
+  const startOfMonth = new Date(today.getFullYear(), today.getMonth(), 1); // First day of the current month
+  const differenceInTime = today.getTime() - startOfMonth.getTime();
+  const daysPassed = Math.floor(differenceInTime / (1000 * 3600 * 24)) + 1; // Convert time difference to days and include today
+  return daysPassed;
+};
+
+export const getDaysPassedThisWeek = () => {
+  const today = new Date();
+  const dayOfWeek = today.getDay(); // Get the day of the week (0 = Sunday, 1 = Monday, etc.)
+  const daysPassedThisWeek = dayOfWeek + 1; // Add 1 to include today
+  return daysPassedThisWeek;
+};
