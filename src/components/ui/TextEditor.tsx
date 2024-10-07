@@ -16,7 +16,7 @@ const modules = {
     [{ list: 'ordered' }, { list: 'bullet' }],
     [{ indent: '-1' }, { indent: '+1' }, { align: [] }],
     [{ color: [] }, { background: [] }],
-    ['link', 'image', 'video'],
+    // ['link', 'image', 'video'],
     ['clean'],
   ],
 };
