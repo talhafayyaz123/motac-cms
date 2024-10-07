@@ -2,7 +2,7 @@
 
 import { yupResolver } from '@hookform/resolvers/yup';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useForm, Controller } from 'react-hook-form'; // Import necessary hooks
 import { FaTrashAlt } from 'react-icons/fa';
 
@@ -86,8 +86,6 @@ export default function AddAttraction() {
   );
   const [cities, setCities] = useState<{ id: number; name: string }[]>([]);
   const [areas, setAreas] = useState<{ id: number; name: string }[]>([]);
-  const cityId = watch('cityId');
-  const isFirstRender = useRef(true);
 
   const fetchInitialData = async () => {
     try {
@@ -114,32 +112,17 @@ export default function AddAttraction() {
     }
   };
 
-  useEffect(() => {
-    const fetchAreasData = async (cityId: number) => {
-      try {
-        if (cityId) {
-          const areasData = await fetchAreas(cityId);
-          setAreas(areasData?.map(({ id, name }) => ({ id, name })));
-        }
-      } catch (error) {
-        console.error('Error loading areas:', error);
-      }
-    };
-
-    // On first render, avoid resetting area if cityId exists (for edit/update cases)
-    if (isFirstRender.current) {
-      isFirstRender.current = false;
-      // Fetch areas but don't reset area on first load
-      void fetchAreasData(cityId);
-    } else {
-      // If cityId changes (after first load), reset area
+  const fetchAreasData = async (cityId: number) => {
+    try {
       if (cityId) {
+        const areasData = await fetchAreas(cityId);
+        setAreas(areasData?.map(({ id, name }) => ({ id, name })));
         setValue('area', null as any); // Reset area
-        void fetchAreasData(cityId); // Fetch new areas
       }
+    } catch (error) {
+      console.error('Error loading areas:', error);
     }
-    // eslint-disable-next-line
-  }, [cityId, setValue, fetchAreas, setAreas]);
+  };
 
   const fetchAttraction = async (attractionId: string) => {
     try {
@@ -570,7 +553,10 @@ export default function AddAttraction() {
                       key: p.id,
                     }))}
                     selectedValues={field.value}
-                    setSelectedValues={field.onChange}
+                    setSelectedValues={(event) => {
+                      field.onChange(event);
+                      void fetchAreasData(event as number);
+                    }}
                     minWidth="350px"
                     error={errors.cityId?.message}
                   />
