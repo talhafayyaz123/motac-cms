@@ -148,8 +148,6 @@ export default function AddAttraction() {
       const data = await fetchDestinationsById(attractionId);
       const destinationCategoryId = data.destinationCategory?.id;
       const priorityId = data.priority?.id;
-      const areaName = data.area?.name;
-      const areaId = data.area?.id;
 
       setValue('title', data.title);
       setValue('openingHours', data.openingHours);
@@ -158,8 +156,10 @@ export default function AddAttraction() {
       setValue('mapLink', data.mapLink);
       setValue('address', data.address);
       setValue('category', destinationCategoryId);
-      setValue('area', { id: areaId, name: areaName });
       setValue('cityId', data?.area?.city?.id);
+      const areaName = data.area?.name;
+      const areaId = data.area?.id;
+      setValue('area', { id: areaId, name: areaName });
       setValue('workingDays', data.workingDays);
       setValue('description', data.description);
       setValue(
