@@ -2,7 +2,7 @@
 
 import { yupResolver } from '@hookform/resolvers/yup';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { FaTrashAlt } from 'react-icons/fa';
 
@@ -88,6 +88,8 @@ export default function AddEvent() {
   );
   const [cities, setCities] = useState<{ id: number; name: string }[]>([]);
   const [areas, setAreas] = useState<{ id: number; name: string }[]>([]);
+  const cityId = watch('cityId');
+  const isFirstRender = useRef(true);
 
   const fetchInitialData = async () => {
     try {
@@ -114,7 +116,6 @@ export default function AddEvent() {
     }
   };
 
-  // Use useEffect to watch for city changes and refetch areas
   useEffect(() => {
     const fetchAreasData = async (cityId: number) => {
       try {
@@ -127,17 +128,20 @@ export default function AddEvent() {
       }
     };
 
-    // Watch for changes to cityId
-    const cityId = watch('cityId');
-
-    // Reset area value and fetch areas if cityId changes
-    if (cityId) {
-      // Reset area to null whenever city changes
-      setValue('area', null as any);
+    // On first render, avoid resetting area if cityId exists (for edit/update cases)
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      // Fetch areas but don't reset area on first load
       void fetchAreasData(cityId);
+    } else {
+      // If cityId changes (after first load), reset area
+      if (cityId) {
+        setValue('area', null as any); // Reset area
+        void fetchAreasData(cityId); // Fetch new areas
+      }
     }
     // eslint-disable-next-line
-  }, [watch('cityId')]);
+  }, [cityId, setValue, fetchAreas, setAreas]);
 
   const fetchHappeningEvent = async (happeningEventId: string) => {
     try {
