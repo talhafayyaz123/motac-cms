@@ -68,7 +68,7 @@ export default function AddEvent() {
       ageLimit: 1,
       mapLink: '',
       address: '',
-      category: 1,
+      category: happeningEventsDestinationId,
       area: { id: null, name: '' },
       cityId: 1,
       description: '',

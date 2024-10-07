@@ -70,7 +70,7 @@ export default function AddAttraction() {
       ageLimit: 1,
       mapLink: '',
       address: '',
-      category: 1,
+      category: attractionDestinationId,
       area: { id: null, name: '' },
       cityId: 1,
       description: '',
