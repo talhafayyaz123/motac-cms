@@ -150,6 +150,20 @@ export default function Dashboard() {
     }
   };
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  /*  const calculateStartAndEndDates = () => {
+    const currentMonthNumber = currentDate.getMonth();
+    const { monthStartDate, monthEndDate } = getMonthStartAndEnd(
+      currentYear,
+      currentMonthNumber,
+    );
+
+    const newStartDate = formatDateToYYYYMMDD(monthStartDate);
+    const newEndDate = formatDateToYYYYMMDD(monthEndDate);
+
+    return { newStartDate, newEndDate };
+  }; */
+
   useEffect(() => {
     const loadData = async () => {
       setLoadingUserManagement(true);
@@ -178,20 +192,9 @@ export default function Dashboard() {
     const loadHappeningEventsData = async () => {
       setLoadingEvents(true);
       try {
-        const currentMonthNumber = currentDate.getMonth();
-        setCurrentMonth(monthNames[currentMonthNumber]);
-        const { monthStartDate, monthEndDate } = getMonthStartAndEnd(
-          currentYear,
-          currentMonthNumber,
-        );
+        //const { newStartDate, newEndDate } = calculateStartAndEndDates();
 
-        const newStartDate = formatDateToYYYYMMDD(monthStartDate);
-        const newEndDate = formatDateToYYYYMMDD(monthEndDate);
-
-        const fetchedData = await FetchHappeningEventsData(
-          newStartDate,
-          newEndDate,
-        );
+        const fetchedData = await FetchHappeningEventsData(startDate, endDate);
 
         setHappeningEventsData(fetchedData);
       } catch (error) {
