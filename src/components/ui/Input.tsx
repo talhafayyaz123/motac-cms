@@ -188,23 +188,27 @@ const Input: React.FC<InputProps> = ({
 
       {/* Modal for displaying the uploaded image */}
       {showModal && (
-        <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
-          <div className="bg-white p-6 rounded-lg max-w-lg w-full">
-            <div className="flex justify-end mb-4">
+        <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50 h-[80vh] mt-16">
+          <div className="bg-white p-6 rounded-lg max-w-lg w-full relative before:flex flex-col items-center gap-4 h-full">
+            {/* Close Button */}
+            <div className="absolute top-4 right-4">
               <GiCancel
-                className="text-black cursor-pointer"
+                className="text-black cursor-pointer hover:text-red-500"
                 size={24}
-                onClick={() => setShowModal(false)} // Close modal
+                onClick={() => setShowModal(false)}
               />
             </div>
-            {imagePreview && (
-              /* eslint-disable @next/next/no-img-element */
-              <img
-                src={imagePreview}
-                alt=""
-                className="max-w-full h-auto rounded-lg"
-              />
-            )}
+            <div className="h-full w-full flex justify-center items-center">
+              {/* Image Preview */}
+              {imagePreview && (
+                /* eslint-disable @next/next/no-img-element */
+                <img
+                  src={imagePreview}
+                  alt=""
+                  className="max-w-full h-[80%] rounded-lg"
+                />
+              )}
+            </div>
           </div>
         </div>
       )}

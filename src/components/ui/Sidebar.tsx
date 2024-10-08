@@ -60,7 +60,7 @@ const Sidebar = () => {
           {menuItems?.map((item) => (
             <li key={item.label}>
               <div
-                className={`group flex items-center p-2 mb-2 rounded-lg font-medium ${
+                className={`group flex items-center p-2 mb-2 rounded-lg font-light ${
                   item.disabled
                     ? 'text-gray-300 cursor-not-allowed'
                     : (item.path !== '/' && pathname.includes(item.path)) ||
@@ -118,7 +118,7 @@ const Sidebar = () => {
                   {item.subItems.map((subItem) => (
                     <li key={subItem.label} className="relative">
                       <div
-                        className={`group flex font-medium items-center p-2 rounded-md ${
+                        className={`group flex font-light items-center p-2 rounded-md ${
                           subItem.disabled
                             ? 'text-gray-300 cursor-not-allowed'
                             : pathname === subItem.path

@@ -28,7 +28,7 @@ const MapChart: React.FC<MapChartProps> = ({
   const options: Highcharts.Options = {
     chart: {
       map: {
-        backgroundColor: 'transparent',
+        backgroundColor: '#BEC9ED', // Set background color for the map
         type: 'FeatureCollection',
         features: filteredMapData, // Use only filtered countries
       },
@@ -41,9 +41,6 @@ const MapChart: React.FC<MapChartProps> = ({
     mapNavigation: {
       enabled: false, // Disable map navigation (zoom, pan)
       enableDoubleClickZoom: false, // Disable double-click zoom
-    },
-    colorAxis: {
-      min: 0,
     },
     series: [
       {
@@ -61,6 +58,7 @@ const MapChart: React.FC<MapChartProps> = ({
           format: '{point.name}',
         },
         allowPointSelect: false, // Disable point selection
+        color: '#BEC9ED', // Set all countries to the desired color
       },
     ],
     tooltip: {

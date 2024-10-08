@@ -100,8 +100,8 @@ const CustomDatePicker: React.FC<CustomDatePickerProps> = ({
           role="button"
           tabIndex={0}
           key={i}
-          className={`h-9 w-9 flex m-1 items-center justify-center cursor-default hover:rounded-full
-          ${hasEvent ? 'bg-blue-100 text-white font-bold rounded-full' : ''} 
+          className={`h-9 w-9 flex m-1 items-center text-gray-50 font-medium justify-center cursor-default hover:rounded-full
+          ${hasEvent ? 'bg-blue-100 text-white font-medium rounded-full' : ''} 
          `}
         >
           {i}
