@@ -224,8 +224,8 @@ const StatsSection: React.FC = () => {
       <Image src={reviewsIcon} alt="" className="w-12 h-12" />
     </div>
   </div> */}
-          <ComingSoonFeature />
-          <ComingSoonFeature />
+          <ComingSoonFeature topBorder={true} />
+          <ComingSoonFeature leftBorder={true} />
         </div>
         <div className="flex flex-col gap-6 h-full w-full lg:w-3/12">
           <div className="relative rounded-xl overflow-hidden bg-white border border-gray-100 p-4 h-full">
