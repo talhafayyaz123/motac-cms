@@ -30,9 +30,8 @@ function OtpComponent() {
     if (result.success) {
       router.push(`/reset-password?email=${email}&otp=${otp}`);
     } else {
-      router.push(`/reset-password?email=${email}&otp=${otp}`);
       const error = typeof result.error === 'string' ? result.error : null;
-      // setError(error);
+      setError(error);
     }
   };
 

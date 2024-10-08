@@ -53,6 +53,7 @@ interface EventData {
   eventDates: string[];
   upcomingEventCount: number;
 }
+
 export default function Dashboard() {
   const [statsData, setStatsData] = useState<UserStats | null>(null);
   const [seeAttractionData, setSeeAttractionData] =
@@ -369,6 +370,7 @@ export default function Dashboard() {
             isEventFilter={true}
             statsData={happeningEventsData?.upcomingEventCount ?? 0}
             handleSelectChange={handleSelectChange}
+            currentMonth={monthNames.indexOf(currentMonth)}
           >
             <CustomDatePicker
               currentMonth={currentMonth}

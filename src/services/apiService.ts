@@ -147,6 +147,19 @@ export async function handleAuthRequest(
         }
 
       case 'requestOtp':
+        response = await apiClient('/otps/request', {
+          method: 'POST',
+          body: JSON.stringify({
+            email: data.email,
+            userAgent: data.userAgent,
+          }),
+        });
+
+        if (response) {
+          return { success: true };
+        } else {
+          return { success: false, error: 'Failed to request OTP.' };
+        }
 
       case 'resetPassword':
         response = await apiClient('/auth/forgot/password', {

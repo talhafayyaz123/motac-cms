@@ -19,15 +19,12 @@ export default function ForgotPassword() {
 
     const result = await requestOtp({ email, userAgent });
 
-    console.log(result);
-
     if (result.success && result.response === 'Otp sent') {
       router.push('/otp?email=' + email);
     } else {
-      router.push('/otp?email=' + email);
       const error =
         typeof result.error === 'string' ? result.error : 'Unknown error';
-      // setError(error);
+      setError(error);
     }
   };
 
