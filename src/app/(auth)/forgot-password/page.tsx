@@ -24,12 +24,10 @@ export default function ForgotPassword() {
 
     try {
       const result = await requestOtp({ email, userAgent });
-      console.log('OTP Request Success:', result.message);
       if (result?.message) {
         router.push('/otp?email=' + email);
       }
     } catch (error: any) {
-      console.error('OTP Request Failed:', error.message);
       setError(error.message);
     }
   };
