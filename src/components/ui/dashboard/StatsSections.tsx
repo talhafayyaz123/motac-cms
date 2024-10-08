@@ -105,6 +105,7 @@ const StatsSection: React.FC = () => {
           ]}
           highlightValue={'30'}
           minimalStyle
+          iconColor={true}
           onChange={(event) => handleSelectChange(event)}
         />
       </div>

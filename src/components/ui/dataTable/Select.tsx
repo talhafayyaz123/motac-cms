@@ -9,6 +9,7 @@ interface SelectProps {
   options: Array<{ value: string; label: string }>;
   highlightValue?: string;
   minimalStyle?: boolean;
+  iconColor?: boolean;
 }
 
 const Select: React.FC<SelectProps> = ({
@@ -18,6 +19,7 @@ const Select: React.FC<SelectProps> = ({
   options,
   highlightValue,
   minimalStyle = false,
+  iconColor = false,
 }) => {
   return (
     <div className="relative">
@@ -50,7 +52,7 @@ const Select: React.FC<SelectProps> = ({
         className={`absolute inset-y-0 right-[-10px] flex items-center pr-4 pointer-events-none`}
       >
         <svg
-          className="w-4 h-4 text-gray-700"
+          className={`w-4 h-4 ${iconColor ? 'text-gray-700' : 'text-white'} `}
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"

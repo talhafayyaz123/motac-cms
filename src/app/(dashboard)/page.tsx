@@ -302,6 +302,7 @@ export default function Dashboard() {
               ]}
               highlightValue={'30'}
               minimalStyle
+              iconColor={true}
               onChange={(event) => handleSelectChange(event, 'userManagement')}
             />
           </div>
@@ -344,6 +345,7 @@ export default function Dashboard() {
                     ]}
                     highlightValue={'30'}
                     minimalStyle
+                    iconColor={true}
                     onChange={(event) =>
                       handleSelectChange(event, 'topExperience')
                     }
