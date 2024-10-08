@@ -78,6 +78,7 @@ export default function AddExperience() {
       bannerImageId: null,
       bannerImage: '',
       workingDays: '',
+      eventLink: '',
     },
   });
 
@@ -151,6 +152,7 @@ export default function AddExperience() {
       setValue('priority', priorityId);
       setValue('bannerImageId', data?.bannerImageId);
       setValue('bannerImage', data?.bannerImage?.path);
+      setValue('eventLink', data?.eventLink);
       // Set existing images and their IDs
       const existingImages = data.images.map(
         (image: { id: number; path: string }) => image.path,
@@ -423,6 +425,21 @@ export default function AddExperience() {
                     minWidth="350px"
                     {...field}
                     error={errors.ageLimit?.message}
+                  />
+                )}
+              />
+
+              <Controller
+                control={control}
+                name="eventLink"
+                render={({ field }) => (
+                  <Input
+                    label="Book Event Link"
+                    placeholder="www.eventlink.com"
+                    className="text-xs"
+                    minWidth="350px"
+                    {...field}
+                    error={errors.eventLink?.message}
                   />
                 )}
               />
