@@ -222,29 +222,17 @@ export default function Dashboard() {
   ];
 
   const categoriesForBar =
-    seeAttractionData?.newExperienceByCategory
-      ?.slice(0, 3)
-      .map((item: any) => item.destination_category_name) || [];
+    seeAttractionData?.newExperienceByCategory?.map(
+      (item: any) => item.destination_category_name,
+    ) || [];
 
   const seriesData = [
     {
       type: 'column' as const,
       name: 'Fruits',
-      data: seeAttractionData?.newExperienceByCategory
-        ?.slice(0, 3)
-        .sort((a: any, b: any) => parseInt(b.count, 10) - parseInt(a.count, 10))
-        .map((item: any) => parseInt(item.count, 10))
-        .reduce(
-          (acc: number[], val: number, index: number, array: number[]) => {
-            if (array.length === 3) {
-              acc[1] = array[0];
-              acc[2] = array[1];
-              acc[0] = array[2];
-            }
-            return acc;
-          },
-          [],
-        ),
+      data: seeAttractionData?.newExperienceByCategory?.map((item: any) =>
+        parseInt(item.count, 10),
+      ),
     },
   ];
 
