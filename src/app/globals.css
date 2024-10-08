@@ -38,19 +38,86 @@ body {
   }
 }
 
+/* Define Font Faces for MarkForMC */
 @font-face {
   font-family: 'MarkForMC';
   src: url('../assets/fonts/MarkForMC/MarkForMC.ttf') format('truetype');
-  font-weight: normal;
+  font-weight: 400; /* Regular */
   font-style: normal;
   font-display: swap;
 }
 
-.font-markForMC {
+@font-face {
   font-family: 'MarkForMC';
-  font-weight: bold;
+  src: url('../assets/fonts/MarkForMC/MarkForMC-ExtraLt.ttf') format('truetype');
+  font-weight: 200; /* Extra Light */
+  font-style: normal;
+  font-display: swap;
 }
 
+@font-face {
+  font-family: 'MarkForMC';
+  src: url('../assets/fonts/MarkForMC/MarkForMC-Med.ttf') format('truetype');
+  font-weight: 500; /* Medium */
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'MarkForMC';
+  src: url('../assets/fonts/MarkForMC/MarkForMC-Lt.ttf') format('truetype');
+  font-weight: 300; /* Light */
+  font-style: normal;
+  font-display: swap;
+}
+
+/* @font-face {
+  font-family: 'MarkForMC';
+  src: url('../assets/fonts/MarkForMC/MarkForMC-Bold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'MarkForMC';
+  src: url('../assets/fonts/MarkForMC/MarkForMC-ExtraBold.ttf') format('truetype');
+  font-weight: 800;
+  font-style: normal;
+  font-display: swap;
+} */
+
+/* Font Classes for MarkForMC */
+.font-markForMC {
+  font-family: 'MarkForMC', sans-serif;
+}
+
+.font-markForMC-regular {
+  font-family: 'MarkForMC', sans-serif;
+  font-weight: 400;
+}
+
+.font-markForMC-light {
+  font-family: 'MarkForMC', sans-serif;
+  font-weight: 300;
+}
+
+.font-markForMC-medium {
+  font-family: 'MarkForMC', sans-serif;
+  font-weight: 500;
+}
+
+.font-markForMC-bold {
+  font-family: 'MarkForMC', sans-serif;
+  font-weight: 700;
+}
+
+.font-markForMC-extra-bold {
+  font-family: 'MarkForMC', sans-serif;
+  font-weight: 800;
+}
+
+/* Custom Scrollbar Styling */
 .sidebar-scroll-bar::-webkit-scrollbar {
   height: 4px;
   width: 2px;

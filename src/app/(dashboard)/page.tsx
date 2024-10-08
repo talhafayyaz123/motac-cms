@@ -275,6 +275,7 @@ export default function Dashboard() {
       <CardContainer
         title="User Management"
         showStats
+        showUserManagemantStats
         stats={statsData?.newSignedUpUserCount}
       >
         <div className="flex">
@@ -307,13 +308,15 @@ export default function Dashboard() {
         </div>
       </CardContainer>
 
-      <CardContainer title="Discover Malaysia">
+      <CardContainer title="Discover Malaysia" showStats>
         <div className="flex lg:flex-row flex-col justify-between gap-4 w-full font-medium">
           <div className="flex rounded-xl bg-blue-50 border border-gray-100 gap-4 font-medium p-4 lg:w-[68%] w-full">
             <div className=" flex flex-col w-1/2 gap-4">
-              <p className="text-xs text-black-100 mb-4">Must See Attraction</p>
+              <p className="text-xs font-bold text-black-100 mb-4">
+                Must See Attraction
+              </p>
               <div>
-                <p className="text-xs text-black-100">Total Attraction</p>
+                <p className="text-xs text-gray-50">Total Attraction</p>
                 <p className="text-4xl font-semibold text-blue-100 mb-3">
                   {seeAttractionData?.newAttractionsCount}
                 </p>

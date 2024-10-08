@@ -44,6 +44,11 @@ const BarChart: React.FC<BarChartProps> = ({
       column: {
         dataLabels: {
           enabled: true,
+          style: {
+            fontSize: '16px',
+            fontWeight: '600',
+            color: '#364EA2',
+          },
         },
         colorByPoint: true,
       },
@@ -54,12 +59,6 @@ const BarChart: React.FC<BarChartProps> = ({
         if (typeof point === 'number') {
           return { y: point, color: colors[index] };
         }
-        // else if (Array.isArray(point) && typeof point[1] === 'number') {
-        //   return { y: point[1], color: getColorForBar(point[1]) };
-        // } else if (typeof point === 'object' && point !== null) {
-        //   return { ...point, color: getColorForBar((point as any).y) };
-        // }
-        // return point; // Fallback case
       }),
     })),
     responsive: {

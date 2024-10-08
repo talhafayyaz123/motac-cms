@@ -6,7 +6,6 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 import { useForm, Controller } from 'react-hook-form';
-import { FaTrashAlt } from 'react-icons/fa';
 import * as Yup from 'yup';
 
 import FormContainer from '@/components/container/FormContainer';
@@ -48,7 +47,6 @@ export default function PersonalDetails() {
   const { currentMember, setCurrentMember } = useMember();
   const [data, setData] = useState<FetchedUser | null>(null);
   const [loading, setLoading] = useState(false);
-  const [profileImage, setProfileImage] = useState<string | File | null>(null); // State to manage image upload
   const router = useRouter();
   const { 'User ID': userID = '' } = currentMember || {};
 
@@ -147,11 +145,6 @@ export default function PersonalDetails() {
         'OK',
       );
     }
-  };
-
-  const handleRemoveImage = () => {
-    setProfileImage(null);
-    setValue('profileImage', '');
   };
 
   const onSubmit = (data: FormValues) => {
@@ -286,53 +279,29 @@ export default function PersonalDetails() {
 
           {/* Image upload */}
           <div className="w-full flex flex-col items-start gap-3 mt-5">
-            {profileImage ? (
-              <div className="relative">
-                {typeof profileImage === 'string' ? (
-                  <img
-                    src={profileImage}
-                    alt="Profile"
-                    className="w-40 h-40 object-cover rounded-md"
-                  />
-                ) : (
-                  <img
-                    src={URL.createObjectURL(profileImage)}
-                    alt="Profile"
-                    className="w-40 h-40 object-cover rounded-md"
-                  />
-                )}
-                <button
-                  type="button"
-                  className="absolute bottom-2 right-2 p-1 bg-[#e9dbda] rounded-md"
-                  onClick={handleRemoveImage}
-                >
-                  <FaTrashAlt size={20} className="text-[#364ea2]" />
-                </button>
-              </div>
-            ) : (
-              <Controller
-                name="profileImage"
-                control={control}
-                render={() => (
-                  <Input
-                    label="Upload Profile Image"
-                    className="text-xs"
-                    minWidth="350px"
-                    isFileUploaded
-                    type="file"
-                    defaultImagePath={watch('profileImage')}
-                    onFileError={async () => {
-                      await AlertService.alert(
-                        '',
-                        'Only images with 16:9 aspect ratio are allowed',
-                        'warning',
-                        'OK',
-                      );
-                    }}
-                  />
-                )}
-              />
-            )}
+            <Controller
+              name="profileImage"
+              control={control}
+              render={() => (
+                <Input
+                  label="Profile Image"
+                  className="text-xs"
+                  minWidth="350px"
+                  isFileUploaded
+                  disabled={!watch('profileImage')}
+                  type="file"
+                  defaultImagePath={watch('profileImage')}
+                  onFileError={async () => {
+                    await AlertService.alert(
+                      '',
+                      'Only images with 16:9 aspect ratio are allowed',
+                      'warning',
+                      'OK',
+                    );
+                  }}
+                />
+              )}
+            />
           </div>
         </form>
       </FormContainer>
