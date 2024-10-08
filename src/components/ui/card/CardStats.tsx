@@ -68,6 +68,7 @@ const CardStats: React.FC<CardStatsProps> = ({
               options={monthsOptions}
               value={selectedMonth}
               minimalStyle
+              iconColor={true}
               onChange={handleMonthChange}
             />
           </div>

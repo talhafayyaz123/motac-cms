@@ -17,6 +17,11 @@ export default function ForgotPassword() {
     const email = form.email.value;
     const userAgent = navigator.userAgent;
 
+    if (!email) {
+      setError('Please Enter Email');
+      return;
+    }
+
     try {
       const result = await requestOtp({ email, userAgent });
       if (result?.message) {
