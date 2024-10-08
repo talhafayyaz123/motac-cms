@@ -236,6 +236,11 @@ export default function Dashboard() {
     },
   ];
 
+  const experienceOfferedSum = seriesData[0]?.data?.reduce(
+    (accumulator: number, currentValue: number) => accumulator + currentValue,
+    0,
+  );
+
   const categories = statsData?.graphData
     ? Object.keys(statsData.graphData)
     : [];
@@ -345,7 +350,7 @@ export default function Dashboard() {
                   Experiences Offered
                 </p>
                 <p className="text-4xl font-semibold text-blue-100 mb-3">
-                  {seeAttractionData?.newExperienceByCategory?.length}
+                  {experienceOfferedSum}
                 </p>
                 <div className="flex py-2 items-center w-full">
                   <div className="transform translate-y-1/2 absolute left-0 h-1/2 lg:border-l lg:border-gray-300 top-10" />
