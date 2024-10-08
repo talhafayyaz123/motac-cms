@@ -226,29 +226,10 @@ export const requestOtp = async (data: AuthRequestData) => {
       }),
     });
 
-    // Check if the response is text/html or JSON
-    const contentType = response.headers.get('content-type');
-    let responseData;
-
-    if (contentType && contentType.includes('application/json')) {
-      responseData = await response.json();
-    } else if (contentType && contentType.includes('text/html')) {
-      responseData = await response.text();
-    } else {
-      throw new Error('Unsupported content type');
-    }
-
-    console.log('API response:', responseData);
-
-    // Treat the response as successful if the status is 201 (Created)
-    if (response.ok && response.status === 201) {
-      return { success: true, response: responseData };
-    } else {
-      return { success: false, error: 'Failed to request OTP.' };
-    }
+    return response;
   } catch (error) {
     console.error('Error requesting OTP:', error);
-    return { success: false, error: 'Network error or failed to request OTP.' };
+    throw error;
   }
 };
 
