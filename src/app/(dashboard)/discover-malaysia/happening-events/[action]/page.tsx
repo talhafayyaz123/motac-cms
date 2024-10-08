@@ -80,6 +80,7 @@ export default function AddEvent() {
       bannerImageId: null,
       bannerImage: '',
       workingDays: '',
+      eventLink: '',
     },
   });
 
@@ -155,6 +156,7 @@ export default function AddEvent() {
       setValue('priority', priorityId);
       setValue('bannerImageId', data?.bannerImageId);
       setValue('bannerImage', data?.bannerImage?.path);
+      setValue('eventLink', data?.eventLink);
       // Set existing images and their IDs
       const existingImages = data.images.map(
         (image: { id: number; path: string }) => image.path,
@@ -394,6 +396,21 @@ export default function AddEvent() {
                     setSelectedValues={field.onChange}
                     minWidth="350px"
                     error={errors.closingHours?.message}
+                  />
+                )}
+              />
+
+              <Controller
+                control={control}
+                name="eventLink"
+                render={({ field }) => (
+                  <Input
+                    label="Book Event Link"
+                    placeholder="www.eventlink.com"
+                    className="text-xs"
+                    minWidth="350px"
+                    {...field}
+                    error={errors.eventLink?.message}
                   />
                 )}
               />

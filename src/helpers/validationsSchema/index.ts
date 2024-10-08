@@ -124,6 +124,7 @@ export const validationSchemaForExperiences = Yup.object().shape({
   images: Yup.array()?.optional().nullable(),
   bannerImageId: Yup.number().nullable(),
   bannerImage: Yup.string().required('Banner image is required'),
+  eventLink: Yup.string().required().url('Must be a valid URL'),
 });
 
 export const validationSchemaForHappeningEvents = Yup.object().shape({
@@ -198,4 +199,5 @@ export const validationSchemaForHappeningEvents = Yup.object().shape({
   images: Yup.array()?.optional().nullable(),
   bannerImageId: Yup.number().nullable(),
   bannerImage: Yup.string().required('Banner image is required'),
+  eventLink: Yup.string().required().url('Must be a valid URL'),
 });

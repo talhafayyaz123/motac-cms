@@ -633,6 +633,10 @@ export const createDestination = async (data: any) => {
       body.happeningEndDate = data.happeningEndDate;
     }
 
+    if (data?.eventLink) {
+      body.eventLink = data.eventLink;
+    }
+
     const result = await apiClient(`/destinations`, {
       method: 'POST',
       body: JSON.stringify(body),
@@ -686,6 +690,10 @@ export const updateDestination = async (displayId: string, data: any) => {
 
     if (data?.happeningEndDate) {
       body.happeningEndDate = data.happeningEndDate;
+    }
+
+    if (data?.eventLink) {
+      body.eventLink = data.eventLink;
     }
 
     const result = await apiClient(`/destinations/${displayId}`, {
