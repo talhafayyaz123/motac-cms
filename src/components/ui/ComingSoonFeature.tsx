@@ -4,6 +4,8 @@ interface ComingSoonFeatureProps {
   maxWidth?: string;
   height?: string;
   addedBorder?: boolean;
+  topBorder?: boolean;
+  leftBorder?: boolean;
   minHeight?: string;
 }
 
@@ -12,11 +14,15 @@ const ComingSoonFeature: React.FC<ComingSoonFeatureProps> = ({
   height = '50%',
   addedBorder = false,
   minHeight = '90px',
+  leftBorder = false,
+  topBorder = false,
 }) => {
   return (
     <div
-      className={`relative flex items-center justify-center overflow-hidden ${addedBorder ? 'border border-gray-100 rounded-xl' : ''}`}
+      className={`relative flex items-center justify-center overflow-hidden  ${topBorder ? 'border-t-2 border-t-gray-200 rounded-xl border border-transparent' : addedBorder ? 'border border-gray-100 rounded-xl' : leftBorder ? 'rounded-xl border-transparent' : ''}`}
       style={{
+        borderLeftWidth: leftBorder ? '2px' : '',
+        borderLeftColor: leftBorder ? 'rgb(229 231 235 )' : '',
         maxWidth: maxWidth,
         height: height,
         minHeight: minHeight,
