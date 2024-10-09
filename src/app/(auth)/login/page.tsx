@@ -34,10 +34,10 @@ export default function Login() {
       description="Please Enter Your Registered Email and Password"
       buttonText="Sign In"
       fields={[
-        { type: 'email', placeholder: 'Enter your email', name: 'email' },
+        { type: 'email', placeholder: 'Email', name: 'email' },
         {
           type: viewPass ? 'text' : 'password',
-          placeholder: 'Enter your password',
+          placeholder: 'Password',
           name: 'password',
           icon: !viewPass ? (
             <ShowPasswordIcon

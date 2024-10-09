@@ -162,7 +162,7 @@ const Input: React.FC<InputProps> = ({
       <div className={`relative mb-${marginBottom}`}>
         {icon && (
           <span
-            className={`absolute inset-y-0 ${iconPlacement === 'right' ? 'right-0' : 'left-0'} flex items-center pl-4 text-2xl text-black`}
+            className={`absolute inset-y-0 ${iconPlacement === 'right' ? 'right-2' : 'left-0'} flex items-center pl-4 text-2xl text-black`}
           >
             {icon}
           </span>
