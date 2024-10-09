@@ -69,7 +69,8 @@ export const getDaysPassedThisMonth = () => {
 
 export const getDaysPassedThisWeek = () => {
   const today = new Date();
-  const dayOfWeek = today.getDay(); // Get the day of the week (0 = Sunday, 1 = Monday, etc.)
-  const daysPassedThisWeek = dayOfWeek + 1; // Add 1 to include today
-  return daysPassedThisWeek;
+  let dayOfWeek = today.getDay(); // Get the day of the week (0 = Sunday, 1 = Monday, etc.)
+  dayOfWeek = dayOfWeek === 0 ? 7 : dayOfWeek;
+  // const daysPassedThisWeek = dayOfWeek + 1; // Add 1 to include today
+  return dayOfWeek;
 };
