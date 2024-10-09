@@ -1,4 +1,6 @@
 'use client';
+//import { subscribe } from 'diagnostics_channel';
+
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
 
@@ -39,7 +41,8 @@ const StatsSection: React.FC = () => {
   const [statsData, setStatsData] = useState<UserStats | null>(null);
 
   const currentDate = new Date();
-  const endDate = formatDateToYYYYMMDD(currentDate);
+  const previousDay = subtractDays(currentDate, 1);
+  const endDate = formatDateToYYYYMMDD(previousDay);
   const adjustedDate = subtractDays(currentDate, 30);
   const startDate = formatDateToYYYYMMDD(adjustedDate);
 
@@ -52,14 +55,62 @@ const StatsSection: React.FC = () => {
   const handleSelectChange = async (
     event: React.ChangeEvent<HTMLSelectElement>,
   ) => {
+    let newStartDate: string = startDate;
+    let newEndDate: string = endDate;
     const selectedValue = event.target.value;
-    const adjustedDate = subtractDays(currentDate, parseInt(selectedValue));
-    const startDate = formatDateToYYYYMMDD(adjustedDate);
+
+    if (['7', '30'].includes(selectedValue)) {
+      const adjustedDate = subtractDays(currentDate, parseInt(selectedValue));
+      newStartDate = formatDateToYYYYMMDD(adjustedDate);
+    } else if (['90', '180'].includes(selectedValue)) {
+      const currentYear = currentDate.getFullYear();
+      const currentMonth = currentDate.getMonth();
+
+      let monthsToSubtract: any;
+      if (selectedValue === '90') {
+        monthsToSubtract = 3;
+      } else if (selectedValue === '180') {
+        monthsToSubtract = 6;
+      }
+
+      const startMonth = currentMonth - monthsToSubtract;
+      let startYear = currentYear;
+      let endYear = currentYear;
+
+      if (startMonth < 0) {
+        startYear -= Math.ceil(Math.abs(startMonth) / 12);
+      }
+
+      newStartDate = formatDateToYYYYMMDD(
+        new Date(startYear, (startMonth + 12) % 12, 1),
+      );
+
+      let endMonth = currentMonth - 1;
+      if (endMonth < 0) {
+        endYear -= 1;
+        endMonth = 11;
+      }
+
+      newEndDate = formatDateToYYYYMMDD(new Date(endYear, endMonth + 1, 0));
+    } else {
+      if (parseInt(selectedValue) > 31) {
+        const adjustedDate = subtractDays(currentDate, parseInt(selectedValue));
+        newStartDate = formatDateToYYYYMMDD(adjustedDate);
+      } else {
+        // in case of this month and this week
+        const adjustedDate = subtractDays(
+          currentDate,
+          parseInt(selectedValue) - 1,
+        );
+        newStartDate = formatDateToYYYYMMDD(adjustedDate);
+        newEndDate = formatDateToYYYYMMDD(currentDate);
+      }
+    }
 
     try {
       const fetchedData = await FetchDashboardUsersAndDestinationData(
-        startDate,
-        endDate,
+        newStartDate,
+        newEndDate,
       );
       setStatsData(fetchedData);
     } catch (error) {

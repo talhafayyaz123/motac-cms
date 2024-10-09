@@ -120,9 +120,63 @@ export default function Dashboard() {
       setCurrentMonth(monthNames[selectedMonth]);
     } else {
       const selectedValue = event.target.value;
-      const adjustedDate = subtractDays(currentDate, parseInt(selectedValue));
+      const previousDay = subtractDays(currentDate, 1);
+      endDate = formatDateToYYYYMMDD(previousDay);
+
+      if (['7', '30'].includes(selectedValue)) {
+        const adjustedDate = subtractDays(currentDate, parseInt(selectedValue));
+        startDate = formatDateToYYYYMMDD(adjustedDate);
+      } else if (['90', '180'].includes(selectedValue)) {
+        const currentYear = currentDate.getFullYear();
+        const currentMonth = currentDate.getMonth();
+
+        let monthsToSubtract: any;
+        if (selectedValue === '90') {
+          monthsToSubtract = 3;
+        } else if (selectedValue === '180') {
+          monthsToSubtract = 6;
+        }
+
+        const startMonth = currentMonth - monthsToSubtract;
+        let startYear = currentYear;
+        let endYear = currentYear;
+
+        if (startMonth < 0) {
+          startYear -= Math.ceil(Math.abs(startMonth) / 12);
+        }
+
+        startDate = formatDateToYYYYMMDD(
+          new Date(startYear, (startMonth + 12) % 12, 1),
+        );
+
+        let endMonth = currentMonth - 1;
+        if (endMonth < 0) {
+          endYear -= 1;
+          endMonth = 11;
+        }
+
+        endDate = formatDateToYYYYMMDD(new Date(endYear, endMonth + 1, 0));
+      } else {
+        if (parseInt(selectedValue) > 31) {
+          const adjustedDate = subtractDays(
+            currentDate,
+            parseInt(selectedValue),
+          );
+          startDate = formatDateToYYYYMMDD(adjustedDate);
+        } else {
+          // in case of this month and this week
+          const adjustedDate = subtractDays(
+            currentDate,
+            parseInt(selectedValue) - 1,
+          );
+          startDate = formatDateToYYYYMMDD(adjustedDate);
+          endDate = formatDateToYYYYMMDD(currentDate);
+        }
+      }
+      /*  const adjustedDate = subtractDays(currentDate, parseInt(selectedValue));
       startDate = formatDateToYYYYMMDD(adjustedDate);
       endDate = formatDateToYYYYMMDD(currentDate);
+      alert(selectedValue); */
     }
 
     try {
