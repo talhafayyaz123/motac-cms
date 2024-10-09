@@ -71,7 +71,8 @@ export default function Dashboard() {
 
   const currentDate = new Date();
   const currentYear = currentDate.getFullYear();
-  const endDate = formatDateToYYYYMMDD(currentDate);
+  const previousDay = subtractDays(currentDate, 1);
+  const endDate = formatDateToYYYYMMDD(previousDay);
   const adjustedDate = subtractDays(currentDate, 30);
   const startDate = formatDateToYYYYMMDD(adjustedDate);
 
