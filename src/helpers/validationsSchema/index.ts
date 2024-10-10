@@ -40,7 +40,7 @@ export const validationSchemaForAttractions = Yup.object().shape({
       },
     ),
   workingDays: Yup.string().required('Working days selection is required'),
-  ageLimit: Yup.number()
+  ageLimit: Yup.string()
     .required('Age Limitation is required')
     .max(99, 'Age cannot exceed 99')
     .typeError('Age must be a number'),
@@ -103,7 +103,7 @@ export const validationSchemaForExperiences = Yup.object().shape({
       },
     ),
   workingDays: Yup.string().required('Working days selection is required'),
-  ageLimit: Yup.number()
+  ageLimit: Yup.string()
     .required('Age Limitation is required')
     .max(99, 'Age cannot exceed 99')
     .typeError('Age must be a number'),
@@ -167,7 +167,7 @@ export const validationSchemaForHappeningEvents = Yup.object().shape({
       },
     ),
   workingDays: Yup.string().required('Working days selection is required'),
-  ageLimit: Yup.number()
+  ageLimit: Yup.string()
     .required('Age Limitation is required')
     .max(99, 'Age cannot exceed 99')
     .typeError('Age must be a number'),

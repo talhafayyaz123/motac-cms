@@ -4,12 +4,15 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import React, { Suspense, FormEvent, useState } from 'react';
 
 import AuthForm from '@/app/(auth)/AuthForm';
+import { HidePasswordIcon, ShowPasswordIcon } from '@/assets';
 import { handleAuthRequest } from '@/services/apiService';
 
 function ResetPasswordComponent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [error, setError] = useState<string | null>(null);
+  const [viewNewPass, setViewNewPass] = useState(false);
+  const [viewConfirmPass, setViewConfirmPass] = useState(false);
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -47,14 +50,42 @@ function ResetPasswordComponent() {
       buttonText="Reset Password"
       fields={[
         {
-          type: 'password',
+          type: viewNewPass ? 'text' : 'password',
           placeholder: 'New Password',
           name: 'password',
+          icon: !viewNewPass ? (
+            <ShowPasswordIcon
+              onClick={() => {
+                setViewNewPass(!viewNewPass);
+              }}
+            />
+          ) : (
+            <HidePasswordIcon
+              onClick={() => {
+                setViewNewPass(!viewNewPass);
+              }}
+            />
+          ),
+          iconPlacement: 'right',
         },
         {
-          type: 'password',
+          type: viewConfirmPass ? 'text' : 'password',
           placeholder: 'Confirm New Password',
           name: 'new_password',
+          icon: !viewConfirmPass ? (
+            <ShowPasswordIcon
+              onClick={() => {
+                setViewConfirmPass(!viewConfirmPass);
+              }}
+            />
+          ) : (
+            <HidePasswordIcon
+              onClick={() => {
+                setViewConfirmPass(!viewConfirmPass);
+              }}
+            />
+          ),
+          iconPlacement: 'right',
         },
       ]}
       onSubmit={handleSubmit}

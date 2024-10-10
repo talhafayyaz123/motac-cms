@@ -17,6 +17,7 @@ import Select from '@/components/ui/Select';
 import TextEditor from '@/components/ui/TextEditor';
 import Title from '@/components/ui/Title';
 import {
+  ageLimitation,
   attractionDestinationId,
   timeOptions,
   workingDaysOptions,
@@ -66,7 +67,7 @@ export default function AddAttraction() {
       title: '',
       openingHours: '',
       closingHours: '',
-      ageLimit: 1,
+      ageLimit: '',
       mapLink: '',
       address: '',
       category: attractionDestinationId,
@@ -416,12 +417,15 @@ export default function AddAttraction() {
                 control={control}
                 name="ageLimit"
                 render={({ field }) => (
-                  <Input
+                  <Select
                     label="Age Limitation"
-                    placeholder="None"
-                    className="text-xs"
+                    options={ageLimitation.map((p) => ({
+                      value: p.value,
+                      label: p.label,
+                    }))}
+                    selectedValues={field.value}
+                    setSelectedValues={field.onChange}
                     minWidth="350px"
-                    {...field}
                     error={errors.ageLimit?.message}
                   />
                 )}
