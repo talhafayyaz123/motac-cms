@@ -10,6 +10,7 @@ interface SelectProps {
   highlightValue?: string;
   minimalStyle?: boolean;
   iconColor?: boolean;
+  padding?: string;
 }
 
 const Select: React.FC<SelectProps> = ({
@@ -20,9 +21,10 @@ const Select: React.FC<SelectProps> = ({
   highlightValue,
   minimalStyle = false,
   iconColor = false,
+  padding = '',
 }) => {
   return (
-    <div className="relative">
+    <div className={`relative ${padding}`}>
       <select
         value={value || defaultValue} // Fallback to defaultValue if no value is provided
         onChange={onChange}

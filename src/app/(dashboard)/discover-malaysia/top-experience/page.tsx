@@ -148,7 +148,7 @@ export default function TopExperience() {
     await updateDestinationTags(rowId, newTagAfterRemove);
   };
 
-  const handleTagAdd = async (
+  const handleTagAdd: any = async (
     e: React.MouseEvent<HTMLButtonElement | HTMLDivElement>,
     rowIndex: number,
     tag: { id: number; name: string },
@@ -168,6 +168,7 @@ export default function TopExperience() {
       (item: { id: number }) => item.id,
     );
     await updateDestinationTags(rowId, newTagAfterAddition);
+    // setIsDropdownOpen(false);
   };
 
   const renderTagOptions = (rowIndex: number, rowId: string) => {
@@ -190,6 +191,7 @@ export default function TopExperience() {
               tabIndex={0}
               onKeyDown={(e) => {
                 if (e.key === 'Enter' || e.key === ' ') {
+                  handleTagAdd(e, rowIndex, tag, rowId);
                 }
               }}
             >
