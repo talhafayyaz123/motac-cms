@@ -326,10 +326,10 @@ export default function Dashboard() {
           <div className="flex rounded-xl bg-blue-50 border border-gray-100 gap-4 font-medium p-4 lg:w-[68%] w-full">
             <div className=" flex flex-col w-1/2 gap-4">
               <p className="text-xs font-bold text-black-100 mb-4">
-                Must See Attraction
+                Must See Attractions
               </p>
               <div>
-                <p className="text-xs text-gray-50">Total Attraction</p>
+                <p className="text-xs text-gray-50">Total Attractions</p>
                 <p className="text-4xl font-semibold text-blue-100 mb-3">
                   {seeAttractionData?.newAttractionsCount}
                 </p>

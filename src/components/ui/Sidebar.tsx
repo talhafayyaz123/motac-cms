@@ -123,7 +123,7 @@ const Sidebar = () => {
                             ? 'text-gray-300 cursor-not-allowed'
                             : pathname === subItem.path
                               ? 'text-blue-100'
-                              : `hover:text-blue-100 text-black-100 ${!subItem.path ? 'cursor-default' : 'cursor-pointer'}`
+                              : ` text-black-100 ${!subItem.path ? 'cursor-default' : 'cursor-pointer hover:text-blue-100'}`
                         }`}
                         role="button"
                         tabIndex={0}
