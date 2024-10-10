@@ -8,7 +8,7 @@ import { useSession } from 'next-auth/react';
 import React, { useState, useEffect, useRef } from 'react';
 import { FaCaretLeft, FaUser } from 'react-icons/fa';
 
-import { parsePathToTitle } from '@/helpers/utils/utils';
+import { parsePathToTitle, firstLetterCapital } from '@/helpers/utils/utils';
 import { fetchSpecificTeamMember } from '@/services/apiService';
 
 import Title from './Title';
@@ -142,7 +142,7 @@ const Navbar = () => {
               <div>
                 <p className="text-sm font-semibold">{`${session?.user?.firstName} ${session?.user?.lastName}`}</p>
                 <p className="text-xs text-gray-500">
-                  {session?.user?.role?.name}
+                  {firstLetterCapital(session?.user?.role?.name)}
                 </p>
               </div>
             </>

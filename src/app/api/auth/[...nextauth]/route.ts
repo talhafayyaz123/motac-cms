@@ -40,7 +40,7 @@ const authOptions: any = {
             // Return the full user object
             return user;
           } else {
-            throw new Error('Invalid credentials');
+            throw new Error('Invalid Credentials');
           }
         } catch (error: any) {
           console.error('Error during authentication:', {

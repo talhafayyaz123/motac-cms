@@ -31,7 +31,7 @@ export default function HappeningEvents() {
     'ID ',
     'Name ',
     'Category ',
-    'States ',
+    'State ',
     'Event Start Date',
     'Event End Date',
     'Tags',

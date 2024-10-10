@@ -1104,7 +1104,7 @@ export const menuItems = [
         disabled: false,
       },
       {
-        label: 'Top Experience',
+        label: 'Top Experiences',
         path: '/discover-malaysia/top-experience',
         icon: TopExperienceIcon,
         disabled: false,

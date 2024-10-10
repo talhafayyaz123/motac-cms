@@ -9,6 +9,10 @@ export function parsePathToTitle(path: string) {
   return title;
 }
 
+export function firstLetterCapital(name: string): string {
+  return name?.charAt(0).toUpperCase() + name?.slice(1);
+}
+
 export const formatDate = (
   dateStr: string,
   locale: string = 'en-US',
