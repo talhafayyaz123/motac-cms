@@ -37,7 +37,14 @@ interface UserStats {
   newAttractions: NewAttractions;
 }
 
-const StatsSection: React.FC = () => {
+interface calculateRange {
+  calculateRange: (selectedValue: string) => {
+    calculatedStartDate: string;
+    calculatedEndDate: string;
+  };
+}
+
+const StatsSection: React.FC<calculateRange> = ({ calculateRange }) => {
   const [statsData, setStatsData] = useState<UserStats | null>(null);
 
   const currentDate = new Date();
@@ -58,54 +65,13 @@ const StatsSection: React.FC = () => {
     let newStartDate: string = startDate;
     let newEndDate: string = endDate;
     const selectedValue = event.target.value;
+    const {
+      calculatedStartDate: finalStartDate,
+      calculatedEndDate: finalEndDate,
+    } = calculateRange(selectedValue);
 
-    if (['7', '30'].includes(selectedValue)) {
-      const adjustedDate = subtractDays(currentDate, parseInt(selectedValue));
-      newStartDate = formatDateToYYYYMMDD(adjustedDate);
-    } else if (['90', '180'].includes(selectedValue)) {
-      const currentYear = currentDate.getFullYear();
-      const currentMonth = currentDate.getMonth();
-
-      let monthsToSubtract: any;
-      if (selectedValue === '90') {
-        monthsToSubtract = 3;
-      } else if (selectedValue === '180') {
-        monthsToSubtract = 6;
-      }
-
-      const startMonth = currentMonth - monthsToSubtract;
-      let startYear = currentYear;
-      let endYear = currentYear;
-
-      if (startMonth < 0) {
-        startYear -= Math.ceil(Math.abs(startMonth) / 12);
-      }
-
-      newStartDate = formatDateToYYYYMMDD(
-        new Date(startYear, (startMonth + 12) % 12, 1),
-      );
-
-      let endMonth = currentMonth - 1;
-      if (endMonth < 0) {
-        endYear -= 1;
-        endMonth = 11;
-      }
-
-      newEndDate = formatDateToYYYYMMDD(new Date(endYear, endMonth + 1, 0));
-    } else {
-      if (parseInt(selectedValue) > 31) {
-        const adjustedDate = subtractDays(currentDate, parseInt(selectedValue));
-        newStartDate = formatDateToYYYYMMDD(adjustedDate);
-      } else {
-        // in case of this month and this week
-        const adjustedDate = subtractDays(
-          currentDate,
-          parseInt(selectedValue) - 1,
-        );
-        newStartDate = formatDateToYYYYMMDD(adjustedDate);
-        newEndDate = formatDateToYYYYMMDD(currentDate);
-      }
-    }
+    newStartDate = finalStartDate;
+    newEndDate = finalEndDate;
 
     try {
       const fetchedData = await FetchDashboardUsersAndDestinationData(

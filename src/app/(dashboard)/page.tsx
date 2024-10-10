@@ -2,7 +2,7 @@
 'use client';
 // import { useState } from 'react';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 
 import CardContainer from '@/components/ui/card/CardContainer';
 import CardStats from '@/components/ui/card/CardStats';
@@ -22,6 +22,7 @@ import {
   getDaysPassedThisWeek,
   getDaysPassedThisYear,
   subtractDays,
+  dashboardDateRangeCalculation,
 } from '@/helpers/utils/utils';
 import {
   FetchDashboardUsersData,
@@ -76,6 +77,13 @@ export default function Dashboard() {
   const adjustedDate = subtractDays(currentDate, 30);
   const startDate = formatDateToYYYYMMDD(adjustedDate);
 
+  const calculateRange = useCallback(
+    (selectedValue: string) => {
+      return dashboardDateRangeCalculation(currentDate, selectedValue);
+    },
+    [currentDate],
+  );
+
   const getMonthStartAndEnd = (
     year: number,
     month: number,
@@ -124,56 +132,12 @@ export default function Dashboard() {
       const previousDay = subtractDays(currentDate, 1);
       endDate = formatDateToYYYYMMDD(previousDay);
 
-      if (['7', '30'].includes(selectedValue)) {
-        const adjustedDate = subtractDays(currentDate, parseInt(selectedValue));
-        startDate = formatDateToYYYYMMDD(adjustedDate);
-      } else if (['90', '180'].includes(selectedValue)) {
-        const currentYear = currentDate.getFullYear();
-        const currentMonth = currentDate.getMonth();
-
-        let monthsToSubtract: any;
-        if (selectedValue === '90') {
-          monthsToSubtract = 3;
-        } else if (selectedValue === '180') {
-          monthsToSubtract = 6;
-        }
-
-        const startMonth = currentMonth - monthsToSubtract;
-        let startYear = currentYear;
-        let endYear = currentYear;
-
-        if (startMonth < 0) {
-          startYear -= Math.ceil(Math.abs(startMonth) / 12);
-        }
-
-        startDate = formatDateToYYYYMMDD(
-          new Date(startYear, (startMonth + 12) % 12, 1),
-        );
-
-        let endMonth = currentMonth - 1;
-        if (endMonth < 0) {
-          endYear -= 1;
-          endMonth = 11;
-        }
-
-        endDate = formatDateToYYYYMMDD(new Date(endYear, endMonth + 1, 0));
-      } else {
-        if (parseInt(selectedValue) > 31) {
-          const adjustedDate = subtractDays(
-            currentDate,
-            parseInt(selectedValue),
-          );
-          startDate = formatDateToYYYYMMDD(adjustedDate);
-        } else {
-          // in case of this month and this week
-          const adjustedDate = subtractDays(
-            currentDate,
-            parseInt(selectedValue) - 1,
-          );
-          startDate = formatDateToYYYYMMDD(adjustedDate);
-          endDate = formatDateToYYYYMMDD(currentDate);
-        }
-      }
+      const {
+        calculatedStartDate: newStartDate,
+        calculatedEndDate: newEndDate,
+      } = calculateRange(selectedValue);
+      endDate = newEndDate;
+      startDate = newStartDate;
       /*  const adjustedDate = subtractDays(currentDate, parseInt(selectedValue));
       startDate = formatDateToYYYYMMDD(adjustedDate);
       endDate = formatDateToYYYYMMDD(currentDate);
@@ -319,7 +283,7 @@ export default function Dashboard() {
 
   return (
     <main className="h-full px-4">
-      <StatsSection />
+      <StatsSection calculateRange={calculateRange} />
       <CardContainer
         title="User Management"
         showStats
