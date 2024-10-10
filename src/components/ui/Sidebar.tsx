@@ -151,7 +151,7 @@ const Sidebar = () => {
                               ? 'text-gray-300'
                               : pathname === subItem.path
                                 ? 'text-blue-100'
-                                : 'group-hover:fill-blue-100'
+                                : `${subItem.path ? 'group-hover:fill-blue-100' : 'text-black-100'}`
                           }`}
                         >
                           <subItem.icon
@@ -160,12 +160,12 @@ const Sidebar = () => {
                                 ? 'gray'
                                 : pathname === subItem.path
                                   ? '#364EA2'
-                                  : 'text-black-100 group-hover:fill-blue-100'
+                                  : `${subItem.path ? 'group-hover:fill-blue-100' : 'text-black-100'}`
                             }
                           />
                         </span>
                         <span
-                          className={`text-xs text-nowrap ${subItem.disabled ? 'text-gray-300' : ''}`}
+                          className={`absolute left-9 text-xs text-nowrap ${subItem.disabled ? 'text-gray-300' : ''}`}
                         >
                           {subItem.label}
                         </span>
