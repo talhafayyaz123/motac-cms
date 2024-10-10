@@ -74,3 +74,64 @@ export const getDaysPassedThisWeek = () => {
   // const daysPassedThisWeek = dayOfWeek + 1; // Add 1 to include today
   return dayOfWeek;
 };
+
+export const dashboardDateRangeCalculation = (
+  currentDate: Date,
+  selectedValue: string,
+): { calculatedStartDate: string; calculatedEndDate: string } => {
+  let calculatedStartDate: string = '';
+  const previousDay = subtractDays(currentDate, 1);
+  let calculatedEndDate: string = formatDateToYYYYMMDD(previousDay);
+
+  if (['7', '30'].includes(selectedValue)) {
+    const adjustedDate = subtractDays(currentDate, parseInt(selectedValue));
+    calculatedStartDate = formatDateToYYYYMMDD(adjustedDate);
+  } else if (['90', '180'].includes(selectedValue)) {
+    const currentYear = currentDate.getFullYear();
+    const currentMonth = currentDate.getMonth();
+
+    let monthsToSubtract: any;
+    if (selectedValue === '90') {
+      monthsToSubtract = 3;
+    } else if (selectedValue === '180') {
+      monthsToSubtract = 6;
+    }
+
+    const startMonth = currentMonth - monthsToSubtract;
+    let startYear = currentYear;
+    let endYear = currentYear;
+
+    if (startMonth < 0) {
+      startYear -= Math.ceil(Math.abs(startMonth) / 12);
+    }
+
+    calculatedStartDate = formatDateToYYYYMMDD(
+      new Date(startYear, (startMonth + 12) % 12, 1),
+    );
+
+    let endMonth = currentMonth - 1;
+    if (endMonth < 0) {
+      endYear -= 1;
+      endMonth = 11;
+    }
+
+    calculatedEndDate = formatDateToYYYYMMDD(
+      new Date(endYear, endMonth + 1, 0),
+    );
+  } else {
+    if (parseInt(selectedValue) > 31) {
+      const adjustedDate = subtractDays(currentDate, parseInt(selectedValue));
+      calculatedStartDate = formatDateToYYYYMMDD(adjustedDate);
+    } else {
+      // in case of this month and this week
+      const adjustedDate = subtractDays(
+        currentDate,
+        parseInt(selectedValue) - 1,
+      );
+      calculatedStartDate = formatDateToYYYYMMDD(adjustedDate);
+      calculatedEndDate = formatDateToYYYYMMDD(currentDate);
+    }
+  }
+
+  return { calculatedStartDate, calculatedEndDate };
+};
