@@ -329,7 +329,7 @@ export default function TopExperience() {
       case 'Tags':
         return (
           <div
-            className={`${item[column]?.length === 0 && 'p-2'} flex gap-1 relative`}
+            className={`${item[column]?.length === 0 && 'p-2'} flex gap-1 relative w-36 overflow-hidden overflow-x-scroll`}
             onClick={() => {
               setActiveRowIndex(rowIndex === activeRowIndex ? null : rowIndex);
               setIsDropdownOpen(rowIndex !== activeRowIndex); // toggle dropdown open state

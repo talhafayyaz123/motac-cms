@@ -197,7 +197,7 @@ export default function AddTeamMemberPage() {
   return (
     <main className="h-full">
       <div className="sticky top-0 bg-white w-full py-8 z-50">
-        <Title>Member Detail</Title>
+        <Title>Member Details</Title>
       </div>
       <FormContainer>
         <form onSubmit={handleSubmit(onSubmit)}>
