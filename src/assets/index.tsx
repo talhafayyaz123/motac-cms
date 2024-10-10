@@ -590,7 +590,7 @@ const RestaurantsIcon: React.FC<IconProps> = ({ color = '#fff' }) => (
   </svg>
 );
 
-const RecommendedTripIcon: React.FC<IconProps> = () => (
+const RecommendedTripIcon: React.FC<IconProps> = ({ color = '#fff' }) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     xmlnsXlink="http://www.w3.org/1999/xlink"
@@ -615,6 +615,7 @@ const RecommendedTripIcon: React.FC<IconProps> = () => (
         d="M5.034,14.7a2.858,2.858,0,0,0,1.229.278h6.11A2.857,2.857,0,0,0,15.2,12.562l.715-4.575a2.286,2.286,0,0,0-2.258-2.639H9.9V2.653a1.857,1.857,0,0,0-3.478-.907L4.048,5.986a1.714,1.714,0,0,0-.219.838v6.22a1.714,1.714,0,0,0,.977,1.547ZM1.186,6.2A1.139,1.139,0,0,0,.047,7.334v5.843a1.139,1.139,0,0,0,1.139,1.139h.568a.571.571,0,0,0,.571-.571V6.766a.571.571,0,0,0-.572-.571Z"
         transform="translate(0.007 0.114)"
         fillRule="evenodd"
+        fill={color}
       />
     </g>
   </svg>
