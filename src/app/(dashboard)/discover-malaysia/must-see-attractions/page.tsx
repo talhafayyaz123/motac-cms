@@ -30,7 +30,7 @@ export default function MustSeeAttractions() {
     'ID ',
     'Name ',
     'Category ',
-    'States ',
+    'State ',
     'Tags',
     'Priority',
     'Edit',

@@ -30,7 +30,7 @@ export default function TopExperience() {
     'ID ',
     'Name ',
     'Category ',
-    'States ',
+    'State ',
     'Tags',
     'Priority',
     'Edit',
