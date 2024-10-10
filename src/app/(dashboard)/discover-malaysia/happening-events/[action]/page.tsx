@@ -17,6 +17,7 @@ import Select from '@/components/ui/Select';
 import TextEditor from '@/components/ui/TextEditor';
 import Title from '@/components/ui/Title';
 import {
+  ageLimitation,
   happeningEventsDestinationId,
   timeOptions,
   workingDaysOptions,
@@ -65,7 +66,7 @@ export default function AddEvent() {
       title: '',
       openingHours: '',
       closingHours: '',
-      ageLimit: 1,
+      ageLimit: '',
       mapLink: '',
       address: '',
       category: happeningEventsDestinationId,
@@ -474,20 +475,25 @@ export default function AddEvent() {
                   />
                 )}
               />
+
               <Controller
                 control={control}
                 name="ageLimit"
                 render={({ field }) => (
-                  <Input
+                  <Select
                     label="Age Limitation"
-                    placeholder="None"
-                    className="text-xs"
+                    options={ageLimitation.map((p) => ({
+                      value: p.value,
+                      label: p.label,
+                    }))}
+                    selectedValues={field.value}
+                    setSelectedValues={field.onChange}
                     minWidth="350px"
-                    {...field}
                     error={errors.ageLimit?.message}
                   />
                 )}
               />
+
               <Controller
                 control={control}
                 name="category"

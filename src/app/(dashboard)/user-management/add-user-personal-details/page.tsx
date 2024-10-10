@@ -269,7 +269,7 @@ export default function PersonalDetails() {
                 label="Gender"
                 disabled
                 placeholder="Male"
-                className="text-xs"
+                className="text-xs capitalize"
                 minWidth="350px"
                 {...field}
                 error={errors.gender?.message}
