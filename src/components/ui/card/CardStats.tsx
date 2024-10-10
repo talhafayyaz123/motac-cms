@@ -53,7 +53,9 @@ const CardStats: React.FC<CardStatsProps> = ({
 
   return (
     <div className="flex flex-col relative rounded-xl bg-blue-50 border border-gray-100 p-4 font-medium">
-      <p className="text-xs text-black-100 p-2 font-bold">{title}</p>
+      <p className="text-xs text-black-100 p-2 relative bottom-2 font-bold">
+        {title}
+      </p>
       {isEventFilter ? (
         <div className="flex justify-between mb-4">
           <div className="flex p-2 items-center space-x-2">
@@ -65,6 +67,7 @@ const CardStats: React.FC<CardStatsProps> = ({
 
           <div className="h-[max-content]">
             <Select
+              padding="bottom-8"
               options={monthsOptions}
               value={selectedMonth}
               minimalStyle
