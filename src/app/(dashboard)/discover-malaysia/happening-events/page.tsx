@@ -169,6 +169,7 @@ export default function HappeningEvents() {
       (item: { id: number }) => item.id,
     );
     await updateDestinationTags(rowId, newTagAfterAddition);
+    setIsDropdownOpen(false);
   };
 
   const renderTagOptions = (rowIndex: number, rowId: string) => {
@@ -369,16 +370,12 @@ export default function HappeningEvents() {
             {activeRowIndex === rowIndex && (
               <div
                 ref={dropdownRef}
-                className={`absolute overflow-y-auto text-left left-0 z-50 bg-white border border-gray-300 rounded-lg shadow-lg p-2 custom-scroll ${
+                className={`absolute overflow-y-auto h-28 left-0 text-left z-10 bg-white border border-gray-300 rounded-lg shadow-lg p-2 ${
                   isDropdownOpen ? 'block' : 'hidden'
                 }`}
                 style={{
                   minWidth: '200px',
                   maxWidth: '350px',
-                  maxHeight: '200px',
-                  top: '100%', // Dropdown opens below the tags
-                  marginTop: '5px', // Space between tags and dropdown
-                  zIndex: 50, // Ensure dropdown stays on top
                 }}
               >
                 {renderTagOptions(rowIndex, item['ID '])}
