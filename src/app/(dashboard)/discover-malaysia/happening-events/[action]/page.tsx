@@ -74,7 +74,7 @@ export default function AddEvent() {
       cityId: undefined,
       description: '',
       tags: [],
-      priority: 1,
+      priority: 0,
       happeningStartDate: new Date(),
       happeningEndDate: new Date(),
       images,

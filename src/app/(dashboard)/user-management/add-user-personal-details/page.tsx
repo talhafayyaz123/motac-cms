@@ -16,6 +16,7 @@ import Title from '@/components/ui/Title';
 import AlertService from '@/services/alertService';
 import { DeleteActiveMember, FetchActiveMember } from '@/services/apiService';
 import { useMember } from '@/store/MemberContext';
+import { capitalizeFirstLetter } from '@/helpers/utils/utils';
 
 interface Nationality {
   id: number;
@@ -87,8 +88,13 @@ export default function PersonalDetails() {
         if (userID) {
           setLoading(true);
           const response = await FetchActiveMember(userID);
+          console.log(response);
+
           if (response) {
-            setData(response);
+            setData({
+              ...response,
+              gender: capitalizeFirstLetter(response?.gender),
+            });
             setValue('profileImage', response?.photo?.path);
             setLoading(false);
           }

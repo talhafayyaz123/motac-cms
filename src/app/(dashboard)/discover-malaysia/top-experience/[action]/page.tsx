@@ -74,7 +74,7 @@ export default function AddExperience() {
       cityId: undefined,
       description: '',
       tags: [],
-      priority: 1,
+      priority: 0,
       images,
       bannerImageId: null,
       bannerImage: '',
