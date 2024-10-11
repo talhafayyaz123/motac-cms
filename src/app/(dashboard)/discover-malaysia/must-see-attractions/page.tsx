@@ -324,26 +324,26 @@ export default function MustSeeAttractions() {
         );
       case 'Tags':
         return (
-          <div className="relative">
+          <div
+            className="relative w-full h-full flex items-center"
+            onClick={() => {
+              setActiveRowIndex(rowIndex === activeRowIndex ? null : rowIndex);
+              setIsDropdownOpen(rowIndex !== activeRowIndex); // Toggle dropdown open state
+            }}
+            role="button"
+            tabIndex={0}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                // Handle enter or space key if necessary
+              }
+            }}
+          >
             {/* Tags container */}
             <div
               className={`${item[column]?.length === 0 && 'p-2'} flex gap-1 relative overflow-x-auto`}
               style={{
                 maxWidth: '350px',
                 whiteSpace: 'nowrap', // Ensures horizontal scrolling for tags
-              }}
-              onClick={() => {
-                setActiveRowIndex(
-                  rowIndex === activeRowIndex ? null : rowIndex,
-                );
-                setIsDropdownOpen(rowIndex !== activeRowIndex); // Toggle dropdown open state
-              }}
-              role="button"
-              tabIndex={0}
-              onKeyDown={(e) => {
-                if (e.key === 'Enter' || e.key === ' ') {
-                  // Handle enter or space key if necessary
-                }
               }}
             >
               {item[column].map((tag: any, index: number) => {

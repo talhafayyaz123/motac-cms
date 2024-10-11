@@ -4,18 +4,19 @@
 
 import { useEffect, useState, useCallback } from 'react';
 
+import { MalaysiaMap } from '@/assets';
 import CardContainer from '@/components/ui/card/CardContainer';
 import CardStats from '@/components/ui/card/CardStats';
 import ComingSoonFeature from '@/components/ui/ComingSoonFeature';
 import CustomDatePicker from '@/components/ui/CustomDatePicker';
 import AreasplineChart from '@/components/ui/dashboard/charts/AreaChart';
 import BarChart from '@/components/ui/dashboard/charts/BarChart';
-import MapChart from '@/components/ui/dashboard/charts/MapChart';
+// import MapChart from '@/components/ui/dashboard/charts/MapChart';
 import StatsSection from '@/components/ui/dashboard/StatsSections';
 import UserStats from '@/components/ui/dashboard/UserStates';
 import Select from '@/components/ui/dataTable/Select';
 import Loader from '@/components/ui/Loader';
-import { dummyMapDataOne, dummyMapVisibleCountriesOne } from '@/constants';
+// import { dummyMapDataOne, dummyMapVisibleCountriesOne } from '@/constants';
 import {
   formatDateToYYYYMMDD,
   getDaysPassedThisMonth,
@@ -328,15 +329,20 @@ export default function Dashboard() {
               <p className="text-xs font-bold text-black-100 mb-4">
                 Must See Attractions
               </p>
-              <div>
-                <p className="text-xs text-gray-50">Total Attractions</p>
-                <p className="text-4xl font-semibold text-blue-100 mb-3">
-                  {seeAttractionData?.newAttractionsCount}
-                </p>
-                <MapChart
+              <div className="h-full flex flex-col gap-14">
+                <div>
+                  <p className="text-xs text-gray-50 font-bold">
+                    Total Attractions
+                  </p>
+                  <p className="text-4xl font-semibold text-blue-100 mb-3">
+                    {seeAttractionData?.newAttractionsCount}
+                  </p>
+                </div>
+                <MalaysiaMap />
+                {/* <MapChart
                   data={dummyMapDataOne}
                   visibleCountries={dummyMapVisibleCountriesOne}
-                />
+                /> */}
               </div>
             </div>
             <div className="flex flex-col w-1/2 relative">

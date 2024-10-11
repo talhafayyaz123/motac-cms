@@ -264,9 +264,11 @@ export default function AddExperience() {
           if (response?.status) {
             await AlertService.alert(
               'Successful!',
-              'Update Experience Success',
+              <span>
+                Experience <strong>Updated</strong> Successfully
+              </span>,
               'success',
-              'Ok',
+              'Done',
             );
             router.push('/discover-malaysia/top-experience');
           } else {
@@ -283,9 +285,11 @@ export default function AddExperience() {
           if (response?.status) {
             await AlertService.alert(
               'Successful!',
-              'Update Experience Success',
+              <span>
+                Experience <strong>Added</strong> Successfully
+              </span>,
               'success',
-              'Ok',
+              'Done',
             );
             router.push('/discover-malaysia/top-experience');
           } else {
@@ -357,7 +361,7 @@ export default function AddExperience() {
                 <Input
                   label="Title"
                   placeholder="Explore the Petronas Twin Towers"
-                  className="text-xs mb-3"
+                  className="text-sm mb-3"
                   {...field}
                   error={errors.title?.message}
                 />
@@ -440,7 +444,7 @@ export default function AddExperience() {
                   <Input
                     label="Book Event Link"
                     placeholder="www.eventlink.com"
-                    className="text-xs"
+                    className="text-sm"
                     minWidth="350px"
                     {...field}
                     error={errors.eventLink?.message}
@@ -472,7 +476,7 @@ export default function AddExperience() {
                 render={({ field }) => (
                   <Input
                     label="Banner Image"
-                    className="text-xs"
+                    className="text-sm"
                     minWidth="350px"
                     error={errors.bannerImage?.message}
                     defaultImagePath={
@@ -506,7 +510,7 @@ export default function AddExperience() {
                   <Input
                     label="Map Link"
                     placeholder="Google Maps"
-                    className="text-xs"
+                    className="text-sm"
                     minWidth="350px"
                     {...field}
                     error={errors.mapLink?.message}
@@ -624,7 +628,7 @@ export default function AddExperience() {
                   <Input
                     label="Address"
                     placeholder="Kuala Lumpur City Center (KLCC), 43 Jalan Ampan"
-                    className="text-xs"
+                    className="text-sm"
                     minWidth="350px"
                     {...field}
                     error={errors.address?.message}

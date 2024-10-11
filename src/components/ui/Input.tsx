@@ -12,7 +12,7 @@ interface InputProps
   onFileError?: (error: string) => void;
   onBase64ValueChange?: (base64Value: File | null) => void;
   error?: string | undefined;
-  defaultImagePath?: string | null; // Add prop for default image path (edit case)
+  defaultImagePath?: string | null;
   marginBottom?: string | null;
   iconPlacement?: string | null;
   isFileUploaded?: boolean;
@@ -41,7 +41,6 @@ const Input: React.FC<InputProps> = ({
 }) => {
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const [, setBase64Value] = useState<string>('');
-
   const [displayText, setDisplayText] = useState<string>('');
   const [isUploaded, setIsUploaded] = useState<boolean>(false);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
@@ -57,6 +56,8 @@ const Input: React.FC<InputProps> = ({
   const disabledStyles = disabled
     ? 'bg-gray-200 text-gray-500 cursor-not-allowed'
     : 'bg-white text-gray-900';
+
+  // Matching font size and weight with Select component
   const combinedStyles = `${className} ${baseStyles} ${sizeStyles[inputSize]} ${disabledStyles}`;
 
   // Handle file change (for both add and re-upload cases)
