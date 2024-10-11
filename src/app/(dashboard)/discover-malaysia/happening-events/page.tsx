@@ -322,26 +322,26 @@ export default function HappeningEvents() {
         );
       case 'Tags':
         return (
-          <div className="relative">
+          <div
+            className="relative w-full h-full flex items-center"
+            onClick={() => {
+              setActiveRowIndex(rowIndex === activeRowIndex ? null : rowIndex);
+              setIsDropdownOpen(rowIndex !== activeRowIndex); // Toggle dropdown open state
+            }}
+            role="button"
+            tabIndex={0}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                // Handle enter or space key if necessary
+              }
+            }}
+          >
             {/* Tags container */}
             <div
               className={`${item[column]?.length === 0 && 'p-2'} flex gap-1 relative overflow-x-auto`}
               style={{
                 maxWidth: '350px',
                 whiteSpace: 'nowrap', // Ensures horizontal scrolling for tags
-              }}
-              onClick={() => {
-                setActiveRowIndex(
-                  rowIndex === activeRowIndex ? null : rowIndex,
-                );
-                setIsDropdownOpen(rowIndex !== activeRowIndex); // Toggle dropdown open state
-              }}
-              role="button"
-              tabIndex={0}
-              onKeyDown={(e) => {
-                if (e.key === 'Enter' || e.key === ' ') {
-                  // Handle enter or space key if necessary
-                }
               }}
             >
               {item[column].map((tag: any, index: number) => {
@@ -369,7 +369,7 @@ export default function HappeningEvents() {
             {activeRowIndex === rowIndex && (
               <div
                 ref={dropdownRef}
-                className={`absolute overflow-y-auto text-left left-0 z-50 bg-white border border-gray-300 rounded-lg shadow-lg p-2 custom-scroll ${
+                className={`absolute overflow-y-auto left-0 text-left z-50 bg-white border border-gray-300 rounded-lg shadow-lg p-2 custom-scroll ${
                   isDropdownOpen ? 'block' : 'hidden'
                 }`}
                 style={{

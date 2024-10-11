@@ -262,9 +262,11 @@ export default function AddAttraction() {
           if (response?.status) {
             await AlertService.alert(
               'Successful!',
-              'Update Attraction Success',
+              <span>
+                Attraction <strong>Updated</strong> Successfully
+              </span>,
               'success',
-              'Ok',
+              'Done',
             );
             router.push('/discover-malaysia/must-see-attractions');
           } else {
@@ -281,9 +283,11 @@ export default function AddAttraction() {
           if (response?.status) {
             await AlertService.alert(
               'Successful!',
-              'Add Attraction Success',
+              <span>
+                Attraction <strong>Added</strong> Successfully
+              </span>,
               'success',
-              'Ok',
+              'Done',
             );
             router.push('/discover-malaysia/must-see-attractions');
           } else {
@@ -355,7 +359,7 @@ export default function AddAttraction() {
                 <Input
                   label="Title"
                   placeholder="Explore the Petronas Twin Towers"
-                  className="text-xs mb-3"
+                  className="text-sm mb-3"
                   {...field}
                   error={errors.title?.message}
                 />
@@ -437,7 +441,7 @@ export default function AddAttraction() {
                 render={({ field }) => (
                   <Input
                     label="Banner Image"
-                    className="text-xs"
+                    className="text-sm"
                     minWidth="350px"
                     error={errors.bannerImage?.message}
                     defaultImagePath={
@@ -472,7 +476,7 @@ export default function AddAttraction() {
                   <Input
                     label="Map Link"
                     placeholder="Google Maps"
-                    className="text-xs"
+                    className="text-sm"
                     minWidth="350px"
                     {...field}
                     error={errors.mapLink?.message}
@@ -607,7 +611,7 @@ export default function AddAttraction() {
                   <Input
                     label="Address"
                     placeholder="Kuala Lumpur City Center (KLCC), 43 Jalan Ampan"
-                    className="text-xs"
+                    className="text-sm"
                     minWidth="350px"
                     {...field}
                     error={errors.address?.message}
