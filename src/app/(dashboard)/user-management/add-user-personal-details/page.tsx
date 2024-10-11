@@ -13,6 +13,7 @@ import Button from '@/components/ui/Button';
 import Input from '@/components/ui/Input';
 import Loader from '@/components/ui/Loader';
 import Title from '@/components/ui/Title';
+import { capitalizeFirstLetter } from '@/helpers/utils/utils';
 import AlertService from '@/services/alertService';
 import { DeleteActiveMember, FetchActiveMember } from '@/services/apiService';
 import { useMember } from '@/store/MemberContext';
@@ -87,8 +88,13 @@ export default function PersonalDetails() {
         if (userID) {
           setLoading(true);
           const response = await FetchActiveMember(userID);
+          console.log(response);
+
           if (response) {
-            setData(response);
+            setData({
+              ...response,
+              gender: capitalizeFirstLetter(response?.gender),
+            });
             setValue('profileImage', response?.photo?.path);
             setLoading(false);
           }
