@@ -372,7 +372,7 @@ export default function TopExperience() {
             {activeRowIndex === rowIndex && (
               <div
                 ref={dropdownRef}
-                className={`absolute overflow-y-auto h-28 left-0 text-left z-10 bg-white border border-gray-300 rounded-lg shadow-lg p-2 ${
+                className={`absolute overflow-y-auto top-10 h-28 left-0 text-left z-10 bg-white border border-gray-300 rounded-lg shadow-lg p-2 ${
                   isDropdownOpen ? 'block' : 'hidden'
                 }`}
                 style={{
