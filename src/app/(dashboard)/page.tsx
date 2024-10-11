@@ -370,12 +370,12 @@ export default function Dashboard() {
                   />
                 </div>
               </div>
-                <p className="text-xs  text-gray-50 font-bold mt-2">
-                  Experiences Offered
-                </p>
-                <p className="text-4xl font-semibold text-blue-100 mb-3">
-                  {experienceOfferedSum}
-                </p>
+              <p className="text-xs  text-gray-50 font-bold mt-2">
+                Experiences Offered
+              </p>
+              <p className="text-4xl font-semibold text-blue-100 mb-3">
+                {experienceOfferedSum}
+              </p>
               <div className="p-2">
                 <div className="flex py-2 items-center w-full">
                   <div className="transform translate-y-1/2 absolute left-0 h-1/2 lg:border-l lg:border-gray-300 top-10" />
