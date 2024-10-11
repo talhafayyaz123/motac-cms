@@ -339,10 +339,13 @@ export default function HappeningEvents() {
           >
             {/* Tags container */}
             <div
-              className={`${item[column]?.length === 0 && 'p-2'} flex gap-1 relative overflow-x-auto`}
+              className={`${item[column]?.length === 0 && 'p-2'} flex gap-1 relative overflow-x-auto pb-3`}
               style={{
                 maxWidth: '350px',
+                paddingTop: '10px',
                 whiteSpace: 'nowrap', // Ensures horizontal scrolling for tags
+
+                // transform: 'translateY(5px)',
               }}
             >
               {item[column].map((tag: any, index: number) => {
