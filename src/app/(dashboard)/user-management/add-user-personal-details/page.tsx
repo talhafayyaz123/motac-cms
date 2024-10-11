@@ -13,10 +13,10 @@ import Button from '@/components/ui/Button';
 import Input from '@/components/ui/Input';
 import Loader from '@/components/ui/Loader';
 import Title from '@/components/ui/Title';
+import { capitalizeFirstLetter } from '@/helpers/utils/utils';
 import AlertService from '@/services/alertService';
 import { DeleteActiveMember, FetchActiveMember } from '@/services/apiService';
 import { useMember } from '@/store/MemberContext';
-import { capitalizeFirstLetter } from '@/helpers/utils/utils';
 
 interface Nationality {
   id: number;
