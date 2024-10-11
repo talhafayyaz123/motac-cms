@@ -367,6 +367,7 @@ export default function AddExperience() {
                 />
               )}
             />
+            <p className="mb-2 text-md text-[#181819] font-normal">About</p>
             <TextEditor
               control={control}
               name="description"
