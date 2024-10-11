@@ -266,9 +266,11 @@ export default function AddEvent() {
           if (response?.status) {
             await AlertService.alert(
               'Successful!',
-              'Update Happening Event Success',
+              <span>
+                Event <strong>Updated</strong> Successfully
+              </span>,
               'success',
-              'Ok',
+              'Done',
             );
             router.push('/discover-malaysia/happening-events');
           } else {
@@ -285,9 +287,11 @@ export default function AddEvent() {
           if (response?.status) {
             await AlertService.alert(
               'Successful!',
-              'Add Happening Event Success',
+              <span>
+                Event <strong>Added</strong> Successfully
+              </span>,
               'success',
-              'Ok',
+              'Done',
             );
             router.push('/discover-malaysia/happening-events');
           } else {
@@ -359,7 +363,7 @@ export default function AddEvent() {
                 <Input
                   label="Title"
                   placeholder="Explore the Petronas Twin Towers"
-                  className="text-xs mb-3"
+                  className="text-sm mb-3"
                   {...field}
                   error={errors.title?.message}
                 />
@@ -408,7 +412,7 @@ export default function AddEvent() {
                   <Input
                     label="Book Event Link"
                     placeholder="www.eventlink.com"
-                    className="text-xs"
+                    className="text-sm"
                     minWidth="350px"
                     {...field}
                     error={errors.eventLink?.message}
@@ -439,7 +443,7 @@ export default function AddEvent() {
                     type="date"
                     label="Event Start Date"
                     placeholder="09/15/25"
-                    className="text-xs"
+                    className="text-sm"
                     minWidth="350px"
                     value={
                       field.value
@@ -461,7 +465,7 @@ export default function AddEvent() {
                     type="date"
                     label="Event End Date"
                     placeholder="09/15/25"
-                    className="text-xs"
+                    className="text-sm"
                     value={
                       field.value
                         ? field.value instanceof Date
@@ -547,7 +551,7 @@ export default function AddEvent() {
                 render={({ field }) => (
                   <Input
                     label="Banner Image"
-                    className="text-xs"
+                    className="text-sm"
                     minWidth="350px"
                     error={errors.bannerImage?.message}
                     defaultImagePath={
@@ -581,7 +585,7 @@ export default function AddEvent() {
                   <Input
                     label="Map Link"
                     placeholder="Google Maps"
-                    className="text-xs"
+                    className="text-sm"
                     minWidth="350px"
                     {...field}
                     error={errors.mapLink?.message}
@@ -675,7 +679,7 @@ export default function AddEvent() {
                   <Input
                     label="Address"
                     placeholder="Kuala Lumpur City Center (KLCC), 43 Jalan Ampan"
-                    className="text-xs"
+                    className="text-sm"
                     minWidth="350px"
                     {...field}
                     error={errors.address?.message}
