@@ -340,12 +340,7 @@ export default function MustSeeAttractions() {
           >
             {/* Tags container */}
             <div
-              className={`${item[column]?.length === 0 && 'p-2'} flex gap-1 relative overflow-x-auto pb-3`}
-              style={{
-                maxWidth: '350px',
-                paddingTop: '10px',
-                whiteSpace: 'nowrap', // Ensures horizontal scrolling for tags
-              }}
+              className={`${item[column]?.length === 0 && 'p-2'} flex gap-1 relative  overflow-x-auto pb-3 max-w-[350px] pt-2.5 whitespace-nowrap`}
             >
               {item[column].map((tag: any, index: number) => {
                 return (
