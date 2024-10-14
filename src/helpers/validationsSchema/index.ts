@@ -44,7 +44,10 @@ export const validationSchemaForAttractions = Yup.object().shape({
     .required('Age Limitation is required')
     .max(99, 'Age cannot exceed 99')
     .typeError('Age must be a number'),
-  mapLink: Yup.string().required().url('Must be a valid URL'),
+  mapLink: Yup.string()
+    .required('Map Link is a required field')
+    .url('Must be a valid URL'),
+
   address: Yup.string().required('Address is required'),
   category: Yup.number().required('Category is required'),
   area: Yup.object()
@@ -107,7 +110,9 @@ export const validationSchemaForExperiences = Yup.object().shape({
     .required('Age Limitation is required')
     .max(99, 'Age cannot exceed 99')
     .typeError('Age must be a number'),
-  mapLink: Yup.string().required().url('Must be a valid URL'),
+  mapLink: Yup.string()
+    .required('Map Link is a required field')
+    .url('Must be a valid URL'),
   address: Yup.string().required('Address is required'),
   category: Yup.number().required('Category is required'),
   area: Yup.object()
@@ -124,7 +129,9 @@ export const validationSchemaForExperiences = Yup.object().shape({
   images: Yup.array()?.optional().nullable(),
   bannerImageId: Yup.number().nullable(),
   bannerImage: Yup.string().required('Banner image is required'),
-  eventLink: Yup.string().required().url('Must be a valid URL'),
+  eventLink: Yup.string()
+    .required('Event Link is a required field')
+    .url('Must be a valid URL'),
 });
 
 export const validationSchemaForHappeningEvents = Yup.object().shape({
@@ -171,7 +178,9 @@ export const validationSchemaForHappeningEvents = Yup.object().shape({
     .required('Age Limitation is required')
     .max(99, 'Age cannot exceed 99')
     .typeError('Age must be a number'),
-  mapLink: Yup.string().required().url('Must be a valid URL'),
+  mapLink: Yup.string()
+    .required('Map Link is a required field')
+    .url('Must be a valid URL'),
   address: Yup.string().required('Address is required'),
   category: Yup.number().required('Category is required'),
   area: Yup.object()
@@ -199,5 +208,7 @@ export const validationSchemaForHappeningEvents = Yup.object().shape({
   images: Yup.array()?.optional().nullable(),
   bannerImageId: Yup.number().nullable(),
   bannerImage: Yup.string().required('Banner image is required'),
-  eventLink: Yup.string().required().url('Must be a valid URL'),
+  eventLink: Yup.string()
+    .required('Event Link is a required field')
+    .url('Must be a valid URL'),
 });
