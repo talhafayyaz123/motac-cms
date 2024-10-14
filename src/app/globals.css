@@ -143,3 +143,8 @@ body {
   -ms-overflow-style: none; /* For Internet Explorer and Edge */
   scrollbar-width: none; /* For Firefox */
 }
+
+input::-ms-reveal,
+input::-ms-clear {
+  display: none;
+}
