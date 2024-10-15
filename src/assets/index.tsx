@@ -1095,7 +1095,7 @@ export const menuItems = [
     disabled: false,
     subItems: [
       {
-        label: 'Active',
+        label: 'Current Users',
         path: '/user-management/active',
         icon: ActiveUserIcon,
         disabled: false,

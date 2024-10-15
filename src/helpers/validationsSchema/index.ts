@@ -1,5 +1,7 @@
 import * as Yup from 'yup';
 
+const latLongRegex = /@(?!0+\.0+,0+\.0+)(-?\d{1,2}\.\d+),(-?\d{1,3}\.\d+)/;
+
 export const validationSchemaForAttractions = Yup.object().shape({
   title: Yup.string().required('Title is required'),
   openingHours: Yup.string().required('Opening hours selection is required'),
@@ -46,7 +48,11 @@ export const validationSchemaForAttractions = Yup.object().shape({
     .typeError('Age must be a number'),
   mapLink: Yup.string()
     .required('Map Link is a required field')
-    .url('Must be a valid URL'),
+    .url('Must be a valid URL')
+    .matches(
+      latLongRegex,
+      'Map Link must include valid latitude and longitude',
+    ),
 
   address: Yup.string().required('Address is required'),
   category: Yup.number().required('Category is required'),
@@ -112,7 +118,11 @@ export const validationSchemaForExperiences = Yup.object().shape({
     .typeError('Age must be a number'),
   mapLink: Yup.string()
     .required('Map Link is a required field')
-    .url('Must be a valid URL'),
+    .url('Must be a valid URL')
+    .matches(
+      latLongRegex,
+      'Map Link must include valid latitude and longitude',
+    ),
   address: Yup.string().required('Address is required'),
   category: Yup.number().required('Category is required'),
   area: Yup.object()
@@ -180,7 +190,11 @@ export const validationSchemaForHappeningEvents = Yup.object().shape({
     .typeError('Age must be a number'),
   mapLink: Yup.string()
     .required('Map Link is a required field')
-    .url('Must be a valid URL'),
+    .url('Must be a valid URL')
+    .matches(
+      latLongRegex,
+      'Map Link must include valid latitude and longitude',
+    ),
   address: Yup.string().required('Address is required'),
   category: Yup.number().required('Category is required'),
   area: Yup.object()
