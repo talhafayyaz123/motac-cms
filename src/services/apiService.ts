@@ -34,7 +34,8 @@ export const fetchDestinations = async (
 
     // Only add search parameter if searchValue is not an empty string
     if (searchValue) {
-      queryParams.append('search', searchValue);
+      const searchEncoded = encodeURIComponent(searchValue);
+      queryParams.append('search', searchEncoded);
     }
 
     const result = await apiClient(
@@ -241,8 +242,9 @@ export const fetchTeam = async (
   search = '',
 ): Promise<any> => {
   try {
+    const searchEncoded = encodeURIComponent(search);
     const result = await apiClient(
-      `/cms/users?page=${pageNumber}&limit=${itemsPerPage}&search=${search}`,
+      `/cms/users?page=${pageNumber}&limit=${itemsPerPage}&search=${searchEncoded}`,
       {
         method: 'GET',
       },
@@ -386,8 +388,9 @@ export const FetchUsers = async (
   search = '',
 ): Promise<{ data: any[]; total: number }> => {
   try {
+    const searchEncoded = encodeURIComponent(search);
     const result = await apiClient(
-      `/app/users?page=${pageNumber}&limit=${itemsPerPage}&search=${search}`,
+      `/app/users?page=${pageNumber}&limit=${itemsPerPage}&search=${searchEncoded}`,
       {
         method: 'GET',
       },
@@ -418,8 +421,9 @@ export const FetchDeletedUsers = async (
   search = '',
 ): Promise<{ data: any[]; total: number }> => {
   try {
+    const searchEncoded = encodeURIComponent(search);
     const result = await apiClient(
-      `/app/users?page=${pageNumber}&limit=${itemsPerPage}&search=${search}&isDeleted=true`,
+      `/app/users?page=${pageNumber}&limit=${itemsPerPage}&search=${searchEncoded}&isDeleted=true`,
       {
         method: 'GET',
       },
