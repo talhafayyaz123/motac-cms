@@ -564,7 +564,7 @@ export default function AddEvent() {
                     onFileError={async () => {
                       await AlertService.alert(
                         '',
-                        'Only images with 16:9 aspect ratio are allowed',
+                        'Only images of pixels 1920x1080 is allowed',
                         'warning',
                         'OK',
                       );
