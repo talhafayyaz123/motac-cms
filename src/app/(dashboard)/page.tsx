@@ -2,7 +2,7 @@
 'use client';
 // import { useState } from 'react';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import { MalaysiaMap } from '@/assets';
 import CardContainer from '@/components/ui/card/CardContainer';
@@ -239,52 +239,66 @@ export default function Dashboard() {
     return { newStartDate, newEndDate };
   };
 
+  const isFirstRender = useRef(true); // Tracks the first render
+
+  const adjustStartDateForFirstRender = (date: string) => {
+    const adjustedDate = new Date(date);
+    adjustedDate.setDate(adjustedDate.getDate() - 30);
+    return adjustedDate.toISOString().split('T')[0]; // Return as YYYY-MM-DD
+  };
+
+  const loadData = async (adjustedStart: string) => {
+    setLoadingUserManagement(true);
+    try {
+      const fetchedData = await FetchDashboardUsersData(adjustedStart, endDate);
+      setStatsData(fetchedData);
+    } catch (error) {
+      console.error('Error loading user management data:', error);
+    } finally {
+      setLoadingUserManagement(false);
+    }
+  };
+
+  const loadTopExperienceData = async (adjustedStart: string) => {
+    setLoadingAttractions(true);
+    try {
+      const fetchedData = await FetchSeeAttractionData(adjustedStart, endDate);
+      setSeeAttractionData(fetchedData);
+    } catch (error) {
+      console.error('Error loading top experience data:', error);
+    } finally {
+      setLoadingAttractions(false);
+    }
+  };
+
+  const loadHappeningEventsData = async () => {
+    setLoadingEvents(true);
+    try {
+      const { newStartDate, newEndDate } = calculateStartAndEndDates();
+      const fetchedData = await FetchHappeningEventsData(
+        newStartDate,
+        newEndDate,
+      );
+
+      setHappeningEventsData(fetchedData);
+    } catch (error) {
+      console.error('Error loading events data:', error);
+    } finally {
+      setLoadingEvents(false);
+    }
+  };
+
   useEffect(() => {
-    const loadData = async () => {
-      setLoadingUserManagement(true);
-      try {
-        const fetchedData = await FetchDashboardUsersData(startDate, endDate);
-        setStatsData(fetchedData);
-      } catch (error) {
-        console.error('Error loading data:', error);
-      } finally {
-        setLoadingUserManagement(false);
-      }
-    };
-
-    const loadTopExperienceData = async () => {
-      setLoadingAttractions(true);
-      try {
-        const fetchedData = await FetchSeeAttractionData(startDate, endDate);
-        setSeeAttractionData(fetchedData);
-      } catch (error) {
-        console.error('Error loading data:', error);
-      } finally {
-        setLoadingAttractions(false);
-      }
-    };
-
-    const loadHappeningEventsData = async () => {
-      setLoadingEvents(true);
-      try {
-        const { newStartDate, newEndDate } = calculateStartAndEndDates();
-
-        const fetchedData = await FetchHappeningEventsData(
-          newStartDate,
-          newEndDate,
-        );
-
-        setHappeningEventsData(fetchedData);
-      } catch (error) {
-        console.error('Error loading data:', error);
-      } finally {
-        setLoadingEvents(false);
-      }
-    };
-
-    void loadTopExperienceData();
-    void loadData();
+    const adjustedStartDate = isFirstRender.current
+      ? adjustStartDateForFirstRender(startDate)
+      : startDate;
+    // Call the loading functions with the adjusted date
+    void loadData(adjustedStartDate);
+    void loadTopExperienceData(adjustedStartDate);
     void loadHappeningEventsData();
+
+    // Mark that the first render has completed
+    isFirstRender.current = false;
   }, [startDate, endDate]);
 
   const statsArray = [

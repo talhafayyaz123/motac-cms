@@ -18,6 +18,7 @@ const nextConfig = {
     ],
     domains: ['assets.motac-dev.com'],
   },
+  reactStrictMode: false,
 };
 
 export default nextConfig;
