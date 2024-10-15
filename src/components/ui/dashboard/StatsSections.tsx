@@ -9,13 +9,7 @@ import usersIcon from '@/assets/users-icon.svg';
 import ComingSoonFeature from '@/components/ui/ComingSoonFeature';
 import AttractionList from '@/components/ui/dashboard/AttractionList';
 import Select from '@/components/ui/dataTable/Select';
-import {
-  formatDateToYYYYMMDD,
-  getDaysPassedThisMonth,
-  getDaysPassedThisWeek,
-  getDaysPassedThisYear,
-  subtractDays,
-} from '@/helpers/utils/utils';
+import { formatDateToYYYYMMDD, subtractDays } from '@/helpers/utils/utils';
 import { FetchDashboardUsersAndDestinationData } from '@/services/apiService';
 
 import AreasplineChart from './charts/AreaChart';
@@ -52,12 +46,6 @@ const StatsSection: React.FC<calculateRange> = ({ calculateRange }) => {
   const endDate = formatDateToYYYYMMDD(previousDay);
   const adjustedDate = subtractDays(currentDate, 30);
   const startDate = formatDateToYYYYMMDD(adjustedDate);
-
-  const daysPassedYear = getDaysPassedThisYear();
-
-  const daysPassedMonth = getDaysPassedThisMonth();
-
-  const daysPassedWeek = getDaysPassedThisWeek();
 
   const handleSelectChange = async (
     event: React.ChangeEvent<HTMLSelectElement>,
@@ -113,12 +101,12 @@ const StatsSection: React.FC<calculateRange> = ({ calculateRange }) => {
         <Select
           options={[
             { value: '30', label: 'Last 30 days' },
-            { value: `${daysPassedWeek}`, label: 'This Week' },
+            { value: 'thisWeek', label: 'This Week' },
             { value: '7', label: 'Last 7 days' },
-            { value: `${daysPassedMonth}`, label: 'This Month' },
+            { value: 'thisMonth', label: 'This Month' },
             { value: '90', label: 'Last 3 Months' },
             { value: '180', label: 'Last 6 Months' },
-            { value: `${daysPassedYear}`, label: 'This Year' },
+            { value: 'thisYear', label: 'This Year' },
           ]}
           highlightValue={'30'}
           minimalStyle
