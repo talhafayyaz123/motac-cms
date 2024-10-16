@@ -70,8 +70,6 @@ function SecuritySettings() {
         email: session?.user?.email,
       });
 
-      console.log(response);
-
       if (response?.error) {
         await AlertService.alert('Error!', response.error, 'error', 'OK');
       } else if (response?.message) {
