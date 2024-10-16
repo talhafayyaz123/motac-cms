@@ -316,10 +316,8 @@ export default function AddEvent() {
     for (const file of images) {
       if (file instanceof File) {
         // Only upload if it's a new file
-        console.log('Uploading file:', file.name);
         const response = await fileUpload(file);
         uploadedImageIds.push(response?.file?.id);
-        console.log('File uploaded successfully:', file.name);
       }
     }
 
@@ -564,7 +562,7 @@ export default function AddEvent() {
                     onFileError={async () => {
                       await AlertService.alert(
                         '',
-                        'Only images with 16:9 aspect ratio are allowed',
+                        'Only images of pixels 1920x1080 is allowed',
                         'warning',
                         'OK',
                       );

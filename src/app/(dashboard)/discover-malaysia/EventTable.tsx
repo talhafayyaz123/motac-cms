@@ -76,7 +76,6 @@ const EventTableLayout: React.FC<EventTableLayoutProps> = ({
             className="bg-white"
             onChange={(e) => {
               const value = e.target.value;
-              console.log(value);
               onSearchChange(value); // Call the handler to update search state
             }}
             icon={<SearchIcon />}

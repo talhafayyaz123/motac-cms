@@ -2,7 +2,7 @@
 'use client';
 // import { useState } from 'react';
 
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import { MalaysiaMap } from '@/assets';
 import CardContainer from '@/components/ui/card/CardContainer';
@@ -17,14 +17,7 @@ import UserStats from '@/components/ui/dashboard/UserStates';
 import Select from '@/components/ui/dataTable/Select';
 import Loader from '@/components/ui/Loader';
 // import { dummyMapDataOne, dummyMapVisibleCountriesOne } from '@/constants';
-import {
-  formatDateToYYYYMMDD,
-  getDaysPassedThisMonth,
-  getDaysPassedThisWeek,
-  getDaysPassedThisYear,
-  subtractDays,
-  dashboardDateRangeCalculation,
-} from '@/helpers/utils/utils';
+import { formatDateToYYYYMMDD, subtractDays } from '@/helpers/utils/utils';
 import {
   FetchDashboardUsersData,
   FetchHappeningEventsData,
@@ -73,17 +66,59 @@ export default function Dashboard() {
 
   const currentDate = new Date();
   const currentYear = currentDate.getFullYear();
-  const previousDay = subtractDays(currentDate, 1);
-  const endDate = formatDateToYYYYMMDD(previousDay);
-  const adjustedDate = subtractDays(currentDate, 30);
-  const startDate = formatDateToYYYYMMDD(adjustedDate);
+  const endDate = formatDateToYYYYMMDD(currentDate);
+  const startDate = formatDateToYYYYMMDD(currentDate);
 
-  const calculateRange = useCallback(
-    (selectedValue: string) => {
-      return dashboardDateRangeCalculation(currentDate, selectedValue);
-    },
-    [currentDate],
-  );
+  const calculateRange = (selectedValue: string) => {
+    let calculatedStartDate: string;
+    const calculatedEndDate: string = formatDateToYYYYMMDD(currentDate); // Default end date
+
+    switch (selectedValue) {
+      case '30':
+        calculatedStartDate = formatDateToYYYYMMDD(
+          subtractDays(currentDate, 30),
+        );
+        break;
+      case '7':
+        calculatedStartDate = formatDateToYYYYMMDD(
+          subtractDays(currentDate, 7),
+        );
+        break;
+      case '90':
+        calculatedStartDate = formatDateToYYYYMMDD(
+          subtractDays(currentDate, 90),
+        );
+        break;
+      case '180':
+        calculatedStartDate = formatDateToYYYYMMDD(
+          subtractDays(currentDate, 180),
+        );
+        break;
+      case 'thisWeek':
+        const startOfWeek = new Date(currentDate); // Copy the current date
+        startOfWeek.setDate(currentDate.getDate() - currentDate.getDay()); // Set to the start of the week (Sunday)
+        calculatedStartDate = formatDateToYYYYMMDD(startOfWeek);
+        break;
+      case 'thisMonth':
+        calculatedStartDate = formatDateToYYYYMMDD(
+          new Date(currentDate.getFullYear(), currentDate.getMonth(), 1), // Start of the current month
+        );
+        break;
+      case 'thisYear':
+        calculatedStartDate = formatDateToYYYYMMDD(
+          new Date(currentDate.getFullYear(), 0, 1), // Start of the current year (January 1st)
+        );
+        break;
+      default:
+        calculatedStartDate = formatDateToYYYYMMDD(currentDate); // Default to today if no match
+        break;
+    }
+
+    return {
+      calculatedStartDate,
+      calculatedEndDate,
+    };
+  };
 
   const getMonthStartAndEnd = (
     year: number,
@@ -114,48 +149,74 @@ export default function Dashboard() {
     flag: string,
     eventFlag?: string,
   ) => {
-    let startDate: string | undefined;
-    let endDate: string = formatDateToYYYYMMDD(currentDate);
-    if (eventFlag === 'events') {
-      const selectedValue = event.target.value;
-      const selectedMonth = parseInt(selectedValue);
+    const selectedValue = event.target.value; // Get the selected value
+    let newStartDate: string = formatDateToYYYYMMDD(currentDate); // Default to current date
+    let newEndDate: string = formatDateToYYYYMMDD(currentDate); // Default end date
 
-      const { monthStartDate, monthEndDate } = getMonthStartAndEnd(
-        currentYear,
-        selectedMonth,
-      );
+    // Determine the start and end dates based on the selected value
+    switch (selectedValue) {
+      case '7':
+        newStartDate = formatDateToYYYYMMDD(subtractDays(currentDate, 7));
+        break;
+      case '30':
+        newStartDate = formatDateToYYYYMMDD(subtractDays(currentDate, 30));
+        break;
+      case '90':
+        newStartDate = formatDateToYYYYMMDD(subtractDays(currentDate, 90));
+        break;
+      case '180':
+        newStartDate = formatDateToYYYYMMDD(subtractDays(currentDate, 180));
+        break;
+      case 'thisYear':
+        newStartDate = formatDateToYYYYMMDD(
+          new Date(currentDate.getFullYear(), 0, 1),
+        );
+        break;
+      case 'thisWeek':
+        newStartDate = formatDateToYYYYMMDD(
+          new Date(
+            new Date().setDate(new Date().getDate() - new Date().getDay()),
+          ), // Start of the week
+        );
+        break;
+      case 'thisMonth':
+        newStartDate = formatDateToYYYYMMDD(
+          new Date(new Date().getFullYear(), new Date().getMonth(), 1), // Start of the current month
+        );
+        break;
+      default:
+        if (eventFlag === 'events') {
+          const selectedMonth = parseInt(selectedValue);
 
-      startDate = formatDateToYYYYMMDD(monthStartDate);
-      endDate = formatDateToYYYYMMDD(monthEndDate);
-      setCurrentMonth(monthNames[selectedMonth]);
-    } else {
-      const selectedValue = event.target.value;
-      const previousDay = subtractDays(currentDate, 1);
-      endDate = formatDateToYYYYMMDD(previousDay);
+          const { monthStartDate, monthEndDate } = getMonthStartAndEnd(
+            currentYear,
+            selectedMonth,
+          );
 
-      const {
-        calculatedStartDate: newStartDate,
-        calculatedEndDate: newEndDate,
-      } = calculateRange(selectedValue);
-      endDate = newEndDate;
-      startDate = newStartDate;
-      /*  const adjustedDate = subtractDays(currentDate, parseInt(selectedValue));
-      startDate = formatDateToYYYYMMDD(adjustedDate);
-      endDate = formatDateToYYYYMMDD(currentDate);
-      alert(selectedValue); */
+          newStartDate = formatDateToYYYYMMDD(monthStartDate);
+          newEndDate = formatDateToYYYYMMDD(monthEndDate);
+          setCurrentMonth(monthNames[selectedMonth]);
+        }
+        break;
     }
-
     try {
-      if (flag === 'userManagement' && startDate) {
-        const fetchedData = await FetchDashboardUsersData(startDate, endDate);
+      // Fetch data based on the flag and the calculated start and end dates
+      if (flag === 'userManagement') {
+        const fetchedData = await FetchDashboardUsersData(
+          newStartDate,
+          newEndDate,
+        );
         setStatsData(fetchedData);
-      } else if (flag === 'happeningEvents' && startDate) {
-        const fetchedData = await FetchHappeningEventsData(startDate, endDate);
+      } else if (flag === 'happeningEvents') {
+        const fetchedData = await FetchHappeningEventsData(
+          newStartDate,
+          newEndDate,
+        );
         setHappeningEventsData(fetchedData);
       } else {
         const fetchedData = await FetchSeeAttractionData(
-          startDate || '',
-          endDate,
+          newStartDate,
+          newEndDate,
         );
         setSeeAttractionData(fetchedData);
       }
@@ -178,52 +239,66 @@ export default function Dashboard() {
     return { newStartDate, newEndDate };
   };
 
+  const isFirstRender = useRef(true); // Tracks the first render
+
+  const adjustStartDateForFirstRender = (date: string) => {
+    const adjustedDate = new Date(date);
+    adjustedDate.setDate(adjustedDate.getDate() - 30);
+    return adjustedDate.toISOString().split('T')[0]; // Return as YYYY-MM-DD
+  };
+
+  const loadData = async (adjustedStart: string) => {
+    setLoadingUserManagement(true);
+    try {
+      const fetchedData = await FetchDashboardUsersData(adjustedStart, endDate);
+      setStatsData(fetchedData);
+    } catch (error) {
+      console.error('Error loading user management data:', error);
+    } finally {
+      setLoadingUserManagement(false);
+    }
+  };
+
+  const loadTopExperienceData = async (adjustedStart: string) => {
+    setLoadingAttractions(true);
+    try {
+      const fetchedData = await FetchSeeAttractionData(adjustedStart, endDate);
+      setSeeAttractionData(fetchedData);
+    } catch (error) {
+      console.error('Error loading top experience data:', error);
+    } finally {
+      setLoadingAttractions(false);
+    }
+  };
+
+  const loadHappeningEventsData = async () => {
+    setLoadingEvents(true);
+    try {
+      const { newStartDate, newEndDate } = calculateStartAndEndDates();
+      const fetchedData = await FetchHappeningEventsData(
+        newStartDate,
+        newEndDate,
+      );
+
+      setHappeningEventsData(fetchedData);
+    } catch (error) {
+      console.error('Error loading events data:', error);
+    } finally {
+      setLoadingEvents(false);
+    }
+  };
+
   useEffect(() => {
-    const loadData = async () => {
-      setLoadingUserManagement(true);
-      try {
-        const fetchedData = await FetchDashboardUsersData(startDate, endDate);
-        setStatsData(fetchedData);
-      } catch (error) {
-        console.error('Error loading data:', error);
-      } finally {
-        setLoadingUserManagement(false);
-      }
-    };
-
-    const loadTopExperienceData = async () => {
-      setLoadingAttractions(true);
-      try {
-        const fetchedData = await FetchSeeAttractionData(startDate, endDate);
-        setSeeAttractionData(fetchedData);
-      } catch (error) {
-        console.error('Error loading data:', error);
-      } finally {
-        setLoadingAttractions(false);
-      }
-    };
-
-    const loadHappeningEventsData = async () => {
-      setLoadingEvents(true);
-      try {
-        const { newStartDate, newEndDate } = calculateStartAndEndDates();
-
-        const fetchedData = await FetchHappeningEventsData(
-          newStartDate,
-          newEndDate,
-        );
-
-        setHappeningEventsData(fetchedData);
-      } catch (error) {
-        console.error('Error loading data:', error);
-      } finally {
-        setLoadingEvents(false);
-      }
-    };
-
-    void loadTopExperienceData();
-    void loadData();
+    const adjustedStartDate = isFirstRender.current
+      ? adjustStartDateForFirstRender(startDate)
+      : startDate;
+    // Call the loading functions with the adjusted date
+    void loadData(adjustedStartDate);
+    void loadTopExperienceData(adjustedStartDate);
     void loadHappeningEventsData();
+
+    // Mark that the first render has completed
+    isFirstRender.current = false;
   }, [startDate, endDate]);
 
   const statsArray = [
@@ -268,12 +343,6 @@ export default function Dashboard() {
     ? Object.values(statsData.graphData)
     : [];
 
-  const daysPassedYear = getDaysPassedThisYear();
-
-  const daysPassedMonth = getDaysPassedThisMonth();
-
-  const daysPassedWeek = getDaysPassedThisWeek();
-
   if (loadingUserManagement || loadingAttractions || loadingEvents) {
     return (
       <div>
@@ -306,12 +375,12 @@ export default function Dashboard() {
             <Select
               options={[
                 { value: '30', label: 'Last 30 days' },
-                { value: `${daysPassedWeek}`, label: 'This Week' },
+                { value: 'thisWeek', label: 'This Week' },
                 { value: '7', label: 'Last 7 days' },
-                { value: `${daysPassedMonth}`, label: 'This Month' },
+                { value: 'thisMonth', label: 'This Month' },
                 { value: '90', label: 'Last 3 Months' },
                 { value: '180', label: 'Last 6 Months' },
-                { value: `${daysPassedYear}`, label: 'This Year' },
+                { value: 'thisYear', label: 'This Year' },
               ]}
               highlightValue={'30'}
               minimalStyle
@@ -354,12 +423,12 @@ export default function Dashboard() {
                   <Select
                     options={[
                       { value: '30', label: 'Last 30 days' },
-                      { value: `${daysPassedWeek}`, label: 'This Week' },
+                      { value: 'thisWeek', label: 'This Week' },
                       { value: '7', label: 'Last 7 days' },
-                      { value: `${daysPassedMonth}`, label: 'This Month' },
+                      { value: 'thisMonth', label: 'This Month' },
                       { value: '90', label: 'Last 3 Months' },
                       { value: '180', label: 'Last 6 Months' },
-                      { value: `${daysPassedYear}`, label: 'This Year' },
+                      { value: 'thisYear', label: 'This Year' },
                     ]}
                     highlightValue={'30'}
                     minimalStyle

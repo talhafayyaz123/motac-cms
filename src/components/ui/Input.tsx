@@ -82,7 +82,7 @@ const Input: React.FC<InputProps> = ({
           const expectedRatio = 16 / 9;
 
           if (Math.abs(aspectRatio - expectedRatio) > 0.01) {
-            onFileError?.('Only images with 16:9 aspect ratio are allowed');
+            onFileError?.('Only images of pixels 1920x1080 is allowed');
             e.target.value = '';
             setBase64Value('');
             setDisplayText('');

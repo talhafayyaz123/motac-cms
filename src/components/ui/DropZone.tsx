@@ -29,7 +29,7 @@ export default function DropZone({ setImages, onChange }: DropZoneProps) {
             try {
               await AlertService.alert(
                 '',
-                'Only images with 16:9 aspect ratio are allowed',
+                'Only images of pixels 1920x1080 is allowed',
                 'warning',
                 'OK',
               );
