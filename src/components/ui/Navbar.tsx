@@ -163,7 +163,7 @@ const Navbar = () => {
               </div>
               {showProfileDropdown && renderProfileDropdownOption()}
               <div>
-                <p className="text-sm font-semibold">{`${data?.firstName} ${data?.lastName}`}</p>
+                <p className="text-sm font-semibold">{`${data?.firstName ?? ''} ${data?.lastName ?? ''}`}</p>
                 <p className="text-xs text-gray-500">
                   {firstLetterCapital(data?.role ?? '')}
                 </p>
