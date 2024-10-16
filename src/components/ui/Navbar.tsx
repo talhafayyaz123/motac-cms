@@ -13,11 +13,33 @@ import { fetchSpecificTeamMember } from '@/services/apiService';
 
 import Title from './Title';
 
+interface Photo {
+  id: number;
+  path: string;
+  type: string;
+}
+
+interface User {
+  id: number;
+  designation: string;
+  firstName: string;
+  lastName: string;
+  company: string;
+  email: string;
+  phoneNumber: string;
+  photo: Photo;
+  role: string;
+  status: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
 const Navbar = () => {
   const [showProfileDropdown, setShowProfileDropdown] =
     useState<boolean>(false);
 
   const [profilePicture, setProfilePicture] = useState<string | null>(null);
+  const [data, setData] = useState<User | null>(null);
 
   const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -40,6 +62,7 @@ const Navbar = () => {
 
       if (userId) {
         const response = await fetchSpecificTeamMember(userId);
+        setData(response);
         setProfilePicture(response?.photo?.path);
       } else {
         console.log('User ID not found');
@@ -140,9 +163,9 @@ const Navbar = () => {
               </div>
               {showProfileDropdown && renderProfileDropdownOption()}
               <div>
-                <p className="text-sm font-semibold">{`${session?.user?.firstName} ${session?.user?.lastName}`}</p>
+                <p className="text-sm font-semibold">{`${data?.firstName} ${data?.lastName}`}</p>
                 <p className="text-xs text-gray-500">
-                  {firstLetterCapital(session?.user?.role?.name)}
+                  {firstLetterCapital(data?.role ?? '')}
                 </p>
               </div>
             </>

@@ -297,10 +297,14 @@ function AccountSettings() {
           render={({ field }) => (
             <Input
               label="Phone Number"
-              placeholder="+66 123 456 789"
+              placeholder="66 123 456 789"
               className="text-xs"
               minWidth="350px"
-              {...field}
+              value={`+${field.value || ''}`}
+              onChange={(e) => {
+                const value = e.target.value.replace(/\D/g, '');
+                field.onChange(value);
+              }}
               icon={
                 <Image
                   alt="flag"
