@@ -70,18 +70,19 @@ export default function AddAttraction() {
       ageLimit: '',
       mapLink: '',
       address: '',
-      category: attractionDestinationId,
-      area: { id: null, name: '' },
+      category: undefined,
+      area: undefined,
       cityId: undefined,
       description: '',
       tags: [],
-      priority: 0,
+      priority: undefined,
       images,
       bannerImageId: null,
       bannerImage: '',
       workingDays: '',
     },
   });
+
   const [priorities, setPriorities] = useState<{ id: number; name: string }[]>(
     [],
   );
@@ -179,6 +180,12 @@ export default function AddAttraction() {
   useEffect(() => {
     void fetchInitialData();
   }, []);
+
+  useEffect(() => {
+    if (images.length) {
+      setIsFormError(false);
+    }
+  }, [images]);
 
   const removeImage = (index: number) => {
     const newImages = [...images];
@@ -660,7 +667,14 @@ export default function AddAttraction() {
             <DropZone onChange={handleFilesChange} setImages={setImages} />
           </FormContainer>
           <div className="w-full flex justify-end gap-3 p-10">
-            <Button variant="customBlue" type="submit" title="Submit">
+            <Button
+              variant="customBlue"
+              type="submit"
+              title="Submit"
+              onClick={() => {
+                !images.length && setIsFormError(true);
+              }}
+            >
               {isFormBtnLoading ? (
                 <FormLoader /> // Small loader icon inside the button
               ) : action === 'add-attraction' ? (
