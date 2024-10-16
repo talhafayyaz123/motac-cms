@@ -13,8 +13,6 @@ const TableRow: React.FC<TableRowProps> = ({
   rowIndex,
   renderCell,
 }) => {
-  console.log(columns);
-
   return (
     <tr>
       {columns.map((column, index) => (

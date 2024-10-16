@@ -88,8 +88,6 @@ export default function PersonalDetails() {
         if (userID) {
           setLoading(true);
           const response = await FetchActiveMember(userID);
-          console.log(response);
-
           if (response) {
             setData({
               ...response,

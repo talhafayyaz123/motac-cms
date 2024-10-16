@@ -268,7 +268,6 @@ export default function HappeningEvents() {
                     await deleteDestination(item['ID ']);
 
                     // If successful, you can reload the page or refetch data
-                    console.log('Destination deleted successfully:');
                     await AlertService.alert(
                       'Successful!',
                       'Destination deleted Successfully',

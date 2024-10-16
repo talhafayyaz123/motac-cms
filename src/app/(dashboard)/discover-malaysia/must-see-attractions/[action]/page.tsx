@@ -194,7 +194,6 @@ export default function AddAttraction() {
   const handleFilesChange = (files: File[]) => {
     setImages((prevImages) => {
       const uniqueFiles = files.filter((file) => !prevImages.includes(file)); // Filter out duplicates
-      console.log('Unique files to be added:', uniqueFiles); // Log unique files
 
       return [...prevImages, ...uniqueFiles]; // Update the state with unique files
     });
@@ -312,10 +311,8 @@ export default function AddAttraction() {
     for (const file of images) {
       if (file instanceof File) {
         // Only upload if it's a new file
-        console.log('Uploading file:', file.name);
         const response = await fileUpload(file);
         uploadedImageIds.push(response?.file?.id);
-        console.log('File uploaded successfully:', file?.name);
       }
     }
 
