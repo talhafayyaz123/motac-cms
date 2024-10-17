@@ -27,6 +27,8 @@ const Sidebar = () => {
   const router = useRouter();
   const pathname = usePathname();
 
+  console.log(pathname);
+
   const handleDropdownToggle = (label: string, items: DropdownItem[]) => {
     setOpenDropdown(openDropdown === label ? null : label);
     if (items?.length) {
@@ -121,7 +123,8 @@ const Sidebar = () => {
                         className={`group flex font-light items-center p-2 rounded-md ${
                           subItem.disabled
                             ? 'text-gray-300 cursor-not-allowed'
-                            : pathname === subItem.path
+                            : pathname === subItem.path ||
+                                pathname.includes(subItem.path)
                               ? 'text-blue-100'
                               : ` text-black-100 ${!subItem.path ? 'cursor-default' : 'cursor-pointer hover:text-blue-100'}`
                         }`}
@@ -149,7 +152,8 @@ const Sidebar = () => {
                           className={`mr-4 ${
                             subItem.disabled
                               ? 'text-gray-300'
-                              : pathname === subItem.path
+                              : pathname === subItem.path ||
+                                  pathname.includes(subItem.path)
                                 ? 'text-blue-100'
                                 : `${subItem.path ? 'group-hover:fill-blue-100' : 'text-black-100'}`
                           }`}
@@ -158,7 +162,8 @@ const Sidebar = () => {
                             color={
                               subItem.disabled
                                 ? 'gray'
-                                : pathname === subItem.path
+                                : pathname === subItem.path ||
+                                    pathname.includes(subItem.path)
                                   ? '#364EA2'
                                   : `${subItem.path ? 'group-hover:fill-blue-100' : 'text-black-100'}`
                             }

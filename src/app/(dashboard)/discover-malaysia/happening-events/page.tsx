@@ -270,7 +270,7 @@ export default function HappeningEvents() {
                     // If successful, you can reload the page or refetch data
                     await AlertService.alert(
                       'Successful!',
-                      'Destination deleted Successfully',
+                      'Event deleted successfully!',
                       'success',
                       'Done',
                     );

@@ -273,7 +273,7 @@ export default function TopExperience() {
                     console.log('Destination deleted successfully:');
                     await AlertService.alert(
                       'Successful!',
-                      'Destination deleted Successfully',
+                      'Experience deleted successfully!',
                       'success',
                       'Done',
                     );
