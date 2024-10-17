@@ -272,7 +272,7 @@ export default function MustSeeAttractions() {
                     console.log('Destination deleted successfully:');
                     await AlertService.alert(
                       'Successful!',
-                      'Destination deleted Successfully',
+                      'Attraction deleted successfully!',
                       'success',
                       'Done',
                     );
