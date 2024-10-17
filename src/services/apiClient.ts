@@ -6,12 +6,12 @@ async function getAccessToken(): Promise<string | null> {
   const session = await getSession();
   return session ? (session as any).accessToken : null;
 }
-const authEndpoints = [
-  '/auth/login',
-  '/otps/request',
-  '/auth/forgot/password',
-  '/otps/verify',
-];
+// const authEndpoints = [
+//   '/auth/login',
+//   '/otps/request',
+//   '/auth/forgot/password',
+//   '/otps/verify',
+// ];
 
 async function refreshAccessToken(): Promise<boolean> {
   try {
