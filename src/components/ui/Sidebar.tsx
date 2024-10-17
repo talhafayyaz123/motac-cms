@@ -4,7 +4,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 //import { signOut } from 'next-auth/react';
-import { signOut } from 'next-auth/react';
+import { signOut, useSession } from 'next-auth/react';
 import React, { useState } from 'react';
 
 import { menuItems } from '@/assets';
@@ -18,6 +18,9 @@ interface DropdownItem {
 }
 
 const Sidebar = () => {
+  const session = useSession();
+  console.log(session.data);
+
   const { setCurrentMember } = useMember();
 
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
@@ -26,8 +29,6 @@ const Sidebar = () => {
   );
   const router = useRouter();
   const pathname = usePathname();
-
-  console.log(pathname);
 
   const handleDropdownToggle = (label: string, items: DropdownItem[]) => {
     setOpenDropdown(openDropdown === label ? null : label);
