@@ -6,6 +6,41 @@
 import NextAuth from 'next-auth/next';
 import CredentialsProvider from 'next-auth/providers/credentials';
 
+// Token refresh logic
+async function refreshAccessToken(token: any) {
+  try {
+    const res = await fetch(
+      'https://cms.api.motac-dev.com/api/v1/auth/refresh',
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token.refreshToken}`, // Use the refresh token
+        },
+      },
+    );
+
+    if (!res.ok) {
+      throw new Error('Failed to refresh access token');
+    }
+
+    const refreshedTokens = await res.json();
+
+    return {
+      ...token,
+      accessToken: refreshedTokens.token,
+      refreshToken: refreshedTokens.refresh_token,
+      tokenExpires: refreshedTokens.token_expires,
+    };
+  } catch (error) {
+    console.error('Error refreshing access token:', error);
+    return {
+      ...token,
+      error: 'RefreshAccessTokenError',
+    };
+  }
+}
+
 // NextAuth configuration options
 const authOptions: any = {
   providers: [
@@ -67,6 +102,13 @@ const authOptions: any = {
         token.refreshToken = user.refresh_token;
         token.tokenExpires = user.token_expires;
         token.user = user.user;
+      }
+
+      const expirationTime = new Date(token.tokenExpires).getTime();
+      const remainingTime = (expirationTime - Date.now()) / 1000; // In seconds
+
+      if (remainingTime <= 20) {
+        return refreshAccessToken(token);
       }
       return token;
     },
