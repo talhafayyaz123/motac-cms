@@ -66,12 +66,20 @@ export default function Dashboard() {
 
   const currentDate = new Date();
   const currentYear = currentDate.getFullYear();
-  const endDate = formatDateToYYYYMMDD(currentDate);
+
+  const previousDay = subtractDays(currentDate, 1);
+  const endDate = formatDateToYYYYMMDD(previousDay);
+
+  //  const endDate = formatDateToYYYYMMDD(currentDate);
   const startDate = formatDateToYYYYMMDD(currentDate);
 
   const calculateRange = (selectedValue: string) => {
     let calculatedStartDate: string;
-    const calculatedEndDate: string = formatDateToYYYYMMDD(currentDate); // Default end date
+    let calculatedEndDate: string = formatDateToYYYYMMDD(previousDay); // Default end date
+
+    if (['thisWeek', 'thisMonth', 'thisYear'].includes(selectedValue)) {
+      calculatedEndDate = formatDateToYYYYMMDD(currentDate);
+    }
 
     switch (selectedValue) {
       case '30':
@@ -95,8 +103,17 @@ export default function Dashboard() {
         );
         break;
       case 'thisWeek':
-        const startOfWeek = new Date(currentDate); // Copy the current date
+        /* const startOfWeek = new Date(previousDay); // Copy the current date
         startOfWeek.setDate(currentDate.getDate() - currentDate.getDay()); // Set to the start of the week (Sunday)
+        calculatedStartDate = formatDateToYYYYMMDD(startOfWeek); */
+
+        const startOfWeek = new Date(currentDate);
+
+        // Get the current day of the week (0 = Sunday, 1 = Monday, ..., 6 = Saturday)
+        const dayOfWeek = currentDate.getDay();
+        startOfWeek.setDate(
+          currentDate.getDate() - (dayOfWeek === 0 ? 6 : dayOfWeek - 1),
+        );
         calculatedStartDate = formatDateToYYYYMMDD(startOfWeek);
         break;
       case 'thisMonth':
@@ -151,9 +168,12 @@ export default function Dashboard() {
   ) => {
     const selectedValue = event.target.value; // Get the selected value
     let newStartDate: string = formatDateToYYYYMMDD(currentDate); // Default to current date
-    let newEndDate: string = formatDateToYYYYMMDD(currentDate); // Default end date
+    let newEndDate: string = formatDateToYYYYMMDD(previousDay); // Default end date
 
-    // Determine the start and end dates based on the selected value
+    if (['thisWeek', 'thisMonth', 'thisYear'].includes(selectedValue)) {
+      newEndDate = formatDateToYYYYMMDD(currentDate);
+    }
+
     switch (selectedValue) {
       case '7':
         newStartDate = formatDateToYYYYMMDD(subtractDays(currentDate, 7));
@@ -173,11 +193,19 @@ export default function Dashboard() {
         );
         break;
       case 'thisWeek':
-        newStartDate = formatDateToYYYYMMDD(
+        /*  newStartDate = formatDateToYYYYMMDD(
           new Date(
             new Date().setDate(new Date().getDate() - new Date().getDay()),
-          ), // Start of the week
+          ),
+        ); */
+        const startOfWeek = new Date(currentDate);
+
+        // Get the current day of the week (0 = Sunday, 1 = Monday, ..., 6 = Saturday)
+        const dayOfWeek = currentDate.getDay();
+        startOfWeek.setDate(
+          currentDate.getDate() - (dayOfWeek === 0 ? 6 : dayOfWeek - 1),
         );
+        newStartDate = formatDateToYYYYMMDD(startOfWeek);
         break;
       case 'thisMonth':
         newStartDate = formatDateToYYYYMMDD(
@@ -292,6 +320,7 @@ export default function Dashboard() {
     const adjustedStartDate = isFirstRender.current
       ? adjustStartDateForFirstRender(startDate)
       : startDate;
+
     // Call the loading functions with the adjusted date
     void loadData(adjustedStartDate);
     void loadTopExperienceData(adjustedStartDate);

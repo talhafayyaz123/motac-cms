@@ -69,12 +69,12 @@ export default function AddEvent() {
       ageLimit: '',
       mapLink: '',
       address: '',
-      category: happeningEventsDestinationId,
-      area: { id: null, name: '' },
+      category: undefined,
+      area: undefined,
       cityId: undefined,
       description: '',
       tags: [],
-      priority: 0,
+      priority: undefined,
       happeningStartDate: new Date(),
       happeningEndDate: new Date(),
       images,
@@ -185,6 +185,13 @@ export default function AddEvent() {
   useEffect(() => {
     void fetchInitialData();
   }, []);
+
+  useEffect(() => {
+    if (images.length) {
+      setIsFormError(false);
+    }
+  }, [images]);
+
   const removeImage = (index: number) => {
     const newImages = [...images];
     newImages.splice(index, 1);
@@ -729,7 +736,14 @@ export default function AddEvent() {
             <DropZone setImages={setImages} onChange={handleFilesChange} />
           </FormContainer>
           <div className="w-full flex justify-end gap-3 p-10">
-            <Button variant="customBlue" type="submit" title="Submit">
+            <Button
+              variant="customBlue"
+              type="submit"
+              title="Submit"
+              onClick={() => {
+                !images.length && setIsFormError(true);
+              }}
+            >
               {isFormBtnLoading ? (
                 <FormLoader /> // Small loader icon inside the button
               ) : action === 'add-happening-event' ? (

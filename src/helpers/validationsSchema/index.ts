@@ -57,11 +57,10 @@ export const validationSchemaForAttractions = Yup.object().shape({
   address: Yup.string().required('Address is required'),
   category: Yup.number().required('Category is required'),
   area: Yup.object()
-    .shape({
-      id: Yup.string().nullable(), // Allow null ID for custom options
-      name: Yup.string().required('Area name is required'), // Name must be provided
-    })
-    .nullable()
+    // .shape({
+    //   id: Yup.string().nullable(), // Allow null ID for custom options
+    //   name: Yup.string().required('Area name is required'), // Name must be provided
+    // })
     .required('Area is required'),
   cityId: Yup.number().required('City is required'),
   description: Yup.string().required('Description is required'),
@@ -126,11 +125,10 @@ export const validationSchemaForExperiences = Yup.object().shape({
   address: Yup.string().required('Address is required'),
   category: Yup.number().required('Category is required'),
   area: Yup.object()
-    .shape({
-      id: Yup.string().nullable(), // Allow null ID for custom options
-      name: Yup.string().required('Area name is required'), // Name must be provided
-    })
-    .nullable()
+    // .shape({
+    //   id: Yup.string().nullable(), // Allow null ID for custom options
+    //   name: Yup.string().required('Area name is required'), // Name must be provided
+    // })
     .required('Area is required'),
   cityId: Yup.number().required('City is required'),
   description: Yup.string().required('Description is required'),
@@ -198,11 +196,11 @@ export const validationSchemaForHappeningEvents = Yup.object().shape({
   address: Yup.string().required('Address is required'),
   category: Yup.number().required('Category is required'),
   area: Yup.object()
-    .shape({
-      id: Yup.string().nullable(), // Allow null ID for custom options
-      name: Yup.string().required('Area name is required'), // Name must be provided
-    })
-    .nullable()
+    // .shape({
+    //   id: Yup.string().nullable(), // Allow null ID for custom options
+    //   name: Yup.string().required('Area name is required'), // Name must be provided
+    // })
+    // .nullable()
     .required('Area is required'),
   cityId: Yup.number().required('City is required'),
   description: Yup.string().required('Description is required'),

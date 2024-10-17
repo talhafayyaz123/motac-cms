@@ -305,14 +305,14 @@ function AccountSettings() {
                 const value = e.target.value.replace(/\D/g, '');
                 field.onChange(value);
               }}
-              icon={
-                <Image
-                  alt="flag"
-                  height={25}
-                  width={25}
-                  src="/malaysia_flag.png"
-                />
-              }
+              // icon={
+              //   <Image
+              //     alt="flag"
+              //     height={25}
+              //     width={25}
+              //     src="/malaysia_flag.png"
+              //   />
+              // }
               error={errors.phoneNumber?.message}
             />
           )}
