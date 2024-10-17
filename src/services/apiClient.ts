@@ -6,12 +6,30 @@ async function getAccessToken(): Promise<string | null> {
   const session = await getSession();
   return session ? (session as any).accessToken : null;
 }
-const authEndpoints = [
-  '/auth/login',
-  '/otps/request',
-  '/auth/forgot/password',
-  '/otps/verify',
-];
+// const authEndpoints = [
+//   '/auth/login',
+//   '/otps/request',
+//   '/auth/forgot/password',
+//   '/otps/verify',
+// ];
+
+async function refreshAccessToken(): Promise<boolean> {
+  try {
+    const response = await fetch(`${backendApiUrl}/auth/refresh`, {
+      method: 'POST',
+      credentials: 'include',
+    });
+
+    if (response.ok) {
+      return true;
+    } else {
+      return false;
+    }
+  } catch (error) {
+    console.error('Refresh Token Error:', error);
+    return false;
+  }
+}
 
 interface FetchOptions extends RequestInit {
   headers?: Record<string, string>;
@@ -41,17 +59,29 @@ export const apiClient = async (
       },
     };
 
-    const response = await fetch(`${backendApiUrl}${endpoint}`, config);
+    let response = await fetch(`${backendApiUrl}${endpoint}`, config);
 
     if (!response.ok) {
-      if (response.status === 401 && !authEndpoints.includes(endpoint)) {
-        await signOut();
+      if (response.status === 401) {
+        const tokenRefreshed = await refreshAccessToken();
+        if (tokenRefreshed) {
+          const newAccessToken = await getAccessToken();
+          config.headers = {
+            ...config.headers,
+            Authorization: `Bearer ${newAccessToken}`,
+          };
+          response = await fetch(`${backendApiUrl}${endpoint}`, config);
+        } else {
+          await signOut();
+        }
       }
-      const data = await response.json();
-      const errorMessages = data.errors
-        ? Object.values(data.errors).flat().join(', ')
-        : data.message || 'Invalid Input';
-      throw new Error(errorMessages);
+      if (!response.ok) {
+        const data = await response.json();
+        const errorMessages = data.errors
+          ? Object.values(data.errors).flat().join(', ')
+          : data.message || 'Invalid Input';
+        throw new Error(errorMessages);
+      }
     }
 
     if (response.status === 204 || response.statusText === 'No Content') {
