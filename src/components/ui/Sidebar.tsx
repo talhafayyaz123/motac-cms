@@ -60,7 +60,7 @@ const Sidebar = () => {
           {menuItems?.map((item) => (
             <li key={item.label}>
               <div
-                className={`group flex items-center p-2 mb-2 rounded-lg font-medium ${
+                className={`group flex items-center p-2 mb-2 rounded-lg font-light ${
                   item.disabled
                     ? 'text-gray-300 cursor-not-allowed'
                     : (item.path !== '/' && pathname.includes(item.path)) ||
@@ -118,12 +118,12 @@ const Sidebar = () => {
                   {item.subItems.map((subItem) => (
                     <li key={subItem.label} className="relative">
                       <div
-                        className={`group flex font-medium items-center p-2 rounded-md ${
+                        className={`group flex font-light items-center p-2 rounded-md ${
                           subItem.disabled
                             ? 'text-gray-300 cursor-not-allowed'
                             : pathname === subItem.path
                               ? 'text-blue-100'
-                              : `hover:text-blue-100 text-black-100 ${!subItem.path ? 'cursor-default' : 'cursor-pointer'}`
+                              : ` text-black-100 ${!subItem.path ? 'cursor-default' : 'cursor-pointer hover:text-blue-100'}`
                         }`}
                         role="button"
                         tabIndex={0}
@@ -151,7 +151,7 @@ const Sidebar = () => {
                               ? 'text-gray-300'
                               : pathname === subItem.path
                                 ? 'text-blue-100'
-                                : 'group-hover:fill-blue-100'
+                                : `${subItem.path ? 'group-hover:fill-blue-100' : 'text-black-100'}`
                           }`}
                         >
                           <subItem.icon
@@ -160,12 +160,12 @@ const Sidebar = () => {
                                 ? 'gray'
                                 : pathname === subItem.path
                                   ? '#364EA2'
-                                  : 'text-black-100 group-hover:fill-blue-100'
+                                  : `${subItem.path ? 'group-hover:fill-blue-100' : 'text-black-100'}`
                             }
                           />
                         </span>
                         <span
-                          className={`text-xs text-nowrap ${subItem.disabled ? 'text-gray-300' : ''}`}
+                          className={`absolute left-9 text-xs text-nowrap ${subItem.disabled ? 'text-gray-300' : ''}`}
                         >
                           {subItem.label}
                         </span>

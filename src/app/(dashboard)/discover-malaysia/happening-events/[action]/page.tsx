@@ -17,6 +17,7 @@ import Select from '@/components/ui/Select';
 import TextEditor from '@/components/ui/TextEditor';
 import Title from '@/components/ui/Title';
 import {
+  ageLimitation,
   happeningEventsDestinationId,
   timeOptions,
   workingDaysOptions,
@@ -65,21 +66,22 @@ export default function AddEvent() {
       title: '',
       openingHours: '',
       closingHours: '',
-      ageLimit: 1,
+      ageLimit: '',
       mapLink: '',
       address: '',
-      category: 1,
-      area: { id: null, name: '' },
-      cityId: 1,
+      category: undefined,
+      area: undefined,
+      cityId: undefined,
       description: '',
       tags: [],
-      priority: 1,
+      priority: undefined,
       happeningStartDate: new Date(),
       happeningEndDate: new Date(),
       images,
       bannerImageId: null,
       bannerImage: '',
       workingDays: '',
+      eventLink: '',
     },
   });
 
@@ -114,30 +116,17 @@ export default function AddEvent() {
     }
   };
 
-  // Use useEffect to watch for city changes and refetch areas
-  useEffect(() => {
-    const fetchAreasData = async (cityId: number) => {
-      try {
-        if (cityId) {
-          const areasData = await fetchAreas(cityId);
-          setAreas(areasData?.map(({ id, name }) => ({ id, name })));
-        }
-      } catch (error) {
-        console.error('Error loading areas:', error);
+  const fetchAreasData = async (cityId: number) => {
+    try {
+      if (cityId) {
+        const areasData = await fetchAreas(cityId);
+        setAreas(areasData?.map(({ id, name }) => ({ id, name })));
+        setValue('area', null as any); // Reset area
       }
-    };
-
-    // Watch for changes to cityId
-    const cityId = watch('cityId');
-
-    // Reset area value and fetch areas if cityId changes
-    if (cityId) {
-      // Reset area to null whenever city changes
-      setValue('area', null as any);
-      void fetchAreasData(cityId);
+    } catch (error) {
+      console.error('Error loading areas:', error);
     }
-    // eslint-disable-next-line
-  }, [watch('cityId')]);
+  };
 
   const fetchHappeningEvent = async (happeningEventId: string) => {
     try {
@@ -145,8 +134,6 @@ export default function AddEvent() {
       const data = await fetchDestinationsById(happeningEventId);
       const destinationCategoryId = data.destinationCategory?.id;
       const priorityId = data.priority?.id;
-      const areaName = data.area?.name;
-      const areaId = data.area?.id;
 
       setValue('title', data.title);
       setValue('openingHours', data.openingHours);
@@ -155,8 +142,10 @@ export default function AddEvent() {
       setValue('mapLink', data.mapLink);
       setValue('address', data.address);
       setValue('category', destinationCategoryId);
-      setValue('area', { id: areaId, name: areaName });
       setValue('cityId', data?.area?.city?.id);
+      const areaName = data.area?.name;
+      const areaId = data.areaId;
+      setValue('area', { id: areaId, name: areaName });
       setValue('workingDays', data.workingDays);
       setValue('description', data.description);
       setValue(
@@ -168,6 +157,7 @@ export default function AddEvent() {
       setValue('priority', priorityId);
       setValue('bannerImageId', data?.bannerImageId);
       setValue('bannerImage', data?.bannerImage?.path);
+      setValue('eventLink', data?.eventLink);
       // Set existing images and their IDs
       const existingImages = data.images.map(
         (image: { id: number; path: string }) => image.path,
@@ -195,6 +185,13 @@ export default function AddEvent() {
   useEffect(() => {
     void fetchInitialData();
   }, []);
+
+  useEffect(() => {
+    if (images.length) {
+      setIsFormError(false);
+    }
+  }, [images]);
+
   const removeImage = (index: number) => {
     const newImages = [...images];
     newImages.splice(index, 1);
@@ -276,9 +273,11 @@ export default function AddEvent() {
           if (response?.status) {
             await AlertService.alert(
               'Successful!',
-              'Update Happening Event Success',
+              <span>
+                Event <strong>Updated</strong> Successfully
+              </span>,
               'success',
-              'Ok',
+              'Done',
             );
             router.push('/discover-malaysia/happening-events');
           } else {
@@ -295,9 +294,11 @@ export default function AddEvent() {
           if (response?.status) {
             await AlertService.alert(
               'Successful!',
-              'Add Happening Event Success',
+              <span>
+                Event <strong>Added</strong> Successfully
+              </span>,
               'success',
-              'Ok',
+              'Done',
             );
             router.push('/discover-malaysia/happening-events');
           } else {
@@ -322,10 +323,8 @@ export default function AddEvent() {
     for (const file of images) {
       if (file instanceof File) {
         // Only upload if it's a new file
-        console.log('Uploading file:', file.name);
         const response = await fileUpload(file);
         uploadedImageIds.push(response?.file?.id);
-        console.log('File uploaded successfully:', file.name);
       }
     }
 
@@ -369,12 +368,13 @@ export default function AddEvent() {
                 <Input
                   label="Title"
                   placeholder="Explore the Petronas Twin Towers"
-                  className="text-xs mb-3"
+                  className="text-sm mb-3"
                   {...field}
                   error={errors.title?.message}
                 />
               )}
             />
+            <p className="mb-2 text-md text-[#181819] font-normal">About</p>
             <TextEditor
               control={control}
               name="description"
@@ -413,6 +413,21 @@ export default function AddEvent() {
 
               <Controller
                 control={control}
+                name="eventLink"
+                render={({ field }) => (
+                  <Input
+                    label="Book Event Link"
+                    placeholder="www.eventlink.com"
+                    className="text-sm"
+                    minWidth="350px"
+                    {...field}
+                    error={errors.eventLink?.message}
+                  />
+                )}
+              />
+
+              <Controller
+                control={control}
                 name="workingDays"
                 render={({ field }) => (
                   <Select
@@ -434,7 +449,7 @@ export default function AddEvent() {
                     type="date"
                     label="Event Start Date"
                     placeholder="09/15/25"
-                    className="text-xs"
+                    className="text-sm"
                     minWidth="350px"
                     value={
                       field.value
@@ -456,7 +471,7 @@ export default function AddEvent() {
                     type="date"
                     label="Event End Date"
                     placeholder="09/15/25"
-                    className="text-xs"
+                    className="text-sm"
                     value={
                       field.value
                         ? field.value instanceof Date
@@ -470,20 +485,25 @@ export default function AddEvent() {
                   />
                 )}
               />
+
               <Controller
                 control={control}
                 name="ageLimit"
                 render={({ field }) => (
-                  <Input
+                  <Select
                     label="Age Limitation"
-                    placeholder="None"
-                    className="text-xs"
+                    options={ageLimitation.map((p) => ({
+                      value: p.value,
+                      label: p.label,
+                    }))}
+                    selectedValues={field.value}
+                    setSelectedValues={field.onChange}
                     minWidth="350px"
-                    {...field}
                     error={errors.ageLimit?.message}
                   />
                 )}
               />
+
               <Controller
                 control={control}
                 name="category"
@@ -537,7 +557,7 @@ export default function AddEvent() {
                 render={({ field }) => (
                   <Input
                     label="Banner Image"
-                    className="text-xs"
+                    className="text-sm"
                     minWidth="350px"
                     error={errors.bannerImage?.message}
                     defaultImagePath={
@@ -549,7 +569,7 @@ export default function AddEvent() {
                     onFileError={async () => {
                       await AlertService.alert(
                         '',
-                        'Only images with 16:9 aspect ratio are allowed',
+                        'Only images of pixels 1920x1080 is allowed',
                         'warning',
                         'OK',
                       );
@@ -571,7 +591,7 @@ export default function AddEvent() {
                   <Input
                     label="Map Link"
                     placeholder="Google Maps"
-                    className="text-xs"
+                    className="text-sm"
                     minWidth="350px"
                     {...field}
                     error={errors.mapLink?.message}
@@ -615,7 +635,10 @@ export default function AddEvent() {
                       key: p.id,
                     }))}
                     selectedValues={field.value}
-                    setSelectedValues={field.onChange}
+                    setSelectedValues={(event) => {
+                      field.onChange(event);
+                      void fetchAreasData(event as number);
+                    }}
                     minWidth="350px"
                     error={errors.cityId?.message}
                   />
@@ -662,7 +685,7 @@ export default function AddEvent() {
                   <Input
                     label="Address"
                     placeholder="Kuala Lumpur City Center (KLCC), 43 Jalan Ampan"
-                    className="text-xs"
+                    className="text-sm"
                     minWidth="350px"
                     {...field}
                     error={errors.address?.message}
@@ -714,14 +737,13 @@ export default function AddEvent() {
           </FormContainer>
           <div className="w-full flex justify-end gap-3 p-10">
             <Button
-              variant="danger"
+              variant="customBlue"
+              type="submit"
+              title="Submit"
               onClick={() => {
-                router.push('/discover-malaysia/happening-events');
+                !images.length && setIsFormError(true);
               }}
             >
-              Cancel
-            </Button>
-            <Button variant="customBlue" type="submit" title="Submit">
               {isFormBtnLoading ? (
                 <FormLoader /> // Small loader icon inside the button
               ) : action === 'add-happening-event' ? (
@@ -729,6 +751,14 @@ export default function AddEvent() {
               ) : (
                 'Update'
               )}
+            </Button>
+            <Button
+              variant="danger"
+              onClick={() => {
+                router.push('/discover-malaysia/happening-events');
+              }}
+            >
+              Cancel
             </Button>
           </div>
         </form>

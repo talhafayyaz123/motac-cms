@@ -89,7 +89,7 @@ const AuthForm: React.FC<AuthFormProps> = ({
           />
         </div>
 
-        <h2 className="text-center mb-6 text-2xl font-medium text-[#181819]">
+        <h2 className="text-center mb-6 text-2xl font-normal text-[#181819]">
           Admin Portal
         </h2>
 
@@ -101,18 +101,18 @@ const AuthForm: React.FC<AuthFormProps> = ({
             onSubmit={onSubmit}
           >
             <h2
-              className={`text-left text-2xl font-medium pt-[${paddingTop}] text-[#181819] `}
+              className={`text-left text-2xl font-normal pt-[${paddingTop}] text-[#181819] `}
             >
               {title}
             </h2>
-            <span className="text-left ext-2xl font-medium text-[#181819]">
+            <span className="text-left ext-2xl font-normal text-[#181819]">
               {description}
             </span>
             {fields.map((field, index) => (
               <div key={index} className="flex flex-col gap-3">
                 <label
                   htmlFor={field.name}
-                  className="text-sm font-medium text-[#181819]"
+                  className="text-sm font-normal text-[#181819]"
                 >
                   {field.placeholder}
                 </label>
@@ -132,7 +132,7 @@ const AuthForm: React.FC<AuthFormProps> = ({
             {forgotPasswordLink && (
               <div className="flex justify-end -mt-3">
                 <Link href={forgotPasswordLink}>
-                  <span className="text-xs font-medium text-[#181819]">
+                  <span className="text-xs font-normal text-[#181819]">
                     Forgot Password?
                   </span>
                 </Link>

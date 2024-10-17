@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 
 import Select from '@/components/ui/dataTable/Select';
 
@@ -8,9 +8,11 @@ interface CardStatsProps {
   statsData: number;
   children: React.ReactNode;
   isEventFilter?: boolean;
+  currentMonth: number;
   handleSelectChange: (
     event: React.ChangeEvent<HTMLSelectElement>,
     flag: string,
+    eventFlag?: string,
   ) => void;
 }
 
@@ -20,11 +22,40 @@ const CardStats: React.FC<CardStatsProps> = ({
   title,
   children,
   isEventFilter = false,
+  currentMonth,
   handleSelectChange,
 }) => {
+  const currentDate = new Date();
+  const currentYear = currentDate.getFullYear();
+
+  const [selectedMonth, setSelectedMonth] = useState<string>(
+    currentMonth.toString(),
+  );
+  const monthsOptions = Array.from({ length: 12 }, (v, i) => {
+    const monthName = new Date(currentYear, i, 1).toLocaleString('default', {
+      month: 'long',
+    });
+    return { value: i.toString(), label: monthName };
+  });
+
+  useEffect(() => {
+    const event = {
+      target: { value: currentMonth.toString() },
+    } as React.ChangeEvent<HTMLSelectElement>;
+    handleMonthChange(event);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentMonth]);
+
+  const handleMonthChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    setSelectedMonth(event.target.value);
+    handleSelectChange(event, 'happeningEvents', 'events');
+  };
+
   return (
     <div className="flex flex-col relative rounded-xl bg-blue-50 border border-gray-100 p-4 font-medium">
-      <p className="text-xs text-black-100 p-2 font-bold">{title}</p>
+      <p className="text-xs text-black-100 p-2 relative bottom-2 font-bold">
+        {title}
+      </p>
       {isEventFilter ? (
         <div className="flex justify-between mb-4">
           <div className="flex p-2 items-center space-x-2">
@@ -36,17 +67,12 @@ const CardStats: React.FC<CardStatsProps> = ({
 
           <div className="h-[max-content]">
             <Select
-              options={[
-                { value: '30', label: 'Last 30 days' },
-                { value: '7', label: 'This week' },
-                { value: '14', label: '14 days' },
-                { value: '90', label: 'Last 3 Months' },
-                { value: '180', label: 'Last 6 Months' },
-                { value: '365', label: 'This Year' },
-              ]}
-              highlightValue={'30'}
+              padding="bottom-8"
+              options={monthsOptions}
+              value={selectedMonth}
               minimalStyle
-              onChange={(event) => handleSelectChange(event, 'happeningEvents')}
+              iconColor={true}
+              onChange={handleMonthChange}
             />
           </div>
         </div>

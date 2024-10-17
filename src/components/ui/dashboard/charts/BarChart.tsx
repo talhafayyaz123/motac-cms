@@ -1,7 +1,7 @@
 'use client';
 import Highcharts, { SeriesColumnOptions } from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
-import React from 'react';
+import React, { memo } from 'react';
 
 interface BarChartProps {
   title?: string;
@@ -14,7 +14,7 @@ const BarChart: React.FC<BarChartProps> = ({
   categories,
   seriesData,
 }) => {
-  const colors = ['#4466D9', '#364EA2', '#778FDF'];
+  const colors = ['#4466D9', '#364EA2', '#778FDF', '#778FDF']; // Define colors (with similar tones for the surrounding bars)
 
   const options: Highcharts.Options = {
     chart: {
@@ -44,6 +44,11 @@ const BarChart: React.FC<BarChartProps> = ({
       column: {
         dataLabels: {
           enabled: true,
+          style: {
+            fontSize: '16px',
+            fontWeight: '600',
+            color: '#364EA2', // Keeping the text color consistent
+          },
         },
         colorByPoint: true,
       },
@@ -52,14 +57,8 @@ const BarChart: React.FC<BarChartProps> = ({
       ...data,
       data: (data.data || []).map((point: any, index: number): any => {
         if (typeof point === 'number') {
-          return { y: point, color: colors[index] };
+          return { y: point, color: colors[index % colors.length] }; // Cycle through the color palette
         }
-        // else if (Array.isArray(point) && typeof point[1] === 'number') {
-        //   return { y: point[1], color: getColorForBar(point[1]) };
-        // } else if (typeof point === 'object' && point !== null) {
-        //   return { ...point, color: getColorForBar((point as any).y) };
-        // }
-        // return point; // Fallback case
       }),
     })),
     responsive: {
@@ -99,4 +98,4 @@ const BarChart: React.FC<BarChartProps> = ({
   return <HighchartsReact highcharts={Highcharts} options={options} />;
 };
 
-export default BarChart;
+export default memo(BarChart);

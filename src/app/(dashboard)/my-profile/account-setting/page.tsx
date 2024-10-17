@@ -56,8 +56,6 @@ function AccountSettings() {
     useState<string>('Account Setting');
   const [imageId, setImageId] = useState('');
 
-  console.log(profilePicture);
-
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   const handleSettingChange = (
@@ -167,6 +165,7 @@ function AccountSettings() {
       photoId: imageId ? imageId : '',
     };
     try {
+      setLoading(true);
       const response: any = await UpdateTeamMember({
         data: payload,
         // @ts-expect-error
@@ -177,11 +176,15 @@ function AccountSettings() {
         await AlertService.alert('Error!', response.error, 'error', 'OK');
       } else if (response?.id) {
         void loadData();
+        setLoading(false);
         await AlertService.alert(
           'Successful!',
           'Member Updated Successfully',
           'success',
           'Done',
+          () => {
+            window.location.reload();
+          },
         );
       }
     } catch (error: any) {
@@ -192,6 +195,8 @@ function AccountSettings() {
         'error',
         'OK',
       );
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -292,18 +297,22 @@ function AccountSettings() {
           render={({ field }) => (
             <Input
               label="Phone Number"
-              placeholder="+66 123 456 789"
+              placeholder="66 123 456 789"
               className="text-xs"
               minWidth="350px"
-              {...field}
-              icon={
-                <Image
-                  alt="flag"
-                  height={25}
-                  width={25}
-                  src="/malaysia_flag.png"
-                />
-              }
+              value={`+${field.value || ''}`}
+              onChange={(e) => {
+                const value = e.target.value.replace(/\D/g, '');
+                field.onChange(value);
+              }}
+              // icon={
+              //   <Image
+              //     alt="flag"
+              //     height={25}
+              //     width={25}
+              //     src="/malaysia_flag.png"
+              //   />
+              // }
               error={errors.phoneNumber?.message}
             />
           )}

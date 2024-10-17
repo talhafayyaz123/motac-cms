@@ -34,7 +34,8 @@ export const fetchDestinations = async (
 
     // Only add search parameter if searchValue is not an empty string
     if (searchValue) {
-      queryParams.append('search', searchValue);
+      const searchEncoded = encodeURIComponent(searchValue);
+      queryParams.append('search', searchEncoded);
     }
 
     const result = await apiClient(
@@ -51,7 +52,7 @@ export const fetchDestinations = async (
         'ID ': item.displayId,
         'Name ': item.title || '',
         'Category ': item.destinationCategoryName || '',
-        'States ': item.cityName,
+        'State ': item.cityName,
         Tags: item.tags
           ? item.tags.map((tag: any) => ({
               id: tag.id,
@@ -147,6 +148,19 @@ export async function handleAuthRequest(
         }
 
       case 'requestOtp':
+        response = await apiClient('/otps/request', {
+          method: 'POST',
+          body: JSON.stringify({
+            email: data.email,
+            userAgent: data.userAgent,
+          }),
+        });
+
+        if (response) {
+          return { success: true };
+        } else {
+          return { success: false, error: 'Failed to request OTP.' };
+        }
 
       case 'resetPassword':
         response = await apiClient('/auth/forgot/password', {
@@ -213,29 +227,10 @@ export const requestOtp = async (data: AuthRequestData) => {
       }),
     });
 
-    // Check if the response is text/html or JSON
-    const contentType = response.headers.get('content-type');
-    let responseData;
-
-    if (contentType && contentType.includes('application/json')) {
-      responseData = await response.json();
-    } else if (contentType && contentType.includes('text/html')) {
-      responseData = await response.text();
-    } else {
-      throw new Error('Unsupported content type');
-    }
-
-    console.log('API response:', responseData);
-
-    // Treat the response as successful if the status is 201 (Created)
-    if (response.ok && response.status === 201) {
-      return { success: true, response: responseData };
-    } else {
-      return { success: false, error: 'Failed to request OTP.' };
-    }
+    return response;
   } catch (error) {
     console.error('Error requesting OTP:', error);
-    return { success: false, error: 'Network error or failed to request OTP.' };
+    throw error;
   }
 };
 
@@ -247,8 +242,9 @@ export const fetchTeam = async (
   search = '',
 ): Promise<any> => {
   try {
+    const searchEncoded = encodeURIComponent(search);
     const result = await apiClient(
-      `/cms/users?page=${pageNumber}&limit=${itemsPerPage}&search=${search}`,
+      `/cms/users?page=${pageNumber}&limit=${itemsPerPage}&search=${searchEncoded}`,
       {
         method: 'GET',
       },
@@ -361,10 +357,9 @@ export const AddTeamMember = async (
 
 export const DeleteTeamMember = async (id: number) => {
   try {
-    const response = await apiClient(`/cms/users/${id}`, {
+    await apiClient(`/cms/users/${id}`, {
       method: 'DELETE',
     });
-    console.log(response);
   } catch (err) {
     const typedError = err as Error;
     return { error: typedError.message };
@@ -392,8 +387,9 @@ export const FetchUsers = async (
   search = '',
 ): Promise<{ data: any[]; total: number }> => {
   try {
+    const searchEncoded = encodeURIComponent(search);
     const result = await apiClient(
-      `/app/users?page=${pageNumber}&limit=${itemsPerPage}&search=${search}`,
+      `/app/users?page=${pageNumber}&limit=${itemsPerPage}&search=${searchEncoded}`,
       {
         method: 'GET',
       },
@@ -424,8 +420,9 @@ export const FetchDeletedUsers = async (
   search = '',
 ): Promise<{ data: any[]; total: number }> => {
   try {
+    const searchEncoded = encodeURIComponent(search);
     const result = await apiClient(
-      `/app/users?page=${pageNumber}&limit=${itemsPerPage}&search=${search}&isDeleted=true`,
+      `/app/users?page=${pageNumber}&limit=${itemsPerPage}&search=${searchEncoded}&isDeleted=true`,
       {
         method: 'GET',
       },
@@ -452,6 +449,18 @@ export const DeleteActiveMember = async (id: number) => {
   try {
     const response = await apiClient(`/app/users/${id}`, {
       method: 'DELETE',
+    });
+    return response;
+  } catch (err) {
+    const typedError = err as Error;
+    return { error: typedError.message };
+  }
+};
+
+export const FetchActiveMember = async (id: number) => {
+  try {
+    const response = await apiClient(`/app/users/${id}`, {
+      method: 'GET',
     });
     return response;
   } catch (err) {
@@ -633,6 +642,10 @@ export const createDestination = async (data: any) => {
       body.happeningEndDate = data.happeningEndDate;
     }
 
+    if (data?.eventLink) {
+      body.eventLink = data.eventLink;
+    }
+
     const result = await apiClient(`/destinations`, {
       method: 'POST',
       body: JSON.stringify(body),
@@ -686,6 +699,10 @@ export const updateDestination = async (displayId: string, data: any) => {
 
     if (data?.happeningEndDate) {
       body.happeningEndDate = data.happeningEndDate;
+    }
+
+    if (data?.eventLink) {
+      body.eventLink = data.eventLink;
     }
 
     const result = await apiClient(`/destinations/${displayId}`, {

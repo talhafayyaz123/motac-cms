@@ -31,7 +31,7 @@ export default function HappeningEvents() {
     'ID ',
     'Name ',
     'Category ',
-    'States ',
+    'State ',
     'Event Start Date',
     'Event End Date',
     'Tags',
@@ -169,23 +169,19 @@ export default function HappeningEvents() {
       (item: { id: number }) => item.id,
     );
     await updateDestinationTags(rowId, newTagAfterAddition);
+    setIsDropdownOpen(false);
   };
 
   const renderTagOptions = (rowIndex: number, rowId: string) => {
     const rowTags = data[rowIndex]?.Tags || [];
     const missingTags = availableTags?.filter((tag) =>
-      rowTags.every((rowTag: any) => rowTag.name !== tag),
+      rowTags.every((rowTag: any) => rowTag.name !== tag.name),
     );
 
     return (
       missingTags &&
       missingTags?.length > 0 && (
-        <div
-          ref={dropdownRef}
-          className={`absolute overflow-y-auto h-20 left-0 z-10 mt-1 bg-white border border-gray-300 rounded-lg shadow-lg p-2 custom-scroll ${
-            isDropdownOpen ? 'block' : 'hidden'
-          }`}
-        >
+        <div>
           {missingTags.map((tag) => (
             <div
               key={tag?.id}
@@ -272,7 +268,6 @@ export default function HappeningEvents() {
                     await deleteDestination(item['ID ']);
 
                     // If successful, you can reload the page or refetch data
-                    console.log('Destination deleted successfully:');
                     await AlertService.alert(
                       'Successful!',
                       'Destination deleted Successfully',
@@ -328,41 +323,62 @@ export default function HappeningEvents() {
       case 'Tags':
         return (
           <div
-            className={`${item[column]?.length === 0 && 'p-2'} flex gap-1 relative`}
+            className="relative w-full h-full flex items-center"
             onClick={() => {
               setActiveRowIndex(rowIndex === activeRowIndex ? null : rowIndex);
-              setIsDropdownOpen(rowIndex !== activeRowIndex); // toggle dropdown open state
+              setIsDropdownOpen(rowIndex !== activeRowIndex); // Toggle dropdown open state
             }}
             role="button"
             tabIndex={0}
             onKeyDown={(e) => {
               if (e.key === 'Enter' || e.key === ' ') {
+                // Handle enter or space key if necessary
               }
             }}
           >
-            {item[column].map((tag: any, index: number) => {
-              return (
-                <span
-                  key={index}
-                  className="px-3 py-1 rounded-full text-xs font-medium"
-                  style={{ backgroundColor: tag.color }}
-                >
-                  {tag.name}
-                  <button
-                    onClick={(event) =>
-                      handleTagRemove(event, rowIndex, index, item['ID '])
-                    }
-                    className="ml-2 text-gray-500 hover:text-gray-700"
+            {/* Tags container */}
+            <div
+              className={`${item[column]?.length === 0 && 'p-2'} flex gap-1 relative whitespace-nowrap overflow-x-auto pb-3 max-w-[350px] pt-2.5`}
+            >
+              {item[column].map((tag: any, index: number) => {
+                return (
+                  <span
+                    key={index}
+                    className="px-3 py-1 rounded-full text-xs font-medium"
+                    style={{ backgroundColor: tag.color }}
                   >
-                    &times;
-                  </button>
-                </span>
-              );
-            })}
-            {activeRowIndex === rowIndex &&
-              renderTagOptions(rowIndex, item['ID '])}
+                    {tag.name}
+                    <button
+                      onClick={(event) =>
+                        handleTagRemove(event, rowIndex, index, item['ID '])
+                      }
+                      className="ml-2 text-gray-500 hover:text-gray-700"
+                    >
+                      &times;
+                    </button>
+                  </span>
+                );
+              })}
+            </div>
+
+            {/* Dropdown container */}
+            {activeRowIndex === rowIndex && (
+              <div
+                ref={dropdownRef}
+                className={`absolute overflow-y-auto h-28 top-10 left-0 text-left z-10 bg-white border border-gray-300 rounded-lg shadow-lg p-2  ${
+                  isDropdownOpen ? 'block' : 'hidden'
+                }`}
+                style={{
+                  minWidth: '200px',
+                  maxWidth: '350px',
+                }}
+              >
+                {renderTagOptions(rowIndex, item['ID '])}
+              </div>
+            )}
           </div>
         );
+
       default:
         return <span>{item[column]}</span>;
     }

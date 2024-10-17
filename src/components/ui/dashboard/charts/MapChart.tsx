@@ -3,9 +3,8 @@ import worldMapData from '@highcharts/map-collection/custom/world.geo.json';
 import Highcharts from 'highcharts';
 import HighchartsMap from 'highcharts/modules/map';
 import HighchartsReact from 'highcharts-react-official';
-import React from 'react';
+import React, { memo } from 'react';
 
-// Initialize the map module
 if (typeof Highcharts === 'object') {
   HighchartsMap(Highcharts);
 }
@@ -29,7 +28,7 @@ const MapChart: React.FC<MapChartProps> = ({
   const options: Highcharts.Options = {
     chart: {
       map: {
-        backgroundColor: 'transparent',
+        backgroundColor: '#BEC9ED', // Set background color for the map
         type: 'FeatureCollection',
         features: filteredMapData, // Use only filtered countries
       },
@@ -40,11 +39,8 @@ const MapChart: React.FC<MapChartProps> = ({
       text: title,
     },
     mapNavigation: {
-      enabled: false,
-      enableDoubleClickZoom: false,
-    },
-    colorAxis: {
-      min: 0,
+      enabled: false, // Disable map navigation (zoom, pan)
+      enableDoubleClickZoom: false, // Disable double-click zoom
     },
     series: [
       {
@@ -54,15 +50,20 @@ const MapChart: React.FC<MapChartProps> = ({
         joinBy: ['iso-a2', 'code'], // Matches country code with data (iso-a2 is the standard code)
         states: {
           hover: {
-            color: '#BADA55',
+            enabled: false, // Disable hover effects
           },
         },
         dataLabels: {
           enabled: false,
           format: '{point.name}',
         },
+        allowPointSelect: false, // Disable point selection
+        color: '#BEC9ED', // Set all countries to the desired color
       },
     ],
+    tooltip: {
+      enabled: false, // Disable tooltips
+    },
     responsive: {
       rules: [
         {
@@ -97,4 +98,4 @@ const MapChart: React.FC<MapChartProps> = ({
   );
 };
 
-export default MapChart;
+export default memo(MapChart);

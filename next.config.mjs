@@ -16,7 +16,9 @@ const nextConfig = {
         hostname: 'motac-assets.s3.ap-south-1.amazonaws.com',
       },
     ],
+    domains: ['assets.motac-dev.com'],
   },
+  reactStrictMode: false,
 };
 
 export default nextConfig;

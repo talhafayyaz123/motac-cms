@@ -1,4 +1,6 @@
 'use client';
+//import { subscribe } from 'diagnostics_channel';
+
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
 
@@ -7,7 +9,6 @@ import usersIcon from '@/assets/users-icon.svg';
 import ComingSoonFeature from '@/components/ui/ComingSoonFeature';
 import AttractionList from '@/components/ui/dashboard/AttractionList';
 import Select from '@/components/ui/dataTable/Select';
-import { chartCategories, chartData } from '@/constants';
 import { formatDateToYYYYMMDD, subtractDays } from '@/helpers/utils/utils';
 import { FetchDashboardUsersAndDestinationData } from '@/services/apiService';
 
@@ -22,6 +23,7 @@ interface UserStats {
   totalUserCount: number;
   newSignedUpUserCount: number;
   previousActiveUserCount: number;
+  activeUserGraphData: Record<string, number>;
   activeUserCount: number;
   inactiveUserCount: number;
   percentageChange: number;
@@ -29,25 +31,40 @@ interface UserStats {
   newAttractions: NewAttractions;
 }
 
-const StatsSection: React.FC = () => {
+interface calculateRange {
+  calculateRange: (selectedValue: string) => {
+    calculatedStartDate: string;
+    calculatedEndDate: string;
+  };
+}
+
+const StatsSection: React.FC<calculateRange> = ({ calculateRange }) => {
   const [statsData, setStatsData] = useState<UserStats | null>(null);
 
   const currentDate = new Date();
-  const endDate = formatDateToYYYYMMDD(currentDate);
+  const previousDay = subtractDays(currentDate, 1);
+  const endDate = formatDateToYYYYMMDD(previousDay);
   const adjustedDate = subtractDays(currentDate, 30);
   const startDate = formatDateToYYYYMMDD(adjustedDate);
 
   const handleSelectChange = async (
     event: React.ChangeEvent<HTMLSelectElement>,
   ) => {
+    let newStartDate: string = startDate;
+    let newEndDate: string = endDate;
     const selectedValue = event.target.value;
-    const adjustedDate = subtractDays(currentDate, parseInt(selectedValue));
-    const startDate = formatDateToYYYYMMDD(adjustedDate);
+    const {
+      calculatedStartDate: finalStartDate,
+      calculatedEndDate: finalEndDate,
+    } = calculateRange(selectedValue);
+
+    newStartDate = finalStartDate;
+    newEndDate = finalEndDate;
 
     try {
       const fetchedData = await FetchDashboardUsersAndDestinationData(
-        startDate,
-        endDate,
+        newStartDate,
+        newEndDate,
       );
       setStatsData(fetchedData);
     } catch (error) {
@@ -71,21 +88,30 @@ const StatsSection: React.FC = () => {
     void loadData();
   }, [startDate, endDate]);
 
+  const categories = statsData?.activeUserGraphData
+    ? Object.keys(statsData.activeUserGraphData)
+    : [];
+  const graphData = statsData?.activeUserGraphData
+    ? Object.values(statsData.activeUserGraphData)
+    : [];
+
   return (
     <div className="bg-blue-150 p-6 rounded-xl border border-gray-100 mb-6">
       <div className="flex justify-end mb-3">
         <Select
           options={[
             { value: '30', label: 'Last 30 days' },
-            { value: '7', label: 'This week' },
-            { value: '14', label: '14 days' },
+            { value: 'thisWeek', label: 'This Week' },
+            { value: '7', label: 'Last 7 days' },
+            { value: 'thisMonth', label: 'This Month' },
             { value: '90', label: 'Last 3 Months' },
             { value: '180', label: 'Last 6 Months' },
-            { value: '365', label: 'This Year' },
+            { value: 'thisYear', label: 'This Year' },
           ]}
           highlightValue={'30'}
           minimalStyle
-          onChange={handleSelectChange}
+          iconColor={true}
+          onChange={(event) => handleSelectChange(event)}
         />
       </div>
       <div className="lg:max-h-96 lg:h-full h-auto w-full flex lg:flex-row flex-col justify-between gap-6">
@@ -168,8 +194,8 @@ const StatsSection: React.FC = () => {
               </div>
             </div>
             <AreasplineChart
-              categories={chartCategories}
-              data={chartData}
+              categories={categories}
+              data={graphData}
               title=""
               color="#364EA2"
               fillColorStart="#778FDF"
@@ -203,8 +229,8 @@ const StatsSection: React.FC = () => {
       <Image src={reviewsIcon} alt="" className="w-12 h-12" />
     </div>
   </div> */}
-          <ComingSoonFeature />
-          <ComingSoonFeature />
+          <ComingSoonFeature topBorder={true} />
+          <ComingSoonFeature leftBorder={true} />
         </div>
         <div className="flex flex-col gap-6 h-full w-full lg:w-3/12">
           <div className="relative rounded-xl overflow-hidden bg-white border border-gray-100 p-4 h-full">

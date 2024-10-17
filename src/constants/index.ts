@@ -74,3 +74,14 @@ export const workingDaysOptions = [
   { value: 'Sat', label: 'Sat' },
   { value: 'Sun', label: 'Sun' },
 ];
+
+export const ageLimitation = [
+  { value: 'All Ages ', label: 'All Ages' },
+  { value: 'Below 15', label: 'Below 15' },
+  { value: '15-24', label: '15-24' },
+  { value: '25-34', label: '25-34' },
+  { value: '35-44', label: '35-44' },
+  { value: '45-54', label: '45-54' },
+  { value: '55-64', label: '55-64' },
+  { value: 'Above 65', label: 'Above 65' },
+];

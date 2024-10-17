@@ -1,3 +1,4 @@
+import ReactDOMServer from 'react-dom/server';
 import Swal from 'sweetalert2';
 
 const baseStyles =
@@ -15,13 +16,19 @@ const variantStyles = {
 const AlertService = {
   alert: (
     title: string,
-    text: string,
+    text: React.ReactNode,
     icon: 'success' | 'error' | 'warning' | 'info',
     confirmButtonText: string,
+    callback?: () => void,
   ) => {
+    const formattedText =
+      typeof text === 'string'
+        ? text
+        : ReactDOMServer.renderToStaticMarkup(text);
+
     return Swal.fire({
       title,
-      html: `<p style="font-size: 16px; color: #333; font-weight: light;">${text}</p>`,
+      html: `<p style="font-size: 16px; color: #333; font-weight: light;">${formattedText}</p>`,
       icon,
       confirmButtonText,
       customClass: {
@@ -29,6 +36,10 @@ const AlertService = {
         title: 'text-black',
         confirmButton: `${baseStyles} ${variantStyles.customBlue}`,
       },
+    }).then((result) => {
+      if (result.isConfirmed && callback) {
+        callback();
+      }
     });
   },
 

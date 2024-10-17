@@ -3,9 +3,9 @@
 
 import { useRouter } from 'next/navigation';
 import React, { FormEvent, useState } from 'react';
-import { GoEye, GoEyeClosed } from 'react-icons/go';
 
 import AuthForm from '@/app/(auth)/AuthForm';
+import { HidePasswordIcon, ShowPasswordIcon } from '@/assets';
 import { handleAuthRequest } from '@/services/apiService';
 
 export default function Login() {
@@ -34,19 +34,19 @@ export default function Login() {
       description="Please Enter Your Registered Email and Password"
       buttonText="Sign In"
       fields={[
-        { type: 'email', placeholder: 'Enter your email', name: 'email' },
+        { type: 'email', placeholder: 'Email', name: 'email' },
         {
           type: viewPass ? 'text' : 'password',
-          placeholder: 'Enter your password',
+          placeholder: 'Password',
           name: 'password',
           icon: !viewPass ? (
-            <GoEye
+            <ShowPasswordIcon
               onClick={() => {
                 setViewPass(!viewPass);
               }}
             />
           ) : (
-            <GoEyeClosed
+            <HidePasswordIcon
               onClick={() => {
                 setViewPass(!viewPass);
               }}

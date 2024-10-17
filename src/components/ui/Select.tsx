@@ -117,7 +117,7 @@ const Select: React.FC<InputProps> = ({
       {label && <p className="mb-2 text-md text-black">{label}</p>}
       <div ref={dropdownRef} className="relative">
         <div
-          className={`block text-sm w-full ${
+          className={`block text-sm w-full capitalize ${
             profile
               ? 'border border-blue-200 text-blue-200 font-medium'
               : 'border text-gray-900'
@@ -154,7 +154,7 @@ const Select: React.FC<InputProps> = ({
               {filteredOptions.map((option) => (
                 <li
                   key={option.value}
-                  className={`px-4 py-2 cursor-pointer text-sm ${
+                  className={`px-4 py-2 cursor-pointer text-sm capitalize ${
                     Array.isArray(selectedValues)
                       ? selectedValues.includes(option.value)
                         ? 'bg-white text-blue-200'

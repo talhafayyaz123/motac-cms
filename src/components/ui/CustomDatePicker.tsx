@@ -4,15 +4,18 @@ import { formatISOStringToYYYYMMDD } from '@/helpers/utils/utils';
 
 interface CustomDatePickerProps {
   data: string[];
+  currentMonth: string;
+  setMonth: React.Dispatch<React.SetStateAction<string>>;
 }
 
-const CustomDatePicker: React.FC<CustomDatePickerProps> = ({ data }) => {
+const CustomDatePicker: React.FC<CustomDatePickerProps> = ({
+  data,
+  currentMonth,
+  setMonth,
+}) => {
   const currentDate = new Date();
-  const [month, setMonth] = useState<string>(
-    currentDate.toLocaleString('default', { month: 'long' }),
-  );
+
   const [year, setYear] = useState<number>(currentDate.getFullYear());
-  // const [selectedDate, setSelectedDate] = useState<string | null>(null);
 
   // Get the number of days in the selected month
   const getDaysInMonth = (month: string, year: number) => {
@@ -20,7 +23,7 @@ const CustomDatePicker: React.FC<CustomDatePickerProps> = ({ data }) => {
     return new Date(year, monthIndex + 1, 0).getDate(); // Get last day of the month
   };
 
-  const daysInMonth = getDaysInMonth(month, year);
+  const daysInMonth = getDaysInMonth(currentMonth, year);
 
   const events = data?.reduce((acc: Record<string, string[]>, item: string) => {
     const formattedDate = formatISOStringToYYYYMMDD(item);
@@ -44,7 +47,7 @@ const CustomDatePicker: React.FC<CustomDatePickerProps> = ({ data }) => {
       'December',
     ];
 
-    const currentMonthIndex = monthNames.indexOf(month);
+    const currentMonthIndex = monthNames.indexOf(currentMonth);
 
     if (direction === 'prev') {
       if (currentMonthIndex === 0) {
@@ -87,7 +90,7 @@ const CustomDatePicker: React.FC<CustomDatePickerProps> = ({ data }) => {
   const renderDays = () => {
     const days = [];
     for (let i = 1; i <= daysInMonth; i++) {
-      const dateKey = `${year}-${String(new Date(`${month} 1, ${year}`).getMonth() + 1).padStart(2, '0')}-${i.toString().padStart(2, '0')}`;
+      const dateKey = `${year}-${String(new Date(`${currentMonth} 1, ${year}`).getMonth() + 1).padStart(2, '0')}-${i.toString().padStart(2, '0')}`;
 
       // Check if the day has any events
       const hasEvent = events && events[dateKey] ? events[dateKey] : null;
@@ -97,8 +100,8 @@ const CustomDatePicker: React.FC<CustomDatePickerProps> = ({ data }) => {
           role="button"
           tabIndex={0}
           key={i}
-          className={`h-9 w-9 flex m-1 items-center justify-center cursor-default hover:rounded-full
-          ${hasEvent ? 'bg-blue-100 text-white font-bold rounded-full' : ''} 
+          className={`h-9 w-9 flex m-1 items-center text-gray-50 font-medium justify-center cursor-default hover:rounded-full
+          ${hasEvent ? 'bg-blue-100 text-white font-medium rounded-full' : ''} 
          `}
         >
           {i}
@@ -128,7 +131,7 @@ const CustomDatePicker: React.FC<CustomDatePickerProps> = ({ data }) => {
           </svg>
         </button>
         <div className="text-lg">
-          {month} {year}
+          {currentMonth} {year}
         </div>
         <button
           onClick={() => changeMonth('next')}

@@ -1,5 +1,7 @@
 import * as Yup from 'yup';
 
+const latLongRegex = /@(?!0+\.0+,0+\.0+)(-?\d{1,2}\.\d+),(-?\d{1,3}\.\d+)/;
+
 export const validationSchemaForAttractions = Yup.object().shape({
   title: Yup.string().required('Title is required'),
   openingHours: Yup.string().required('Opening hours selection is required'),
@@ -40,19 +42,25 @@ export const validationSchemaForAttractions = Yup.object().shape({
       },
     ),
   workingDays: Yup.string().required('Working days selection is required'),
-  ageLimit: Yup.number()
+  ageLimit: Yup.string()
     .required('Age Limitation is required')
     .max(99, 'Age cannot exceed 99')
     .typeError('Age must be a number'),
-  mapLink: Yup.string().required().url('Must be a valid URL'),
+  mapLink: Yup.string()
+    .required('Map Link is a required field')
+    .url('Must be a valid URL')
+    .matches(
+      latLongRegex,
+      'Map Link must include valid latitude and longitude',
+    ),
+
   address: Yup.string().required('Address is required'),
   category: Yup.number().required('Category is required'),
   area: Yup.object()
-    .shape({
-      id: Yup.string().nullable(), // Allow null ID for custom options
-      name: Yup.string().required('Area name is required'), // Name must be provided
-    })
-    .nullable()
+    // .shape({
+    //   id: Yup.string().nullable(), // Allow null ID for custom options
+    //   name: Yup.string().required('Area name is required'), // Name must be provided
+    // })
     .required('Area is required'),
   cityId: Yup.number().required('City is required'),
   description: Yup.string().required('Description is required'),
@@ -103,19 +111,24 @@ export const validationSchemaForExperiences = Yup.object().shape({
       },
     ),
   workingDays: Yup.string().required('Working days selection is required'),
-  ageLimit: Yup.number()
+  ageLimit: Yup.string()
     .required('Age Limitation is required')
     .max(99, 'Age cannot exceed 99')
     .typeError('Age must be a number'),
-  mapLink: Yup.string().required().url('Must be a valid URL'),
+  mapLink: Yup.string()
+    .required('Map Link is a required field')
+    .url('Must be a valid URL')
+    .matches(
+      latLongRegex,
+      'Map Link must include valid latitude and longitude',
+    ),
   address: Yup.string().required('Address is required'),
   category: Yup.number().required('Category is required'),
   area: Yup.object()
-    .shape({
-      id: Yup.string().nullable(), // Allow null ID for custom options
-      name: Yup.string().required('Area name is required'), // Name must be provided
-    })
-    .nullable()
+    // .shape({
+    //   id: Yup.string().nullable(), // Allow null ID for custom options
+    //   name: Yup.string().required('Area name is required'), // Name must be provided
+    // })
     .required('Area is required'),
   cityId: Yup.number().required('City is required'),
   description: Yup.string().required('Description is required'),
@@ -124,6 +137,9 @@ export const validationSchemaForExperiences = Yup.object().shape({
   images: Yup.array()?.optional().nullable(),
   bannerImageId: Yup.number().nullable(),
   bannerImage: Yup.string().required('Banner image is required'),
+  eventLink: Yup.string()
+    .required('Event Link is a required field')
+    .url('Must be a valid URL'),
 });
 
 export const validationSchemaForHappeningEvents = Yup.object().shape({
@@ -166,19 +182,25 @@ export const validationSchemaForHappeningEvents = Yup.object().shape({
       },
     ),
   workingDays: Yup.string().required('Working days selection is required'),
-  ageLimit: Yup.number()
+  ageLimit: Yup.string()
     .required('Age Limitation is required')
     .max(99, 'Age cannot exceed 99')
     .typeError('Age must be a number'),
-  mapLink: Yup.string().required().url('Must be a valid URL'),
+  mapLink: Yup.string()
+    .required('Map Link is a required field')
+    .url('Must be a valid URL')
+    .matches(
+      latLongRegex,
+      'Map Link must include valid latitude and longitude',
+    ),
   address: Yup.string().required('Address is required'),
   category: Yup.number().required('Category is required'),
   area: Yup.object()
-    .shape({
-      id: Yup.string().nullable(), // Allow null ID for custom options
-      name: Yup.string().required('Area name is required'), // Name must be provided
-    })
-    .nullable()
+    // .shape({
+    //   id: Yup.string().nullable(), // Allow null ID for custom options
+    //   name: Yup.string().required('Area name is required'), // Name must be provided
+    // })
+    // .nullable()
     .required('Area is required'),
   cityId: Yup.number().required('City is required'),
   description: Yup.string().required('Description is required'),
@@ -198,4 +220,7 @@ export const validationSchemaForHappeningEvents = Yup.object().shape({
   images: Yup.array()?.optional().nullable(),
   bannerImageId: Yup.number().nullable(),
   bannerImage: Yup.string().required('Banner image is required'),
+  eventLink: Yup.string()
+    .required('Event Link is a required field')
+    .url('Must be a valid URL'),
 });

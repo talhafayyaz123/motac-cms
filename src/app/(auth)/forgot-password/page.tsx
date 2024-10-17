@@ -17,17 +17,18 @@ export default function ForgotPassword() {
     const email = form.email.value;
     const userAgent = navigator.userAgent;
 
-    const result = await requestOtp({ email, userAgent });
+    if (!email) {
+      setError('Please Enter Email');
+      return;
+    }
 
-    console.log(result);
-
-    if (result.success && result.response === 'Otp sent') {
-      router.push('/otp?email=' + email);
-    } else {
-      router.push('/otp?email=' + email);
-      const error =
-        typeof result.error === 'string' ? result.error : 'Unknown error';
-      // setError(error);
+    try {
+      const result = await requestOtp({ email, userAgent });
+      if (result?.message) {
+        router.push('/otp?email=' + email);
+      }
+    } catch (error: any) {
+      setError(error.message);
     }
   };
 

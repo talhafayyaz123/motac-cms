@@ -12,9 +12,10 @@ interface InputProps
   onFileError?: (error: string) => void;
   onBase64ValueChange?: (base64Value: File | null) => void;
   error?: string | undefined;
-  defaultImagePath?: string | null; // Add prop for default image path (edit case)
+  defaultImagePath?: string | null;
   marginBottom?: string | null;
   iconPlacement?: string | null;
+  isFileUploaded?: boolean;
 }
 
 const Input: React.FC<InputProps> = ({
@@ -35,6 +36,7 @@ const Input: React.FC<InputProps> = ({
   defaultImagePath,
   marginBottom,
   iconPlacement = 'left',
+  isFileUploaded = false,
   ...rest
 }) => {
   const fileInputRef = useRef<HTMLInputElement | null>(null);
@@ -54,6 +56,8 @@ const Input: React.FC<InputProps> = ({
   const disabledStyles = disabled
     ? 'bg-gray-200 text-gray-500 cursor-not-allowed'
     : 'bg-white text-gray-900';
+
+  // Matching font size and weight with Select component
   const combinedStyles = `${className} ${baseStyles} ${sizeStyles[inputSize]} ${disabledStyles}`;
 
   // Handle file change (for both add and re-upload cases)
@@ -78,7 +82,7 @@ const Input: React.FC<InputProps> = ({
           const expectedRatio = 16 / 9;
 
           if (Math.abs(aspectRatio - expectedRatio) > 0.01) {
-            onFileError?.('Only images with 16:9 aspect ratio are allowed');
+            onFileError?.('Only images of pixels 1920x1080 is allowed');
             e.target.value = '';
             setBase64Value('');
             setDisplayText('');
@@ -123,7 +127,7 @@ const Input: React.FC<InputProps> = ({
   return (
     <div className="flex flex-col" style={{ minWidth }}>
       {label && (
-        <p className="mb-2 text-md text-[#181819] font-semibold">
+        <p className="mb-2 text-md text-[#181819] font-normal">
           {label}
           <span className="text-[0.5rem] ml-12">{sublabel}</span>
         </p>
@@ -145,19 +149,21 @@ const Input: React.FC<InputProps> = ({
             style={{ minWidth }}
             onClick={() => setShowModal(true)}
           />
-          <GiCancel
-            color="#51afec"
-            className="absolute top-1/4 right-2 cursor-pointer"
-            height={20}
-            width={20}
-            onClick={handleReupload} // Handle re-upload
-          />
+          {!isFileUploaded && (
+            <GiCancel
+              color="#51afec"
+              className="absolute top-1/4 right-2 cursor-pointer"
+              height={20}
+              width={20}
+              onClick={handleReupload} // Handle re-upload
+            />
+          )}
         </div>
       )}
       <div className={`relative mb-${marginBottom}`}>
         {icon && (
           <span
-            className={`absolute inset-y-0 ${iconPlacement === 'right' ? 'right-0' : 'left-0'} flex items-center pl-4 text-2xl text-black`}
+            className={`absolute inset-y-0 ${iconPlacement === 'right' ? 'right-2' : 'left-0'} flex items-center pl-4 text-2xl text-black`}
           >
             {icon}
           </span>
@@ -183,23 +189,27 @@ const Input: React.FC<InputProps> = ({
 
       {/* Modal for displaying the uploaded image */}
       {showModal && (
-        <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
-          <div className="bg-white p-6 rounded-lg max-w-lg w-full">
-            <div className="flex justify-end mb-4">
+        <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50 h-[80vh] mt-16">
+          <div className="bg-white p-6 rounded-lg max-w-lg w-full relative before:flex flex-col items-center gap-4 h-full">
+            {/* Close Button */}
+            <div className="absolute top-4 right-4">
               <GiCancel
-                className="text-black cursor-pointer"
+                className="text-black cursor-pointer hover:text-red-500"
                 size={24}
-                onClick={() => setShowModal(false)} // Close modal
+                onClick={() => setShowModal(false)}
               />
             </div>
-            {imagePreview && (
-              /* eslint-disable @next/next/no-img-element */
-              <img
-                src={imagePreview}
-                alt=""
-                className="max-w-full h-auto rounded-lg"
-              />
-            )}
+            <div className="h-full w-full flex justify-center items-center">
+              {/* Image Preview */}
+              {imagePreview && (
+                /* eslint-disable @next/next/no-img-element */
+                <img
+                  src={imagePreview}
+                  alt=""
+                  className="max-w-full h-[80%] rounded-lg"
+                />
+              )}
+            </div>
           </div>
         </div>
       )}
