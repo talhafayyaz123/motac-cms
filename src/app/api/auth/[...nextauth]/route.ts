@@ -3,45 +3,82 @@
 //import type { NextAuthOptions } from 'next-auth';
 //import { JWT } from 'next-auth/jwt';
 /* eslint-disable prettier/prettier */
+import CryptoJS from 'crypto-js';
 import NextAuth from 'next-auth/next';
 import CredentialsProvider from 'next-auth/providers/credentials';
 
 // Token refresh logic
-async function refreshAccessToken(token: any) {
+async function attemptReLogin(email: string, password: string) {
   try {
-    const res = await fetch(
-      'https://cms.api.motac-dev.com/api/v1/auth/refresh',
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token.refreshToken}`, // Use the refresh token
-        },
+    const res = await fetch('https://cms.api.motac-dev.com/api/v1/auth/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
       },
-    );
+      body: JSON.stringify({
+        email: email,
+        password: password,
+      }),
+    });
+
+    const newTokens = await res.json();
 
     if (!res.ok) {
-      throw new Error('Failed to refresh access token');
+      console.error('Re-login request failed:', newTokens);
+      return null;
     }
 
-    const refreshedTokens = await res.json();
-
     return {
-      ...token,
-      accessToken: refreshedTokens.token,
-      refreshToken: refreshedTokens.refresh_token,
-      tokenExpires: refreshedTokens.token_expires,
+      accessToken: newTokens.token,
+      refreshToken: newTokens.refresh_token,
+      tokenExpires: newTokens.token_expires,
     };
   } catch (error) {
-    console.error('Error refreshing access token:', error);
-    return {
-      ...token,
-      error: 'RefreshAccessTokenError',
-    };
+    console.error('Error during re-login:', error);
+    return null;
   }
 }
 
-// NextAuth configuration options
+async function refreshAccessToken(token: any) {
+  const res = await fetch('https://cms.api.motac-dev.com/api/v1/auth/refresh', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token.refreshToken}`,
+    },
+  });
+
+  const refreshedTokens = await res.json();
+
+  if (!res.ok) {
+    const decryptedBytes = CryptoJS.AES.decrypt(
+      token.encryptedPassword,
+      'motac-cms-ses',
+    );
+    const decryptedPassword = decryptedBytes.toString(CryptoJS.enc.Utf8);
+
+    const newTokens = await attemptReLogin(token.user.email, decryptedPassword);
+
+    if (newTokens) {
+      return {
+        ...token,
+        accessToken: newTokens.accessToken,
+        refreshToken: newTokens.refreshToken,
+        tokenExpires: newTokens.tokenExpires,
+      };
+    } else {
+      throw new Error('Failed to refresh access token and re-login.');
+    }
+  }
+
+  return {
+    ...token,
+    accessToken: refreshedTokens.token,
+    refreshToken: refreshedTokens.refresh_token,
+    tokenExpires: refreshedTokens.token_expires,
+  };
+}
+
 const authOptions: any = {
   providers: [
     CredentialsProvider({
@@ -72,8 +109,18 @@ const authOptions: any = {
           const user = await res.json();
 
           if (res.ok && user) {
-            // Return the full user object
-            return user;
+            // Ensure password is defined
+            if (!credentials?.password) {
+              throw new Error('Password is required');
+            }
+
+            // Encrypt the password
+            const encryptedPassword = CryptoJS.AES.encrypt(
+              credentials.password,
+              'motac-cms-ses',
+            ).toString();
+
+            return { ...user, encryptedPassword };
           } else {
             throw new Error('Invalid Credentials');
           }
@@ -96,19 +143,22 @@ const authOptions: any = {
     maxAge: 3300,
   },
   callbacks: {
-    jwt({ token, user }: { token: any; user?: any }) {
+    async jwt({ token, user }: { token: any; user?: any }) {
       if (user) {
         token.accessToken = user.token;
         token.refreshToken = user.refresh_token;
         token.tokenExpires = user.token_expires;
         token.user = user.user;
+        if (user?.encryptedPassword) {
+          token.encryptedPassword = user.encryptedPassword;
+        }
       }
 
       const expirationTime = new Date(token.tokenExpires).getTime();
       const remainingTime = (expirationTime - Date.now()) / 1000; // In seconds
-
       if (remainingTime <= 20) {
-        return refreshAccessToken(token);
+        const data = await refreshAccessToken(token);
+        return data;
       }
       return token;
     },
@@ -117,7 +167,7 @@ const authOptions: any = {
       session.refreshToken = token.refreshToken;
       session.tokenExpires = token.tokenExpires;
       session.user = token.user;
-
+      session.encryptedPassword = token.encryptedPassword;
       return session;
     },
   },
