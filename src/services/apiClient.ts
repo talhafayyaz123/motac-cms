@@ -1,6 +1,6 @@
 import { getSession, signOut } from 'next-auth/react';
 
-const backendApiUrl = 'https://cms.api.motac-dev.com/api/v1';
+const backendApiUrl = process.env.NEXT_PUBLIC_API_URL;
 
 const authEndpoints = [
   '/auth/login',

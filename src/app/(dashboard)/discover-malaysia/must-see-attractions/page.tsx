@@ -387,7 +387,7 @@ export default function MustSeeAttractions() {
 
   return (
     <EventTableLayout
-      tableTitle="See Must Attractions"
+      tableTitle="Must See Attractions"
       buttonTitle="Add Attraction"
       data={data}
       columns={columns}

@@ -6,11 +6,12 @@
 import CryptoJS from 'crypto-js';
 import NextAuth from 'next-auth/next';
 import CredentialsProvider from 'next-auth/providers/credentials';
+const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
 // Token refresh logic
 async function attemptReLogin(email: string, password: string) {
   try {
-    const res = await fetch('https://cms.api.motac-dev.com/api/v1/auth/login', {
+    const res = await fetch(`${apiUrl}/auth/login`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -40,7 +41,7 @@ async function attemptReLogin(email: string, password: string) {
 }
 
 async function refreshAccessToken(token: any) {
-  const res = await fetch('https://cms.api.motac-dev.com/api/v1/auth/refresh', {
+  const res = await fetch(`${apiUrl}/auth/refresh`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -94,17 +95,14 @@ const authOptions: any = {
 
       async authorize(credentials) {
         try {
-          const res = await fetch(
-            'https://cms.api.motac-dev.com/api/v1/auth/login',
-            {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({
-                email: credentials?.email,
-                password: credentials?.password,
-              }),
-            },
-          );
+          const res = await fetch(`${apiUrl}/auth/login`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              email: credentials?.email,
+              password: credentials?.password,
+            }),
+          });
 
           const user = await res.json();
 
